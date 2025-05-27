@@ -1,0 +1,1258 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>sessions Schedule</title>
+    <!--Layout-->
+    <link href="/content/layoutCSS?v=m3Vg5qEHQrwgeLWT7E8UGYyj9MxrQfDWC_iGZOimAxY1" rel="stylesheet"/>
+
+    <!--App-->
+    
+    <!--Page-->
+    
+
+    <link href="/assets/content/css/schedule?v=3hkLKX5EEBTHNOT02AuuZdDjmu5Z8RuiF_j50yylM8E1" rel="stylesheet"/>
+
+
+
+
+    <link id="linkTheme" href="/Theme/Index?hexColor=%23B0E0E6" rel="stylesheet" />
+
+</head>
+
+<body data-current-skin>
+
+	
+<header id="header" class="clearfix" data-current-skin="EZGreen">
+    <div class="leftHeader">
+        <div class="menuTriggerContainer">
+            <div id="menu-trigger" data-trigger="#sidebar" class="open">
+                <div class="line-wrap">
+                    <div class="line top"></div>
+                    <div class="line center"></div>
+                    <div class="line bottom"></div>
+                </div>
+            </div>
+        </div>
+        <div class="headerLogo" >
+            <a href="/">
+                <img id="headerSSLogo" src="https://c249711.ssl.cf0.rackcdn.com/13558" alt="" />
+                <h5 style="display:none;" id="headerCompanyName"  class="  "
+                >Big Bear Ice Arena LLC</h5>
+
+            </a>
+        </div>
+    </div>
+    <div class="centerHeader">
+        <div>
+            <div>Big Bear Ice Arena LLC</div>
+        </div>
+        
+    </div>
+
+    <div class="rightHeader">
+        <ul class="top-menu">
+            
+
+<li id="liCartDropDown" class="dropdown ">
+    <a id="aCart" data-toggle="dropdown" href="#">
+        <i class="tm-icon zmdi zmdi-shopping-cart "></i>
+        <i class="tmn-counts"></i>
+    </a>
+    <div class="dropdown-menu dropdown-menu-lg pull-right" >
+        <div class="listview" >
+            <div class="lv-header">
+                Shopping Cart
+            </div>
+            <div class="lv-body" style="max-height: 352px; overflow-y: scroll;">
+
+
+            </div>
+            <div class="lv-footer text-right">
+                <a id="aViewCartDetails" class="btn btn-link waves-effect" href="/Cart/ShoppingItems">View Cart</a>
+                <a id="aCheckoutCart" class="btn btn-primary waves-effect" href="/Checkout/ShoppingItemsFromCart">Check Out</a>    
+            </div>
+            
+        </div>
+    </div>
+</li>
+
+
+        </ul>
+    </div>
+</header>
+
+	<input type="hidden" id="sessionTimeOut" value="20" />
+	<input type="hidden" id="culture" value="en-us" />
+	<input type="hidden" id="currencyDecimalSeparator" value="." />
+	<input type="hidden" id="currencyGroupSeparator" value="," />
+	
+	<input type="hidden" id="dateFormat" value="M/D/YYYY" />
+	<input type="hidden" id="use24HourFormat" value="false" />
+	<input type="hidden" id="clientIsLoggedIn" value="false" />
+	<input id="RecaptchaSiteKey" type="hidden" value="6Ld3WtcqAAAAAMgqh-UF16VeP-Cg6pm9c1mK084A" />
+
+
+	<section>
+		<aside id="sidebar" class="sidebar c-overflow toggled">
+			
+<ul class="main-menu">
+    <li class="mm-profile hidden">
+        <a id="aProfile" href="/Profile" class="media">
+            <img id="sidebarProfileImage" src="" alt="">
+            <div id="divSidebarClientName" class="media-body">
+                
+            </div>
+        </a>
+    </li>
+        <li class="sub-menu hidden">
+            <a id="aInvoices" href="/Invoices/Open"><i class="zmdi zmdi-file-text"></i> Invoices</a>
+            <ul>
+                    <li><a href="/Invoices/Open">Open Invoices</a></li>
+                                    <li><a href="/Invoices/Closed">Closed Invoices</a></li>
+            </ul>
+        </li>
+            <li class="sub-menu">
+            <a id="aBuy" href=""><i class="zmdi zmdi-money zmdi-hc-fw"></i> Buy</a>
+            <ul>
+                    <li><a href="/Package">Packages</a></li>
+                                    <li><a href="/Membership">Memberships</a></li>
+            </ul>
+        </li>
+            <li class="hidden">
+            <a href="/MySchedule"><i class="zmdi zmdi-account"></i> My Schedule</a>
+        </li>
+            <li>
+            <a href="/Sessions"><i class="zmdi zmdi-book"></i> Book sessions</a>
+        </li>
+                <li>
+            <a href="/OnlineRegistration"><i class="zmdi zmdi-assignment-account zmdi-hc-fw"></i>Registrations</a>
+        </li>
+    
+    <li id="toggle-width">
+        <i class="zmdi zmdi-format-indent-increase zmdi-hc-fw"></i>
+        <div class="toggle-switch">
+            <label for="tw-width" class="ts-label">Toggle Width</label>
+            <input id="tw-switch" type="checkbox" hidden="hidden">
+            <label for="tw-switch" class="ts-helper"></label>
+        </div>
+    </li>
+
+    <li class="hidden" onclick="Login.ResetClient()">
+        <a href="/Login/Logout"><i class="zmdi zmdi-power"></i> Logout</a>
+    </li>
+
+    <li id="liLogin" class="">
+        <a href="#"><i class="zmdi zmdi-power"></i> Login</a>
+    </li>
+</ul>
+<hr />
+
+		</aside>
+	</section>
+
+	<section id="main">
+		<section id="content">
+			<div class="container toggled">
+						<div class="card">
+							<div class="card-header">
+								<h2 class="card-title">Welcome, </h2>
+							</div>
+							<div class="card-body card-padding">
+								Public Skate Sessions are in PURPLE<br>
+Freestyle Sessions are in PINK<br>
+Stick and Puck Sessions are in GREEN<br>
+Drop-In Sessions are in RED<br>
+<br>
+Party Room Rentals are in NAVY (Option of 10 or 20 attendees)&nbsp;<br>
+Hockey Party Room Rentals are in GOLD
+							</div>
+						</div>
+
+				<div class="block-header">
+					<h2>sessions Schedule</h2>
+					
+
+				</div>
+				
+
+
+
+
+
+<div class="card">
+    <div id="calendar"></div>
+</div>
+
+<!-- Edit event -->
+<div class="modal fade " id="modal-book-reservation" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="card">
+            <form id="frmBook">
+
+                <input type="hidden" id="reservationId" name="reservationId" />
+                <input type="hidden" id="reservationTypeId" name="reservationTypeId" />
+                <input type="hidden" id="reservationStartDateTime" name="reservationStartDateTime" />
+                <input type="hidden" id="reservationEndDateTime" name="reservationEndDateTime" />
+                <input type="hidden" id="reservationResourceName" name="reservationResourceName" />
+                <input type="hidden" id="reservationTitle" name="reservationTitle" />
+                <input type="hidden" id="cultureCode" name="cultureCode" value="en-US" />
+                <input type="hidden" id="allowedReservationTypeIDs" name="allowedReservationTypeIDs" />
+                <input type="hidden" id="defaultCalendarView" name="defaultCalendarView" value="month" />
+                <input type="hidden" id="scheduleInterval" name="defaultCalendarView" value="15" />
+                <input type="hidden" id="publicSessions" name="publicSessions" value="false" />
+
+                <div id="book-header" class="card-header ch-alt">
+                    <div class="title-addon">
+                        <i class="zmdi zmdi-calendar-alt"></i>
+                    </div>
+                    <h2 class="modal-title">
+                        Book - <span id="displayTitle"></span>
+                    </h2>
+                    <ul class="actions">
+                        <li>
+                            <a href="" data-dismiss="modal">
+                                <i class="zmdi zmdi-close"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card-body card-padding ">
+                    <div class="listview">
+                        <div class="lv-item description" href="">
+                            <div class="media">
+                                <div class="pull-left">
+                                    <div>
+                                        <i class="zmdi p-l-20"></i>
+                                    </div>
+                                </div>
+                                <div class="media-body" id="descriptionContainer">
+                                    <div class="lv-title" id="description"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lv-item" href="">
+                            <div class="media">
+                                <div class="pull-left">
+                                    <div>
+                                        <i class="zmdi zmdi-time"></i>
+                                    </div>
+                                </div>
+                                <div class="media-body">
+                                    <div class="lv-title" id="time"></div>
+                                    <small class="lv-small" id="timeDifference"></small>
+                                </div>
+                            </div>
+                        </div>
+                            <div id="classSize" class="lv-item" href="">
+                                <div class="media">
+                                    <div class="pull-left">
+                                        <div>
+                                            <i class="zmdi zmdi-accounts"></i>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <div class="lv-title">
+                                            <span id="sSpotsLeft"></span> Spot(s) Left <span id="sWaitlisting"></span>
+                                        </div>
+                                        <small class="lv-small">Class size of <span id="sClassSize"></span></small>
+                                    </div>
+                                </div>
+                            </div>
+                        <div id="instructors" class="lv-item">
+                            <div class="media">
+                                <div class="pull-left">
+                                    <div>
+                                        <i class="zmdi zmdi-map"></i>
+                                    </div>
+                                </div>
+                                <div id="instructorList" class="media-body">
+                                    <div class="lv-title">
+                                        Instructors
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="venues" class="lv-item">
+                            <div class="media">
+                                <div class="pull-left">
+                                    <div>
+                                        <i class="zmdi zmdi-map"></i>
+                                    </div>
+                                </div>
+                                <div id="venueList" class="media-body">
+                                    <div class="lv-title">
+                                        Venues
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lv-item package" href="" id="divRelatedClients">
+                            <div class="media">
+                                <div class="pull-left">
+                                    <div>
+                                        <i class="zmdi zmdi-account"></i>
+                                    </div>
+                                </div>
+                                <div class="media-body">
+                                    <div class="lv-title">
+                                        <div>
+                                        </div>
+                                        <div class="input-group form-group">
+                                            
+
+<span class="input-group-addon p-l-0 ">
+Book For</span>
+
+
+
+<select class="selectpicker" data-container="body" data-style="btn btn-default " id="ddlName" name="ddlName"></select>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="videos" class="lv-item">
+                            <div class="media">
+                                <div class="pull-left">
+                                    <div>
+                                        <i class="zmdi zmdi-collection-video"></i>
+                                    </div>
+                                </div>
+                                <div id="videoList" class="media-body">
+                                    <div class="lv-title">
+                                        Video
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="lv-item package" href="">
+                            <div class="media">
+                                <div class="pull-left">
+                                    <div>
+                                        <i class="zmdi zmdi-book"></i>
+                                    </div>
+                                </div>
+                                <div class="media-body">
+                                    <div class="lv-title">
+                                        <div>
+                                            <span id="packageMessage"></span>
+                                        </div>
+                                        <div class="input-group form-group" id="ddlPackage">
+                                            <span class="input-group-addon">Package</span>
+                                            <select class="selectpicker" name="packageId" data-container="body"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </form>
+            <div class="modal-footer">
+                <h4 id="viewOnlyMessage">Call for more Information!</h4>
+                <h4 id="memberOnlyMessage">Members Only!</h4>
+                <div id="videoSessionMessage" class="align-self-center"></div>
+                    <button id="btnLaunch" class="btn btn-primary" style="display: none;">Launch Session</button>
+                    <button id="btnBook" class="btn btn-primary ">Book</button>
+                    <button id="btnBuyPackage" class="btn btn-default" data-calendar="buy-package">Buy Package</button>
+                    <button id="btnCancelSession" class="btn btn-link" data-calendar="cancel-session">Cancel Session</button>
+            </div>
+            <div id="bookedMessage"></div>
+            <iframe id="launchFrame" src="" style="display:none"></iframe>
+
+        </div>
+    </div>
+</div>
+
+<!-- filter calendar -->
+<div class="modal fade" id="modal-filter-events" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="card">
+            <div class="card-header ch-alt">
+                <h2 class="modal-title">
+                    Filter
+                    <small>Use this to show classes/trainings that fit your schedule.</small>
+                </h2>
+            </div>
+
+            <div class="card-body card-padding">
+                <form id="frmFilter">
+                    
+                    <div role="tabpanel" class="tab">
+                        <ul class="tab-nav" role="tablist">
+                            <li class="active" id="filterClientsTab"><a href="#clientTab" aria-controls="clientTab" role="tab" data-toggle="tab"><i class="zmdi zmdi-account-box"></i></a></li>
+                            <li role="presentation" id="filterLocationsTab"><a href="#locationsTab" aria-controls="locationsTab" role="tab" data-toggle="tab"><i class="zmdi zmdi-pin"></i></a></li>
+                            <li role="presentation"><a href="#timeTab" aria-controls="timeTab" role="tab" data-toggle="tab"><i class="zmdi zmdi-time"></i></a></li>
+                            <li role="presentation"><a href="#sessionTab" aria-controls="sessionTab" role="tab" data-toggle="tab"><i class="zmdi zmdi-calendar-note"></i></a></li>
+                            <li role="presentation"><a href="#resourceTab" aria-controls="messages9" role="tab" data-toggle="tab"><i class="zmdi zmdi-pin-account"></i></a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active animated fadeInRight in" id="clientTab">
+
+
+                            </div>
+
+                            <div role="tabpanel" class="tab-pane animated fadeInRight in" id="locationsTab">
+
+
+
+
+
+<div class="radio form-align ">
+    <div>
+        <label>
+            <input name="LocationId"
+                   type="radio"
+                   checked=checked
+                   value="13558"
+                   >
+            <i class="input-helper"></i>
+            Big Bear Ice Arena LLC
+        </label>
+    </div>
+
+</div>
+
+                            </div>
+
+                            <div role="tabpanel" class="tab-pane animated fadeInRight" id="timeTab">
+                                
+                                <div id="onOffContainer">
+    
+
+
+
+<div class="checkbox weekday form-align ">
+    <div>
+        <label>
+            <input id="Sunday"
+                   name="Sunday"
+                   type="checkbox"
+                   checked=checked
+                   value=true>
+            <i class="input-helper" day="Su"></i>
+        </label>
+    </div>
+
+</div>
+
+
+    
+
+
+
+<div class="checkbox weekday form-align ">
+    <div>
+        <label>
+            <input id="Monday"
+                   name="Monday"
+                   type="checkbox"
+                   checked=checked
+                   value=true>
+            <i class="input-helper" day="M"></i>
+        </label>
+    </div>
+
+</div>
+
+
+    
+
+
+
+<div class="checkbox weekday form-align ">
+    <div>
+        <label>
+            <input id="Tuesday"
+                   name="Tuesday"
+                   type="checkbox"
+                   checked=checked
+                   value=true>
+            <i class="input-helper" day="T"></i>
+        </label>
+    </div>
+
+</div>
+
+
+    
+
+
+
+<div class="checkbox weekday form-align ">
+    <div>
+        <label>
+            <input id="Wednesday"
+                   name="Wednesday"
+                   type="checkbox"
+                   checked=checked
+                   value=true>
+            <i class="input-helper" day="W"></i>
+        </label>
+    </div>
+
+</div>
+
+
+    
+
+
+
+<div class="checkbox weekday form-align ">
+    <div>
+        <label>
+            <input id="Thursday"
+                   name="Thursday"
+                   type="checkbox"
+                   checked=checked
+                   value=true>
+            <i class="input-helper" day="T"></i>
+        </label>
+    </div>
+
+</div>
+
+
+    
+
+
+
+<div class="checkbox weekday form-align ">
+    <div>
+        <label>
+            <input id="Friday"
+                   name="Friday"
+                   type="checkbox"
+                   checked=checked
+                   value=true>
+            <i class="input-helper" day="F"></i>
+        </label>
+    </div>
+
+</div>
+
+
+    
+
+
+
+<div class="checkbox weekday form-align ">
+    <div>
+        <label>
+            <input id="Saturday"
+                   name="Saturday"
+                   type="checkbox"
+                   checked=checked
+                   value=true>
+            <i class="input-helper" day="Sa"></i>
+        </label>
+    </div>
+
+</div>
+
+
+</div>
+
+
+                                
+
+                                <div class="input-group static m-t-20">
+                                    <span class="input-group-addon p-l-0"><i class="zmdi zmdi-time"></i></span>
+                                    <div class="fg-line">
+                                        <label class="fg-label" for="startTime">Start Time</label>
+                                        <input id="startTime" name="StartTime" type='text' class="form-control time-picker" placeholder="Start Time">
+                                    </div>
+                                </div>
+
+                                
+
+                                <div class="input-group static">
+                                    <span class="input-group-addon p-l-0"><i class="zmdi zmdi-time"></i></span>
+                                    <div class="fg-line">
+                                        <label class="fg-label" for="endTime">End Time</label>
+                                        <input id="endTime" name="EndTime" type='text' class="form-control time-picker" placeholder="End Time">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div role="tabpanel" class="tab-pane animated fadeInRight" id="sessionTab">
+                                
+
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[0].Selected"
+                   name="ReservationTypes[0].Selected"
+                   type="checkbox"
+                   checked=checked
+                   value=true>
+            <i class="input-helper"></i>
+            All
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_0__Id" name="ReservationTypes[0].Id" type="hidden" value="-1" />
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[1].Selected"
+                   name="ReservationTypes[1].Selected"
+                   type="checkbox"
+                   
+                   >
+            <i class="input-helper"></i>
+            Drop - IN HOCKEY
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_1__Id" name="ReservationTypes[1].Id" type="hidden" value="203425" />
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[2].Selected"
+                   name="ReservationTypes[2].Selected"
+                   type="checkbox"
+                   
+                   >
+            <i class="input-helper"></i>
+            Drop-IN Goalie REGISTRATION
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_2__Id" name="ReservationTypes[2].Id" type="hidden" value="208508" />
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[3].Selected"
+                   name="ReservationTypes[3].Selected"
+                   type="checkbox"
+                   
+                   >
+            <i class="input-helper"></i>
+            Family Stick &amp; Puck
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_3__Id" name="ReservationTypes[3].Id" type="hidden" value="215333" />
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[4].Selected"
+                   name="ReservationTypes[4].Selected"
+                   type="checkbox"
+                   
+                   >
+            <i class="input-helper"></i>
+            Free Style
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_4__Id" name="ReservationTypes[4].Id" type="hidden" value="182117" />
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[5].Selected"
+                   name="ReservationTypes[5].Selected"
+                   type="checkbox"
+                   
+                   >
+            <i class="input-helper"></i>
+            Hockey Party Room
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_5__Id" name="ReservationTypes[5].Id" type="hidden" value="227573" />
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[6].Selected"
+                   name="ReservationTypes[6].Selected"
+                   type="checkbox"
+                   
+                   >
+            <i class="input-helper"></i>
+            ICE FOR SALE
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_6__Id" name="ReservationTypes[6].Id" type="hidden" value="217778" />
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[7].Selected"
+                   name="ReservationTypes[7].Selected"
+                   type="checkbox"
+                   
+                   >
+            <i class="input-helper"></i>
+            ICE FOR SALE 60 MIN - $495.00
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_7__Id" name="ReservationTypes[7].Id" type="hidden" value="215383" />
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[8].Selected"
+                   name="ReservationTypes[8].Selected"
+                   type="checkbox"
+                   
+                   >
+            <i class="input-helper"></i>
+            LTS
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_8__Id" name="ReservationTypes[8].Id" type="hidden" value="271335" />
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[9].Selected"
+                   name="ReservationTypes[9].Selected"
+                   type="checkbox"
+                   
+                   >
+            <i class="input-helper"></i>
+            LTS Free event
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_9__Id" name="ReservationTypes[9].Id" type="hidden" value="285107" />
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[10].Selected"
+                   name="ReservationTypes[10].Selected"
+                   type="checkbox"
+                   
+                   >
+            <i class="input-helper"></i>
+            LTS Summer - 24
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_10__Id" name="ReservationTypes[10].Id" type="hidden" value="218387" />
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[11].Selected"
+                   name="ReservationTypes[11].Selected"
+                   type="checkbox"
+                   
+                   >
+            <i class="input-helper"></i>
+            Open Stick &amp; Puck
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_11__Id" name="ReservationTypes[11].Id" type="hidden" value="215334" />
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[12].Selected"
+                   name="ReservationTypes[12].Selected"
+                   type="checkbox"
+                   
+                   >
+            <i class="input-helper"></i>
+            Party Room
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_12__Id" name="ReservationTypes[12].Id" type="hidden" value="190860" />
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[13].Selected"
+                   name="ReservationTypes[13].Selected"
+                   type="checkbox"
+                   
+                   >
+            <i class="input-helper"></i>
+            Public Skate
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_13__Id" name="ReservationTypes[13].Id" type="hidden" value="215332" />
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[14].Selected"
+                   name="ReservationTypes[14].Selected"
+                   type="checkbox"
+                   
+                   >
+            <i class="input-helper"></i>
+            Warrior Avalanche Private Ice
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_14__Id" name="ReservationTypes[14].Id" type="hidden" value="224028" />
+                            </div>
+                            <div role="tabpanel" class="tab-pane animated fadeInRight" id="resourceTab">
+                                
+
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="Resources[0].Selected"
+                   name="Resources[0].Selected"
+                   type="checkbox"
+                   checked=checked
+                   value=true>
+            <i class="input-helper"></i>
+            All
+        </label>
+    </div>
+    
+</div>
+<input id="Resources_0__Id" name="Resources[0].Id" type="hidden" value="-1" />
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="Resources[1].Selected"
+                   name="Resources[1].Selected"
+                   type="checkbox"
+                   
+                   >
+            <i class="input-helper"></i>
+            North Rink
+        </label>
+    </div>
+    
+</div>
+<input id="Resources_1__Id" name="Resources[1].Id" type="hidden" value="268382" />
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="Resources[2].Selected"
+                   name="Resources[2].Selected"
+                   type="checkbox"
+                   
+                   >
+            <i class="input-helper"></i>
+            South Rink
+        </label>
+    </div>
+    
+</div>
+<input id="Resources_2__Id" name="Resources[2].Id" type="hidden" value="268383" />
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="Resources[3].Selected"
+                   name="Resources[3].Selected"
+                   type="checkbox"
+                   
+                   >
+            <i class="input-helper"></i>
+            Party Room
+        </label>
+    </div>
+    
+</div>
+<input id="Resources_3__Id" name="Resources[3].Id" type="hidden" value="309500" />
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="Resources[4].Selected"
+                   name="Resources[4].Selected"
+                   type="checkbox"
+                   
+                   >
+            <i class="input-helper"></i>
+            Outdoor Rink
+        </label>
+    </div>
+    
+</div>
+<input id="Resources_4__Id" name="Resources[4].Id" type="hidden" value="350941" />
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="Resources[5].Selected"
+                   name="Resources[5].Selected"
+                   type="checkbox"
+                   
+                   >
+            <i class="input-helper"></i>
+            AR-ROOM
+        </label>
+    </div>
+    
+</div>
+<input id="Resources_5__Id" name="Resources[5].Id" type="hidden" value="354858" />
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="Resources[6].Selected"
+                   name="Resources[6].Selected"
+                   type="checkbox"
+                   
+                   >
+            <i class="input-helper"></i>
+            AR-ROOM{2}
+        </label>
+    </div>
+    
+</div>
+<input id="Resources_6__Id" name="Resources[6].Id" type="hidden" value="396198" />
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer ">
+                
+                <button id="btnFilter" class="btn btn-primary" data-calendar="update">Filter</button>
+                <button class="btn btn-link" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<input data-reservationData="" id="reservationIdToOpen" name="reservationIdToOpen" type="hidden" value="" />
+<input id="isReservationAlreadyBooked" name="isReservationAlreadyBooked" type="hidden" value="False" />
+			</div>
+		</section>
+	</section>
+
+
+
+	
+
+<div class="modal fade" id="modal-login" role="dialog">
+    <div class="modal-dialog" style="max-width:510px">
+        <div class="login-content modal-content ">
+            
+            <div class="modal-header p-b-0">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Login</h4>
+            </div>
+
+            <div id="alertContainer"></div>
+
+            <div class="card no-shadow ">
+
+                <div class="card-body card-padding p-t-0 " style="overflow: hidden;">
+                    <div id="formHolder" class="form-holder">
+                        <div id="formHolderView">
+
+<form action="/Login/_LoginForm" autocomplete="off" class="form-horizontal" id="LoginForm" method="post" role="form"><input name="__RequestVerificationToken" type="hidden" value="ZCaxw4AsMN6y19zBb0Qa4iWpLqD4E-ut6sjRcu5zLwBE_oVVeSmx-s35wO5gOLrq6NvC1wwu-oNi2WLciimrQMHx5so1" />	<input type="hidden" id="g-recaptcha-number" name="g-recaptcha-number" />
+	<input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response" />
+	<input type="hidden" name="LoginFromPublicView" id="LoginFromPublicView" value="false" />
+	<input type="hidden" name="SmuFormId" id="SmuFormId" value="" />
+    <input id="RecaptchaSiteKey" type="hidden" />
+	<div class="form-group">
+		<div class="col-xs-11">
+			<div class="input-group fg-float">
+    <span class="input-group-addon"><i class='zmdi zmdi-account-box'></i></span>
+    <div class="fg-line">
+        <input class="form-control input-lg" data-val="true" data-val-length="Username can not be more than 50 characters." data-val-length-max="50" data-val-required="Username is Required." id="Username" name="Username" type="text" value="" />
+        <label class="fg-label" for="Username">Username</label>
+    </div>
+    <span class="field-validation-valid" data-valmsg-for="Username" data-valmsg-replace="true"></span>
+</div>
+
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-xs-11">
+			<div class="input-group fg-float">
+    <span class="input-group-addon"><i class="zmdi zmdi-lock "></i></span>
+    <div class="fg-line">
+        <input class="form-control input-lg" data-val="true" data-val-required="Password is Required." id="Password" name="Password" type="password" value="" />
+        <label class="fg-label" for="Password">Password</label>
+    </div>
+    <span class="field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span>
+</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-xs-6 ">
+			
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="RememberMe"
+                   name="RememberMe"
+                   type="checkbox"
+                   
+                   >
+            <i class="input-helper"></i>
+            Remember Me
+        </label>
+    </div>
+    
+</div>
+
+		</div>
+		<div class="col-xs-5 ">
+			<a class="btn btn-link waves-effect trouble">
+				Having trouble?
+			</a>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-xs-6">
+			<div class="form-align">
+				<button id="btnLogin"
+						type="submit"
+						class="btn btn-primary btn-icon-text no-shadow waves-effect">
+					<i class="zmdi zmdi-lock "></i> Log In
+				</button>
+			</div>
+		</div>
+			<div class="col-xs-5 text-right">
+				<button id="btnRegister"
+						type="button"
+						class="btn default btn-icon-text no-shadow waves-effect">
+					<i class="zmdi zmdi-account-add"></i> Create Account
+				</button>
+			</div>
+		
+		<input type="hidden" name="RedirectUrl" id="RedirectUrl" />
+
+	</div>
+</form>                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row p-b-20">
+                <div class="text-center">
+                    <a href="https://www.ezfacility.com/privacy-policy" target="_blank">Privacy Policy</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="mMergeCart" tabindex="-1" role="dialog" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                
+                <h4 class="modal-title" id="myModalLabel">Items In Cart</h4>
+            </div>
+            <div class="modal-body">
+                These are in your cart from a previous session would you like to add them?
+                
+                <div class="listview">
+                    <div class="lv-body">
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnAddExistingItems" class="btn btn-primary waves-effect " data-row="" data-action="">Yes</button>
+                <button id="btnClearExistingItems" class="btn btn-link waves-effect " data-row="">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+	<!-- Page Loader -->
+	<div class="page-loader">
+		<div class="preloader pls-blue">
+			<svg class="pl-circular" viewBox="25 25 50 50">
+				<circle class="plc-path" cx="50" cy="50" r="20" />
+			</svg>
+
+			<p>Please wait...</p>
+		</div>
+	</div>
+
+	
+	<div class="modal fade" id="authenthicationModal">
+		<div class="modal-dialog modal-lg card-stream">
+			<div class="modal-content">
+				<div class="modal-body text-center">
+					<div id="divAuthContainer">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<footer id="footer">
+    <div class="container toggled">
+        <div class="row body">
+            <div class="col-sm-7">
+                <ul class="contact">
+                        <li><i class="zmdi zmdi-phone"></i> 303-343-1111</li>
+                                            <li><i class="zmdi zmdi-email"></i> vikontessa65@yahoo.com</li>
+                                            <li><i class="zmdi zmdi-pin"></i>8580 E Lowry Blvd, Devnver, CO 80230</li>
+                </ul>
+            </div>
+            <div class="col-sm-5">
+                <ul class="company">
+                    <li>Powered by EZFacility &reg;</li>
+                    <li>Copyright &copy; 2025 EZFacility Inc.</li>
+                    <li>Service Code: -1-013558/v: 1.0.1</li>
+                    <li><a href="https://www.ezfacility.com/privacy-policy" target="_blank">Privacy Policy</a></li>
+                </ul>
+            </div>
+           
+        </div>
+
+    </div>
+</footer>
+
+
+	
+<div class="modal fade" id="mConfirmation" tabindex="-1" role="dialog" aria-labelledby="mSetSessions">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="mConfirmation-Title">Are you sure you want to cancel?</h4>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary waves-effect confirmation-confirmed" data-row="" data-action="">Yes</button>
+                <button class="btn btn-link waves-effect confirmation-cancelled" data-row="">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+	<!--jQuery-->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	
+	
+	<script>window.jQuery || document.write('<script src="~/Assets/vendors/jquery/dist/jquery.min.js">')</script>
+	<!--jQueryval-->
+	<script src="/bundles/jqueryval?v=QCZfShIrtURhmjizFZvGPfVjGxBuv7I4aEE9el49HmY1"></script>
+
+	<!--Vendors-->
+	<script src="/bundles/vendors?v=LsCyjFrhyTX7GF0GPuSFkMjHBs4JpCllyXKhIxyUsrw1"></script>
+
+	<!--Local-->
+	<script src="/bundles/selfServiceJS?v=XroBdKZVZEqhTp5_DQBGXH5oXJ9272ZR3GR1Yve0G7w1"></script>
+
+
+	
+    <script src="/Assets/vendors/fullcalendar/dist/fullcalendar.js"></script>
+    <script src="/Assets/vendors/fullcalendar-scheduler/dist/scheduler.js"></script>
+    <script src="/bundles/sessionJS?v=kwiWwrfZTNYXpbEGSuXc1QxlfPQsKFNUDtpsWsdotoA1"></script>
+
+
+
+	
+
+</body>
+</html>

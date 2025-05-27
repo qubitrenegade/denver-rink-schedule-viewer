@@ -1,5 +1,6 @@
-import { RawIceEventData } from '../types';
-import { BaseScraper } from './base-scraper';
+import { RawIceEventData } from '../../src/types.js';
+import { BaseScraper } from './base-scraper.js';
+import { JSDOM } from 'jsdom';
 
 export class IceRanchScraper extends BaseScraper {
   get rinkId(): string { return 'ice-ranch'; }
@@ -11,8 +12,8 @@ export class IceRanchScraper extends BaseScraper {
       const url = 'https://www.theiceranch.com/page/show/1652320-calendar';
       const html = await this.fetchWithFallback(url);
       
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, 'text/html');
+      const dom = new JSDOM(html);
+      const doc = dom.window.document;
       
       const events: RawIceEventData[] = [];
       
@@ -128,7 +129,7 @@ export class IceRanchScraper extends BaseScraper {
         }
       });
       
-      console.log(`🎯 Memorial Day found: ${memorialDayFound}`);
+      console.log(`�� Memorial Day found: ${memorialDayFound}`);
       console.log(`📅 Total events found: ${eventsFound}`);
       
       events.sort((a, b) => a.startTime.getTime() - b.startTime.getTime());

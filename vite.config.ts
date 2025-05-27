@@ -12,6 +12,15 @@ export default defineConfig(({ mode }) => {
         alias: {
           '@': path.resolve(__dirname, '.'),
         }
+      },
+      // Set base path for GitHub Pages
+      base: process.env.NODE_ENV === 'production' ? '/denver-rink-schedule-viewer/' : '/',
+      
+      // Serve data files during development
+      server: {
+        fs: {
+          allow: ['..']
+        }
       }
     };
 });
