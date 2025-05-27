@@ -1,8 +1,6 @@
-
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { RinkInfo, EventCategory, DisplayableIceEvent, FilterSettings, FilterMode, UrlViewType, RawIceEventData } from './types';
-import { RINKS_CONFIG, MOCK_EVENTS_DATA, ALL_INDIVIDUAL_RINKS_FOR_FILTERING } from './mockData';
-import { RealRinkScraper } from './scraper';
+import { RINKS_CONFIG, ALL_INDIVIDUAL_RINKS_FOR_FILTERING } from './mockData';
 import RinkTabs from './components/RinkTabs';
 import EventList from './components/EventList';
 import FilterControls from './components/FilterControls';
@@ -11,17 +9,26 @@ import { LoadingIcon, CalendarIcon, AdjustmentsHorizontalIcon, RefreshIcon } fro
 export const ALL_RINKS_TAB_ID = 'all-rinks';
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
+interface Metadata {
+  lastCombinedUpdate: string;
+  rinks: Record<string, {
+    lastSuccessfulScrape?: string;
+    lastAttempt: string;
+    status: 'success' | 'error';
+    eventCount: number;
+    errorMessage?: string;
+  }>;
+}
+
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [rinksConfigForTabs] = useState<RinkInfo[]>(RINKS_CONFIG); // Used for creating tabs
-  const [individualRinksForFiltering] = useState<RinkInfo[]>(ALL_INDIVIDUAL_RINKS_FOR_FILTERING); // Used for "Filter by Rink"
+  const [rinksConfigForTabs] = useState<RinkInfo[]>(RINKS_CONFIG);
+  const [individualRinksForFiltering] = useState<RinkInfo[]>(ALL_INDIVIDUAL_RINKS_FOR_FILTERING);
   
-  const [useLiveData, setUseLiveData] = useState<boolean>(false);
-  const [scraper] = useState(() => new RealRinkScraper());
-  
-  const [scrapedDataCache, setScrapedDataCache] = useState<RawIceEventData[]>([]);
-  const [lastScrapeTime, setLastScrapeTime] = useState<number>(0);
+  const [staticData, setStaticData] = useState<RawIceEventData[]>([]);
+  const [metadata, setMetadata] = useState<Metadata | null>(null);
+  const [lastFetchTime, setLastFetchTime] = useState<number>(0);
 
   const [numberOfDaysToShow] = useState<number>(4); 
 
@@ -50,13 +57,68 @@ const App: React.FC = () => {
 
   const allPossibleCategories = useMemo((): EventCategory[] => {
     const categories = new Set<EventCategory>();
-    // Get categories from mock data for all individual rinks
-    individualRinksForFiltering.forEach(rink => {
-        (MOCK_EVENTS_DATA[rink.id] || []).forEach(event => categories.add(event.category));
+    // Get categories from static data
+    staticData.forEach(event => categories.add(event.category));
+    
+    // Ensure we have common categories even if not in current data
+    ['Public Skate', 'Stick & Puck', 'Hockey League', 'Learn to Skate', 'Figure Skating', 'Hockey Practice', 'Drop-In Hockey', 'Special Event'].forEach(cat => {
+      categories.add(cat as EventCategory);
     });
-    if (!categories.has('Drop-In Hockey')) categories.add('Drop-In Hockey');
+    
     return Array.from(categories).sort();
-  }, [individualRinksForFiltering]);
+  }, [staticData]);
+
+  const fetchStaticData = useCallback(async (forceRefresh: boolean = false) => {
+    // Only refetch if we don't have data or it's been more than 5 minutes (for development)
+    if (staticData.length > 0 && !forceRefresh && Date.now() - lastFetchTime < 5 * 60 * 1000) {
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      console.log('📡 Fetching static data...');
+      
+      // Fetch combined events data
+      const eventsResponse = await fetch('/data/combined.json');
+      if (!eventsResponse.ok) {
+        throw new Error(`Failed to fetch events data: ${eventsResponse.status}`);
+      }
+      
+      const eventsData = await eventsResponse.json();
+      
+      // Convert string dates back to Date objects
+      const parsedEvents: RawIceEventData[] = eventsData.map((event: any) => ({
+        ...event,
+        startTime: new Date(event.startTime),
+        endTime: new Date(event.endTime),
+      }));
+      
+      // Fetch metadata
+      let metadataData: Metadata | null = null;
+      try {
+        const metadataResponse = await fetch('/data/metadata.json');
+        if (metadataResponse.ok) {
+          metadataData = await metadataResponse.json();
+        }
+      } catch (metaError) {
+        console.warn('Could not fetch metadata:', metaError);
+      }
+      
+      setStaticData(parsedEvents);
+      setMetadata(metadataData);
+      setLastFetchTime(Date.now());
+      
+      console.log(`✅ Loaded ${parsedEvents.length} events from static data`);
+      
+    } catch (err) {
+      console.error('Error fetching static data:', err);
+      setError(`Failed to load schedule data: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [staticData.length, lastFetchTime]);
 
   const filterAndDisplayEvents = useCallback((rinkTabId: UrlViewType, currentFilters: FilterSettings, sourceData: RawIceEventData[]) => {
     console.log("Filtering data for tab:", { rinkTabId, currentFilters, dataLength: sourceData.length });
@@ -134,62 +196,19 @@ const App: React.FC = () => {
     setEvents(sortedEvents);
   }, [rinksConfigForTabs, individualRinksForFiltering, numberOfDaysToShow]);
 
-  const scrapeData = useCallback(async (): Promise<RawIceEventData[]> => {
-    console.log('🚀 Scraping fresh data...');
-    const scrapedEvents = await scraper.scrapeAllRinks();
-    setScrapedDataCache(scrapedEvents);
-    setLastScrapeTime(Date.now());
-    return scrapedEvents;
-  }, [scraper]);
-
-  const fetchAndFilterEvents = useCallback(async (rinkTabId: UrlViewType, currentFilters: FilterSettings, forceRefresh: boolean = false) => {
-    console.log("fetchAndFilterEvents called with:", { rinkTabId, currentFilters, useLiveData, forceRefresh });
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      let sourceData: RawIceEventData[];
-
-      if (useLiveData) {
-        if (scrapedDataCache.length > 0 && !forceRefresh && Date.now() - lastScrapeTime < 15 * 60 * 1000) {
-          console.log('📋 Using recent cached scraped data...');
-          sourceData = scrapedDataCache;
-        } else {
-          console.log('🚀 Fetching fresh live data...');
-          sourceData = await scrapeData();
-        }
-      } else {
-        console.log('📋 Using mock data...');
-        const allMockEvents: RawIceEventData[] = [];
-        // Collect mock data from all *individual* rinks, as MOCK_EVENTS_DATA is keyed by individual rink IDs
-        individualRinksForFiltering.forEach(r => { 
-          const rinkEvents = MOCK_EVENTS_DATA[r.id] || [];
-          allMockEvents.push(...rinkEvents.map(event => ({...event, rinkId: r.id}))); // Ensure rinkId is correct
-        });
-        sourceData = allMockEvents;
-      }
-      filterAndDisplayEvents(rinkTabId, currentFilters, sourceData);
-
-    } catch (err) {
-      console.error("Error fetching or filtering events:", err);
-      setError(`Failed to load event data: ${err instanceof Error ? err.message : 'Unknown error'}`);
-      setEvents([]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [useLiveData, scrapedDataCache, lastScrapeTime, scrapeData, filterAndDisplayEvents, individualRinksForFiltering]);
-
+  // Initial data fetch
   useEffect(() => {
-    console.log("Effect triggered for filters, live data toggle, or rink selection.");
-    if (useLiveData && (scrapedDataCache.length === 0 || (Date.now() - lastScrapeTime > 15 * 60 * 1000))) {
-        fetchAndFilterEvents(selectedRinkId, filterSettings, true);
-    } else if (!useLiveData) {
-        fetchAndFilterEvents(selectedRinkId, filterSettings); 
-    } else {
-        filterAndDisplayEvents(selectedRinkId, filterSettings, scrapedDataCache);
-    }
-  }, [selectedRinkId, filterSettings, useLiveData]); 
+    fetchStaticData();
+  }, [fetchStaticData]);
 
+  // Filter events when data or filters change
+  useEffect(() => {
+    if (staticData.length > 0) {
+      filterAndDisplayEvents(selectedRinkId, filterSettings, staticData);
+    }
+  }, [selectedRinkId, filterSettings, staticData, filterAndDisplayEvents]);
+
+  // URL state management
   useEffect(() => {
     const params = new URLSearchParams();
     params.set('view', selectedRinkId);
@@ -233,20 +252,41 @@ const App: React.FC = () => {
   };
   
   const handleRefreshData = () => {
-    fetchAndFilterEvents(selectedRinkId, filterSettings, true);
-  };
-
-  const handleToggleLiveData = () => {
-    const newLiveDataState = !useLiveData;
-    setUseLiveData(newLiveDataState);
-    if (newLiveDataState && scrapedDataCache.length === 0) { 
-        fetchAndFilterEvents(selectedRinkId, filterSettings, true);
-    } else if (!newLiveDataState) { 
-        fetchAndFilterEvents(selectedRinkId, filterSettings, false);
-    }
+    fetchStaticData(true);
   };
 
   const selectedRinkTabInfo = selectedRinkId !== ALL_RINKS_TAB_ID ? rinksConfigForTabs.find(rink => rink.id === selectedRinkId) : null;
+
+  const getLastUpdateInfo = () => {
+    if (!metadata) return 'Unknown';
+    
+    if (selectedRinkId === ALL_RINKS_TAB_ID) {
+      return new Date(metadata.lastCombinedUpdate).toLocaleString();
+    } else {
+      // Find the most recent update for rinks in this tab
+      let latestUpdate = '';
+      
+      if (selectedRinkTabInfo?.memberRinkIds) {
+        // Group tab - find latest update among member rinks
+        selectedRinkTabInfo.memberRinkIds.forEach(rinkId => {
+          const rinkMeta = metadata.rinks[rinkId];
+          if (rinkMeta?.lastSuccessfulScrape) {
+            if (!latestUpdate || rinkMeta.lastSuccessfulScrape > latestUpdate) {
+              latestUpdate = rinkMeta.lastSuccessfulScrape;
+            }
+          }
+        });
+      } else {
+        // Individual rink tab
+        const rinkMeta = metadata.rinks[selectedRinkId];
+        if (rinkMeta?.lastSuccessfulScrape) {
+          latestUpdate = rinkMeta.lastSuccessfulScrape;
+        }
+      }
+      
+      return latestUpdate ? new Date(latestUpdate).toLocaleString() : 'Unknown';
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-700 text-gray-100 p-4 sm:p-6 md:p-8">
@@ -258,15 +298,15 @@ const App: React.FC = () => {
           </h1>
         </div>
         <p className="text-sm text-slate-400 italic max-w-2xl mx-auto">
-          Showing events for the next {numberOfDaysToShow} days (Today + {numberOfDaysToShow-1} days). 
-          Toggle between mock data and live scraping.
+          Showing events for the next {numberOfDaysToShow} days. 
+          Data is automatically updated twice daily via GitHub Actions.
         </p>
       </header>
 
       <div className="max-w-6xl mx-auto bg-slate-800 shadow-2xl rounded-lg overflow-hidden">
         <div className="p-4 sm:p-6 border-b border-slate-700">
           <RinkTabs
-            rinks={rinksConfigForTabs} // Use the tab configuration
+            rinks={rinksConfigForTabs}
             selectedRinkId={selectedRinkId}
             onSelectRink={handleRinkSelect}
             allRinksTabId={ALL_RINKS_TAB_ID}
@@ -288,39 +328,31 @@ const App: React.FC = () => {
                 )}
               </button>
               
-              <button
-                onClick={handleToggleLiveData}
-                className={`flex items-center justify-center w-full sm:w-auto px-4 py-2 text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-75 transition-colors ${
-                  useLiveData 
-                    ? 'text-green-200 bg-green-600 hover:bg-green-500 focus:ring-green-500' 
-                    : 'text-orange-200 bg-orange-600 hover:bg-orange-500 focus:ring-orange-500'
-                }`}
-                title={useLiveData ? 'Using live scraped data' : 'Using mock data'}
-              >
-                <div className={`w-2 h-2 rounded-full mr-2 ${useLiveData ? 'bg-green-300' : 'bg-orange-300'}`} />
-                {useLiveData ? 'Live Data' : 'Mock Data'}
-                {useLiveData && scrapedDataCache.length > 0 && Date.now() - lastScrapeTime < 15 * 60 * 1000 && (
+              <div className="flex items-center px-4 py-2 text-sm bg-green-600/20 text-green-300 rounded-md">
+                <div className="w-2 h-2 rounded-full mr-2 bg-green-300" />
+                Static Data
+                {metadata && (
                   <span className="ml-2 text-xs opacity-75">
-                    (cached {Math.round((Date.now() - lastScrapeTime) / 60000)}m)
+                    (Updated: {getLastUpdateInfo()})
                   </span>
                 )}
-              </button>
+              </div>
             </div>
 
             <button
               onClick={handleRefreshData}
-              disabled={isLoading && useLiveData} 
+              disabled={isLoading} 
               className="flex items-center justify-center w-full sm:w-auto px-4 py-2 text-sm font-medium text-sky-200 bg-sky-600 hover:bg-sky-500 disabled:bg-sky-800 disabled:text-sky-400 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-opacity-75 transition-colors"
-              title={useLiveData ? "Force refresh from live websites" : "Refresh mock data (no change)"}
+              title="Refresh static data from server"
             >
-              <RefreshIcon className={`w-5 h-5 mr-2 ${isLoading && useLiveData ? 'animate-spin' : ''}`} />
-              {isLoading && useLiveData ? 'Loading...' : 'Refresh Data'}
+              <RefreshIcon className={`w-5 h-5 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+              {isLoading ? 'Loading...' : 'Refresh Data'}
             </button>
           </div>
             {showFilters && (
               <div id="filter-panel" className="mt-4 p-4 bg-slate-700/50 rounded-md">
                 <FilterControls
-                  allRinks={individualRinksForFiltering} // Pass individual rinks for the filter section
+                  allRinks={individualRinksForFiltering}
                   selectedRinkId={selectedRinkId}
                   allCategories={allPossibleCategories}
                   currentFilterSettings={filterSettings}
@@ -348,11 +380,11 @@ const App: React.FC = () => {
              <div className="mb-6 p-4 border border-slate-700 rounded-lg bg-slate-700/50">
                <h2 className="text-2xl font-semibold text-sky-300 mb-1">All Rinks View</h2>
                <p className="text-sm text-slate-400">
-                 Showing events from selected rinks. {useLiveData ? 'Live scraped data' : 'Mock data for demonstration'}.
+                 Showing events from all Denver area ice rinks. Data automatically updated twice daily.
                </p>
-               {useLiveData && scrapedDataCache.length > 0 && (
+               {metadata && (
                  <p className="text-xs text-green-400 mt-1">
-                   📊 {scrapedDataCache.length} total events cached {lastScrapeTime > 0 ? `(${Math.round((Date.now() - lastScrapeTime) / 60000)}m ago)` : ''}
+                   📊 {staticData.length} total events loaded (Last update: {new Date(metadata.lastCombinedUpdate).toLocaleString()})
                  </p>
                )}
              </div>
@@ -361,8 +393,7 @@ const App: React.FC = () => {
           {isLoading && (
             <div className="flex flex-col items-center justify-center h-64 text-slate-400">
               <LoadingIcon className="w-12 h-12 mb-4" />
-              <p className="text-lg">{useLiveData ? 'Scraping live data...' : 'Loading schedule...'}</p>
-              {useLiveData && <p className="text-sm text-slate-500">This may take a few seconds for all sources.</p>}
+              <p className="text-lg">Loading schedule data...</p>
             </div>
           )}
 
@@ -377,13 +408,7 @@ const App: React.FC = () => {
                 onClick={() => handleRefreshData()}
                 className="mt-3 px-3 py-1 text-xs bg-sky-600 hover:bg-sky-500 rounded"
               >
-                Retry Fetching Live Data
-              </button>
-              <button 
-                onClick={() => setUseLiveData(false)}
-                className="mt-2 px-3 py-1 text-xs bg-slate-600 hover:bg-slate-500 rounded"
-              >
-                Switch to Mock Data
+                Retry Loading Data
               </button>
             </div>
           )}
@@ -395,7 +420,7 @@ const App: React.FC = () => {
               </svg>
               <p className="text-lg">No events found for the selected criteria and date range.</p>
               <p className="text-sm text-slate-500">
-                {useLiveData ? 'Try adjusting filters, or check if websites are accessible.' : 'Try adjusting filters or switching to live data.'}
+                Try adjusting filters or check back later for updated data.
               </p>
             </div>
           )}
@@ -406,11 +431,14 @@ const App: React.FC = () => {
         </div>
       </div>
       <footer className="text-center mt-8 text-sm text-slate-500">
-        <p>&copy; {new Date().getFullYear()} Denver Rink Schedule. {useLiveData ? `Live data scraped ${lastScrapeTime > 0 ? Math.round((Date.now() - lastScrapeTime) / 60000) + 'm ago' : 'never'}.` : 'Using mock data.'}</p>
-        <p className="mt-1">Frontend scraping relies on CORS proxies. Refresh data if it seems stale.</p>
+        <p>&copy; {new Date().getFullYear()} Denver Rink Schedule. Data updated automatically via GitHub Actions.</p>
+        <p className="mt-1">
+          Last data update: {metadata ? new Date(metadata.lastCombinedUpdate).toLocaleString() : 'Loading...'}
+        </p>
       </footer>
     </div>
   );
 };
 
 export default App;
+

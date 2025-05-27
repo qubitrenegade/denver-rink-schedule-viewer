@@ -1,6 +1,6 @@
-
-import { RawIceEventData, EventCategory } from '../types';
-import { BaseScraper } from './base-scraper';
+import { RawIceEventData, EventCategory } from '../../src/types.js';
+import { BaseScraper } from './base-scraper.js';
+import { JSDOM } from 'jsdom';
 
 const facilityIdToRinkIdMap: Record<number, string> = {
   1904: 'fsc-avalanche',        // FSC Avalanche Rink
@@ -29,8 +29,8 @@ export class SSPRDScraper extends BaseScraper {
       console.log(`🏢 Scraping ${this.rinkName} from ${this.schedulePageUrl}...`);
       const html = await this.fetchWithFallback(this.schedulePageUrl);
       
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, 'text/html');
+      const dom = new JSDOM(html);
+      const doc = dom.window.document;
       
       const events: RawIceEventData[] = [];
       
@@ -66,7 +66,6 @@ export class SSPRDScraper extends BaseScraper {
                     category = this.categorizeEvent(title); // Fallback to title if EventTypeName was generic
                 }
 
-
                 try {
                     const startTime = new Date(item.EventStartTime);
                     const endTime = new Date(item.EventEndTime);
@@ -79,7 +78,6 @@ export class SSPRDScraper extends BaseScraper {
                     // Check if the event is "Closed" - we can filter this at a higher level if needed
                     // but good to note it here if it's explicit.
                     const isClosed = item.Closed === true || title.toLowerCase().includes("closed");
-
 
                     events.push({
                         id: `${specificRinkId}-${item.EventId || Date.now() + index}`, // Use EventId if available

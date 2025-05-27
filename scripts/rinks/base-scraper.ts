@@ -1,78 +1,43 @@
-import { RawIceEventData, EventCategory } from '../types';
+import { RawIceEventData, EventCategory } from '../../src/types.js';
+import fetch from 'node-fetch';
 
 export abstract class BaseScraper {
-  protected proxyUrls = [
-    'https://api.allorigins.win/get?url=',
-    'https://api.codetabs.com/v1/proxy?quest=',
-  ];
-
   abstract get rinkId(): string;
   abstract get rinkName(): string;
   abstract scrape(): Promise<RawIceEventData[]>;
 
   protected async fetchWithFallback(url: string): Promise<string> {
-    const errors = [];
+    console.log(`🔄 [${this.rinkName}] Fetching directly: ${url}`);
     
-    for (const proxyUrl of this.proxyUrls) {
-      try {
-        console.log(`🔄 [${this.rinkName}] Trying proxy: ${proxyUrl}`);
-        
-        let fetchUrl: string;
-        
-        if (proxyUrl.includes('allorigins')) {
-          fetchUrl = `${proxyUrl}${encodeURIComponent(url)}`;
-        } else if (proxyUrl.includes('codetabs')) {
-          fetchUrl = `${proxyUrl}${encodeURIComponent(url)}`;
-        } else {
-          fetchUrl = `${proxyUrl}${url}`;
+    try {
+      const fetchStart = Date.now();
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+          'Accept-Language': 'en-US,en;q=0.5',
+          'Accept-Encoding': 'gzip, deflate',
+          'Connection': 'keep-alive',
+          'Upgrade-Insecure-Requests': '1',
         }
-        
-        console.log(`   Full URL: ${fetchUrl}`);
-        
-        const fetchStart = Date.now();
-        const response = await fetch(fetchUrl, {
-          method: 'GET',
-          mode: 'cors',
-          credentials: 'omit',
-        });
-        
-        const fetchTime = Date.now() - fetchStart;
-        console.log(`   📡 Response: ${response.status} after ${fetchTime}ms`);
-        
-        if (!response.ok) {
-          const errorText = await response.text().catch(() => 'Could not read error');
-          throw new Error(`HTTP ${response.status}: ${errorText.substring(0, 100)}`);
-        }
-        
-        let html: string;
-        
-        if (proxyUrl.includes('allorigins')) {
-          const data = await response.json();
-          console.log(`   📊 AllOrigins response keys: ${Object.keys(data).join(', ')}`);
-          
-          if (data.contents) {
-            html = data.contents;
-            console.log(`   ✅ SUCCESS! Got ${html.length} chars of HTML`);
-            return html;
-          } else if (data.status?.http_code) {
-            throw new Error(`Target HTTP ${data.status.http_code}: ${data.status.error_message || 'Unknown'}`);
-          } else {
-            throw new Error('No contents in allorigins response');
-          }
-        } else {
-          html = await response.text();
-          console.log(`   ✅ SUCCESS! Got ${html.length} chars of HTML`);
-          return html;
-        }
-        
-      } catch (error) {
-        const errorMsg = `${proxyUrl}: ${error.message}`;
-        console.log(`   ❌ Failed: ${error.message}`);
-        errors.push(errorMsg);
+      });
+      
+      const fetchTime = Date.now() - fetchStart;
+      console.log(`   📡 Response: ${response.status} after ${fetchTime}ms`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
+      
+      const html = await response.text();
+      console.log(`   ✅ SUCCESS! Got ${html.length} chars of content`);
+      return html;
+      
+    } catch (error) {
+      console.error(`   ❌ Failed to fetch ${url}:`, error.message);
+      throw error;
     }
-    
-    throw new Error(`All proxies failed: ${errors.join('; ')}`);
   }
 
   protected parseTimeWithTimezone(timeStr: string, date: Date): Date {
@@ -150,3 +115,4 @@ export abstract class BaseScraper {
     return cleanTitle.trim();
   }
 }
+

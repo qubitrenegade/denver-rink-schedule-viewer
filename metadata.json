@@ -1,6 +1,0 @@
-{
-  "name": "Denver Rink Schedule Viewer",
-  "description": "An application to display (mock) ice time schedules for various hockey rinks in the Denver area. Data is illustrative and not live-scraped.",
-  "requestFramePermissions": [],
-  "prompt": ""
-}

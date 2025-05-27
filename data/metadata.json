@@ -1,0 +1,23 @@
+{
+  "lastCombinedUpdate": "2025-05-27T19:19:52.266Z",
+  "rinks": {
+    "big-bear": {
+      "lastAttempt": "2025-05-27T19:19:52.225Z",
+      "status": "success",
+      "eventCount": 0,
+      "lastSuccessfulScrape": "2025-05-27T19:19:52.225Z"
+    },
+    "ssprd-249": {
+      "lastAttempt": "2025-05-27T17:57:38.962Z",
+      "status": "success",
+      "eventCount": 1388,
+      "lastSuccessfulScrape": "2025-05-27T17:57:38.962Z"
+    },
+    "ice-ranch": {
+      "lastAttempt": "2025-05-27T18:19:00.546Z",
+      "status": "success",
+      "eventCount": 43,
+      "lastSuccessfulScrape": "2025-05-27T18:19:00.546Z"
+    }
+  }
+}
