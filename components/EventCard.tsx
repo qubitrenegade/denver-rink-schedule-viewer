@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { DisplayableIceEvent, EventCategory } from '../types';
 import { ClockIcon, TagIcon, InfoIcon, StarIcon, GlobeAltIcon } from './icons'; 
@@ -25,6 +24,12 @@ const getCategoryColor = (category: EventCategory): string => {
   }
 };
 
+// Link icon component
+const LinkIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
+  </svg>
+);
 
 const EventCard: React.FC<EventCardProps> = ({ event }) => {
   const startTimeDate = new Date(event.startTime);
@@ -41,7 +46,22 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
       aria-labelledby={`event-title-${event.id}`}
     >
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2 sm:mb-3">
-        <h4 id={`event-title-${event.id}`} className="text-lg sm:text-xl font-semibold text-sky-200 mb-1 sm:mb-0">{event.title}</h4>
+        <div className="flex items-center gap-2 mb-1 sm:mb-0">
+          <h4 id={`event-title-${event.id}`} className="text-lg sm:text-xl font-semibold text-sky-200">
+            {event.title}
+          </h4>
+          {event.eventUrl && (
+            <a 
+              href={event.eventUrl} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-sky-400 hover:text-sky-300 transition-colors"
+              title="View event details"
+            >
+              <LinkIcon className="w-4 h-4" />
+            </a>
+          )}
+        </div>
         {event.isFeatured && (
           <div className="flex items-center text-xs font-medium bg-yellow-400/20 text-yellow-300 px-2.5 py-1 rounded-full self-start sm:self-center">
             <StarIcon className="w-3.5 h-3.5 mr-1.5" />
@@ -80,3 +100,4 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
 };
 
 export default EventCard;
+

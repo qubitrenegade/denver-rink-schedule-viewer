@@ -1,4 +1,3 @@
-
 export interface RinkInfo {
   id: string;
   name: string;
@@ -26,6 +25,7 @@ export interface IceEvent {
   description?: string;
   category: EventCategory;
   isFeatured?: boolean; // For potential special highlighting
+  eventUrl?: string; // NEW: Link to the specific event page
 }
 
 // Used for displaying events, potentially with added info like rinkName
@@ -52,4 +52,5 @@ export interface RawIceEventData {
   description?: string;
   category: EventCategory;
   isFeatured?: boolean;
+  eventUrl?: string; // NEW: Link to the specific event page
 }
