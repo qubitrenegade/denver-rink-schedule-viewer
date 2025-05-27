@@ -12,7 +12,8 @@
     "scrape:big-bear": "bun run scripts/scraper.ts --rink big-bear", 
     "scrape:ssprd": "bun run scripts/scraper.ts --rink ssprd",
     "scrape:local": "bun run scripts/scraper.ts --local",
-    "scrape:test": "bun run scripts/scraper.ts --test"
+    "scrape:test": "bun run scripts/scraper.ts --test",
+    "test:puppeteer": "bun run scripts/test-puppeteer.ts"
   },
   "dependencies": {
     "react": "^19.1.0",
@@ -23,6 +24,8 @@
     "typescript": "~5.7.2",
     "vite": "^6.2.0",
     "node-fetch": "^3.3.2",
-    "jsdom": "^23.0.1"
+    "jsdom": "^23.0.1",
+    "@types/jsdom": "^21.1.6",
+    "puppeteer": "^21.0.0"
   }
 }

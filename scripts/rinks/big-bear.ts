@@ -1,5 +1,7 @@
 import { RawIceEventData, EventCategory } from '../../src/types.js';
 import { BaseScraper } from './base-scraper.js';
+import puppeteer from 'puppeteer';
+import { writeFile } from 'fs/promises';
 
 interface BigBearEvent {
   id: string;
@@ -25,8 +27,8 @@ export class BigBearScraper extends BaseScraper {
 
   private readonly baseUrl = 'https://bigbearicearena.ezfacility.com';
 
-  protected categorizeBigBearEvent(event: BigBearEvent): EventCategory {
-    const classNames = event.className.join(' ').toLowerCase();
+  protected categorizeBigBearEvent(event: BigBearEvent | any): EventCategory {
+    const classNames = event.className ? event.className.join(' ').toLowerCase() : '';
     const titleLower = event.title.toLowerCase();
 
     if (classNames.includes('event-purple') || titleLower.includes('public skate')) return 'Public Skate';
@@ -42,144 +44,300 @@ export class BigBearScraper extends BaseScraper {
 
   async scrape(): Promise<RawIceEventData[]> {
     try {
-      console.log('🐻 Scraping Big Bear Ice Arena...');
-      
-      // First, let's try to get a session by visiting the main sessions page
-      const mainPageUrl = `${this.baseUrl}/Sessions`;
-      console.log(`   🔄 Getting session from main page: ${mainPageUrl}`);
-      
-      const mainPageHtml = await this.fetchWithFallback(mainPageUrl);
-      
-      // Extract any cookies or session info we might need
-      // For now, let's try the API with proper headers that mimic a browser
-      
-      const today = new Date();
-      const year = today.getFullYear();
-      const month = today.getMonth(); // 0-indexed
-
-      const startDateCurrentMonth = new Date(year, month, 1);
-      const endDateCurrentMonth = new Date(year, month + 1, 0); 
-      
-      const startDateNextMonth = new Date(year, month + 1, 1);
-      const endDateNextMonth = new Date(year, month + 2, 0);
-      
-      const formatDateForAPI = (date: Date) => date.toISOString().split('T')[0];
-
-      const eventsUrl1 = `${this.baseUrl}/Sessions/GetCalenderEvents?start=${formatDateForAPI(startDateCurrentMonth)}&end=${formatDateForAPI(endDateCurrentMonth)}`;
-      const eventsUrl2 = `${this.baseUrl}/Sessions/GetCalenderEvents?start=${formatDateForAPI(startDateNextMonth)}&end=${formatDateForAPI(endDateNextMonth)}`;
+      console.log('🐻 Scraping Big Bear Ice Arena with Puppeteer...');
       
       const fetchedEvents: RawIceEventData[] = [];
-
-      for (const eventsUrl of [eventsUrl1, eventsUrl2]) {
-        console.log(`   Fetching events from ${eventsUrl}`);
+      
+      // Launch Puppeteer browser
+      console.log('🚀 Launching headless browser...');
+      const browser = await puppeteer.launch({
+        headless: "new", // Use new headless mode
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-accelerated-2d-canvas',
+          '--no-first-run',
+          '--no-zygote',
+          '--single-process',
+          '--disable-gpu'
+        ]
+      });
+      
+      try {
+        const page = await browser.newPage();
         
-        try {
-          // Try with enhanced headers that mimic the browser request
-          const response = await fetch(eventsUrl, {
-            method: 'GET',
-            headers: {
-              'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-              'Accept': 'application/json, text/javascript, */*; q=0.01',
-              'Accept-Language': 'en-US,en;q=0.9',
-              'Accept-Encoding': 'gzip, deflate, br',
-              'Referer': `${this.baseUrl}/Sessions`,
-              'X-Requested-With': 'XMLHttpRequest',
-              'Connection': 'keep-alive',
-              'Sec-Fetch-Dest': 'empty',
-              'Sec-Fetch-Mode': 'cors',
-              'Sec-Fetch-Site': 'same-origin',
+        // Set user agent and viewport
+        await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
+        await page.setViewport({ width: 1280, height: 720 });
+        
+        const mainPageUrl = `${this.baseUrl}/Sessions`;
+        console.log(`📄 Navigating to: ${mainPageUrl}`);
+        
+        // Navigate and wait for the page to load
+        await page.goto(mainPageUrl, { 
+          waitUntil: 'networkidle2', 
+          timeout: 30000 
+        });
+        
+        console.log('⏳ Waiting for calendar to load...');
+        
+        // Wait for FullCalendar to initialize
+        await page.waitForSelector('#calendar', { timeout: 10000 });
+        
+        // Give extra time for events to load
+        await page.waitForTimeout(3000);
+        
+        // Add some debugging info about what's on the page
+        const pageInfo = await page.evaluate(() => {
+          return {
+            title: document.title,
+            url: window.location.href,
+            hasJQuery: typeof (window as any).$ !== 'undefined',
+            hasFullCalendar: typeof (window as any).$ !== 'undefined' && typeof (window as any).$.fn.fullCalendar !== 'undefined',
+            calendarExists: !!document.getElementById('calendar'),
+            scriptCount: document.querySelectorAll('script').length,
+            eventElementCount: document.querySelectorAll('.fc-event, .fc-daygrid-event, .fc-timegrid-event').length
+          };
+        });
+        
+        console.log('📊 Page info:', pageInfo);
+        
+        console.log('🔍 Extracting events from loaded calendar...');
+        
+        // Let's dump everything we can about the page
+        const pageData = await page.evaluate(() => {
+          const eventElements = document.querySelectorAll('.fc-event, .fc-daygrid-event, .fc-timegrid-event, [class*="fc-event"]');
+          
+          return {
+            // Sample of event element HTML
+            sampleEvents: Array.from(eventElements).slice(0, 10).map((el, index) => ({
+              index,
+              outerHTML: el.outerHTML,
+              textContent: el.textContent?.trim(),
+              className: el.className,
+              attributes: Array.from(el.attributes).reduce((acc, attr) => {
+                acc[attr.name] = attr.value;
+                return acc;
+              }, {} as any),
+              children: Array.from(el.children).map(child => ({
+                tagName: child.tagName,
+                className: child.className,
+                textContent: child.textContent?.trim()
+              }))
+            })),
+            
+            // Check for FullCalendar instance
+            hasFullCalendar: typeof (window as any).$ !== 'undefined' && typeof (window as any).$.fn.fullCalendar !== 'undefined',
+            
+            // Try to get FullCalendar version
+            fullCalendarVersion: (window as any).$ && (window as any).$.fn.fullCalendar ? 
+              (window as any).$.fn.fullCalendar.version || 'unknown' : 'not available',
+            
+            // Global variables that might contain events
+            globalVars: {
+              calendarEvents: typeof (window as any).calendarEvents,
+              events: typeof (window as any).events,
+              scheduleData: typeof (window as any).scheduleData,
+              fullCalendarEvents: typeof (window as any).fullCalendarEvents
+            },
+            
+            // Calendar element info
+            calendarElement: (() => {
+              const cal = document.getElementById('calendar');
+              if (cal) {
+                return {
+                  innerHTML: cal.innerHTML.substring(0, 1000) + '...',
+                  className: cal.className,
+                  children: Array.from(cal.children).map(child => child.tagName)
+                };
+              }
+              return null;
+            })()
+          };
+        });
+        
+        console.log('📄 PAGE DATA DUMP:');
+        console.log('==================');
+        console.log(`Found ${pageData.sampleEvents.length} sample events to examine:`);
+        
+        pageData.sampleEvents.forEach((event, index) => {
+          console.log(`\nEvent ${index}:`);
+          console.log(`  HTML: ${event.outerHTML.substring(0, 200)}...`);
+          console.log(`  Text: "${event.textContent}"`);
+          console.log(`  Class: "${event.className}"`);
+          console.log(`  Attributes:`, event.attributes);
+          console.log(`  Children:`, event.children);
+        });
+        
+        console.log(`\nFullCalendar Info:`);
+        console.log(`  Available: ${pageData.hasFullCalendar}`);
+        console.log(`  Version: ${pageData.fullCalendarVersion}`);
+        
+        console.log(`\nGlobal Variables:`);
+        console.log(`  calendarEvents: ${pageData.globalVars.calendarEvents}`);
+        console.log(`  events: ${pageData.globalVars.events}`);
+        console.log(`  scheduleData: ${pageData.globalVars.scheduleData}`);
+        
+        console.log(`\nCalendar Element:`, pageData.calendarElement);
+        
+        // Also save the full page HTML to a file for inspection
+        const fullHTML = await page.content();
+        console.log(`\n💾 Full page HTML length: ${fullHTML.length} characters`);
+        
+        // Save to file in the current directory so you can examine it
+        await writeFile('./debug-bigbear-page.html', fullHTML, 'utf-8');
+        console.log('💾 Saved full page HTML to: ./debug-bigbear-page.html');
+        
+        // Extract events using the info we just gathered
+        const events = await page.evaluate(() => {
+          const events: any[] = [];
+          
+          // Based on what we see, try to extract events
+          const eventElements = document.querySelectorAll('.fc-event, .fc-daygrid-event, .fc-timegrid-event, [class*="fc-event"]');
+          
+          eventElements.forEach((el, index) => {
+            const title = el.textContent?.trim() || '';
+            if (title && title.length > 2) {
+              // Try to find parent cell with date
+              let dateStr = '';
+              const parentCell = el.closest('[data-date]');
+              if (parentCell) {
+                dateStr = parentCell.getAttribute('data-date') || '';
+              }
+              
+              events.push({
+                id: `extracted-${index}`,
+                title: title,
+                start: dateStr || new Date().toISOString().split('T')[0],
+                end: dateStr || new Date().toISOString().split('T')[0],
+                source: 'dom-extraction'
+              });
             }
           });
           
-          if (!response.ok) {
-            console.warn(`   ⚠️ HTTP ${response.status} for ${eventsUrl}`);
-            continue;
-          }
-          
-          const responseText = await response.text();
-          console.log(`   📄 Response length: ${responseText.length} chars`);
-          
-          // Check if it's an error page
-          if (responseText.includes('LocationError') || responseText.includes('<html>')) {
-            console.warn(`   ⚠️ Got HTML error page instead of JSON from ${eventsUrl}`);
-            console.log(`   First 200 chars: ${responseText.substring(0, 200)}`);
-            continue;
-          }
-          
-          // Validate JSON
-          if (!(responseText.trim().startsWith('[') || responseText.trim().startsWith('{'))) {
-            console.warn(`   ⚠️ Response doesn't look like JSON from ${eventsUrl}`);
-            console.log(`   Response start: ${responseText.substring(0, 100)}`);
-            continue;
-          }
-
-          let rawEvents: BigBearEvent[];
+          return events;
+        });
+        
+        console.log(`🎯 Extracted ${(events || []).length} raw events from browser`);
+        
+        // Process the extracted events
+        (events || []).forEach((event: any, index: number) => {
           try {
-            rawEvents = JSON.parse(responseText);
-          } catch (parseError) {
-            console.error(`   ❌ JSON parse error for ${eventsUrl}: ${parseError.message}`);
-            continue;
-          }
-          
-          if (!Array.isArray(rawEvents)) {
-            console.warn(`   ⚠️ Expected array but got ${typeof rawEvents} from ${eventsUrl}`);
-            continue;
-          }
-          
-          console.log(`   ✅ Parsed ${rawEvents.length} events from ${eventsUrl}`);
-          
-          rawEvents.forEach((event, index) => {
-            try {
-              const startTime = new Date(event.start);
-              const endTime = new Date(event.end);
-
-              if (isNaN(startTime.getTime()) || isNaN(endTime.getTime())) {
-                console.warn(`   ⚠️ Invalid date for Big Bear event:`, event.start, event.end, event);
-                return;
-              }
+            let startTime: Date;
+            let endTime: Date;
+            
+            // Handle different date formats
+            if (event.start) {
+              startTime = new Date(event.start);
+            } else if (event.time) {
+              // Try to parse time from string
+              const today = new Date();
+              startTime = new Date(today.toDateString() + ' ' + event.time);
+            } else {
+              console.warn(`⚠️ No start time for event: ${event.title}`);
+              return;
+            }
+            
+            if (event.end) {
+              endTime = new Date(event.end);
+            } else {
+              // Default to 1 hour duration
+              endTime = new Date(startTime.getTime() + 60 * 60 * 1000);
+            }
+            
+            if (!isNaN(startTime.getTime())) {
+              const eventId = event.id || `big-bear-${index}-${startTime.getTime()}`;
               
-              const eventId = event.parentEventId 
-                ? `${this.rinkId}-${event.parentEventId}-${event.id}` 
-                : `${this.rinkId}-${event.id || index}-${startTime.getTime()}`;
-
               fetchedEvents.push({
                 id: eventId,
                 rinkId: this.rinkId,
-                title: this.cleanTitle(event.title),
+                title: this.cleanTitle(event.title || 'Unknown Event'),
                 startTime,
                 endTime,
-                description: event.description ? event.description.trim() : undefined,
+                description: event.description || undefined,
                 category: this.categorizeBigBearEvent(event),
-                isFeatured: false, 
+                isFeatured: false,
                 eventUrl: event.url ? `${this.baseUrl}${event.url}` : undefined,
               });
-            } catch(e) {
-              console.warn(`   ⚠️ Error processing individual Big Bear event item: `, event, e);
             }
-          });
-        } catch (e) {
-          console.error(`   ❌ Error fetching/parsing from ${eventsUrl}: ${e.message}`);
-        }
+          } catch (e) {
+            console.warn(`⚠️ Error processing browser event ${index}: ${e.message}`);
+          }
+        });
+        
+      } finally {
+        await browser.close();
+        console.log('🔒 Browser closed');
       }
-
-      console.log(`🐻 Big Bear: Total events found: ${fetchedEvents.length}`);
       
-      // If we got no events, let's provide some diagnostic info
+      console.log(`🐻 Big Bear Puppeteer: Total events found: ${fetchedEvents.length}`);
+      
+      // If Puppeteer didn't find events, fall back to the old HTTP method
       if (fetchedEvents.length === 0) {
-        console.log(`   🔍 No events found. This could mean:`);
-        console.log(`     - The API requires authentication/session`);
-        console.log(`     - Different date format needed`);
-        console.log(`     - Events are loaded differently`);
-        console.log(`     - Server is blocking automated requests`);
+        console.log('🔄 Puppeteer found no events, falling back to HTTP method...');
+        return await this.httpFallback();
       }
       
       fetchedEvents.sort((a, b) => a.startTime.getTime() - b.startTime.getTime());
       return fetchedEvents;
 
     } catch (error) {
-      console.error('❌ Big Bear Ice Arena scraping failed overall:', error);
-      return []; 
+      console.error('❌ Big Bear Puppeteer scraping failed:', error);
+      console.log('🔄 Trying HTTP fallback...');
+      return await this.httpFallback();
+    }
+  }
+  
+  private async httpFallback(): Promise<RawIceEventData[]> {
+    console.log('📡 Attempting HTTP fallback method...');
+    
+    try {
+      const today = new Date();
+      const start = today.toISOString().split('T')[0];
+      const endDate = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000);
+      const end = endDate.toISOString().split('T')[0];
+      
+      const apiUrl = `${this.baseUrl}/Sessions/GetCalenderEvents?start=${start}&end=${end}`;
+      
+      const response = await fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+          'Accept': 'application/json, text/javascript, */*; q=0.01',
+          'Referer': `${this.baseUrl}/Sessions`,
+          'X-Requested-With': 'XMLHttpRequest',
+        }
+      });
+      
+      if (response.ok) {
+        const responseText = await response.text();
+        if (responseText.trim().startsWith('[')) {
+          const apiEvents = JSON.parse(responseText);
+          if (Array.isArray(apiEvents) && apiEvents.length > 0) {
+            console.log(`✅ HTTP fallback successful: ${apiEvents.length} events`);
+            
+            return apiEvents.map((event: any, index: number) => ({
+              id: `${this.rinkId}-fallback-${event.id || index}`,
+              rinkId: this.rinkId,
+              title: this.cleanTitle(event.title),
+              startTime: new Date(event.start),
+              endTime: new Date(event.end || event.start),
+              description: event.description || undefined,
+              category: this.categorizeBigBearEvent(event),
+              isFeatured: false,
+              eventUrl: event.url ? `${this.baseUrl}${event.url}` : undefined,
+            })).filter(event => !isNaN(event.startTime.getTime()));
+          }
+        }
+      }
+      
+      console.log('❌ HTTP fallback also failed');
+      return [];
+      
+    } catch (error) {
+      console.error('❌ HTTP fallback error:', error);
+      return [];
     }
   }
 }
-
