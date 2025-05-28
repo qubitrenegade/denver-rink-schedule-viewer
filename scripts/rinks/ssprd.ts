@@ -50,6 +50,8 @@ export class SSPRDScraper extends BaseScraper {
           try {
             const scheduleData = JSON.parse(match[1]);
             if (Array.isArray(scheduleData)) {
+              console.log(`   📅 Processing ${scheduleData.length} events from schedule data`);
+              
               scheduleData.forEach((item: any, index: number) => {
                 const specificRinkId = facilityIdToRinkIdMap[item.FacilityId];
                 if (!specificRinkId) {
@@ -67,13 +69,74 @@ export class SSPRDScraper extends BaseScraper {
                 }
 
                 try {
-                    const startTime = new Date(item.EventStartTime);
-                    const endTime = new Date(item.EventEndTime);
+                    // Parse the date strings - these should be in the facility's local timezone
+                    // SSPRD facilities are in Mountain Time
+                    
+                    let startTime: Date;
+                    let endTime: Date;
+                    
+                    console.log(`🕐 Parsing SSPRD event times for "${title}"`);
+                    console.log(`   Raw start: ${item.EventStartTime}`);
+                    console.log(`   Raw end: ${item.EventEndTime}`);
+                    
+                    // The EventStartTime and EventEndTime from SSPRD are likely in Mountain Time
+                    // but JavaScript Date constructor treats them as local time or UTC
+                    if (item.EventStartTime) {
+                      const rawStart = new Date(item.EventStartTime);
+                      const rawEnd = new Date(item.EventEndTime);
+                      
+                      // Check if these dates look reasonable (not way off)
+                      const now = new Date();
+                      const thirtyDaysFromNow = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+                      
+                      if (rawStart >= now && rawStart <= thirtyDaysFromNow) {
+                        // The dates seem reasonable, but we need to ensure they're in Mountain Time
+                        // If they're being parsed as UTC but should be Mountain Time, adjust them
+                        
+                        // Get the hour from the original date
+                        const startHour = rawStart.getUTCHours();
+                        const startMinutes = rawStart.getUTCMinutes();
+                        const endHour = rawEnd.getUTCHours();
+                        const endMinutes = rawEnd.getUTCMinutes();
+                        
+                        // Create Mountain Time dates using our helper method
+                        startTime = this.createMountainTimeDate(
+                          rawStart.getUTCFullYear(),
+                          rawStart.getUTCMonth() + 1,
+                          rawStart.getUTCDate(),
+                          startHour,
+                          startMinutes
+                        );
+                        
+                        endTime = this.createMountainTimeDate(
+                          rawEnd.getUTCFullYear(),
+                          rawEnd.getUTCMonth() + 1,
+                          rawEnd.getUTCDate(),
+                          endHour,
+                          endMinutes
+                        );
+                        
+                      } else {
+                        // The parsed dates don't look right, skip this event
+                        console.warn(`   ⚠️ Skipping event with invalid dates: ${item.EventStartTime} to ${item.EventEndTime}`);
+                        return;
+                      }
+                    } else {
+                      console.warn(`   ⚠️ No EventStartTime for event: ${title}`);
+                      return;
+                    }
 
                     if (isNaN(startTime.getTime()) || isNaN(endTime.getTime())) {
-                        // console.warn(`   ⚠️ Invalid date for event on ${this.rinkName}:`, item.EventStartTime, item.EventEndTime, item);
+                        console.warn(`   ⚠️ Invalid date after parsing for event: ${title}`, {
+                          originalStart: item.EventStartTime,
+                          originalEnd: item.EventEndTime,
+                          parsedStart: startTime,
+                          parsedEnd: endTime
+                        });
                         return;
                     }
+                    
+                    console.log(`   ✅ Parsed as Mountain Time: ${startTime.toString()} to ${endTime.toString()}`);
                     
                     // Check if the event is "Closed" - we can filter this at a higher level if needed
                     // but good to note it here if it's explicit.
@@ -90,7 +153,10 @@ export class SSPRDScraper extends BaseScraper {
                         isFeatured: item.isFeatured || false, // Assuming isFeatured might exist
                     });
                 } catch (dateError) {
-                    // console.warn(`   ⚠️ Error parsing date for event on ${this.rinkName}:`, item, dateError);
+                    console.warn(`   ⚠️ Error parsing date for event on ${this.rinkName}:`, {
+                      event: item,
+                      error: dateError
+                    });
                 }
               });
             }
@@ -105,6 +171,16 @@ export class SSPRDScraper extends BaseScraper {
       }
       
       console.log(`🏢 ${this.rinkName} (specific rinks): Found ${events.length} events`);
+      
+      // Debug: Show sample parsed times
+      if (events.length > 0) {
+        console.log('🔍 Sample SSPRD event times:');
+        events.slice(0, 3).forEach((event, i) => {
+          console.log(`   ${i + 1}. "${event.title}" - ${event.startTime.toString()}`);
+          console.log(`      ISO: ${event.startTime.toISOString()}`);
+        });
+      }
+      
       events.sort((a, b) => a.startTime.getTime() - b.startTime.getTime());
       return events;
       

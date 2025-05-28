@@ -47,7 +47,8 @@ export class IceRanchScraper extends BaseScraper {
             const dateMatch = link.href.match(/\/event\/\d+\/(\d{4})\/(\d{1,2})\/(\d{1,2})/);
             if (dateMatch) {
               const [, year, month, day] = dateMatch;
-              eventDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+              // Use Mountain Time date creation
+              eventDate = this.createMountainTimeDate(parseInt(year), parseInt(month), parseInt(day), 0, 0);
             }
           }
           
@@ -65,7 +66,7 @@ export class IceRanchScraper extends BaseScraper {
           eventsFound++;
         }
         
-        // Look for regular time patterns
+        // Look for regular time patterns like "3:15pm MDT-4:45pm MDT"
         const timeMatches = cellText.match(/(\d{1,2}:\d{2}[ap]m\s+\w+)-(\d{1,2}:\d{2}[ap]m\s+\w+)/gi);
         
         if (timeMatches) {
@@ -80,16 +81,25 @@ export class IceRanchScraper extends BaseScraper {
             const dateMatch = link.href.match(/\/event\/\d+\/(\d{4})\/(\d{1,2})\/(\d{1,2})/);
             if (dateMatch) {
               const [, year, month, day] = dateMatch;
-              eventDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+              eventDate = this.createMountainTimeDate(parseInt(year), parseInt(month), parseInt(day), 0, 0);
             }
           }
           
           timeMatches.forEach((timeMatch, timeIndex) => {
-            const [, startTimeStr, endTimeStr] = timeMatch.match(/(\d{1,2}:\d{2}[ap]m\s+\w+)-(\d{1,2}:\d{2}[ap]m\s+\w+)/i) || [];
+            const timePattern = /(\d{1,2}:\d{2}[ap]m)\s+(\w+)-(\d{1,2}:\d{2}[ap]m)\s+(\w+)/i;
+            const timeMatchResult = timeMatch.match(timePattern);
             
-            if (startTimeStr && endTimeStr) {
+            if (timeMatchResult) {
+              const [, startTimeStr, startTz, endTimeStr, endTz] = timeMatchResult;
+              
+              console.log(`🕐 Parsing time: "${timeMatch}"`);
+              console.log(`   Start: ${startTimeStr} ${startTz}, End: ${endTimeStr} ${endTz}`);
+              
+              // Parse times using the improved Mountain Time method
               const startTime = this.parseTimeWithTimezone(startTimeStr, eventDate);
               const endTime = this.parseTimeWithTimezone(endTimeStr, eventDate);
+              
+              console.log(`   ✅ Parsed as Mountain Time: ${startTime.toString()} to ${endTime.toString()}`);
               
               // Extract event title
               let title = 'Ice Time';
@@ -129,8 +139,17 @@ export class IceRanchScraper extends BaseScraper {
         }
       });
       
-      console.log(`�� Memorial Day found: ${memorialDayFound}`);
+      console.log(`🎯 Memorial Day found: ${memorialDayFound}`);
       console.log(`📅 Total events found: ${eventsFound}`);
+      
+      // Debug: Show sample parsed times
+      if (events.length > 0) {
+        console.log('🔍 Sample event times:');
+        events.slice(0, 3).forEach((event, i) => {
+          console.log(`   ${i + 1}. "${event.title}" - ${event.startTime.toString()}`);
+          console.log(`      ISO: ${event.startTime.toISOString()}`);
+        });
+      }
       
       events.sort((a, b) => a.startTime.getTime() - b.startTime.getTime());
       return events;

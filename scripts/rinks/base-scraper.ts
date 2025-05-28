@@ -40,6 +40,35 @@ export abstract class BaseScraper {
     }
   }
 
+  /**
+   * Create a Date object in Mountain Time from date and time components
+   * This ensures the date is correctly interpreted as Mountain Time, not UTC
+   */
+  protected createMountainTimeDate(year: number, month: number, day: number, hours: number, minutes: number = 0): Date {
+    // Create date using local constructor, then adjust for Mountain Time
+    // Mountain Time is UTC-7 (MST) or UTC-6 (MDT)
+    // In late May, we're in MDT (UTC-6)
+    
+    // Create the date as if it's in Mountain Time
+    const localDate = new Date(year, month - 1, day, hours, minutes, 0, 0);
+    
+    // Get the timezone offset difference between local system and Mountain Time
+    // Mountain Daylight Time (May) is UTC-6 = 360 minutes
+    const mountainOffset = 360; // 6 hours * 60 minutes
+    const systemOffset = localDate.getTimezoneOffset();
+    
+    // If we're not running in Mountain Time, adjust the date
+    if (systemOffset !== mountainOffset) {
+      const offsetDifference = systemOffset - mountainOffset;
+      return new Date(localDate.getTime() + offsetDifference * 60 * 1000);
+    }
+    
+    return localDate;
+  }
+
+  /**
+   * Parse time with explicit Mountain Time handling
+   */
   protected parseTimeWithTimezone(timeStr: string, date: Date): Date {
     const match = timeStr.match(/(\d{1,2}):(\d{2})\s*([ap]m)\s*(\w+)?/i);
     if (!match) return date;
@@ -51,12 +80,17 @@ export abstract class BaseScraper {
     if (ampm === 'pm' && hours !== 12) hours += 12;
     if (ampm === 'am' && hours === 12) hours = 0;
     
-    const result = new Date(date);
-    result.setHours(hours, minutes, 0, 0);
+    // Use the Mountain Time date creation method
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;  // getMonth() is 0-based
+    const day = date.getDate();
     
-    return result;
+    return this.createMountainTimeDate(year, month, day, hours, minutes);
   }
 
+  /**
+   * Parse time string with Mountain Time handling
+   */
   protected parseTimeString(timeStr: string, baseDate: Date): Date {
     const timeMatch = timeStr.match(/(\d{1,2}):(\d{2})\s*([ap]m)?/i);
     if (!timeMatch) return baseDate;
@@ -72,14 +106,41 @@ export abstract class BaseScraper {
       if (ampm === 'am' && hours === 12) hours = 0;
     }
     
-    const result = new Date(baseDate);
-    result.setHours(hours, minutes, 0, 0);
+    // Create Mountain Time date
+    const year = baseDate.getFullYear();
+    const month = baseDate.getMonth() + 1;
+    const day = baseDate.getDate();
     
+    const result = this.createMountainTimeDate(year, month, day, hours, minutes);
+    
+    // If the result is in the past, add a day
     if (result < new Date()) {
       result.setDate(result.getDate() + 1);
     }
     
     return result;
+  }
+
+  /**
+   * Parse a date string (YYYY-MM-DD) and time string into Mountain Time
+   */
+  protected parseDateTimeInMountainTime(dateStr: string, timeStr: string): Date {
+    const [year, month, day] = dateStr.split('-').map(Number);
+    
+    const timeMatch = timeStr.match(/(\d{1,2}):(\d{2})\s*([ap]m)?/i);
+    if (!timeMatch) {
+      // Default to noon if no time can be parsed
+      return this.createMountainTimeDate(year, month, day, 12, 0);
+    }
+    
+    let hours = parseInt(timeMatch[1]);
+    const minutes = parseInt(timeMatch[2]);
+    const ampm = timeMatch[3]?.toLowerCase();
+    
+    if (ampm === 'pm' && hours !== 12) hours += 12;
+    if (ampm === 'am' && hours === 12) hours = 0;
+    
+    return this.createMountainTimeDate(year, month, day, hours, minutes);
   }
 
   protected categorizeEvent(title: string): EventCategory {
@@ -115,4 +176,3 @@ export abstract class BaseScraper {
     return cleanTitle.trim();
   }
 }
-
