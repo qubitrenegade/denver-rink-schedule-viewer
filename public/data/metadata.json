@@ -1,41 +1,41 @@
 {
-  "lastCombinedUpdate": "2025-05-28T18:26:07.663Z",
+  "lastCombinedUpdate": "2025-05-28T20:02:55.292Z",
   "rinks": {
     "du-ritchie": {
-      "lastAttempt": "2025-05-28T19:59:08.959Z",
+      "lastAttempt": "2025-05-28T20:02:51.595Z",
       "status": "success",
       "eventCount": 87,
-      "lastSuccessfulScrape": "2025-05-28T19:59:08.959Z"
+      "lastSuccessfulScrape": "2025-05-28T20:02:51.595Z"
     },
     "big-bear": {
-      "lastAttempt": "2025-05-28T18:26:07.653Z",
+      "lastAttempt": "2025-05-28T20:02:55.271Z",
       "status": "success",
-      "eventCount": 63,
-      "lastSuccessfulScrape": "2025-05-28T18:26:07.653Z"
+      "eventCount": 64,
+      "lastSuccessfulScrape": "2025-05-28T20:02:55.271Z"
     },
     "ice-ranch": {
-      "lastAttempt": "2025-05-28T19:59:07.178Z",
+      "lastAttempt": "2025-05-28T20:02:49.979Z",
       "status": "success",
       "eventCount": 48,
-      "lastSuccessfulScrape": "2025-05-28T19:59:07.178Z"
+      "lastSuccessfulScrape": "2025-05-28T20:02:49.979Z"
     },
     "ssprd-249": {
-      "lastAttempt": "2025-05-28T18:37:12.952Z",
+      "lastAttempt": "2025-05-28T20:02:49.985Z",
       "status": "success",
       "eventCount": 1383,
-      "lastSuccessfulScrape": "2025-05-28T18:37:12.952Z"
+      "lastSuccessfulScrape": "2025-05-28T20:02:49.985Z"
     },
     "ssprd-250": {
-      "lastAttempt": "2025-05-28T19:59:07.158Z",
+      "lastAttempt": "2025-05-28T20:02:49.078Z",
       "status": "success",
       "eventCount": 874,
-      "lastSuccessfulScrape": "2025-05-28T19:59:07.158Z"
+      "lastSuccessfulScrape": "2025-05-28T20:02:49.078Z"
     },
     "foothills-edge": {
-      "lastAttempt": "2025-05-28T19:59:04.111Z",
+      "lastAttempt": "2025-05-28T20:02:46.702Z",
       "status": "success",
       "eventCount": 66,
-      "lastSuccessfulScrape": "2025-05-28T19:59:04.111Z"
+      "lastSuccessfulScrape": "2025-05-28T20:02:46.702Z"
     }
   }
 }
