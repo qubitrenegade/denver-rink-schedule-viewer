@@ -23,6 +23,54 @@ export class SSPRDScraper extends BaseScraper {
     return `SSPRD Schedule Page ${this.schedulePageId}`;
   }
 
+  // Parse SSPRD datetime string and convert from Mountain Time to UTC
+  private parseSSPRDDateTime(dateTimeStr: string): Date {
+    // SSPRD API returns datetime strings that might be in Mountain Time
+    // We need to handle various possible formats and convert to UTC
+    
+    const date = new Date(dateTimeStr);
+    
+    // Check if the date parsed correctly
+    if (isNaN(date.getTime())) {
+      console.warn(`   ⚠️ Invalid date format: ${dateTimeStr}`);
+      return new Date(); // Return current date as fallback
+    }
+    
+    // If the dateTimeStr doesn't include timezone info, JavaScript treats it as local time
+    // But the SSPRD servers are in Mountain Time, so we need to adjust
+    
+    // Check if the date string includes timezone info
+    const hasTimezone = /[+-]\d{2}:?\d{2}|Z|UTC|GMT|[A-Z]{3,4}T?$/i.test(dateTimeStr);
+    
+    if (!hasTimezone) {
+      // No timezone info, assume it's Mountain Time and convert to UTC
+      // Mountain Daylight Time (MDT) is UTC-6, Mountain Standard Time (MST) is UTC-7
+      // For current events, assume MDT (UTC-6)
+      
+      // Get the time components as if they were in Mountain Time
+      const year = date.getFullYear();
+      const month = date.getMonth();
+      const day = date.getDate();
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      const seconds = date.getSeconds();
+      const milliseconds = date.getMilliseconds();
+      
+      // Create a UTC date with these components, then add 6 hours
+      const utcDate = new Date(Date.UTC(year, month, day, hours, minutes, seconds, milliseconds));
+      utcDate.setTime(utcDate.getTime() + (6 * 60 * 60 * 1000)); // Add 6 hours for MDT->UTC
+      
+      console.log(`   🕐 SSPRD timezone conversion: ${dateTimeStr} -> ${utcDate.toISOString()}`);
+      console.log(`   📍 Mountain Time check: ${utcDate.toLocaleString('en-US', {timeZone: 'America/Denver'})}`);
+      
+      return utcDate;
+    } else {
+      // Timezone info included, use as-is
+      console.log(`   ℹ️ SSPRD date with timezone: ${dateTimeStr} -> ${date.toISOString()}`);
+      return date;
+    }
+  }
+
   async scrape(): Promise<RawIceEventData[]> {
     try {
       console.log(`🏢 Scraping ${this.rinkName} from ${this.schedulePageUrl}...`);
@@ -63,17 +111,14 @@ export class SSPRDScraper extends BaseScraper {
                 }
 
                 try {
-                    // Keep the original, working date parsing logic
-                    const startTime = new Date(item.EventStartTime);
-                    const endTime = new Date(item.EventEndTime);
+                    // Use the new timezone-aware date parsing
+                    const startTime = this.parseSSPRDDateTime(item.EventStartTime);
+                    const endTime = this.parseSSPRDDateTime(item.EventEndTime);
 
                     if (isNaN(startTime.getTime()) || isNaN(endTime.getTime())) {
-                        console.warn(`   ⚠️ Invalid date for event: ${title}`);
+                        console.warn(`   ⚠️ Invalid parsed dates for event: ${title}`);
                         return;
                     }
-                    
-                    // Debug logging to see what we're getting
-                    console.log(`🕐 SSPRD event "${title}": ${item.EventStartTime} -> ${startTime.toString()}`);
                     
                     const isClosed = item.Closed === true || title.toLowerCase().includes("closed");
 

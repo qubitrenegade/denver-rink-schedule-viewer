@@ -12,6 +12,8 @@
     "scrape:big-bear": "bun run scripts/scraper.ts --rink big-bear",
     "scrape:du-ritchie": "bun run scripts/scraper.ts --rink du-ritchie", 
     "scrape:ssprd": "bun run scripts/scraper.ts --rink ssprd",
+    "scrape:ssprd-249": "bun run scripts/scraper.ts --rink ssprd-249",
+    "scrape:ssprd-250": "bun run scripts/scraper.ts --rink ssprd-250",
     "scrape:local": "bun run scripts/scraper.ts --local",
     "scrape:test": "bun run scripts/scraper.ts --test",
     "test:puppeteer": "bun run scripts/test-puppeteer.ts"

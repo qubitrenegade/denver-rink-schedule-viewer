@@ -6,7 +6,7 @@ export class IceRanchScraper extends BaseScraper {
   get rinkId(): string { return 'ice-ranch'; }
   get rinkName(): string { return 'Ice Ranch'; }
 
-  // Simple time parser that doesn't over-complicate timezone handling
+  // Parse time and properly handle Mountain Time zone
   private parseIceRanchTime(timeStr: string, baseDate: Date): Date {
     const timeMatch = timeStr.match(/(\d{1,2}):(\d{2})\s*([ap]m)/i);
     if (!timeMatch) return baseDate;
@@ -19,9 +19,17 @@ export class IceRanchScraper extends BaseScraper {
     if (ampm === 'pm' && hours !== 12) hours += 12;
     if (ampm === 'am' && hours === 12) hours = 0;
     
-    // Create new date with the parsed time
+    // Create date in Mountain Time, then convert to UTC for storage
+    // Mountain Daylight Time (MDT) is UTC-6 during summer months
+    // Mountain Standard Time (MST) is UTC-7 during winter months
+    // Since we're dealing with current/future events, assume MDT (UTC-6)
     const result = new Date(baseDate);
-    result.setHours(hours, minutes, 0, 0);
+    
+    // Set the time as if it were UTC first
+    result.setUTCHours(hours, minutes, 0, 0);
+    
+    // Then add 6 hours to convert from Mountain Time to UTC
+    result.setTime(result.getTime() + (6 * 60 * 60 * 1000));
     
     return result;
   }
@@ -112,13 +120,14 @@ export class IceRanchScraper extends BaseScraper {
               const [, startTimeStr, endTimeStr] = timeMatchResult;
               
               console.log(`🕐 Ice Ranch parsing: "${timeMatch}"`);
-              console.log(`   Extracting: ${startTimeStr} to ${endTimeStr}`);
+              console.log(`   Extracting: ${startTimeStr} to ${endTimeStr} (Mountain Time)`);
               
-              // Use simple time parsing
+              // Parse times with proper timezone handling
               const startTime = this.parseIceRanchTime(startTimeStr, eventDate);
               const endTime = this.parseIceRanchTime(endTimeStr, eventDate);
               
-              console.log(`   ✅ Parsed as: ${startTime.toString()} to ${endTime.toString()}`);
+              console.log(`   ✅ Converted to UTC: ${startTime.toISOString()} to ${endTime.toISOString()}`);
+              console.log(`   📍 Mountain Time equivalent: ${startTime.toLocaleString('en-US', {timeZone: 'America/Denver'})} to ${endTime.toLocaleString('en-US', {timeZone: 'America/Denver'})}`);
               
               // Extract event title
               let title = 'Ice Time';
