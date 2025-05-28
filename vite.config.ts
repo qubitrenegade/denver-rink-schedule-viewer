@@ -14,7 +14,7 @@ export default defineConfig(({ mode }) => {
         }
       },
       // Set base path for GitHub Pages
-      base: process.env.NODE_ENV === 'production' ? '/denver-rink-schedule-viewer/' : '/',
+      base: mode === 'production' ? './' : '/',
       
       // Serve data files during development
       server: {
