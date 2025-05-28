@@ -21,12 +21,6 @@ jobs:
       with:
         bun-version: latest
 
-    - name: Install dependencies
-      run: |
-        bun install
-        # Install scraping dependencies
-        bun install --optional
-
     - name: Install Chrome dependencies for Puppeteer
       run: |
         sudo apt-get update
@@ -68,6 +62,12 @@ jobs:
           lsb-release \
           wget \
           xdg-utils
+
+    - name: Install dependencies
+      run: |
+        bun install
+        # Install scraping dependencies
+        bun install --optional
 
     - name: Add random delay (0-60 minutes)
       run: |
