@@ -1,5 +1,5 @@
 {
-  "lastCombinedUpdate": "2025-05-28T18:21:19.483Z",
+  "lastCombinedUpdate": "2025-05-28T18:26:07.663Z",
   "rinks": {
     "du-ritchie": {
       "lastAttempt": "2025-05-28T06:31:36.174Z",
@@ -8,10 +8,10 @@
       "lastSuccessfulScrape": "2025-05-28T06:31:36.174Z"
     },
     "big-bear": {
-      "lastAttempt": "2025-05-28T18:21:19.465Z",
+      "lastAttempt": "2025-05-28T18:26:07.653Z",
       "status": "success",
       "eventCount": 63,
-      "lastSuccessfulScrape": "2025-05-28T18:21:19.465Z"
+      "lastSuccessfulScrape": "2025-05-28T18:26:07.653Z"
     },
     "ice-ranch": {
       "lastAttempt": "2025-05-28T17:52:30.722Z",
