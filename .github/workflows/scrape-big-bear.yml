@@ -22,7 +22,10 @@ jobs:
         bun-version: latest
 
     - name: Install dependencies
-      run: bun install
+      run: |
+        bun install
+        # Install scraping dependencies
+        bun install --optional
 
     - name: Install Chrome dependencies for Puppeteer
       run: |
