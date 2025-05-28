@@ -317,7 +317,7 @@ const App: React.FC = () => {
           <img 
             src="/images/header.png" 
             alt="Denver Rink Schedule" 
-            className="w-full h-32 sm:h-40 object-cover rounded-lg shadow-lg"
+            className="w-full max-h-48 object-contain rounded-lg shadow-lg"
           />
         </div>
         <div className="flex items-center justify-center mb-2">
