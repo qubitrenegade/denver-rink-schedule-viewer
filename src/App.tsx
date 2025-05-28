@@ -314,6 +314,11 @@ const App: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-700 text-gray-100 p-4 sm:p-6 md:p-8">
       <header className="mb-6 text-center">
         <div className="flex items-center justify-center mb-2">
+            <img
+              src="/images/header.png"
+              alt="Get Ice Ti.me"
+              className="mx-auto mb-4 w-full max-w-screen-md"
+            />
           <CalendarIcon className="w-10 h-10 mr-3 text-sky-400" />
           <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-cyan-300">
             Denver Rink Schedule
