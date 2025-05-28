@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { RinkInfo, EventCategory, DisplayableIceEvent, FilterSettings, FilterMode, UrlViewType, RawIceEventData } from './types';
+import { RinkInfo, EventCategory, DisplayableIceEvent, FilterSettings, FilterMode, UrlViewType, RawIceEventData, DateFilterMode, TimeFilterMode } from './types';
 import { RINKS_CONFIG, ALL_INDIVIDUAL_RINKS_FOR_FILTERING } from './mockData';
 import RinkTabs from './components/RinkTabs';
 import EventList from './components/EventList';
@@ -30,8 +30,6 @@ const App: React.FC = () => {
   const [metadata, setMetadata] = useState<Metadata | null>(null);
   const [lastFetchTime, setLastFetchTime] = useState<number>(0);
 
-  const [numberOfDaysToShow] = useState<number>(4); 
-
   const [selectedRinkId, setSelectedRinkId] = useState<UrlViewType>(() => {
     const params = new URLSearchParams(window.location.search);
     return params.get('view') || ALL_RINKS_TAB_ID;
@@ -44,11 +42,35 @@ const App: React.FC = () => {
     const rinkIdsParam = params.get('rinkIds');
     const rinkModeParam = params.get('rinkMode') as FilterMode | null;
     
+    // Date filtering params
+    const dateFilterMode = (params.get('dateMode') as DateFilterMode) || 'next-days';
+    const numberOfDays = parseInt(params.get('days') || '4');
+    const selectedDate = params.get('date') || undefined;
+    const dateRangeStart = params.get('dateStart') || undefined;
+    const dateRangeEnd = params.get('dateEnd') || undefined;
+    
+    // Time filtering params
+    const timeFilterMode = (params.get('timeMode') as TimeFilterMode) || 'all-times';
+    const afterTime = params.get('afterTime') || undefined;
+    const beforeTime = params.get('beforeTime') || undefined;
+    const timeRangeStart = params.get('timeStart') || undefined;
+    const timeRangeEnd = params.get('timeEnd') || undefined;
+    
     return {
       activeCategories: categories ? categories.split(',') as EventCategory[] : [],
       filterMode: mode || 'exclude',
       activeRinkIds: rinkIdsParam ? rinkIdsParam.split(',') : [],
       rinkFilterMode: rinkModeParam || 'exclude',
+      dateFilterMode,
+      numberOfDays,
+      selectedDate,
+      dateRangeStart,
+      dateRangeEnd,
+      timeFilterMode,
+      afterTime,
+      beforeTime,
+      timeRangeStart,
+      timeRangeEnd,
     };
   });
   
@@ -120,33 +142,105 @@ const App: React.FC = () => {
     }
   }, [staticData.length, lastFetchTime]);
 
+  // Helper function to parse time string to hours and minutes
+  const parseTime = (timeString: string): { hours: number; minutes: number } => {
+    const [hours, minutes] = timeString.split(':').map(Number);
+    return { hours, minutes };
+  };
+
+  // Helper function to get time in minutes from midnight
+  const getMinutesFromMidnight = (date: Date): number => {
+    return date.getHours() * 60 + date.getMinutes();
+  };
+
   const filterAndDisplayEvents = useCallback((rinkTabId: UrlViewType, currentFilters: FilterSettings, sourceData: RawIceEventData[]) => {
     console.log("Filtering data for tab:", { rinkTabId, currentFilters, dataLength: sourceData.length });
     
     let processedData = [...sourceData];
 
     // 1. Date Range Filter
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const endDateLimit = new Date(today.getTime() + numberOfDaysToShow * MS_PER_DAY);
-    endDateLimit.setHours(23, 59, 59, 999);
+    let startDate: Date;
+    let endDate: Date;
+
+    if (currentFilters.dateFilterMode === 'next-days') {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      startDate = today;
+      endDate = new Date(today.getTime() + (currentFilters.numberOfDays || 4) * MS_PER_DAY);
+      endDate.setHours(23, 59, 59, 999);
+    } else if (currentFilters.dateFilterMode === 'specific-day') {
+      if (currentFilters.selectedDate) {
+        startDate = new Date(currentFilters.selectedDate + 'T00:00:00');
+        endDate = new Date(currentFilters.selectedDate + 'T23:59:59');
+      } else {
+        // Fallback to today
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        startDate = today;
+        endDate = new Date(today);
+        endDate.setHours(23, 59, 59, 999);
+      }
+    } else if (currentFilters.dateFilterMode === 'date-range') {
+      if (currentFilters.dateRangeStart && currentFilters.dateRangeEnd) {
+        startDate = new Date(currentFilters.dateRangeStart + 'T00:00:00');
+        endDate = new Date(currentFilters.dateRangeEnd + 'T23:59:59');
+      } else {
+        // Fallback to next 7 days
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        startDate = today;
+        endDate = new Date(today.getTime() + 7 * MS_PER_DAY);
+        endDate.setHours(23, 59, 59, 999);
+      }
+    } else {
+      // Fallback
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      startDate = today;
+      endDate = new Date(today.getTime() + 4 * MS_PER_DAY);
+      endDate.setHours(23, 59, 59, 999);
+    }
     
-    console.log(`Date range: ${today.toLocaleDateString()} to ${endDateLimit.toLocaleDateString()}`);
+    console.log(`Date range: ${startDate.toLocaleDateString()} to ${endDate.toLocaleDateString()}`);
 
     processedData = processedData.filter(event => {
       const eventStartTime = event.startTime;
-      return eventStartTime >= today && eventStartTime <= endDateLimit;
+      return eventStartTime >= startDate && eventStartTime <= endDate;
     });
-    console.log(`After date filter (${numberOfDaysToShow} days): ${processedData.length} events`);
+    console.log(`After date filter: ${processedData.length} events`);
+
+    // 2. Time Filter
+    if (currentFilters.timeFilterMode !== 'all-times') {
+      processedData = processedData.filter(event => {
+        const eventTime = getMinutesFromMidnight(event.startTime);
+        
+        if (currentFilters.timeFilterMode === 'after-time' && currentFilters.afterTime) {
+          const { hours, minutes } = parseTime(currentFilters.afterTime);
+          const afterTimeMinutes = hours * 60 + minutes;
+          return eventTime >= afterTimeMinutes;
+        } else if (currentFilters.timeFilterMode === 'before-time' && currentFilters.beforeTime) {
+          const { hours, minutes } = parseTime(currentFilters.beforeTime);
+          const beforeTimeMinutes = hours * 60 + minutes;
+          return eventTime < beforeTimeMinutes;
+        } else if (currentFilters.timeFilterMode === 'time-range' && currentFilters.timeRangeStart && currentFilters.timeRangeEnd) {
+          const { hours: startHours, minutes: startMinutes } = parseTime(currentFilters.timeRangeStart);
+          const { hours: endHours, minutes: endMinutes } = parseTime(currentFilters.timeRangeEnd);
+          const startTimeMinutes = startHours * 60 + startMinutes;
+          const endTimeMinutes = endHours * 60 + endMinutes;
+          return eventTime >= startTimeMinutes && eventTime <= endTimeMinutes;
+        }
+        
+        return true;
+      });
+      
+      console.log(`After time filter: ${processedData.length} events`);
+    }
 
     // DEBUG: Check for DU events after date filter
     const duEventsAfterDate = processedData.filter(e => e.rinkId === 'du-ritchie');
-    console.log(`DU events after date filter: ${duEventsAfterDate.length}`);
-    if (duEventsAfterDate.length > 0) {
-      console.log("Sample DU event after date filter:", duEventsAfterDate[0]);
-    }
+    console.log(`DU events after date/time filter: ${duEventsAfterDate.length}`);
 
-    // 2. Rink Filter (only for 'All Rinks' view, based on individual rinks)
+    // 3. Rink Filter (only for 'All Rinks' view, based on individual rinks)
     if (rinkTabId === ALL_RINKS_TAB_ID && currentFilters.activeRinkIds && currentFilters.activeRinkIds.length > 0) {
       processedData = processedData.filter(event => {
         if (currentFilters.rinkFilterMode === 'include') {
@@ -158,7 +252,7 @@ const App: React.FC = () => {
       console.log(`After 'All Rinks' view specific rink filter: ${processedData.length} events`);
     }
     
-    // 3. Prepare for display (add rinkName) and filter by selected tab (individual or group)
+    // 4. Prepare for display (add rinkName) and filter by selected tab (individual or group)
     let rawEventsWithDates: Array<RawIceEventData & { rinkName?: string }> = [];
     
     const selectedTabConfig = rinksConfigForTabs.find(r => r.id === rinkTabId);
@@ -199,7 +293,7 @@ const App: React.FC = () => {
     }
      console.log(`After preparing for display (rinkName, tab selection): ${rawEventsWithDates.length} events`);
     
-    // 4. Category Filter
+    // 5. Category Filter
     const processedEvents: DisplayableIceEvent[] = rawEventsWithDates.map(event => ({
       ...event,
       startTime: event.startTime.toISOString(),
@@ -216,7 +310,7 @@ const App: React.FC = () => {
     const sortedEvents = processedEvents.sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
     console.log("Setting filtered events:", sortedEvents.length);
     setEvents(sortedEvents);
-  }, [rinksConfigForTabs, individualRinksForFiltering, numberOfDaysToShow]);
+  }, [rinksConfigForTabs, individualRinksForFiltering]);
 
   // Initial data fetch
   useEffect(() => {
@@ -246,6 +340,36 @@ const App: React.FC = () => {
     }
     if (filterSettings.activeRinkIds && filterSettings.activeRinkIds.length > 0) {
       params.set('rinkIds', filterSettings.activeRinkIds.join(','));
+    }
+
+    // Date filtering URL params
+    if (filterSettings.dateFilterMode !== 'next-days') {
+      params.set('dateMode', filterSettings.dateFilterMode);
+    }
+    if (filterSettings.dateFilterMode === 'next-days' && filterSettings.numberOfDays !== 4) {
+      params.set('days', filterSettings.numberOfDays?.toString() || '4');
+    }
+    if (filterSettings.dateFilterMode === 'specific-day' && filterSettings.selectedDate) {
+      params.set('date', filterSettings.selectedDate);
+    }
+    if (filterSettings.dateFilterMode === 'date-range') {
+      if (filterSettings.dateRangeStart) params.set('dateStart', filterSettings.dateRangeStart);
+      if (filterSettings.dateRangeEnd) params.set('dateEnd', filterSettings.dateRangeEnd);
+    }
+
+    // Time filtering URL params
+    if (filterSettings.timeFilterMode !== 'all-times') {
+      params.set('timeMode', filterSettings.timeFilterMode);
+    }
+    if (filterSettings.timeFilterMode === 'after-time' && filterSettings.afterTime) {
+      params.set('afterTime', filterSettings.afterTime);
+    }
+    if (filterSettings.timeFilterMode === 'before-time' && filterSettings.beforeTime) {
+      params.set('beforeTime', filterSettings.beforeTime);
+    }
+    if (filterSettings.timeFilterMode === 'time-range') {
+      if (filterSettings.timeRangeStart) params.set('timeStart', filterSettings.timeRangeStart);
+      if (filterSettings.timeRangeEnd) params.set('timeEnd', filterSettings.timeRangeEnd);
     }
 
     const newSearchString = params.toString();
@@ -310,6 +434,34 @@ const App: React.FC = () => {
     }
   };
 
+  // Helper function to describe current filter state
+  const getFilterDescription = () => {
+    const parts: string[] = [];
+    
+    // Date description
+    if (filterSettings.dateFilterMode === 'next-days') {
+      parts.push(`next ${filterSettings.numberOfDays || 4} days`);
+    } else if (filterSettings.dateFilterMode === 'specific-day' && filterSettings.selectedDate) {
+      const date = new Date(filterSettings.selectedDate + 'T00:00:00');
+      parts.push(`${date.toLocaleDateString()}`);
+    } else if (filterSettings.dateFilterMode === 'date-range' && filterSettings.dateRangeStart && filterSettings.dateRangeEnd) {
+      const startDate = new Date(filterSettings.dateRangeStart + 'T00:00:00');
+      const endDate = new Date(filterSettings.dateRangeEnd + 'T00:00:00');
+      parts.push(`${startDate.toLocaleDateString()} to ${endDate.toLocaleDateString()}`);
+    }
+    
+    // Time description
+    if (filterSettings.timeFilterMode === 'after-time' && filterSettings.afterTime) {
+      parts.push(`after ${filterSettings.afterTime}`);
+    } else if (filterSettings.timeFilterMode === 'before-time' && filterSettings.beforeTime) {
+      parts.push(`before ${filterSettings.beforeTime}`);
+    } else if (filterSettings.timeFilterMode === 'time-range' && filterSettings.timeRangeStart && filterSettings.timeRangeEnd) {
+      parts.push(`between ${filterSettings.timeRangeStart} and ${filterSettings.timeRangeEnd}`);
+    }
+    
+    return parts.length > 0 ? `Showing events for ${parts.join(', ')}.` : 'Showing events with custom filtering.';
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-700 text-gray-100 p-4 sm:p-6 md:p-8">
       <header className="mb-6 text-center">
@@ -327,14 +479,7 @@ const App: React.FC = () => {
           </h1>
         </div>
         <p className="text-sm text-slate-400 italic max-w-2xl mx-auto">
-          {filterSettings.dateFilterMode === 'all' 
-            ? `Showing events for the next ${numberOfDaysToShow} days.`
-            : filterSettings.dateFilterMode === 'single' && filterSettings.selectedDate
-            ? `Showing events for ${new Date(filterSettings.selectedDate).toLocaleDateString()}.`
-            : filterSettings.dateFilterMode === 'range' && filterSettings.dateRangeStart && filterSettings.dateRangeEnd
-            ? `Showing events from ${new Date(filterSettings.dateRangeStart).toLocaleDateString()} to ${new Date(filterSettings.dateRangeEnd).toLocaleDateString()}.`
-            : 'Custom date filtering active.'
-          } Data is automatically updated twice daily via GitHub Actions.
+          {getFilterDescription()} Data is automatically updated twice daily via GitHub Actions.
         </p>
       </header>
 
@@ -356,7 +501,11 @@ const App: React.FC = () => {
               >
                 <AdjustmentsHorizontalIcon className="w-5 h-5 mr-2" />
                 {showFilters ? 'Hide Filters' : 'Show Filters'}
-                {((filterSettings.activeCategories.length > 0) || (filterSettings.activeRinkIds && filterSettings.activeRinkIds.length > 0)) && !showFilters && (
+                {((filterSettings.activeCategories.length > 0) || 
+                  (filterSettings.activeRinkIds && filterSettings.activeRinkIds.length > 0) ||
+                  (filterSettings.dateFilterMode !== 'next-days') ||
+                  (filterSettings.numberOfDays !== 4) ||
+                  (filterSettings.timeFilterMode !== 'all-times')) && !showFilters && (
                   <span className="ml-2 bg-sky-500 text-sky-100 text-xs font-bold px-2 py-0.5 rounded-full">
                     Active
                   </span>

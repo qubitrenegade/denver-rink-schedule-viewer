@@ -1,5 +1,3 @@
-
-
 export interface RinkInfo {
   id: string;
   name: string;
@@ -38,11 +36,31 @@ export interface DisplayableIceEvent extends IceEvent {
 
 export type FilterMode = 'include' | 'exclude';
 
+// Date filtering options
+export type DateFilterMode = 'next-days' | 'specific-day' | 'date-range';
+
+// Time filtering options  
+export type TimeFilterMode = 'all-times' | 'after-time' | 'before-time' | 'time-range';
+
 export interface FilterSettings {
   activeCategories: EventCategory[]; 
   filterMode: FilterMode;
   activeRinkIds?: string[]; // For filtering rinks in 'All Rinks' view
   rinkFilterMode?: FilterMode; // Mode for rink filtering ('include' or 'exclude')
+  
+  // Date filtering
+  dateFilterMode: DateFilterMode;
+  numberOfDays?: number; // For 'next-days' mode
+  selectedDate?: string; // For 'specific-day' mode (YYYY-MM-DD format)
+  dateRangeStart?: string; // For 'date-range' mode (YYYY-MM-DD format)
+  dateRangeEnd?: string; // For 'date-range' mode (YYYY-MM-DD format)
+  
+  // Time filtering
+  timeFilterMode: TimeFilterMode;
+  afterTime?: string; // For 'after-time' mode (HH:MM format)
+  beforeTime?: string; // For 'before-time' mode (HH:MM format)
+  timeRangeStart?: string; // For 'time-range' mode (HH:MM format)
+  timeRangeEnd?: string; // For 'time-range' mode (HH:MM format)
 }
 
 export type UrlViewType = string; // Rink ID or 'all-rinks'
