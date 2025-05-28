@@ -17,7 +17,7 @@ export interface Metadata {
 }
 
 export class DataFileWriter {
-  private readonly dataDir = join(process.cwd(), 'data');
+  private readonly dataDir = join(process.cwd(), 'public', 'data');
   private readonly combinedFile = join(this.dataDir, 'combined.json');
   private readonly metadataFile = join(this.dataDir, 'metadata.json');
 
