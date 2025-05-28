@@ -4,7 +4,7 @@ import { RINKS_CONFIG, ALL_INDIVIDUAL_RINKS_FOR_FILTERING } from './mockData';
 import RinkTabs from './components/RinkTabs';
 import EventList from './components/EventList';
 import FilterControls from './components/FilterControls';
-import { LoadingIcon, CalendarIcon, AdjustmentsHorizontalIcon, RefreshIcon } from './components/icons';
+import { LoadingIcon, CalendarIcon, AdjustmentsHorizontalIcon } from './components/icons';
 
 export const ALL_RINKS_TAB_ID = 'all-rinks';
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
@@ -397,9 +397,7 @@ const App: React.FC = () => {
     setFilterSettings(newFilterSettings);
   };
   
-  const handleRefreshData = () => {
-    fetchStaticData(true);
-  };
+
 
   const selectedRinkTabInfo = selectedRinkId !== ALL_RINKS_TAB_ID ? rinksConfigForTabs.find(rink => rink.id === selectedRinkId) : null;
 
@@ -491,7 +489,7 @@ const App: React.FC = () => {
             onSelectRink={handleRinkSelect}
             allRinksTabId={ALL_RINKS_TAB_ID}
           />
-          <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div className="mt-4 flex flex-col sm:flex-row sm:items-center gap-3">
             <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={() => setShowFilters(!showFilters)}
@@ -522,16 +520,6 @@ const App: React.FC = () => {
                 )}
               </div>
             </div>
-
-            <button
-              onClick={handleRefreshData}
-              disabled={isLoading} 
-              className="flex items-center justify-center w-full sm:w-auto px-4 py-2 text-sm font-medium text-sky-200 bg-sky-600 hover:bg-sky-500 disabled:bg-sky-800 disabled:text-sky-400 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-opacity-75 transition-colors"
-              title="Refresh static data from server"
-            >
-              <RefreshIcon className={`w-5 h-5 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
-              {isLoading ? 'Loading...' : 'Refresh Data'}
-            </button>
           </div>
             {showFilters && (
               <div id="filter-panel" className="mt-4 p-4 bg-slate-700/50 rounded-md">
@@ -588,12 +576,7 @@ const App: React.FC = () => {
               </svg>
               <p className="text-lg font-semibold">Error Loading Data</p>
               <p className="text-sm text-center">{error}</p>
-              <button 
-                onClick={() => handleRefreshData()}
-                className="mt-3 px-3 py-1 text-xs bg-sky-600 hover:bg-sky-500 rounded"
-              >
-                Retry Loading Data
-              </button>
+              <p className="text-xs text-slate-500 mt-2">Data updates automatically via GitHub Actions</p>
             </div>
           )}
           
