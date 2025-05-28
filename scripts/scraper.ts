@@ -206,10 +206,10 @@ Examples:
 }
 
 // Add random delay for GitHub Actions (staggered execution)
-if (process.env.GITHUB_ACTIONS) {
-  const delay = Math.floor(Math.random() * 3600); // 0-60 minutes
-  console.log(`⏱️ GitHub Actions: Adding ${Math.floor(delay/60)}m ${delay%60}s random delay...`);
-  await new Promise(resolve => setTimeout(resolve, delay * 1000));
-}
+// if (process.env.GITHUB_ACTIONS) {
+//   const delay = Math.floor(Math.random() * 3600); // 0-60 minutes
+//   console.log(`⏱️ GitHub Actions: Adding ${Math.floor(delay/60)}m ${delay%60}s random delay...`);
+//   await new Promise(resolve => setTimeout(resolve, delay * 1000));
+// }
 
 await main();
