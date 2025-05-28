@@ -1,11 +1,11 @@
 {
-  "lastCombinedUpdate": "2025-05-28T03:26:59.185Z",
+  "lastCombinedUpdate": "2025-05-28T03:37:00.751Z",
   "rinks": {
     "big-bear": {
-      "lastAttempt": "2025-05-28T03:26:59.124Z",
+      "lastAttempt": "2025-05-28T03:37:00.726Z",
       "status": "success",
       "eventCount": 79,
-      "lastSuccessfulScrape": "2025-05-28T03:26:59.124Z"
+      "lastSuccessfulScrape": "2025-05-28T03:37:00.726Z"
     },
     "ssprd-249": {
       "lastAttempt": "2025-05-27T17:57:38.962Z",
