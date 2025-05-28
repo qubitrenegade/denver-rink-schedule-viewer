@@ -4,6 +4,7 @@ import { RawIceEventData } from '../src/types.js';
 import { IceRanchScraper } from './rinks/ice-ranch.js';
 import { BigBearScraper } from './rinks/big-bear.js';
 import { DURitchieScraper } from './rinks/du-ritchie.js';
+import { FoothillsEdgeScraper } from './rinks/foothills-edge.js';
 import { createSSPRD249Scraper, createSSPRD250Scraper } from './rinks/ssprd.js';
 import { DataFileWriter } from './utils/file-writer.js';
 
@@ -32,6 +33,12 @@ const SCRAPERS: ScraperConfig[] = [
     name: 'DU Ritchie Center',
     scraper: new DURitchieScraper(),
     outputFile: 'du-ritchie.json'
+  },
+  {
+    id: 'foothills-edge',
+    name: 'Foothills Ice Arena (Edge)',
+    scraper: new FoothillsEdgeScraper(),
+    outputFile: 'foothills-edge.json'
   },
   {
     id: 'ssprd-249',

@@ -10,8 +10,10 @@
     "scrape": "bun run scripts/scraper.ts",
     "scrape:ice-ranch": "bun run scripts/scraper.ts --rink ice-ranch",
     "scrape:big-bear": "bun run scripts/scraper.ts --rink big-bear",
-    "scrape:du-ritchie": "bun run scripts/scraper.ts --rink du-ritchie", 
-    "scrape:ssprd": "bun run scripts/scraper.ts --rink ssprd",
+    "scrape:du-ritchie": "bun run scripts/scraper.ts --rink du-ritchie",
+    "scrape:foothills": "bun run scrape:foothills-edge",
+    "scrape:foothills-edge": "bun run scripts/scraper.ts --rink foothills-edge",
+    "scrape:ssprd": "bun run scripts/scraper.ts --ssprd",
     "scrape:ssprd-249": "bun run scripts/scraper.ts --rink ssprd-249",
     "scrape:ssprd-250": "bun run scripts/scraper.ts --rink ssprd-250",
     "scrape:local": "bun run scripts/scraper.ts --local",
@@ -25,7 +27,9 @@
   "devDependencies": {
     "@types/node": "^22.14.0",
     "typescript": "~5.7.2",
-    "vite": "^6.2.0",
+    "vite": "^6.2.0"
+  },
+  "optionalDependencies": {
     "node-fetch": "^3.3.2",
     "jsdom": "^23.0.1",
     "@types/jsdom": "^21.1.6",
