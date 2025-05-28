@@ -1,1477 +1,791 @@
 [
   {
-    "id": "extracted-0",
+    "id": "198509400",
     "rinkId": "big-bear",
-    "title": "3:45p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
+    "title": "Free Style",
+    "startTime": "2025-05-25T06:00:00.000Z",
+    "endTime": "2025-05-25T07:00:00.000Z",
+    "description": "Venue: South Rink • 25 spots left",
+    "category": "Figure Skating",
+    "isFeatured": false
+  },
+  {
+    "id": "198509401",
+    "rinkId": "big-bear",
+    "title": "Free Style",
+    "startTime": "2025-05-25T07:00:00.000Z",
+    "endTime": "2025-05-25T08:00:00.000Z",
+    "description": "Venue: South Rink • 25 spots left",
+    "category": "Figure Skating",
+    "isFeatured": false
+  },
+  {
+    "id": "198515520",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-25T07:45:00.000Z",
+    "endTime": "2025-05-25T09:15:00.000Z",
+    "description": "Venue: North Rink • 29 spots left",
     "category": "Stick & Puck",
     "isFeatured": false
   },
   {
-    "id": "extracted-1",
+    "id": "198509402",
     "rinkId": "big-bear",
-    "title": "3:45p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
+    "title": "Free Style",
+    "startTime": "2025-05-25T08:00:00.000Z",
+    "endTime": "2025-05-25T09:00:00.000Z",
+    "description": "Venue: South Rink • 25 spots left",
+    "category": "Figure Skating",
+    "isFeatured": false
+  },
+  {
+    "id": "200047255",
+    "rinkId": "big-bear",
+    "title": "Public Skate",
+    "startTime": "2025-05-25T09:15:00.000Z",
+    "endTime": "2025-05-25T10:45:00.000Z",
+    "description": "Venue: South Rink • 50 spots left",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "198515521",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-25T09:30:00.000Z",
+    "endTime": "2025-05-25T10:45:00.000Z",
+    "description": "Venue: North Rink • 29 spots left",
     "category": "Stick & Puck",
     "isFeatured": false
   },
   {
-    "id": "extracted-2",
+    "id": "200047256",
     "rinkId": "big-bear",
-    "title": "a Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
+    "title": "Public Skate",
+    "startTime": "2025-05-25T10:45:00.000Z",
+    "endTime": "2025-05-25T12:30:00.000Z",
+    "description": "Venue: South Rink • 50 spots left",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "198515557",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-25T12:15:00.000Z",
+    "endTime": "2025-05-25T13:15:00.000Z",
+    "description": "Venue: North Rink • 30 spots left",
     "category": "Stick & Puck",
     "isFeatured": false
   },
   {
-    "id": "extracted-3",
+    "id": "198515365",
     "rinkId": "big-bear",
-    "title": "a Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
+    "title": "Public Skate",
+    "startTime": "2025-05-25T12:30:00.000Z",
+    "endTime": "2025-05-25T14:00:00.000Z",
+    "description": "Venue: South Rink • 50 spots left",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "198515544",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-25T13:30:00.000Z",
+    "endTime": "2025-05-25T14:30:00.000Z",
+    "description": "Venue: North Rink • 30 spots left",
     "category": "Stick & Puck",
     "isFeatured": false
   },
   {
-    "id": "extracted-4",
+    "id": "198515219",
     "rinkId": "big-bear",
-    "title": "a Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
+    "title": "Free Style",
+    "startTime": "2025-05-25T14:15:00.000Z",
+    "endTime": "2025-05-25T15:15:00.000Z",
+    "description": "Venue: South Rink • 25 spots left",
+    "category": "Figure Skating",
     "isFeatured": false
   },
   {
-    "id": "extracted-5",
+    "id": "202560693",
     "rinkId": "big-bear",
-    "title": "a Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-25T14:45:00.000Z",
+    "endTime": "2025-05-25T15:45:00.000Z",
+    "description": "Venue: North Rink • 30 spots left",
+    "category": "Stick & Puck",
     "isFeatured": false
   },
   {
-    "id": "extracted-6",
+    "id": "198515220",
     "rinkId": "big-bear",
-    "title": "5:45a Drop-IN Goalie REGISTRATION",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
+    "title": "Free Style",
+    "startTime": "2025-05-25T15:15:00.000Z",
+    "endTime": "2025-05-25T16:15:00.000Z",
+    "description": "Venue: South Rink • 25 spots left",
+    "category": "Figure Skating",
+    "isFeatured": false
+  },
+  {
+    "id": "199950350",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-25T16:00:00.000Z",
+    "endTime": "2025-05-25T17:00:00.000Z",
+    "description": "Venue: North Rink • 29 spots left",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "198515218",
+    "rinkId": "big-bear",
+    "title": "Free Style",
+    "startTime": "2025-05-25T16:15:00.000Z",
+    "endTime": "2025-05-25T17:15:00.000Z",
+    "description": "Venue: South Rink • 23 spots left",
+    "category": "Figure Skating",
+    "isFeatured": false
+  },
+  {
+    "id": "203768763",
+    "rinkId": "big-bear",
+    "title": "Public Skate",
+    "startTime": "2025-05-25T18:00:00.000Z",
+    "endTime": "2025-05-25T19:30:00.000Z",
+    "description": "Venue: South Rink • 50 spots left",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "203768784",
+    "rinkId": "big-bear",
+    "title": "Public Skate",
+    "startTime": "2025-05-25T19:45:00.000Z",
+    "endTime": "2025-05-25T21:00:00.000Z",
+    "description": "Venue: South Rink • 50 spots left",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "198514779",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-25T20:15:00.000Z",
+    "endTime": "2025-05-25T21:30:00.000Z",
+    "description": "Venue: North Rink • 30 spots left",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "198515441",
+    "rinkId": "big-bear",
+    "title": "Public Skate",
+    "startTime": "2025-05-25T20:45:00.000Z",
+    "endTime": "2025-05-25T23:00:00.000Z",
+    "description": "Venue: South Rink • 50 spots left",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "200295606",
+    "rinkId": "big-bear",
+    "title": "Public Skate",
+    "startTime": "2025-05-25T21:15:00.000Z",
+    "endTime": "2025-05-25T23:00:00.000Z",
+    "description": "Venue: South Rink • 50 spots left",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "199950154",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-25T21:45:00.000Z",
+    "endTime": "2025-05-25T23:00:00.000Z",
+    "description": "Venue: North Rink • 30 spots left",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "198514780",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-25T21:45:00.000Z",
+    "endTime": "2025-05-25T23:00:00.000Z",
+    "description": "Venue: North Rink • 30 spots left",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "198433510",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-26T06:00:00.000Z",
+    "endTime": "2025-05-26T07:00:00.000Z",
+    "description": "Venue: North Rink • 29 spots left",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "198431266",
+    "rinkId": "big-bear",
+    "title": "Free Style",
+    "startTime": "2025-05-26T07:00:00.000Z",
+    "endTime": "2025-05-26T08:00:00.000Z",
+    "description": "Venue: South Rink • 25 spots left",
+    "category": "Figure Skating",
+    "isFeatured": false
+  },
+  {
+    "id": "198431267",
+    "rinkId": "big-bear",
+    "title": "Free Style",
+    "startTime": "2025-05-26T08:00:00.000Z",
+    "endTime": "2025-05-26T09:00:00.000Z",
+    "description": "Venue: South Rink • 24 spots left",
+    "category": "Figure Skating",
+    "isFeatured": false
+  },
+  {
+    "id": "198433512",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-26T09:00:00.000Z",
+    "endTime": "2025-05-26T10:30:00.000Z",
+    "description": "Venue: North Rink • 30 spots left",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "198433615",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-26T10:45:00.000Z",
+    "endTime": "2025-05-26T12:15:00.000Z",
+    "description": "Venue: North Rink • 30 spots left",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "198433616",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-26T12:30:00.000Z",
+    "endTime": "2025-05-26T13:45:00.000Z",
+    "description": "Venue: North Rink • 30 spots left",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "199945238",
+    "rinkId": "big-bear",
+    "title": "Public Skate",
+    "startTime": "2025-05-26T12:45:00.000Z",
+    "endTime": "2025-05-26T14:30:00.000Z",
+    "description": "Venue: South Rink • 50 spots left",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "198431270",
+    "rinkId": "big-bear",
+    "title": "Free Style",
+    "startTime": "2025-05-26T14:45:00.000Z",
+    "endTime": "2025-05-26T15:45:00.000Z",
+    "description": "Venue: South Rink • 25 spots left",
+    "category": "Figure Skating",
+    "isFeatured": false
+  },
+  {
+    "id": "198433513",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-26T15:30:00.000Z",
+    "endTime": "2025-05-26T17:00:00.000Z",
+    "description": "Venue: North Rink • 30 spots left",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "198432736",
+    "rinkId": "big-bear",
+    "title": "Free Style",
+    "startTime": "2025-05-26T15:45:00.000Z",
+    "endTime": "2025-05-26T16:45:00.000Z",
+    "description": "Venue: South Rink • 25 spots left",
+    "category": "Figure Skating",
+    "isFeatured": false
+  },
+  {
+    "id": "198431268",
+    "rinkId": "big-bear",
+    "title": "Free Style",
+    "startTime": "2025-05-26T16:45:00.000Z",
+    "endTime": "2025-05-26T17:45:00.000Z",
+    "description": "Venue: South Rink • 25 spots left",
+    "category": "Figure Skating",
+    "isFeatured": false
+  },
+  {
+    "id": "198510939",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-26T17:30:00.000Z",
+    "endTime": "2025-05-26T18:45:00.000Z",
+    "description": "Venue: North Rink • 30 spots left",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "198432800",
+    "rinkId": "big-bear",
+    "title": "Public Skate",
+    "startTime": "2025-05-26T18:00:00.000Z",
+    "endTime": "2025-05-26T19:30:00.000Z",
+    "description": "Venue: South Rink • 50 spots left",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "203768744",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-26T19:45:00.000Z",
+    "endTime": "2025-05-26T21:00:00.000Z",
+    "description": "Venue: South Rink • 30 spots left",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "198447740",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-26T20:15:00.000Z",
+    "endTime": "2025-05-26T21:30:00.000Z",
+    "description": "Venue: North Rink • 30 spots left",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "200179166",
+    "rinkId": "big-bear",
+    "title": "Public Skate",
+    "startTime": "2025-05-26T21:15:00.000Z",
+    "endTime": "2025-05-26T23:00:00.000Z",
+    "description": "Venue: South Rink • 50 spots left",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "199945270",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-26T21:30:00.000Z",
+    "endTime": "2025-05-26T23:00:00.000Z",
+    "description": "Venue: North Rink • 30 spots left",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "198449462",
+    "rinkId": "big-bear",
+    "title": "Public Skate",
+    "startTime": "2025-05-26T21:30:00.000Z",
+    "endTime": "2025-05-26T23:00:00.000Z",
+    "description": "Venue: South Rink • 50 spots left",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "198447741",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-26T21:45:00.000Z",
+    "endTime": "2025-05-26T23:00:00.000Z",
+    "description": "Venue: North Rink • 30 spots left",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "203032747",
+    "rinkId": "big-bear",
+    "title": "Drop - IN HOCKEY",
+    "startTime": "2025-05-27T06:00:00.000Z",
+    "endTime": "2025-05-27T07:30:00.000Z",
+    "description": "Venue: North Rink • 25 spots left",
     "category": "Drop-In Hockey",
     "isFeatured": false
   },
   {
-    "id": "extracted-7",
+    "id": "198509403",
     "rinkId": "big-bear",
-    "title": "5:45a Drop-IN Goalie REGISTRATION",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
+    "title": "Free Style",
+    "startTime": "2025-05-27T06:00:00.000Z",
+    "endTime": "2025-05-27T07:00:00.000Z",
+    "description": "Venue: South Rink • 25 spots left",
+    "category": "Figure Skating",
+    "isFeatured": false
+  },
+  {
+    "id": "198509404",
+    "rinkId": "big-bear",
+    "title": "Free Style",
+    "startTime": "2025-05-27T07:00:00.000Z",
+    "endTime": "2025-05-27T08:00:00.000Z",
+    "description": "Venue: South Rink • 25 spots left",
+    "category": "Figure Skating",
+    "isFeatured": false
+  },
+  {
+    "id": "203033519",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-27T07:45:00.000Z",
+    "endTime": "2025-05-27T09:15:00.000Z",
+    "description": "Venue: North Rink • 29 spots left",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "198509405",
+    "rinkId": "big-bear",
+    "title": "Free Style",
+    "startTime": "2025-05-27T08:00:00.000Z",
+    "endTime": "2025-05-27T09:00:00.000Z",
+    "description": "Venue: South Rink • 25 spots left",
+    "category": "Figure Skating",
+    "isFeatured": false
+  },
+  {
+    "id": "200047524",
+    "rinkId": "big-bear",
+    "title": "Public Skate",
+    "startTime": "2025-05-27T09:15:00.000Z",
+    "endTime": "2025-05-27T11:00:00.000Z",
+    "description": "Venue: South Rink • 50 spots left",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "198510984",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-27T09:30:00.000Z",
+    "endTime": "2025-05-27T10:45:00.000Z",
+    "description": "Venue: North Rink • 30 spots left",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "198510985",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-27T11:00:00.000Z",
+    "endTime": "2025-05-27T12:15:00.000Z",
+    "description": "Venue: North Rink • 30 spots left",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "198510198",
+    "rinkId": "big-bear",
+    "title": "Public Skate",
+    "startTime": "2025-05-27T12:30:00.000Z",
+    "endTime": "2025-05-27T14:30:00.000Z",
+    "description": "Venue: South Rink • 50 spots left",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "198510778",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-27T12:30:00.000Z",
+    "endTime": "2025-05-27T13:45:00.000Z",
+    "description": "Venue: North Rink • 30 spots left",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "198433617",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-27T14:00:00.000Z",
+    "endTime": "2025-05-27T15:15:00.000Z",
+    "description": "Venue: North Rink • 30 spots left",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "198510779",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-27T14:00:00.000Z",
+    "endTime": "2025-05-27T15:30:00.000Z",
+    "description": "Venue: North Rink • 30 spots left",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "198509539",
+    "rinkId": "big-bear",
+    "title": "Free Style",
+    "startTime": "2025-05-27T14:45:00.000Z",
+    "endTime": "2025-05-27T15:45:00.000Z",
+    "description": "Venue: South Rink • 25 spots left",
+    "category": "Figure Skating",
+    "isFeatured": false
+  },
+  {
+    "id": "198510781",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-27T15:45:00.000Z",
+    "endTime": "2025-05-27T17:15:00.000Z",
+    "description": "Venue: North Rink • 30 spots left",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "198509540",
+    "rinkId": "big-bear",
+    "title": "Free Style",
+    "startTime": "2025-05-27T15:45:00.000Z",
+    "endTime": "2025-05-27T16:45:00.000Z",
+    "description": "Venue: South Rink • 24 spots left",
+    "category": "Figure Skating",
+    "isFeatured": false
+  },
+  {
+    "id": "199755963",
+    "rinkId": "big-bear",
+    "title": "Free Style",
+    "startTime": "2025-05-27T16:45:00.000Z",
+    "endTime": "2025-05-27T17:45:00.000Z",
+    "description": "Venue: South Rink • 24 spots left",
+    "category": "Figure Skating",
+    "isFeatured": false
+  },
+  {
+    "id": "198449461",
+    "rinkId": "big-bear",
+    "title": "Public Skate",
+    "startTime": "2025-05-27T19:30:00.000Z",
+    "endTime": "2025-05-27T21:15:00.000Z",
+    "description": "Venue: South Rink • 50 spots left",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "198515519",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-28T06:00:00.000Z",
+    "endTime": "2025-05-28T07:30:00.000Z",
+    "description": "Venue: North Rink • 27 spots left",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "198445020",
+    "rinkId": "big-bear",
+    "title": "Free Style",
+    "startTime": "2025-05-28T06:00:00.000Z",
+    "endTime": "2025-05-28T07:00:00.000Z",
+    "description": "Venue: South Rink • 24 spots left",
+    "category": "Figure Skating",
+    "isFeatured": false
+  },
+  {
+    "id": "198445021",
+    "rinkId": "big-bear",
+    "title": "Free Style",
+    "startTime": "2025-05-28T07:00:00.000Z",
+    "endTime": "2025-05-28T08:00:00.000Z",
+    "description": "Venue: South Rink • 25 spots left",
+    "category": "Figure Skating",
+    "isFeatured": false
+  },
+  {
+    "id": "198445866",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-28T07:30:00.000Z",
+    "endTime": "2025-05-28T08:45:00.000Z",
+    "description": "Venue: North Rink • 30 spots left",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "198445034",
+    "rinkId": "big-bear",
+    "title": "Free Style",
+    "startTime": "2025-05-28T08:00:00.000Z",
+    "endTime": "2025-05-28T09:00:00.000Z",
+    "description": "Venue: South Rink • 25 spots left",
+    "category": "Figure Skating",
+    "isFeatured": false
+  },
+  {
+    "id": "198444221",
+    "rinkId": "big-bear",
+    "title": "Drop-IN Goalie REGISTRATION",
+    "startTime": "2025-05-28T10:00:00.000Z",
+    "endTime": "2025-05-28T11:00:00.000Z",
+    "description": "Venue: North Rink • 1 spots left",
     "category": "Drop-In Hockey",
     "isFeatured": false
   },
   {
-    "id": "extracted-8",
+    "id": "198444319",
     "rinkId": "big-bear",
-    "title": "a Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-9",
-    "rinkId": "big-bear",
-    "title": "a Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-10",
-    "rinkId": "big-bear",
-    "title": "3:45p Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-11",
-    "rinkId": "big-bear",
-    "title": "3:45p Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-12",
-    "rinkId": "big-bear",
-    "title": "a Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-13",
-    "rinkId": "big-bear",
-    "title": "a Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-14",
-    "rinkId": "big-bear",
-    "title": "a Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-15",
-    "rinkId": "big-bear",
-    "title": "a Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-16",
-    "rinkId": "big-bear",
-    "title": "a Drop - IN HOCKEY",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
+    "title": "Drop - IN HOCKEY",
+    "startTime": "2025-05-28T10:15:00.000Z",
+    "endTime": "2025-05-28T11:45:00.000Z",
+    "description": "Venue: North Rink • 28 spots left",
     "category": "Drop-In Hockey",
     "isFeatured": false
   },
   {
-    "id": "extracted-17",
+    "id": "203768797",
     "rinkId": "big-bear",
-    "title": "a Drop - IN HOCKEY",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
+    "title": "Public Skate",
+    "startTime": "2025-05-28T11:00:00.000Z",
+    "endTime": "2025-05-28T13:15:00.000Z",
+    "description": "Venue: South Rink • 50 spots left",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "200047786",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-28T13:15:00.000Z",
+    "endTime": "2025-05-28T14:15:00.000Z",
+    "description": "Venue: North Rink • 30 spots left",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "198449458",
+    "rinkId": "big-bear",
+    "title": "Public Skate",
+    "startTime": "2025-05-28T13:30:00.000Z",
+    "endTime": "2025-05-28T15:15:00.000Z",
+    "description": "Venue: South Rink • 50 spots left",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "198446555",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-28T14:30:00.000Z",
+    "endTime": "2025-05-28T15:30:00.000Z",
+    "description": "Venue: North Rink • 30 spots left",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "198449459",
+    "rinkId": "big-bear",
+    "title": "Public Skate",
+    "startTime": "2025-05-28T15:30:00.000Z",
+    "endTime": "2025-05-28T17:15:00.000Z",
+    "description": "Venue: South Rink • 50 spots left",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "198447737",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-28T15:45:00.000Z",
+    "endTime": "2025-05-28T17:00:00.000Z",
+    "description": "Venue: North Rink • 30 spots left",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "198447738",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-28T17:15:00.000Z",
+    "endTime": "2025-05-28T18:30:00.000Z",
+    "description": "Venue: North Rink • 30 spots left",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "198449460",
+    "rinkId": "big-bear",
+    "title": "Public Skate",
+    "startTime": "2025-05-28T17:30:00.000Z",
+    "endTime": "2025-05-28T19:15:00.000Z",
+    "description": "Venue: South Rink • 50 spots left",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "198447739",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-28T18:45:00.000Z",
+    "endTime": "2025-05-28T20:00:00.000Z",
+    "description": "Venue: North Rink • 30 spots left",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "198431265",
+    "rinkId": "big-bear",
+    "title": "Free Style",
+    "startTime": "2025-05-29T06:00:00.000Z",
+    "endTime": "2025-05-29T07:00:00.000Z",
+    "description": "Venue: South Rink • 23 spots left",
+    "category": "Figure Skating",
+    "isFeatured": false
+  },
+  {
+    "id": "200047525",
+    "rinkId": "big-bear",
+    "title": "Public Skate",
+    "startTime": "2025-05-29T11:00:00.000Z",
+    "endTime": "2025-05-29T12:30:00.000Z",
+    "description": "Venue: South Rink • 50 spots left",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "203032739",
+    "rinkId": "big-bear",
+    "title": "Drop-IN Goalie REGISTRATION",
+    "startTime": "2025-05-30T05:45:00.000Z",
+    "endTime": "2025-05-30T06:45:00.000Z",
+    "description": "Venue: North Rink • 1 spots left",
     "category": "Drop-In Hockey",
     "isFeatured": false
   },
   {
-    "id": "extracted-18",
+    "id": "198445865",
     "rinkId": "big-bear",
-    "title": "a Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-19",
-    "rinkId": "big-bear",
-    "title": "a Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-20",
-    "rinkId": "big-bear",
-    "title": "p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-21",
-    "rinkId": "big-bear",
-    "title": "p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-22",
-    "rinkId": "big-bear",
-    "title": "a Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-23",
-    "rinkId": "big-bear",
-    "title": "a Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-24",
-    "rinkId": "big-bear",
-    "title": "a Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-25",
-    "rinkId": "big-bear",
-    "title": "a Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-26",
-    "rinkId": "big-bear",
-    "title": "a Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-27",
-    "rinkId": "big-bear",
-    "title": "a Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-28",
-    "rinkId": "big-bear",
-    "title": "a Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-29",
-    "rinkId": "big-bear",
-    "title": "a Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-30",
-    "rinkId": "big-bear",
-    "title": "7:45a Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-31T06:00:00.000Z",
+    "endTime": "2025-05-31T07:15:00.000Z",
+    "description": "Venue: North Rink • 30 spots left",
     "category": "Stick & Puck",
     "isFeatured": false
   },
   {
-    "id": "extracted-31",
-    "rinkId": "big-bear",
-    "title": "7:45a Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-32",
-    "rinkId": "big-bear",
-    "title": "a Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-33",
-    "rinkId": "big-bear",
-    "title": "a Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-34",
-    "rinkId": "big-bear",
-    "title": "a Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-35",
-    "rinkId": "big-bear",
-    "title": "a Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-36",
-    "rinkId": "big-bear",
-    "title": "7:30a Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-37",
-    "rinkId": "big-bear",
-    "title": "7:30a Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-38",
-    "rinkId": "big-bear",
-    "title": "a Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-39",
-    "rinkId": "big-bear",
-    "title": "a Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-40",
-    "rinkId": "big-bear",
-    "title": "a Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-41",
-    "rinkId": "big-bear",
-    "title": "a Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-42",
-    "rinkId": "big-bear",
-    "title": "7:45a Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-43",
-    "rinkId": "big-bear",
-    "title": "7:45a Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-44",
-    "rinkId": "big-bear",
-    "title": "a Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-45",
-    "rinkId": "big-bear",
-    "title": "a Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-46",
-    "rinkId": "big-bear",
-    "title": "9:15a Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-47",
-    "rinkId": "big-bear",
-    "title": "9:15a Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-48",
-    "rinkId": "big-bear",
-    "title": "10:45a Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-49",
-    "rinkId": "big-bear",
-    "title": "10:45a Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-50",
-    "rinkId": "big-bear",
-    "title": "a Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-51",
-    "rinkId": "big-bear",
-    "title": "a Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-52",
-    "rinkId": "big-bear",
-    "title": "a Drop-IN Goalie REGISTRATION",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Drop-In Hockey",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-53",
-    "rinkId": "big-bear",
-    "title": "a Drop-IN Goalie REGISTRATION",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Drop-In Hockey",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-54",
-    "rinkId": "big-bear",
-    "title": "9:30a Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-55",
-    "rinkId": "big-bear",
-    "title": "9:30a Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-56",
-    "rinkId": "big-bear",
-    "title": "12:30p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-57",
-    "rinkId": "big-bear",
-    "title": "12:30p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-58",
-    "rinkId": "big-bear",
-    "title": "9:15a Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-59",
-    "rinkId": "big-bear",
-    "title": "9:15a Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-60",
-    "rinkId": "big-bear",
-    "title": "10:15a Drop - IN HOCKEY",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Drop-In Hockey",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-61",
-    "rinkId": "big-bear",
-    "title": "10:15a Drop - IN HOCKEY",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Drop-In Hockey",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-62",
-    "rinkId": "big-bear",
-    "title": "10:45a Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-63",
-    "rinkId": "big-bear",
-    "title": "10:45a Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-64",
-    "rinkId": "big-bear",
-    "title": "12:45p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-65",
-    "rinkId": "big-bear",
-    "title": "12:45p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-66",
-    "rinkId": "big-bear",
-    "title": "9:30a Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-67",
-    "rinkId": "big-bear",
-    "title": "9:30a Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-68",
-    "rinkId": "big-bear",
-    "title": "a Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-69",
-    "rinkId": "big-bear",
-    "title": "a Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-70",
-    "rinkId": "big-bear",
-    "title": "12:15p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-71",
-    "rinkId": "big-bear",
-    "title": "12:15p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-72",
-    "rinkId": "big-bear",
-    "title": "p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-73",
-    "rinkId": "big-bear",
-    "title": "p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-74",
-    "rinkId": "big-bear",
-    "title": "a Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-75",
-    "rinkId": "big-bear",
-    "title": "a Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-76",
-    "rinkId": "big-bear",
-    "title": "p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-77",
-    "rinkId": "big-bear",
-    "title": "p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-78",
-    "rinkId": "big-bear",
-    "title": "12:30p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-79",
-    "rinkId": "big-bear",
-    "title": "12:30p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-80",
-    "rinkId": "big-bear",
-    "title": "2:45p Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-81",
-    "rinkId": "big-bear",
-    "title": "2:45p Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-82",
-    "rinkId": "big-bear",
-    "title": "a Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-83",
-    "rinkId": "big-bear",
-    "title": "a Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-84",
-    "rinkId": "big-bear",
-    "title": "1:15p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-85",
-    "rinkId": "big-bear",
-    "title": "1:15p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-86",
-    "rinkId": "big-bear",
-    "title": "1:30p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-87",
-    "rinkId": "big-bear",
-    "title": "1:30p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-88",
-    "rinkId": "big-bear",
-    "title": "3:30p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-89",
-    "rinkId": "big-bear",
-    "title": "3:30p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-90",
-    "rinkId": "big-bear",
-    "title": "12:30p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-91",
-    "rinkId": "big-bear",
-    "title": "12:30p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-92",
-    "rinkId": "big-bear",
-    "title": "1:30p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-93",
-    "rinkId": "big-bear",
-    "title": "1:30p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-94",
-    "rinkId": "big-bear",
-    "title": "2:15p Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-95",
-    "rinkId": "big-bear",
-    "title": "2:15p Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-96",
-    "rinkId": "big-bear",
-    "title": "3:45p Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-97",
-    "rinkId": "big-bear",
-    "title": "3:45p Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-98",
-    "rinkId": "big-bear",
-    "title": "12:30p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-99",
-    "rinkId": "big-bear",
-    "title": "12:30p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-100",
-    "rinkId": "big-bear",
-    "title": "2:30p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-101",
-    "rinkId": "big-bear",
-    "title": "2:30p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-102",
-    "rinkId": "big-bear",
-    "title": "2:45p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-103",
-    "rinkId": "big-bear",
-    "title": "2:45p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-104",
-    "rinkId": "big-bear",
-    "title": "4:45p Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-105",
-    "rinkId": "big-bear",
-    "title": "4:45p Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-106",
-    "rinkId": "big-bear",
-    "title": "p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-107",
-    "rinkId": "big-bear",
-    "title": "p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-108",
-    "rinkId": "big-bear",
-    "title": "3:30p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-109",
-    "rinkId": "big-bear",
-    "title": "3:30p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-110",
-    "rinkId": "big-bear",
-    "title": "3:15p Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-111",
-    "rinkId": "big-bear",
-    "title": "3:15p Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-112",
-    "rinkId": "big-bear",
-    "title": "p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-113",
-    "rinkId": "big-bear",
-    "title": "p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-114",
-    "rinkId": "big-bear",
-    "title": "2:45p Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-115",
-    "rinkId": "big-bear",
-    "title": "2:45p Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-116",
-    "rinkId": "big-bear",
-    "title": "3:45p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-117",
-    "rinkId": "big-bear",
-    "title": "3:45p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-118",
-    "rinkId": "big-bear",
-    "title": "p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-119",
-    "rinkId": "big-bear",
-    "title": "p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-120",
-    "rinkId": "big-bear",
-    "title": "7:45p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-121",
-    "rinkId": "big-bear",
-    "title": "7:45p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-122",
-    "rinkId": "big-bear",
-    "title": "3:45p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-123",
-    "rinkId": "big-bear",
-    "title": "3:45p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-124",
-    "rinkId": "big-bear",
-    "title": "5:15p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-125",
-    "rinkId": "big-bear",
-    "title": "5:15p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-126",
-    "rinkId": "big-bear",
-    "title": "4:15p Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-127",
-    "rinkId": "big-bear",
-    "title": "4:15p Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-128",
-    "rinkId": "big-bear",
-    "title": "9:15p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-129",
-    "rinkId": "big-bear",
-    "title": "9:15p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-130",
-    "rinkId": "big-bear",
-    "title": "3:45p Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-131",
-    "rinkId": "big-bear",
-    "title": "3:45p Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-132",
-    "rinkId": "big-bear",
-    "title": "5:30p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-133",
-    "rinkId": "big-bear",
-    "title": "5:30p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-134",
-    "rinkId": "big-bear",
-    "title": "8:45p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-135",
-    "rinkId": "big-bear",
-    "title": "8:45p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-136",
-    "rinkId": "big-bear",
-    "title": "9:30p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-137",
-    "rinkId": "big-bear",
-    "title": "9:30p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-138",
-    "rinkId": "big-bear",
-    "title": "4:45p Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-139",
-    "rinkId": "big-bear",
-    "title": "4:45p Free Style",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Other",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-140",
-    "rinkId": "big-bear",
-    "title": "6:45p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-141",
-    "rinkId": "big-bear",
-    "title": "6:45p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-142",
-    "rinkId": "big-bear",
-    "title": "9:45p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-143",
-    "rinkId": "big-bear",
-    "title": "9:45p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-144",
-    "rinkId": "big-bear",
-    "title": "5:30p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-145",
-    "rinkId": "big-bear",
-    "title": "5:30p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-146",
-    "rinkId": "big-bear",
-    "title": "7:30p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-147",
-    "rinkId": "big-bear",
-    "title": "7:30p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-148",
-    "rinkId": "big-bear",
-    "title": "p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-149",
-    "rinkId": "big-bear",
-    "title": "p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-150",
-    "rinkId": "big-bear",
-    "title": "8:15p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-151",
-    "rinkId": "big-bear",
-    "title": "8:15p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-152",
-    "rinkId": "big-bear",
-    "title": "7:45p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-153",
-    "rinkId": "big-bear",
-    "title": "7:45p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-154",
-    "rinkId": "big-bear",
-    "title": "9:30p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-155",
-    "rinkId": "big-bear",
-    "title": "9:30p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-156",
-    "rinkId": "big-bear",
-    "title": "8:15p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-157",
-    "rinkId": "big-bear",
-    "title": "8:15p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-158",
-    "rinkId": "big-bear",
-    "title": "9:45p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-159",
-    "rinkId": "big-bear",
-    "title": "9:45p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-160",
-    "rinkId": "big-bear",
-    "title": "9:15p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-161",
-    "rinkId": "big-bear",
-    "title": "9:15p Public Skate",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-162",
-    "rinkId": "big-bear",
-    "title": "9:45p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "extracted-163",
-    "rinkId": "big-bear",
-    "title": "9:45p Open Stick & Puck",
-    "startTime": "2025-05-27T00:00:00.000Z",
-    "endTime": "2025-05-27T00:00:00.000Z",
+    "id": "198446554",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-31T12:00:00.000Z",
+    "endTime": "2025-05-31T13:00:00.000Z",
+    "description": "Venue: North Rink • 30 spots left",
     "category": "Stick & Puck",
     "isFeatured": false
   }

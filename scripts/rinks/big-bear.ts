@@ -1,7 +1,6 @@
 import { RawIceEventData, EventCategory } from '../../src/types.js';
 import { BaseScraper } from './base-scraper.js';
 import puppeteer from 'puppeteer';
-import { writeFile } from 'fs/promises';
 
 interface BigBearEvent {
   id: string;
@@ -27,16 +26,18 @@ export class BigBearScraper extends BaseScraper {
 
   private readonly baseUrl = 'https://bigbearicearena.ezfacility.com';
 
-  protected categorizeBigBearEvent(event: BigBearEvent | any): EventCategory {
+  protected categorizeBigBearEvent(event: any): EventCategory {
     const classNames = event.className ? event.className.join(' ').toLowerCase() : '';
     const titleLower = event.title.toLowerCase();
+    const backgroundColor = event.backgroundColor || '';
 
-    if (classNames.includes('event-purple') || titleLower.includes('public skate')) return 'Public Skate';
-    if (classNames.includes('event-pink') || titleLower.includes('freestyle')) return 'Figure Skating';
-    if (classNames.includes('event-green') || (titleLower.includes('stick') && titleLower.includes('puck'))) return 'Stick & Puck';
-    if (classNames.includes('event-red') || titleLower.includes('drop-in') || titleLower.includes('drop in')) return 'Drop-In Hockey';
-    if (classNames.includes('event-navy') || titleLower.includes('party room')) return 'Special Event'; // Party Room
-    if (classNames.includes('event-gold') || titleLower.includes('hockey party')) return 'Special Event'; // Hockey Party Room
+    // Use color coding as primary categorization method (from the HTML analysis)
+    if (backgroundColor === '#9900FF' || backgroundColor === '#9900ff' || titleLower.includes('public skate')) return 'Public Skate';
+    if (backgroundColor === '#FF66FF' || backgroundColor === '#ff66ff' || titleLower.includes('freestyle') || titleLower.includes('free style')) return 'Figure Skating';
+    if (backgroundColor === '#00CC00' || backgroundColor === '#00cc00' || (titleLower.includes('stick') && titleLower.includes('puck'))) return 'Stick & Puck';
+    if (backgroundColor === '#FF0000' || backgroundColor === '#ff0000' || backgroundColor === '#990000' || backgroundColor === '#990000' || titleLower.includes('drop-in') || titleLower.includes('drop in')) return 'Drop-In Hockey';
+    if (backgroundColor === '#000080' || titleLower.includes('party room')) return 'Special Event'; // Navy - Party Room
+    if (backgroundColor === '#FFD700' || titleLower.includes('hockey party')) return 'Special Event'; // Gold - Hockey Party Room
     
     // Fallback to general title categorization
     return this.categorizeEvent(event.title);
@@ -88,169 +89,160 @@ export class BigBearScraper extends BaseScraper {
         // Give extra time for events to load
         await page.waitForTimeout(3000);
         
-        // Add some debugging info about what's on the page
-        const pageInfo = await page.evaluate(() => {
-          return {
-            title: document.title,
-            url: window.location.href,
-            hasJQuery: typeof (window as any).$ !== 'undefined',
-            hasFullCalendar: typeof (window as any).$ !== 'undefined' && typeof (window as any).$.fn.fullCalendar !== 'undefined',
-            calendarExists: !!document.getElementById('calendar'),
-            scriptCount: document.querySelectorAll('script').length,
-            eventElementCount: document.querySelectorAll('.fc-event, .fc-daygrid-event, .fc-timegrid-event').length
-          };
-        });
+        console.log('🔍 Extracting events from FullCalendar...');
         
-        console.log('📊 Page info:', pageInfo);
-        
-        console.log('🔍 Extracting events from loaded calendar...');
-        
-        // Let's dump everything we can about the page
-        const pageData = await page.evaluate(() => {
-          const eventElements = document.querySelectorAll('.fc-event, .fc-daygrid-event, .fc-timegrid-event, [class*="fc-event"]');
-          
-          return {
-            // Sample of event element HTML
-            sampleEvents: Array.from(eventElements).slice(0, 10).map((el, index) => ({
-              index,
-              outerHTML: el.outerHTML,
-              textContent: el.textContent?.trim(),
-              className: el.className,
-              attributes: Array.from(el.attributes).reduce((acc, attr) => {
-                acc[attr.name] = attr.value;
-                return acc;
-              }, {} as any),
-              children: Array.from(el.children).map(child => ({
-                tagName: child.tagName,
-                className: child.className,
-                textContent: child.textContent?.trim()
-              }))
-            })),
-            
-            // Check for FullCalendar instance
-            hasFullCalendar: typeof (window as any).$ !== 'undefined' && typeof (window as any).$.fn.fullCalendar !== 'undefined',
-            
-            // Try to get FullCalendar version
-            fullCalendarVersion: (window as any).$ && (window as any).$.fn.fullCalendar ? 
-              (window as any).$.fn.fullCalendar.version || 'unknown' : 'not available',
-            
-            // Global variables that might contain events
-            globalVars: {
-              calendarEvents: typeof (window as any).calendarEvents,
-              events: typeof (window as any).events,
-              scheduleData: typeof (window as any).scheduleData,
-              fullCalendarEvents: typeof (window as any).fullCalendarEvents
-            },
-            
-            // Calendar element info
-            calendarElement: (() => {
-              const cal = document.getElementById('calendar');
-              if (cal) {
-                return {
-                  innerHTML: cal.innerHTML.substring(0, 1000) + '...',
-                  className: cal.className,
-                  children: Array.from(cal.children).map(child => child.tagName)
-                };
-              }
-              return null;
-            })()
-          };
-        });
-        
-        console.log('📄 PAGE DATA DUMP:');
-        console.log('==================');
-        console.log(`Found ${pageData.sampleEvents.length} sample events to examine:`);
-        
-        pageData.sampleEvents.forEach((event, index) => {
-          console.log(`\nEvent ${index}:`);
-          console.log(`  HTML: ${event.outerHTML.substring(0, 200)}...`);
-          console.log(`  Text: "${event.textContent}"`);
-          console.log(`  Class: "${event.className}"`);
-          console.log(`  Attributes:`, event.attributes);
-          console.log(`  Children:`, event.children);
-        });
-        
-        console.log(`\nFullCalendar Info:`);
-        console.log(`  Available: ${pageData.hasFullCalendar}`);
-        console.log(`  Version: ${pageData.fullCalendarVersion}`);
-        
-        console.log(`\nGlobal Variables:`);
-        console.log(`  calendarEvents: ${pageData.globalVars.calendarEvents}`);
-        console.log(`  events: ${pageData.globalVars.events}`);
-        console.log(`  scheduleData: ${pageData.globalVars.scheduleData}`);
-        
-        console.log(`\nCalendar Element:`, pageData.calendarElement);
-        
-        // Also save the full page HTML to a file for inspection
-        const fullHTML = await page.content();
-        console.log(`\n💾 Full page HTML length: ${fullHTML.length} characters`);
-        
-        // Save to file in the current directory so you can examine it
-        await writeFile('./debug-bigbear-page.html', fullHTML, 'utf-8');
-        console.log('💾 Saved full page HTML to: ./debug-bigbear-page.html');
-        
-        // Extract events using the info we just gathered
+        // Extract events with proper parsing
         const events = await page.evaluate(() => {
           const events: any[] = [];
           
-          // Based on what we see, try to extract events
-          const eventElements = document.querySelectorAll('.fc-event, .fc-daygrid-event, .fc-timegrid-event, [class*="fc-event"]');
+          // Find all event elements - specifically target the anchor tags with event data
+          const eventElements = document.querySelectorAll('a.fc-day-grid-event[data-eventid]');
           
-          eventElements.forEach((el, index) => {
-            const title = el.textContent?.trim() || '';
-            if (title && title.length > 2) {
-              // Try to find parent cell with date
-              let dateStr = '';
-              const parentCell = el.closest('[data-date]');
+          eventElements.forEach((eventEl, index) => {
+            try {
+              const anchor = eventEl as HTMLAnchorElement;
+              
+              // Extract basic info
+              const eventId = anchor.getAttribute('data-eventid') || `extracted-${index}`;
+              const title = anchor.textContent?.trim() || 'Unknown Event';
+              
+              // Extract style information for categorization
+              const style = anchor.getAttribute('style') || '';
+              const backgroundColorMatch = style.match(/background-color:\s*([^;]+)/i);
+              const backgroundColor = backgroundColorMatch ? backgroundColorMatch[1] : '';
+              
+              // Find the parent cell with the date
+              const parentCell = anchor.closest('td[data-date], th[data-date]');
+              let eventDate = new Date(); // Default to today
+              
               if (parentCell) {
-                dateStr = parentCell.getAttribute('data-date') || '';
+                const dateStr = parentCell.getAttribute('data-date');
+                if (dateStr) {
+                  eventDate = new Date(dateStr);
+                }
+              } else {
+                // Try to find date from the calendar structure
+                const weekRow = anchor.closest('.fc-week');
+                if (weekRow) {
+                  const allCells = weekRow.querySelectorAll('.fc-day[data-date]');
+                  const eventContainer = anchor.closest('.fc-event-container');
+                  if (eventContainer) {
+                    const containerIndex = Array.from(eventContainer.parentElement?.children || []).indexOf(eventContainer);
+                    if (containerIndex >= 0 && containerIndex < allCells.length) {
+                      const cellDate = allCells[containerIndex].getAttribute('data-date');
+                      if (cellDate) {
+                        eventDate = new Date(cellDate);
+                      }
+                    }
+                  }
+                }
+              }
+              
+              // Parse time from title text
+              let startTime = new Date(eventDate);
+              let endTime = new Date(eventDate);
+              
+              // Extract time from the title (e.g., "3:45p Open Stick & Puck", "6a Free Style")
+              const timeMatch = title.match(/^(\d{1,2}(?::\d{2})?)\s*([ap])/i);
+              if (timeMatch) {
+                const timeStr = timeMatch[1];
+                const ampm = timeMatch[2].toLowerCase();
+                
+                let hours = 0;
+                let minutes = 0;
+                
+                if (timeStr.includes(':')) {
+                  const [h, m] = timeStr.split(':');
+                  hours = parseInt(h);
+                  minutes = parseInt(m);
+                } else {
+                  hours = parseInt(timeStr);
+                }
+                
+                // Convert to 24-hour format
+                if (ampm === 'p' && hours !== 12) {
+                  hours += 12;
+                } else if (ampm === 'a' && hours === 12) {
+                  hours = 0;
+                }
+                
+                startTime.setHours(hours, minutes, 0, 0);
+                
+                // Try to extract duration from popover data
+                const popoverContent = anchor.querySelector('[data-content]')?.getAttribute('data-content') || '';
+                let durationMinutes = 60; // Default 1 hour
+                
+                const durationMatch = popoverContent.match(/(\d+)\s*hour\(s\)(?:\s*(\d+)\s*minutes?)?/i);
+                if (durationMatch) {
+                  const hours = parseInt(durationMatch[1]) || 0;
+                  const mins = parseInt(durationMatch[2]) || 0;
+                  durationMinutes = (hours * 60) + mins;
+                }
+                
+                endTime = new Date(startTime.getTime() + (durationMinutes * 60 * 1000));
+              } else {
+                // If we can't parse time, set a default 1-hour duration
+                endTime = new Date(startTime.getTime() + (60 * 60 * 1000));
+              }
+              
+              // Clean the title to remove time prefix
+              const cleanTitle = title.replace(/^\d{1,2}(?::\d{2})?\s*[ap]\s*/i, '').trim();
+              
+              // Extract additional info from popover
+              const popoverEl = anchor.querySelector('[data-content]');
+              let description = '';
+              let spotsLeft = 0;
+              
+              if (popoverEl) {
+                const popoverContent = popoverEl.getAttribute('data-content') || '';
+                
+                // Extract spots left
+                const spotsMatch = popoverContent.match(/(\d+)\s*Spot\(s\)\s*Left/i);
+                if (spotsMatch) {
+                  spotsLeft = parseInt(spotsMatch[1]);
+                }
+                
+                // Extract venue info
+                const venueMatch = popoverContent.match(/Venues\s*-\s*([^<]+)/i);
+                if (venueMatch) {
+                  description = `Venue: ${venueMatch[1].trim()}`;
+                }
+                
+                if (spotsLeft > 0) {
+                  description += description ? ` • ${spotsLeft} spots left` : `${spotsLeft} spots left`;
+                }
               }
               
               events.push({
-                id: `extracted-${index}`,
-                title: title,
-                start: dateStr || new Date().toISOString().split('T')[0],
-                end: dateStr || new Date().toISOString().split('T')[0],
-                source: 'dom-extraction'
+                id: eventId,
+                title: cleanTitle,
+                start: startTime.toISOString(),
+                end: endTime.toISOString(),
+                backgroundColor: backgroundColor,
+                description: description || undefined,
+                spotsLeft: spotsLeft,
+                source: 'fullcalendar-extraction'
               });
+              
+            } catch (e) {
+              console.warn(`Error processing event ${index}:`, e);
             }
           });
           
           return events;
         });
         
-        console.log(`🎯 Extracted ${(events || []).length} raw events from browser`);
+        console.log(`🎯 Extracted ${events.length} events from FullCalendar`);
         
         // Process the extracted events
-        (events || []).forEach((event: any, index: number) => {
+        events.forEach((event: any, index: number) => {
           try {
-            let startTime: Date;
-            let endTime: Date;
+            const startTime = new Date(event.start);
+            const endTime = new Date(event.end);
             
-            // Handle different date formats
-            if (event.start) {
-              startTime = new Date(event.start);
-            } else if (event.time) {
-              // Try to parse time from string
-              const today = new Date();
-              startTime = new Date(today.toDateString() + ' ' + event.time);
-            } else {
-              console.warn(`⚠️ No start time for event: ${event.title}`);
-              return;
-            }
-            
-            if (event.end) {
-              endTime = new Date(event.end);
-            } else {
-              // Default to 1 hour duration
-              endTime = new Date(startTime.getTime() + 60 * 60 * 1000);
-            }
-            
-            if (!isNaN(startTime.getTime())) {
-              const eventId = event.id || `big-bear-${index}-${startTime.getTime()}`;
-              
+            if (!isNaN(startTime.getTime()) && !isNaN(endTime.getTime())) {
               fetchedEvents.push({
-                id: eventId,
+                id: event.id || `big-bear-${index}-${startTime.getTime()}`,
                 rinkId: this.rinkId,
                 title: this.cleanTitle(event.title || 'Unknown Event'),
                 startTime,
@@ -262,7 +254,7 @@ export class BigBearScraper extends BaseScraper {
               });
             }
           } catch (e) {
-            console.warn(`⚠️ Error processing browser event ${index}: ${e.message}`);
+            console.warn(`⚠️ Error processing extracted event ${index}: ${e.message}`);
           }
         });
         
