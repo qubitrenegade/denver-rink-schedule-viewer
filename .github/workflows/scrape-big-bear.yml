@@ -77,10 +77,6 @@ jobs:
     # only inject a random sleep when this was kicked off by the schedule,
     # so manual runs skip immediately to scraping
     - name: Random delay for schedule runs
-      run: |
-        delay=$((RANDOM % 3600))
-        echo "Adding ${delay}s delay for load distribution…"
-        sleep $delay
       if: |
         github.event_name == 'schedule' ||
         (github.event_name == 'workflow_dispatch' && github.event.inputs.with_delay == 'true')
