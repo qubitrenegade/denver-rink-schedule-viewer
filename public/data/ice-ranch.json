@@ -428,5 +428,55 @@
     "category": "Other",
     "description": "Scraped from Ice Ranch calendar",
     "eventUrl": "/event/1652320/2025/5/30"
+  },
+  {
+    "id": "ice-ranch-1748649600000-43-0",
+    "rinkId": "ice-ranch",
+    "title": "Coach's Ice",
+    "startTime": "2025-05-31T14:30:00.000Z",
+    "endTime": "2025-05-31T15:30:00.000Z",
+    "category": "Other",
+    "description": "Scraped from Ice Ranch calendar",
+    "eventUrl": "/event/1652320/2025/5/31"
+  },
+  {
+    "id": "ice-ranch-1748649600000-43-1",
+    "rinkId": "ice-ranch",
+    "title": "Coach's Ice",
+    "startTime": "2025-05-31T15:45:00.000Z",
+    "endTime": "2025-05-31T17:15:00.000Z",
+    "category": "Other",
+    "description": "Scraped from Ice Ranch calendar",
+    "eventUrl": "/event/1652320/2025/5/31"
+  },
+  {
+    "id": "ice-ranch-1748649600000-43-2",
+    "rinkId": "ice-ranch",
+    "title": "Coach's Ice",
+    "startTime": "2025-05-31T17:30:00.000Z",
+    "endTime": "2025-05-31T19:00:00.000Z",
+    "category": "Other",
+    "description": "Scraped from Ice Ranch calendar",
+    "eventUrl": "/event/1652320/2025/5/31"
+  },
+  {
+    "id": "ice-ranch-1748649600000-43-3",
+    "rinkId": "ice-ranch",
+    "title": "Coach's Ice",
+    "startTime": "2025-05-31T19:15:00.000Z",
+    "endTime": "2025-05-31T20:45:00.000Z",
+    "category": "Other",
+    "description": "Scraped from Ice Ranch calendar",
+    "eventUrl": "/event/1652320/2025/5/31"
+  },
+  {
+    "id": "ice-ranch-1748649600000-43-4",
+    "rinkId": "ice-ranch",
+    "title": "Coach's Ice",
+    "startTime": "2025-05-31T21:00:00.000Z",
+    "endTime": "2025-05-31T23:00:00.000Z",
+    "category": "Other",
+    "description": "Scraped from Ice Ranch calendar",
+    "eventUrl": "/event/1652320/2025/5/31"
   }
 ]

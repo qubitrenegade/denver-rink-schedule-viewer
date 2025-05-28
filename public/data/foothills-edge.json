@@ -1,1 +1,662 @@
-[]
+[
+  {
+    "id": "foothills-edge-2025-05-28-1",
+    "rinkId": "foothills-edge",
+    "title": "Stick and Puck",
+    "startTime": "2025-05-28T21:00:00.000Z",
+    "endTime": "2025-05-28T22:30:00.000Z",
+    "category": "Stick & Puck",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-05-29-0",
+    "rinkId": "foothills-edge",
+    "title": "Public Skate",
+    "startTime": "2025-05-29T18:00:00.000Z",
+    "endTime": "2025-05-29T19:30:00.000Z",
+    "category": "Public Skate",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-05-29-1",
+    "rinkId": "foothills-edge",
+    "title": "Stick and Puck",
+    "startTime": "2025-05-29T21:00:00.000Z",
+    "endTime": "2025-05-29T22:30:00.000Z",
+    "category": "Stick & Puck",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-05-30-0",
+    "rinkId": "foothills-edge",
+    "title": "Drop In Hockey",
+    "startTime": "2025-05-30T18:00:00.000Z",
+    "endTime": "2025-05-30T19:30:00.000Z",
+    "category": "Drop-In Hockey",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-05-30-1",
+    "rinkId": "foothills-edge",
+    "title": "Stick and Puck",
+    "startTime": "2025-05-30T21:00:00.000Z",
+    "endTime": "2025-05-30T22:30:00.000Z",
+    "category": "Stick & Puck",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-05-30-2",
+    "rinkId": "foothills-edge",
+    "title": "Public Skate",
+    "startTime": "2025-05-31T02:00:00.000Z",
+    "endTime": "2025-05-31T03:30:00.000Z",
+    "category": "Public Skate",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-05-30-3",
+    "rinkId": "foothills-edge",
+    "title": "Drop In Hockey",
+    "startTime": "2025-05-31T03:00:00.000Z",
+    "endTime": "2025-05-31T04:30:00.000Z",
+    "category": "Drop-In Hockey",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-05-31-0",
+    "rinkId": "foothills-edge",
+    "title": "Stick and Puck",
+    "startTime": "2025-05-31T15:15:00.000Z",
+    "endTime": "2025-05-31T16:45:00.000Z",
+    "category": "Stick & Puck",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-05-31-1",
+    "rinkId": "foothills-edge",
+    "title": "Public Skate",
+    "startTime": "2025-05-31T18:00:00.000Z",
+    "endTime": "2025-05-31T19:30:00.000Z",
+    "category": "Public Skate",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-05-31-2",
+    "rinkId": "foothills-edge",
+    "title": "Stick and Puck",
+    "startTime": "2025-05-31T21:00:00.000Z",
+    "endTime": "2025-05-31T22:30:00.000Z",
+    "category": "Stick & Puck",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-05-31-3",
+    "rinkId": "foothills-edge",
+    "title": "Public Skate",
+    "startTime": "2025-06-01T02:00:00.000Z",
+    "endTime": "2025-06-01T03:30:00.000Z",
+    "category": "Public Skate",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-05-31-4",
+    "rinkId": "foothills-edge",
+    "title": "Drop In Hockey",
+    "startTime": "2025-06-01T03:00:00.000Z",
+    "endTime": "2025-06-01T04:30:00.000Z",
+    "category": "Drop-In Hockey",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-01-0",
+    "rinkId": "foothills-edge",
+    "title": "Stick and Puck",
+    "startTime": "2025-06-01T18:00:00.000Z",
+    "endTime": "2025-06-01T19:30:00.000Z",
+    "category": "Stick & Puck",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-01-1",
+    "rinkId": "foothills-edge",
+    "title": "Stick and Puck",
+    "startTime": "2025-06-01T21:00:00.000Z",
+    "endTime": "2025-06-01T22:30:00.000Z",
+    "category": "Stick & Puck",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-01-2",
+    "rinkId": "foothills-edge",
+    "title": "Public Skate",
+    "startTime": "2025-06-01T22:00:00.000Z",
+    "endTime": "2025-06-01T23:30:00.000Z",
+    "category": "Public Skate",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-02-0",
+    "rinkId": "foothills-edge",
+    "title": "Public Skate",
+    "startTime": "2025-06-02T18:00:00.000Z",
+    "endTime": "2025-06-02T19:30:00.000Z",
+    "category": "Public Skate",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-03-0",
+    "rinkId": "foothills-edge",
+    "title": "Public Skate",
+    "startTime": "2025-06-03T18:00:00.000Z",
+    "endTime": "2025-06-03T19:30:00.000Z",
+    "category": "Public Skate",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-04-0",
+    "rinkId": "foothills-edge",
+    "title": "Public Skate",
+    "startTime": "2025-06-04T18:00:00.000Z",
+    "endTime": "2025-06-04T19:30:00.000Z",
+    "category": "Public Skate",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-04-1",
+    "rinkId": "foothills-edge",
+    "title": "Stick and Puck",
+    "startTime": "2025-06-04T21:00:00.000Z",
+    "endTime": "2025-06-04T22:30:00.000Z",
+    "category": "Stick & Puck",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-05-0",
+    "rinkId": "foothills-edge",
+    "title": "Public Skate",
+    "startTime": "2025-06-05T18:00:00.000Z",
+    "endTime": "2025-06-05T19:30:00.000Z",
+    "category": "Public Skate",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-05-1",
+    "rinkId": "foothills-edge",
+    "title": "Stick and Puck",
+    "startTime": "2025-06-05T21:00:00.000Z",
+    "endTime": "2025-06-05T22:30:00.000Z",
+    "category": "Stick & Puck",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-06-0",
+    "rinkId": "foothills-edge",
+    "title": "Public Skate",
+    "startTime": "2025-06-06T18:00:00.000Z",
+    "endTime": "2025-06-06T19:30:00.000Z",
+    "category": "Public Skate",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-06-1",
+    "rinkId": "foothills-edge",
+    "title": "Drop In Hockey",
+    "startTime": "2025-06-06T18:00:00.000Z",
+    "endTime": "2025-06-06T19:30:00.000Z",
+    "category": "Drop-In Hockey",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-06-2",
+    "rinkId": "foothills-edge",
+    "title": "Stick and Puck",
+    "startTime": "2025-06-06T21:00:00.000Z",
+    "endTime": "2025-06-06T22:30:00.000Z",
+    "category": "Stick & Puck",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-06-3",
+    "rinkId": "foothills-edge",
+    "title": "Public Skate",
+    "startTime": "2025-06-07T02:00:00.000Z",
+    "endTime": "2025-06-07T03:30:00.000Z",
+    "category": "Public Skate",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-06-4",
+    "rinkId": "foothills-edge",
+    "title": "Drop In Hockey",
+    "startTime": "2025-06-07T03:00:00.000Z",
+    "endTime": "2025-06-07T04:30:00.000Z",
+    "category": "Drop-In Hockey",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-07-0",
+    "rinkId": "foothills-edge",
+    "title": "Public Skate",
+    "startTime": "2025-06-07T18:00:00.000Z",
+    "endTime": "2025-06-07T19:30:00.000Z",
+    "category": "Public Skate",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-07-1",
+    "rinkId": "foothills-edge",
+    "title": "Stick and Puck",
+    "startTime": "2025-06-07T18:00:00.000Z",
+    "endTime": "2025-06-07T19:30:00.000Z",
+    "category": "Stick & Puck",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-07-2",
+    "rinkId": "foothills-edge",
+    "title": "Stick and Puck",
+    "startTime": "2025-06-07T21:00:00.000Z",
+    "endTime": "2025-06-07T22:30:00.000Z",
+    "category": "Stick & Puck",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-07-3",
+    "rinkId": "foothills-edge",
+    "title": "Public Skate",
+    "startTime": "2025-06-08T02:00:00.000Z",
+    "endTime": "2025-06-08T03:30:00.000Z",
+    "category": "Public Skate",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-07-4",
+    "rinkId": "foothills-edge",
+    "title": "Drop In Hockey",
+    "startTime": "2025-06-08T03:00:00.000Z",
+    "endTime": "2025-06-08T04:30:00.000Z",
+    "category": "Drop-In Hockey",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-08-0",
+    "rinkId": "foothills-edge",
+    "title": "Stick and Puck",
+    "startTime": "2025-06-08T18:00:00.000Z",
+    "endTime": "2025-06-08T19:30:00.000Z",
+    "category": "Stick & Puck",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-08-1",
+    "rinkId": "foothills-edge",
+    "title": "Stick and Puck",
+    "startTime": "2025-06-08T21:00:00.000Z",
+    "endTime": "2025-06-08T22:30:00.000Z",
+    "category": "Stick & Puck",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-08-2",
+    "rinkId": "foothills-edge",
+    "title": "Public Skate",
+    "startTime": "2025-06-08T22:00:00.000Z",
+    "endTime": "2025-06-08T23:30:00.000Z",
+    "category": "Public Skate",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-09-0",
+    "rinkId": "foothills-edge",
+    "title": "Public Skate",
+    "startTime": "2025-06-09T18:00:00.000Z",
+    "endTime": "2025-06-09T19:30:00.000Z",
+    "category": "Public Skate",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-10-0",
+    "rinkId": "foothills-edge",
+    "title": "Public Skate",
+    "startTime": "2025-06-10T18:00:00.000Z",
+    "endTime": "2025-06-10T19:30:00.000Z",
+    "category": "Public Skate",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-11-0",
+    "rinkId": "foothills-edge",
+    "title": "Public Skate",
+    "startTime": "2025-06-11T18:00:00.000Z",
+    "endTime": "2025-06-11T19:30:00.000Z",
+    "category": "Public Skate",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-12-0",
+    "rinkId": "foothills-edge",
+    "title": "Public Skate",
+    "startTime": "2025-06-12T18:00:00.000Z",
+    "endTime": "2025-06-12T19:30:00.000Z",
+    "category": "Public Skate",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-13-0",
+    "rinkId": "foothills-edge",
+    "title": "Drop In Hockey",
+    "startTime": "2025-06-13T18:00:00.000Z",
+    "endTime": "2025-06-13T19:30:00.000Z",
+    "category": "Drop-In Hockey",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-13-1",
+    "rinkId": "foothills-edge",
+    "title": "Stick and Puck",
+    "startTime": "2025-06-13T21:00:00.000Z",
+    "endTime": "2025-06-13T22:30:00.000Z",
+    "category": "Stick & Puck",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-13-2",
+    "rinkId": "foothills-edge",
+    "title": "Public Skate",
+    "startTime": "2025-06-14T02:00:00.000Z",
+    "endTime": "2025-06-14T03:30:00.000Z",
+    "category": "Public Skate",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-13-3",
+    "rinkId": "foothills-edge",
+    "title": "Drop In Hockey",
+    "startTime": "2025-06-14T03:00:00.000Z",
+    "endTime": "2025-06-14T04:30:00.000Z",
+    "category": "Drop-In Hockey",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-14-0",
+    "rinkId": "foothills-edge",
+    "title": "Stick and Puck",
+    "startTime": "2025-06-14T15:15:00.000Z",
+    "endTime": "2025-06-14T16:45:00.000Z",
+    "category": "Stick & Puck",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-14-1",
+    "rinkId": "foothills-edge",
+    "title": "Public Skate",
+    "startTime": "2025-06-14T18:00:00.000Z",
+    "endTime": "2025-06-14T19:30:00.000Z",
+    "category": "Public Skate",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-14-2",
+    "rinkId": "foothills-edge",
+    "title": "Stick and Puck",
+    "startTime": "2025-06-14T18:00:00.000Z",
+    "endTime": "2025-06-14T19:30:00.000Z",
+    "category": "Stick & Puck",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-14-3",
+    "rinkId": "foothills-edge",
+    "title": "Stick and Puck",
+    "startTime": "2025-06-14T21:00:00.000Z",
+    "endTime": "2025-06-14T22:30:00.000Z",
+    "category": "Stick & Puck",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-14-4",
+    "rinkId": "foothills-edge",
+    "title": "Public Skate",
+    "startTime": "2025-06-15T02:00:00.000Z",
+    "endTime": "2025-06-15T03:30:00.000Z",
+    "category": "Public Skate",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-14-5",
+    "rinkId": "foothills-edge",
+    "title": "Drop In Hockey",
+    "startTime": "2025-06-15T03:00:00.000Z",
+    "endTime": "2025-06-15T04:30:00.000Z",
+    "category": "Drop-In Hockey",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-15-0",
+    "rinkId": "foothills-edge",
+    "title": "Stick and Puck",
+    "startTime": "2025-06-15T18:00:00.000Z",
+    "endTime": "2025-06-15T19:30:00.000Z",
+    "category": "Stick & Puck",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-15-1",
+    "rinkId": "foothills-edge",
+    "title": "Stick and Puck",
+    "startTime": "2025-06-15T21:00:00.000Z",
+    "endTime": "2025-06-15T22:30:00.000Z",
+    "category": "Stick & Puck",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-15-2",
+    "rinkId": "foothills-edge",
+    "title": "Public Skate",
+    "startTime": "2025-06-15T22:00:00.000Z",
+    "endTime": "2025-06-15T23:30:00.000Z",
+    "category": "Public Skate",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-16-0",
+    "rinkId": "foothills-edge",
+    "title": "Stick and Puck",
+    "startTime": "2025-06-16T15:15:00.000Z",
+    "endTime": "2025-06-16T16:45:00.000Z",
+    "category": "Stick & Puck",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-16-1",
+    "rinkId": "foothills-edge",
+    "title": "Public Skate",
+    "startTime": "2025-06-16T18:00:00.000Z",
+    "endTime": "2025-06-16T19:30:00.000Z",
+    "category": "Public Skate",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-17-0",
+    "rinkId": "foothills-edge",
+    "title": "Stick and Puck",
+    "startTime": "2025-06-17T15:15:00.000Z",
+    "endTime": "2025-06-17T16:45:00.000Z",
+    "category": "Stick & Puck",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-17-1",
+    "rinkId": "foothills-edge",
+    "title": "Public Skate",
+    "startTime": "2025-06-17T18:00:00.000Z",
+    "endTime": "2025-06-17T19:30:00.000Z",
+    "category": "Public Skate",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-17-2",
+    "rinkId": "foothills-edge",
+    "title": "Stick and Puck",
+    "startTime": "2025-06-17T18:00:00.000Z",
+    "endTime": "2025-06-17T19:30:00.000Z",
+    "category": "Stick & Puck",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-18-0",
+    "rinkId": "foothills-edge",
+    "title": "Stick and Puck",
+    "startTime": "2025-06-18T15:15:00.000Z",
+    "endTime": "2025-06-18T16:45:00.000Z",
+    "category": "Stick & Puck",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-18-1",
+    "rinkId": "foothills-edge",
+    "title": "Public Skate",
+    "startTime": "2025-06-18T18:00:00.000Z",
+    "endTime": "2025-06-18T19:30:00.000Z",
+    "category": "Public Skate",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-18-2",
+    "rinkId": "foothills-edge",
+    "title": "Stick and Puck",
+    "startTime": "2025-06-18T18:00:00.000Z",
+    "endTime": "2025-06-18T19:30:00.000Z",
+    "category": "Stick & Puck",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-19-0",
+    "rinkId": "foothills-edge",
+    "title": "Stick and Puck",
+    "startTime": "2025-06-19T15:15:00.000Z",
+    "endTime": "2025-06-19T16:45:00.000Z",
+    "category": "Stick & Puck",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-19-1",
+    "rinkId": "foothills-edge",
+    "title": "Public Skate",
+    "startTime": "2025-06-19T18:00:00.000Z",
+    "endTime": "2025-06-19T19:30:00.000Z",
+    "category": "Public Skate",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-19-2",
+    "rinkId": "foothills-edge",
+    "title": "Stick and Puck",
+    "startTime": "2025-06-19T18:00:00.000Z",
+    "endTime": "2025-06-19T19:30:00.000Z",
+    "category": "Stick & Puck",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-24-0",
+    "rinkId": "foothills-edge",
+    "title": "Public Skate",
+    "startTime": "2025-06-24T18:00:00.000Z",
+    "endTime": "2025-06-24T19:30:00.000Z",
+    "category": "Public Skate",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-25-0",
+    "rinkId": "foothills-edge",
+    "title": "Public Skate",
+    "startTime": "2025-06-25T18:00:00.000Z",
+    "endTime": "2025-06-25T19:30:00.000Z",
+    "category": "Public Skate",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-26-0",
+    "rinkId": "foothills-edge",
+    "title": "Public Skate",
+    "startTime": "2025-06-26T18:00:00.000Z",
+    "endTime": "2025-06-26T19:30:00.000Z",
+    "category": "Public Skate",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-27-0",
+    "rinkId": "foothills-edge",
+    "title": "Drop In Hockey",
+    "startTime": "2025-06-27T18:00:00.000Z",
+    "endTime": "2025-06-27T19:30:00.000Z",
+    "category": "Drop-In Hockey",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  }
+]

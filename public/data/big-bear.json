@@ -40,11 +40,11 @@
     "isFeatured": false
   },
   {
-    "id": "big-bear-198433616-1748521800000",
+    "id": "big-bear-198433616-1748520000000",
     "rinkId": "big-bear",
     "title": "Open Stick & Puck",
-    "startTime": "2025-05-29T12:30:00.000Z",
-    "endTime": "2025-05-29T13:45:00.000Z",
+    "startTime": "2025-05-29T12:00:00.000Z",
+    "endTime": "2025-05-29T13:00:00.000Z",
     "description": "Open Sick and Puck, 60 Minutes long, Individual Skate, NO COACHING ALLOWED",
     "category": "Stick & Puck",
     "isFeatured": false
@@ -70,6 +70,16 @@
     "isFeatured": false
   },
   {
+    "id": "big-bear-204049409-1748524500000",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-29T13:15:00.000Z",
+    "endTime": "2025-05-29T14:15:00.000Z",
+    "description": "Open Sick and Puck, 60 Minutes long, Individual Skate, NO COACHING ALLOWED",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
     "id": "big-bear-198431267-1748527200000",
     "rinkId": "big-bear",
     "title": "Free Style",
@@ -80,11 +90,11 @@
     "isFeatured": false
   },
   {
-    "id": "big-bear-198433617-1748527200000",
+    "id": "big-bear-204049403-1748529000000",
     "rinkId": "big-bear",
     "title": "Open Stick & Puck",
-    "startTime": "2025-05-29T14:00:00.000Z",
-    "endTime": "2025-05-29T15:15:00.000Z",
+    "startTime": "2025-05-29T14:30:00.000Z",
+    "endTime": "2025-05-29T15:45:00.000Z",
     "description": "Open Sick and Puck, 60 Minutes long, Individual Skate, NO COACHING ALLOWED",
     "category": "Stick & Puck",
     "isFeatured": false
@@ -104,17 +114,7 @@
     "rinkId": "big-bear",
     "title": "Open Stick & Puck",
     "startTime": "2025-05-29T15:00:00.000Z",
-    "endTime": "2025-05-29T16:30:00.000Z",
-    "description": "Open Sick and Puck, 60 Minutes long, Individual Skate, NO COACHING ALLOWED",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "big-bear-198433513-1748532600000",
-    "rinkId": "big-bear",
-    "title": "Open Stick & Puck",
-    "startTime": "2025-05-29T15:30:00.000Z",
-    "endTime": "2025-05-29T17:00:00.000Z",
+    "endTime": "2025-05-29T16:15:00.000Z",
     "description": "Open Sick and Puck, 60 Minutes long, Individual Skate, NO COACHING ALLOWED",
     "category": "Stick & Puck",
     "isFeatured": false
@@ -130,6 +130,26 @@
     "isFeatured": false
   },
   {
+    "id": "big-bear-198433513-1748534400000",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-29T16:00:00.000Z",
+    "endTime": "2025-05-29T17:00:00.000Z",
+    "description": "Open Sick and Puck, 60 Minutes long, Individual Skate, NO COACHING ALLOWED",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "big-bear-198433615-1748536200000",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-29T16:30:00.000Z",
+    "endTime": "2025-05-29T17:45:00.000Z",
+    "description": "Open Sick and Puck, 60 Minutes long, Individual Skate, NO COACHING ALLOWED",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
     "id": "big-bear-198431268-1748537100000",
     "rinkId": "big-bear",
     "title": "Free Style",
@@ -137,16 +157,6 @@
     "endTime": "2025-05-29T17:45:00.000Z",
     "description": "Freestyle Session, 60 Minutes long, Individual Skate",
     "category": "Figure Skating",
-    "isFeatured": false
-  },
-  {
-    "id": "big-bear-198433615-1748537100000",
-    "rinkId": "big-bear",
-    "title": "Open Stick & Puck",
-    "startTime": "2025-05-29T16:45:00.000Z",
-    "endTime": "2025-05-29T18:15:00.000Z",
-    "description": "Open Sick and Puck, 60 Minutes long, Individual Skate, NO COACHING ALLOWED",
-    "category": "Stick & Puck",
     "isFeatured": false
   },
   {
