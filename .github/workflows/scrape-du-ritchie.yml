@@ -1,0 +1,51 @@
+name: Scrape DU Ritchie
+
+on:
+  schedule:
+    # Run at 3:00 AM and 3:00 PM UTC (8:00 PM and 8:00 AM Mountain Time)
+    - cron: '0 3,15 * * *'
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v1
+      with:
+        bun-version: latest
+
+    - name: Install dependencies
+      run: bun install
+
+    - name: Add random delay (0-60 minutes)
+      run: |
+        delay=$((RANDOM % 3600))
+        echo "Adding ${delay} second delay for load distribution..."
+        sleep $delay
+
+    - name: Scrape DU Ritchie Center
+      run: bun run scrape:du-ritchie
+
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add data/
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "🏫 Update DU Ritchie schedule data $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git push
+        fi
+
+    - name: Show scraping status
+      if: always()
+      run: bun run scrape --status
+

@@ -86,7 +86,7 @@ export class DataFileWriter {
     await this.ensureDataDir();
     
     const allEvents: any[] = [];
-    const rinkFiles = ['ice-ranch.json', 'big-bear.json', 'ssprd-249.json', 'ssprd-250.json'];
+    const rinkFiles = ['ice-ranch.json', 'big-bear.json', 'du-ritchie.json', 'ssprd-249.json', 'ssprd-250.json'];
     
     for (const rinkFile of rinkFiles) {
       const filePath = join(this.dataDir, rinkFile);
@@ -131,4 +131,3 @@ export class DataFileWriter {
     return null;
   }
 }
-

@@ -1,4 +1,3 @@
-
 import { RinkInfo, EventCategory, RawIceEventData } from './types';
 
 // RINKS_CONFIG now defines the tabs. 

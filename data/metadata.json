@@ -1,11 +1,11 @@
 {
-  "lastCombinedUpdate": "2025-05-27T20:57:50.619Z",
+  "lastCombinedUpdate": "2025-05-28T03:24:39.117Z",
   "rinks": {
     "big-bear": {
-      "lastAttempt": "2025-05-27T20:57:50.589Z",
+      "lastAttempt": "2025-05-27T21:04:47.425Z",
       "status": "success",
       "eventCount": 164,
-      "lastSuccessfulScrape": "2025-05-27T20:57:50.589Z"
+      "lastSuccessfulScrape": "2025-05-27T21:04:47.425Z"
     },
     "ssprd-249": {
       "lastAttempt": "2025-05-27T17:57:38.962Z",
@@ -18,6 +18,12 @@
       "status": "success",
       "eventCount": 43,
       "lastSuccessfulScrape": "2025-05-27T18:19:00.546Z"
+    },
+    "du-ritchie": {
+      "lastAttempt": "2025-05-28T03:24:39.078Z",
+      "status": "success",
+      "eventCount": 84,
+      "lastSuccessfulScrape": "2025-05-28T03:24:39.078Z"
     }
   }
 }

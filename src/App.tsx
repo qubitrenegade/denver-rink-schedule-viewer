@@ -128,14 +128,23 @@ const App: React.FC = () => {
     // 1. Date Range Filter
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const endDateLimit = new Date(today.getTime() + (numberOfDaysToShow - 1) * MS_PER_DAY);
+    const endDateLimit = new Date(today.getTime() + numberOfDaysToShow * MS_PER_DAY);
     endDateLimit.setHours(23, 59, 59, 999);
+    
+    console.log(`Date range: ${today.toLocaleDateString()} to ${endDateLimit.toLocaleDateString()}`);
 
     processedData = processedData.filter(event => {
       const eventStartTime = event.startTime;
       return eventStartTime >= today && eventStartTime <= endDateLimit;
     });
     console.log(`After date filter (${numberOfDaysToShow} days): ${processedData.length} events`);
+
+    // DEBUG: Check for DU events after date filter
+    const duEventsAfterDate = processedData.filter(e => e.rinkId === 'du-ritchie');
+    console.log(`DU events after date filter: ${duEventsAfterDate.length}`);
+    if (duEventsAfterDate.length > 0) {
+      console.log("Sample DU event after date filter:", duEventsAfterDate[0]);
+    }
 
     // 2. Rink Filter (only for 'All Rinks' view, based on individual rinks)
     if (rinkTabId === ALL_RINKS_TAB_ID && currentFilters.activeRinkIds && currentFilters.activeRinkIds.length > 0) {
@@ -153,6 +162,7 @@ const App: React.FC = () => {
     let rawEventsWithDates: Array<RawIceEventData & { rinkName?: string }> = [];
     
     const selectedTabConfig = rinksConfigForTabs.find(r => r.id === rinkTabId);
+    console.log("Selected tab config:", selectedTabConfig);
 
     if (rinkTabId === ALL_RINKS_TAB_ID) {
       rawEventsWithDates = processedData.map(e => ({
@@ -168,12 +178,24 @@ const App: React.FC = () => {
           rinkName: individualRinksForFiltering.find(r => r.id === e.rinkId)?.name || e.rinkId 
         }));
     } else { // It's a specific, non-grouped rink tab
-      rawEventsWithDates = processedData
-        .filter(e => e.rinkId === rinkTabId)
-        .map(e => ({
-          ...e,
-          rinkName: selectedTabConfig?.name // Name of the tab itself
-        }));
+      console.log(`Filtering for specific rink tab: ${rinkTabId}`);
+      console.log(`Looking for events with rinkId === "${rinkTabId}"`);
+      
+      const matchingEvents = processedData.filter(e => e.rinkId === rinkTabId);
+      console.log(`Found ${matchingEvents.length} matching events for rinkId "${rinkTabId}"`);
+      
+      if (matchingEvents.length > 0) {
+        console.log("Sample matching event:", matchingEvents[0]);
+      }
+      
+      // DEBUG: Show all unique rinkIds in the data
+      const uniqueRinkIds = [...new Set(processedData.map(e => e.rinkId))];
+      console.log("Available rinkIds in filtered data:", uniqueRinkIds);
+      
+      rawEventsWithDates = matchingEvents.map(e => ({
+        ...e,
+        rinkName: selectedTabConfig?.name // Name of the tab itself
+      }));
     }
      console.log(`After preparing for display (rinkName, tab selection): ${rawEventsWithDates.length} events`);
     
@@ -441,4 +463,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-

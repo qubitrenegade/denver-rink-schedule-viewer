@@ -3,6 +3,7 @@
 import { RawIceEventData } from '../src/types.js';
 import { IceRanchScraper } from './rinks/ice-ranch.js';
 import { BigBearScraper } from './rinks/big-bear.js';
+import { DURitchieScraper } from './rinks/du-ritchie.js';
 import { createSSPRD249Scraper, createSSPRD250Scraper } from './rinks/ssprd.js';
 import { DataFileWriter } from './utils/file-writer.js';
 
@@ -25,6 +26,12 @@ const SCRAPERS: ScraperConfig[] = [
     name: 'Big Bear Ice Arena',
     scraper: new BigBearScraper(),
     outputFile: 'big-bear.json'
+  },
+  {
+    id: 'du-ritchie',
+    name: 'DU Ritchie Center',
+    scraper: new DURitchieScraper(),
+    outputFile: 'du-ritchie.json'
   },
   {
     id: 'ssprd-249',
@@ -156,6 +163,7 @@ Options:
 
 Examples:
   bun run scraper.ts --rink ice-ranch
+  bun run scraper.ts --rink du-ritchie
   bun run scraper.ts --ssprd  
   bun run scraper.ts          (scrape all rinks)
 `);
@@ -198,4 +206,3 @@ if (process.env.GITHUB_ACTIONS) {
 }
 
 await main();
-
