@@ -11,6 +11,10 @@ on:
         required: false
         default: 'false'
 
+# Add permissions to allow the workflow to push changes
+permissions:
+  contents: write
+
 jobs:
   scrape:
     runs-on: ubuntu-latest
@@ -70,6 +74,8 @@ jobs:
 
     - name: Install dependencies
       run: |
+        export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+        export PUPPETEER_SKIP_DOWNLOAD=true
         bun install
         # Install scraping dependencies
         bun install --optional

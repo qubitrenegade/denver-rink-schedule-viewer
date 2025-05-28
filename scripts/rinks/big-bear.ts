@@ -91,6 +91,7 @@ export class BigBearScraper extends BaseScraper {
       console.log('🚀 Launching headless browser...');
       const browser = await puppeteer.launch({
         headless: "new",
+        executablePath: '/usr/bin/google-chrome-stable', // Use system Chrome
         args: [
           '--no-sandbox',
           '--disable-setuid-sandbox',

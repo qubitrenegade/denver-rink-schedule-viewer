@@ -11,6 +11,10 @@ on:
         required: false
         default: 'false'
 
+# Add permissions to allow the workflow to push changes
+permissions:
+  contents: write
+
 jobs:
   scrape:
     runs-on: ubuntu-latest
