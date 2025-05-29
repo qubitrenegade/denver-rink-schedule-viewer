@@ -26,45 +26,6 @@ export class BigBearScraper extends BaseScraper {
 
   private readonly baseUrl = 'https://bigbearicearena.ezfacility.com';
 
-  // Helper to create Mountain Time dates
-  private createMountainTime(dateStr: string, timeStr: string): Date {
-    // Parse the date (YYYY-MM-DD format)
-    const [year, month, day] = dateStr.split('-').map(Number);
-    
-    // Parse the time
-    const timeMatch = timeStr.match(/(\d{1,2}):(\d{2})\s*([ap])m?/i);
-    if (!timeMatch) {
-      // Fallback for times without minutes or AM/PM
-      const hourMatch = timeStr.match(/(\d{1,2})\s*([ap])/i);
-      if (hourMatch) {
-        let hours = parseInt(hourMatch[1]);
-        const ampm = hourMatch[2].toLowerCase();
-        
-        if (ampm === 'p' && hours !== 12) hours += 12;
-        if (ampm === 'a' && hours === 12) hours = 0;
-        
-        // Create date in Mountain Time (UTC-7/-6 depending on DST)
-        // For 2025, May 28 is during DST, so UTC-6
-        const mtDate = new Date(year, month - 1, day, hours, 0, 0, 0);
-        return mtDate;
-      }
-      // If we can't parse the time, return noon on the given date
-      return new Date(year, month - 1, day, 12, 0, 0, 0);
-    }
-    
-    let hours = parseInt(timeMatch[1]);
-    const minutes = parseInt(timeMatch[2]);
-    const ampm = timeMatch[3].toLowerCase();
-    
-    // Convert to 24-hour format
-    if (ampm === 'p' && hours !== 12) hours += 12;
-    if (ampm === 'a' && hours === 12) hours = 0;
-    
-    // Create the date in local timezone (should be Mountain Time for the scraper)
-    const mtDate = new Date(year, month - 1, day, hours, minutes, 0, 0);
-    return mtDate;
-  }
-
   protected categorizeBigBearEvent(event: any): EventCategory {
     const classNames = event.className ? event.className.join(' ').toLowerCase() : '';
     const titleLower = event.title.toLowerCase();
@@ -197,21 +158,10 @@ export class BigBearScraper extends BaseScraper {
                   endTime = new Date(startTime.getTime() + 90 * 60 * 1000);
                 }
                 
-                // If the times look like they might be UTC when they should be Mountain Time,
-                // check if we need to adjust them
-                const hour = startTime.getHours();
-                if (hour < 6) {
-                  // Times before 6 AM are suspicious for an ice rink - they might be UTC times
-                  // that should be Mountain Time. Let's check if adding 6 hours makes sense.
-                  const adjustedStart = new Date(startTime.getTime() + 6 * 60 * 60 * 1000);
-                  const adjustedEnd = new Date(endTime.getTime() + 6 * 60 * 60 * 1000);
-                  
-                  if (adjustedStart.getHours() >= 6 && adjustedStart.getHours() <= 23) {
-                    console.log(`Big Bear API: Adjusting suspicious time ${startTime.toISOString()} -> ${adjustedStart.toISOString()}`);
-                    startTime = adjustedStart;
-                    endTime = adjustedEnd;
-                  }
-                }
+                // IMPORTANT: The times from FullCalendar should already be in the correct timezone
+                // Since we set the browser timezone to America/Denver, these should be MT times
+                // We DON'T need to do any additional timezone conversion here in the browser
+                // The conversion to UTC will happen in the Node.js scraper code
                 
                 // Debug the API event
                 console.log(`API Event: "${title}" - Start: ${startTime.toString()}, End: ${endTime.toString()}`);
@@ -287,25 +237,22 @@ export class BigBearScraper extends BaseScraper {
                   
                   // Get the event date
                   const eventDateStr = dateCell?.getAttribute('data-date') || new Date().toISOString().split('T')[0];
-                  const [year, month, day] = eventDateStr.split('-').map(Number);
                   
-                  // Create date in Mountain Time (UTC-6 for daylight time in May)
-                  // We'll create a UTC date and then adjust it
-                  const utcDate = new Date(Date.UTC(year, month - 1, day, hours, minutes, 0, 0));
-                  // Add 6 hours to convert from Mountain Time to UTC for storage
-                  startTime = new Date(utcDate.getTime() + 6 * 60 * 60 * 1000);
+                  // Create date in Mountain Time (browser is set to America/Denver)
+                  // These times should be interpreted as local Mountain Time
+                  const [year, month, day] = eventDateStr.split('-').map(Number);
+                  startTime = new Date(year, month - 1, day, hours, minutes, 0, 0);
                   
                   // Default to 90 minutes duration
                   endTime = new Date(startTime.getTime() + 90 * 60 * 1000);
                   
                   // Debug: log what we created
-                  console.log(`Time "${originalText}" -> MT: ${hours}:${minutes.toString().padStart(2,'0')} -> UTC: ${startTime.toISOString()}`);
+                  console.log(`Time "${originalText}" -> MT: ${hours}:${minutes.toString().padStart(2,'0')} -> ${startTime.toISOString()}`);
                 } else {
-                  // If no time found, set to noon Mountain Time (6 PM UTC)
+                  // If no time found, set to noon Mountain Time
                   const eventDateStr = dateCell?.getAttribute('data-date') || new Date().toISOString().split('T')[0];
                   const [year, month, day] = eventDateStr.split('-').map(Number);
-                  const utcDate = new Date(Date.UTC(year, month - 1, day, 12, 0, 0, 0));
-                  startTime = new Date(utcDate.getTime() + 6 * 60 * 60 * 1000);
+                  startTime = new Date(year, month - 1, day, 12, 0, 0, 0);
                   endTime = new Date(startTime.getTime() + 90 * 60 * 1000);
                 }
                 
@@ -344,12 +291,13 @@ export class BigBearScraper extends BaseScraper {
           });
         }
         
-        // Process events
+        // Process events - the browser timezone is set to America/Denver, so times should already be correct
         const now = new Date();
         const thirtyDaysFromNow = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
         
         events.forEach((event: any, index: number) => {
           try {
+            // The browser is set to America/Denver, so these ISO strings should already represent the correct UTC times
             const startTime = new Date(event.start);
             const endTime = new Date(event.end);
             
@@ -372,6 +320,9 @@ export class BigBearScraper extends BaseScraper {
                 isFeatured: false,
                 eventUrl: event.url ? `${this.baseUrl}${event.url}` : undefined,
               });
+              
+              // Debug log to verify times
+              console.log(`🕐 Event "${cleanTitle}": ${startTime.toLocaleString('en-US', {timeZone: 'America/Denver'})} MT (${startTime.toISOString()} UTC)`);
             }
           } catch (e) {
             console.warn(`⚠️ Error processing event ${index}: ${e.message}`);
@@ -435,11 +386,11 @@ export class BigBearScraper extends BaseScraper {
               console.log(`✅ HTTP fallback successful: ${apiEvents.length} events`);
               
               return apiEvents.map((event: any, index: number) => {
-                // Try to parse times correctly for Mountain Time zone
                 let startTime: Date;
                 let endTime: Date;
                 
                 try {
+                  // Parse dates directly - API might return dates in various formats
                   startTime = new Date(event.start || event.startTime);
                   endTime = new Date(event.end || event.endTime || event.start || event.startTime);
                   

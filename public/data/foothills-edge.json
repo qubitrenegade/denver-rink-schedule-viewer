@@ -1,15 +1,5 @@
 [
   {
-    "id": "foothills-edge-2025-05-28-1",
-    "rinkId": "foothills-edge",
-    "title": "Stick and Puck",
-    "startTime": "2025-05-28T21:00:00.000Z",
-    "endTime": "2025-05-28T22:30:00.000Z",
-    "category": "Stick & Puck",
-    "description": "Ice activity at Foothills Edge Ice Arena",
-    "isFeatured": false
-  },
-  {
     "id": "foothills-edge-2025-05-29-0",
     "rinkId": "foothills-edge",
     "title": "Public Skate",
