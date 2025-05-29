@@ -1358,6 +1358,26 @@
     "isFeatured": false
   },
   {
+    "id": "big-bear-199950154",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-29T03:45:00.000Z",
+    "endTime": "2025-05-29T04:45:00.000Z",
+    "category": "Stick & Puck",
+    "description": "60 minutes",
+    "isFeatured": false
+  },
+  {
+    "id": "big-bear-198431265",
+    "rinkId": "big-bear",
+    "title": "Free Style",
+    "startTime": "2025-05-29T12:00:00.000Z",
+    "endTime": "2025-05-29T13:00:00.000Z",
+    "category": "Figure Skating",
+    "description": "60 minutes",
+    "isFeatured": false
+  },
+  {
     "id": "sssc-rink3-2771034",
     "rinkId": "sssc-rink3",
     "title": "Take A Shot",
@@ -1440,6 +1460,16 @@
     "isFeatured": false
   },
   {
+    "id": "big-bear-198446554",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-29T18:00:00.000Z",
+    "endTime": "2025-05-29T19:00:00.000Z",
+    "category": "Stick & Puck",
+    "description": "60 minutes",
+    "isFeatured": false
+  },
+  {
     "id": "foothills-edge-2025-05-29-0",
     "rinkId": "foothills-edge",
     "title": "Public Skate",
@@ -1514,6 +1544,16 @@
     "endTime": "2025-05-30T02:35:00.000Z",
     "category": "Drop-In Hockey",
     "description": "NO Staff lesson Ice",
+    "isFeatured": false
+  },
+  {
+    "id": "big-bear-203032739",
+    "rinkId": "big-bear",
+    "title": "Drop-IN Goalie REGISTRATION",
+    "startTime": "2025-05-30T11:45:00.000Z",
+    "endTime": "2025-05-30T12:45:00.000Z",
+    "category": "Drop-In Hockey",
+    "description": "60 minutes",
     "isFeatured": false
   },
   {
@@ -1722,6 +1762,16 @@
     "endTime": "2025-05-31T04:30:00.000Z",
     "category": "Drop-In Hockey",
     "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
+  },
+  {
+    "id": "big-bear-198445865",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-05-31T12:00:00.000Z",
+    "endTime": "2025-05-31T13:00:00.000Z",
+    "category": "Stick & Puck",
+    "description": "60 minutes",
     "isFeatured": false
   },
   {
