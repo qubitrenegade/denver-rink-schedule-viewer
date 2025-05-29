@@ -70,6 +70,11 @@ export class BigBearScraper extends BaseScraper {
         
         // Set timezone to Mountain Time to ensure proper time parsing
         await page.emulateTimezone('America/Denver');
+        // Debug: Confirm browser timezone before navigation
+        await page.evaluate(() => {
+          console.log('DEBUG: Browser timezone:', Intl.DateTimeFormat().resolvedOptions().timeZone);
+          console.log('DEBUG: Browser date string:', new Date().toString());
+        });
         await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
         await page.setViewport({ width: 1280, height: 720 });
         
@@ -241,7 +246,11 @@ export class BigBearScraper extends BaseScraper {
                   // Create date in Mountain Time (browser is set to America/Denver)
                   // These times should be interpreted as local Mountain Time
                   const [year, month, day] = eventDateStr.split('-').map(Number);
-                  startTime = new Date(year, month - 1, day, hours, minutes, 0, 0);
+                  // --- Time zone fix: treat as America/Denver, convert to UTC ---
+                  // America/Denver is UTC-6 (MDT) or UTC-7 (MST). For simplicity, use -6 (MDT) for now.
+                  // If you want to handle DST, use a library like luxon or date-fns-tz.
+                  const mtOffset = 6; // hours to add to convert local MT to UTC (MDT)
+                  startTime = new Date(Date.UTC(year, month - 1, day, hours + mtOffset, minutes, 0, 0));
                   
                   // Default to 90 minutes duration
                   endTime = new Date(startTime.getTime() + 90 * 60 * 1000);
@@ -325,7 +334,8 @@ export class BigBearScraper extends BaseScraper {
               console.log(`🕐 Event "${cleanTitle}": ${startTime.toLocaleString('en-US', {timeZone: 'America/Denver'})} MT (${startTime.toISOString()} UTC)`);
             }
           } catch (e) {
-            console.warn(`⚠️ Error processing event ${index}: ${e.message}`);
+            const msg = e instanceof Error ? e.message : String(e);
+            console.warn(`⚠️ Error processing event ${index}: ${msg}`);
           }
         });
         
