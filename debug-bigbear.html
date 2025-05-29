@@ -1,0 +1,1127 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>sessions Schedule</title>
+    <!--Layout-->
+    <link href="/content/layoutCSS?v=m3Vg5qEHQrwgeLWT7E8UGYyj9MxrQfDWC_iGZOimAxY1" rel="stylesheet">
+
+    <!--App-->
+    
+    <!--Page-->
+    
+
+    <link href="/assets/content/css/schedule?v=3hkLKX5EEBTHNOT02AuuZdDjmu5Z8RuiF_j50yylM8E1" rel="stylesheet">
+
+
+
+
+    <link id="linkTheme" href="/Theme/Index?hexColor=%23B0E0E6" rel="stylesheet">
+
+<script type="text/javascript" async="" charset="utf-8" src="https://www.gstatic.com/recaptcha/releases/jt8Oh2-Ue1u7nEbJQUIdocyd/recaptcha__en.js" crossorigin="anonymous" integrity="sha384-UPrQVGoaAH4LSrUOE7fPg+sY6k0d8riR1MCeHMs2PytQcLpLR6pkOj7gsJu5KWvT"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js"></script><script src="https://www.google.com/recaptcha/api.js?render=6Ld3WtcqAAAAAMgqh-UF16VeP-Cg6pm9c1mK084A"></script></head>
+
+<body data-current-skin="">
+
+	
+<header id="header" class="clearfix" data-current-skin="EZGreen">
+    <div class="leftHeader">
+        <div class="menuTriggerContainer">
+            <div id="menu-trigger" data-trigger="#sidebar" class="open">
+                <div class="line-wrap">
+                    <div class="line top"></div>
+                    <div class="line center"></div>
+                    <div class="line bottom"></div>
+                </div>
+            </div>
+        </div>
+        <div class="headerLogo">
+            <a href="/">
+                <img id="headerSSLogo" src="https://c249711.ssl.cf0.rackcdn.com/13558.jpg" alt="">
+                <h5 style="display:none;" id="headerCompanyName" class="  ">Big Bear Ice Arena LLC</h5>
+
+            </a>
+        </div>
+    </div>
+    <div class="centerHeader">
+        <div>
+            <div>Big Bear Ice Arena LLC</div>
+        </div>
+        
+    </div>
+
+    <div class="rightHeader">
+        <ul class="top-menu">
+            
+
+<li id="liCartDropDown" class="dropdown ">
+    <a id="aCart" data-toggle="dropdown" href="#" class="disabled" aria-expanded="false">
+        <i class="tm-icon zmdi zmdi-shopping-cart "></i>
+        <i class="tmn-counts" style="display: none;"></i>
+    </a>
+    <div class="dropdown-menu dropdown-menu-lg pull-right">
+        <div class="listview">
+            <div class="lv-header">
+                Shopping Cart
+            </div>
+            <div class="lv-body" style="max-height: 352px; overflow-y: scroll;">
+
+
+            </div>
+            <div class="lv-footer text-right">
+                <a id="aViewCartDetails" class="btn btn-link waves-effect" href="/Cart/ShoppingItems">View Cart</a>
+                <a id="aCheckoutCart" class="btn btn-primary waves-effect" href="/Checkout/ShoppingItemsFromCart">Check Out</a>    
+            </div>
+            
+        </div>
+    </div>
+</li>
+
+
+        </ul>
+    </div>
+</header>
+
+	<input type="hidden" id="sessionTimeOut" value="20">
+	<input type="hidden" id="culture" value="en-us">
+	<input type="hidden" id="currencyDecimalSeparator" value=".">
+	<input type="hidden" id="currencyGroupSeparator" value=",">
+	
+	<input type="hidden" id="dateFormat" value="M/D/YYYY">
+	<input type="hidden" id="use24HourFormat" value="false">
+	<input type="hidden" id="clientIsLoggedIn" value="false">
+	<input id="RecaptchaSiteKey" type="hidden" value="6Ld3WtcqAAAAAMgqh-UF16VeP-Cg6pm9c1mK084A">
+
+
+	<section>
+		<aside id="sidebar" class="sidebar c-overflow toggled mCustomScrollbar _mCS_1 mCS-autoHide mCS_no_scrollbar" style="overflow: visible;"><div id="mCSB_1" class="mCustomScrollBox mCS-minimal-dark mCSB_vertical_horizontal mCSB_outside" style="max-height: none;"><div id="mCSB_1_container" class="mCSB_container mCS_y_hidden mCS_no_scrollbar_y mCS_x_hidden mCS_no_scrollbar_x" style="position: relative; top: 0px; left: 0px; width: 100%;" dir="ltr">
+			
+<ul class="main-menu">
+    <li class="mm-profile hidden">
+        <a id="aProfile" href="/Profile" class="media">
+            <img id="sidebarProfileImage" src="" alt="" class="mCS_img_loaded">
+            <div id="divSidebarClientName" class="media-body">
+                
+            </div>
+        </a>
+    </li>
+        <li class="sub-menu hidden">
+            <a id="aInvoices" href="/Invoices/Open"><i class="zmdi zmdi-file-text"></i> Invoices</a>
+            <ul>
+                    <li><a href="/Invoices/Open">Open Invoices</a></li>
+                                    <li><a href="/Invoices/Closed">Closed Invoices</a></li>
+            </ul>
+        </li>
+            <li class="sub-menu">
+            <a id="aBuy" href=""><i class="zmdi zmdi-money zmdi-hc-fw"></i> Buy</a>
+            <ul>
+                    <li><a href="/Package">Packages</a></li>
+                                    <li><a href="/Membership">Memberships</a></li>
+            </ul>
+        </li>
+            <li class="hidden">
+            <a href="/MySchedule"><i class="zmdi zmdi-account"></i> My Schedule</a>
+        </li>
+            <li>
+            <a href="/Sessions"><i class="zmdi zmdi-book"></i> Book sessions</a>
+        </li>
+                <li>
+            <a href="/OnlineRegistration"><i class="zmdi zmdi-assignment-account zmdi-hc-fw"></i>Registrations</a>
+        </li>
+    
+    <li id="toggle-width">
+        <i class="zmdi zmdi-format-indent-increase zmdi-hc-fw"></i>
+        <div class="toggle-switch">
+            <label for="tw-width" class="ts-label">Toggle Width</label>
+            <input id="tw-switch" type="checkbox" hidden="hidden">
+            <label for="tw-switch" class="ts-helper"></label>
+        </div>
+    </li>
+
+    <li class="hidden" onclick="Login.ResetClient()">
+        <a href="/Login/Logout"><i class="zmdi zmdi-power"></i> Logout</a>
+    </li>
+
+    <li id="liLogin" class="">
+        <a href="#"><i class="zmdi zmdi-power"></i> Login</a>
+    </li>
+</ul>
+<hr>
+
+		</div></div><div id="mCSB_1_scrollbar_vertical" class="mCSB_scrollTools mCSB_1_scrollbar mCS-minimal-dark mCSB_scrollTools_vertical" style="display: none;"><div class="mCSB_draggerContainer"><div id="mCSB_1_dragger_vertical" class="mCSB_dragger" style="position: absolute; min-height: 50px; height: 0px; top: 0px;"><div class="mCSB_dragger_bar" style="line-height: 50px;"></div><div class="mCSB_draggerRail"></div></div><div id="mCSB_1_scrollbar_horizontal" class="mCSB_scrollTools mCSB_1_scrollbar mCS-minimal-dark mCSB_scrollTools_horizontal" style="display: none;"><div class="mCSB_draggerContainer"><div id="mCSB_1_dragger_horizontal" class="mCSB_dragger" style="position: absolute; min-width: 50px; width: 0px; left: 0px;"><div class="mCSB_dragger_bar"></div><div class="mCSB_draggerRail"></div></div></div></div></div></div></aside>
+	</section>
+
+	<section id="main">
+		<section id="content">
+			<div class="container toggled">
+						<div class="card">
+							<div class="card-header">
+								<h2 class="card-title">Welcome, </h2>
+							</div>
+							<div class="card-body card-padding">
+								Public Skate Sessions are in PURPLE<br>
+Freestyle Sessions are in PINK<br>
+Stick and Puck Sessions are in GREEN<br>
+Drop-In Sessions are in RED<br>
+<br>
+Party Room Rentals are in NAVY (Option of 10 or 20 attendees)&nbsp;<br>
+Hockey Party Room Rentals are in GOLD
+							</div>
+						</div>
+
+				<div class="block-header">
+					<h2>sessions Schedule</h2>
+					
+
+				</div>
+				
+
+
+
+
+
+<div class="card">
+    <div id="calendar" class="fc fc-unthemed fc-ltr"><div class="fc-toolbar fc-header-toolbar" data-calendar-month="4"><div class="fc-left"><h2>May 2025</h2><ul class="actions actions-alt" id="fc-actions"><li><button class="btn btn-default p-r-15 p-l-15 waves-effect calendar-prev"><i class="zmdi zmdi-chevron-left"></i></button></li><li><button class="btn btn-default p-r-15 p-l-15 m-l-5 waves-effect calendar-next"><i class="zmdi zmdi-chevron-right"></i></button></li><li><button class="btn btn-default m-l-10 waves-effect calendar-today" href="">TODAY</button></li></ul><span id="calendarLocation">Big Bear Ice Arena LLC</span></div><div class="fc-right"><ul class="actions actions-alt" id="fc-actions"><li><button class="btn btn-default btn-icon-text waves-effect calendar-filter" data-toggle="popover" data-placement="bottom" data-content="<div class='text-left'><b>At:</b> Big Bear Ice Arena LLC<br/><b>On:</b> Monday, Tuesday, Wednesday, Thursday, Friday, Saturday and Sunday<br/><b>Between:</b> 12:00 AM and 12:00 AM<br/><b>Filtered for types:</b> All<br/><b>Resources/Trainers:</b> All"><i class="zmdi zmdi-filter-list"></i>FILTER</button></li><li><button class="btn btn-default dropdown-toggle waves-effect m-l-10" data-toggle="dropdown">CHANGE VIEW  <span class="caret"></span></button><ul class="dropdown-menu dropdown-menu-right"><li class="active"><a data-calendar-view="month" href="">Month View</a></li><li><a data-calendar-view="basicWeek" href="">Week View</a></li><li><a data-calendar-view="agendaWeek" href="">Agenda Week View</a></li><li><a data-calendar-view="basicDay" href="">Day View</a></li><li><a data-calendar-view="agendaDay" href="">Agenda Day View</a></li><li><a data-calendar-view="listWeek" href="">List Week View</a></li><li><a data-calendar-view="listDay" href="">List Day View</a></li><li><a data-calendar-view="timelineDay" href="">Resource Day View</a></li></ul></li></ul></div><div class="fc-center"></div><div class="fc-clear"></div></div><div class="fc-view-container" style=""><div class="fc-view fc-month-view fc-basic-view" style=""><table class=""><thead class="fc-head"><tr><td class="fc-head-container fc-widget-header"><div class="fc-row fc-widget-header"><table class=""><thead><tr><th class="fc-day-header fc-widget-header fc-sun"><span>Sun</span></th><th class="fc-day-header fc-widget-header fc-mon"><span>Mon</span></th><th class="fc-day-header fc-widget-header fc-tue"><span>Tue</span></th><th class="fc-day-header fc-widget-header fc-wed"><span>Wed</span></th><th class="fc-day-header fc-widget-header fc-thu"><span>Thu</span></th><th class="fc-day-header fc-widget-header fc-fri"><span>Fri</span></th><th class="fc-day-header fc-widget-header fc-sat"><span>Sat</span></th></tr></thead></table></div></td></tr></thead><tbody class="fc-body"><tr><td class="fc-widget-content"><div class="fc-scroller fc-day-grid-container" style="overflow: hidden auto; height: auto;"><div class="fc-day-grid fc-unselectable"><div class="fc-row fc-week fc-widget-content" style=""><div class="fc-bg"><table class=""><tbody><tr><td class="fc-day fc-widget-content fc-sun fc-other-month fc-past" data-date="2025-04-27"></td><td class="fc-day fc-widget-content fc-mon fc-other-month fc-past" data-date="2025-04-28"></td><td class="fc-day fc-widget-content fc-tue fc-other-month fc-past" data-date="2025-04-29"></td><td class="fc-day fc-widget-content fc-wed fc-other-month fc-past" data-date="2025-04-30"></td><td class="fc-day fc-widget-content fc-thu fc-past" data-date="2025-05-01"></td><td class="fc-day fc-widget-content fc-fri fc-past" data-date="2025-05-02"></td><td class="fc-day fc-widget-content fc-sat fc-past" data-date="2025-05-03"></td></tr></tbody></table></div><div class="fc-content-skeleton"><table><thead><tr><td class="fc-day-top fc-sun fc-other-month fc-past" data-date="2025-04-27"><span class="fc-day-number">27</span></td><td class="fc-day-top fc-mon fc-other-month fc-past" data-date="2025-04-28"><span class="fc-day-number">28</span></td><td class="fc-day-top fc-tue fc-other-month fc-past" data-date="2025-04-29"><span class="fc-day-number">29</span></td><td class="fc-day-top fc-wed fc-other-month fc-past" data-date="2025-04-30"><span class="fc-day-number">30</span></td><td class="fc-day-top fc-thu fc-past" data-date="2025-05-01"><span class="fc-day-number">1</span></td><td class="fc-day-top fc-fri fc-past" data-date="2025-05-02"><span class="fc-day-number">2</span></td><td class="fc-day-top fc-sat fc-past" data-date="2025-05-03"><span class="fc-day-number">3</span></td></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div></div><div class="fc-row fc-week fc-widget-content" style=""><div class="fc-bg"><table class=""><tbody><tr><td class="fc-day fc-widget-content fc-sun fc-past" data-date="2025-05-04"></td><td class="fc-day fc-widget-content fc-mon fc-past" data-date="2025-05-05"></td><td class="fc-day fc-widget-content fc-tue fc-past" data-date="2025-05-06"></td><td class="fc-day fc-widget-content fc-wed fc-past" data-date="2025-05-07"></td><td class="fc-day fc-widget-content fc-thu fc-past" data-date="2025-05-08"></td><td class="fc-day fc-widget-content fc-fri fc-past" data-date="2025-05-09"></td><td class="fc-day fc-widget-content fc-sat fc-past" data-date="2025-05-10"></td></tr></tbody></table></div><div class="fc-content-skeleton"><table><thead><tr><td class="fc-day-top fc-sun fc-past" data-date="2025-05-04"><span class="fc-day-number">4</span></td><td class="fc-day-top fc-mon fc-past" data-date="2025-05-05"><span class="fc-day-number">5</span></td><td class="fc-day-top fc-tue fc-past" data-date="2025-05-06"><span class="fc-day-number">6</span></td><td class="fc-day-top fc-wed fc-past" data-date="2025-05-07"><span class="fc-day-number">7</span></td><td class="fc-day-top fc-thu fc-past" data-date="2025-05-08"><span class="fc-day-number">8</span></td><td class="fc-day-top fc-fri fc-past" data-date="2025-05-09"><span class="fc-day-number">9</span></td><td class="fc-day-top fc-sat fc-past" data-date="2025-05-10"><span class="fc-day-number">10</span></td></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div></div><div class="fc-row fc-week fc-widget-content" style=""><div class="fc-bg"><table class=""><tbody><tr><td class="fc-day fc-widget-content fc-sun fc-past" data-date="2025-05-11"></td><td class="fc-day fc-widget-content fc-mon fc-past" data-date="2025-05-12"></td><td class="fc-day fc-widget-content fc-tue fc-past" data-date="2025-05-13"></td><td class="fc-day fc-widget-content fc-wed fc-past" data-date="2025-05-14"></td><td class="fc-day fc-widget-content fc-thu fc-past" data-date="2025-05-15"></td><td class="fc-day fc-widget-content fc-fri fc-past" data-date="2025-05-16"></td><td class="fc-day fc-widget-content fc-sat fc-past" data-date="2025-05-17"></td></tr></tbody></table></div><div class="fc-content-skeleton"><table><thead><tr><td class="fc-day-top fc-sun fc-past" data-date="2025-05-11"><span class="fc-day-number">11</span></td><td class="fc-day-top fc-mon fc-past" data-date="2025-05-12"><span class="fc-day-number">12</span></td><td class="fc-day-top fc-tue fc-past" data-date="2025-05-13"><span class="fc-day-number">13</span></td><td class="fc-day-top fc-wed fc-past" data-date="2025-05-14"><span class="fc-day-number">14</span></td><td class="fc-day-top fc-thu fc-past" data-date="2025-05-15"><span class="fc-day-number">15</span></td><td class="fc-day-top fc-fri fc-past" data-date="2025-05-16"><span class="fc-day-number">16</span></td><td class="fc-day-top fc-sat fc-past" data-date="2025-05-17"><span class="fc-day-number">17</span></td></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div></div><div class="fc-row fc-week fc-widget-content" style=""><div class="fc-bg"><table class=""><tbody><tr><td class="fc-day fc-widget-content fc-sun fc-past" data-date="2025-05-18"></td><td class="fc-day fc-widget-content fc-mon fc-past" data-date="2025-05-19"></td><td class="fc-day fc-widget-content fc-tue fc-past" data-date="2025-05-20"></td><td class="fc-day fc-widget-content fc-wed fc-past" data-date="2025-05-21"></td><td class="fc-day fc-widget-content fc-thu fc-past" data-date="2025-05-22"></td><td class="fc-day fc-widget-content fc-fri fc-past" data-date="2025-05-23"></td><td class="fc-day fc-widget-content fc-sat fc-past" data-date="2025-05-24"></td></tr></tbody></table></div><div class="fc-content-skeleton"><table><thead><tr><td class="fc-day-top fc-sun fc-past" data-date="2025-05-18"><span class="fc-day-number">18</span></td><td class="fc-day-top fc-mon fc-past" data-date="2025-05-19"><span class="fc-day-number">19</span></td><td class="fc-day-top fc-tue fc-past" data-date="2025-05-20"><span class="fc-day-number">20</span></td><td class="fc-day-top fc-wed fc-past" data-date="2025-05-21"><span class="fc-day-number">21</span></td><td class="fc-day-top fc-thu fc-past" data-date="2025-05-22"><span class="fc-day-number">22</span></td><td class="fc-day-top fc-fri fc-past" data-date="2025-05-23"><span class="fc-day-number">23</span></td><td class="fc-day-top fc-sat fc-past" data-date="2025-05-24"><span class="fc-day-number">24</span></td></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div></div><div class="fc-row fc-week fc-widget-content" style=""><div class="fc-bg"><table class=""><tbody><tr><td class="fc-day fc-widget-content fc-sun fc-past" data-date="2025-05-25"></td><td class="fc-day fc-widget-content fc-mon fc-past" data-date="2025-05-26"></td><td class="fc-day fc-widget-content fc-tue fc-past" data-date="2025-05-27"></td><td class="fc-day fc-widget-content fc-wed fc-past" data-date="2025-05-28"></td><td class="fc-day fc-widget-content fc-thu fc-today " data-date="2025-05-29"></td><td class="fc-day fc-widget-content fc-fri fc-future" data-date="2025-05-30"></td><td class="fc-day fc-widget-content fc-sat fc-future" data-date="2025-05-31"></td></tr></tbody></table></div><div class="fc-content-skeleton"><table><thead><tr><td class="fc-day-top fc-sun fc-past" data-date="2025-05-25"><span class="fc-day-number">25</span></td><td class="fc-day-top fc-mon fc-past" data-date="2025-05-26"><span class="fc-day-number">26</span></td><td class="fc-day-top fc-tue fc-past" data-date="2025-05-27"><span class="fc-day-number">27</span></td><td class="fc-day-top fc-wed fc-past" data-date="2025-05-28"><span class="fc-day-number">28</span></td><td class="fc-day-top fc-thu fc-today " data-date="2025-05-29"><span class="fc-day-number">29</span></td><td class="fc-day-top fc-fri fc-future" data-date="2025-05-30"><span class="fc-day-number">30</span></td><td class="fc-day-top fc-sat fc-future" data-date="2025-05-31"><span class="fc-day-number">31</span></td></tr></thead><tbody><tr><td rowspan="23"></td><td rowspan="23"></td><td rowspan="23"></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#9900FF;border-color:#9900FF" data-eventid="198515441"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Public Skate<br/>Venues - South Rink<br/>2 hour(s) 15 minutes <br/>45 Spot(s) Left</div>"><span class="fc-time">8:45p</span> <span class="fc-title">Public Skate</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#FF66FF;border-color:#FF66FF" data-eventid="198431265"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Free Style<br/>Venues - South Rink<br/>1 hour(s) <br/>22 Spot(s) Left</div>"><span class="fc-time">6a</span> <span class="fc-title light-bg">Free Style</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#FF0000;border-color:#FF0000" data-eventid="203032739"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Drop-IN Goalie REGISTRATION<br/>Venues - North Rink<br/>15 minutes <br/>1 Spot(s) Left</div>"><span class="fc-time">5:45a</span> <span class="fc-title">Drop-IN Goalie REGISTRATION</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#00CC00;border-color:#00CC00" data-eventid="198445865"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Open Stick &amp; Puck<br/>Venues - North Rink<br/>1 hour(s) 15 minutes <br/>30 Spot(s) Left</div>"><span class="fc-time">6a</span> <span class="fc-title">Open Stick &amp; Puck</span></div></a></td></tr><tr><td class="fc-event-container" rowspan="22"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#00CC00;border-color:#00CC00" data-eventid="199950154"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Open Stick &amp; Puck<br/>Venues - North Rink<br/>1 hour(s) 15 minutes <br/>28 Spot(s) Left</div>"><span class="fc-time">9:45p</span> <span class="fc-title">Open Stick &amp; Puck</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#00CC00;border-color:#00CC00" data-eventid="198433510"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Open Stick &amp; Puck<br/>Venues - North Rink<br/>1 hour(s) <br/>28 Spot(s) Left</div>"><span class="fc-time">6a</span> <span class="fc-title">Open Stick &amp; Puck</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#990000;border-color:#990000" data-eventid="203032747"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Drop - IN HOCKEY<br/>Venues - North Rink<br/>1 hour(s) 30 minutes <br/>24 Spot(s) Left</div>"><span class="fc-time">6a</span> <span class="fc-title">Drop - IN HOCKEY</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#FF66FF;border-color:#FF66FF" data-eventid="198445020"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Free Style<br/>Venues - South Rink<br/>1 hour(s) <br/>24 Spot(s) Left</div>"><span class="fc-time">6a</span> <span class="fc-title light-bg">Free Style</span></div></a></td></tr><tr><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#FF66FF;border-color:#FF66FF" data-eventid="198431266"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Free Style<br/>Venues - South Rink<br/>1 hour(s) <br/>25 Spot(s) Left</div>"><span class="fc-time">7a</span> <span class="fc-title light-bg">Free Style</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#FF66FF;border-color:#FF66FF" data-eventid="198509403"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Free Style<br/>Venues - South Rink<br/>1 hour(s) <br/>25 Spot(s) Left</div>"><span class="fc-time">6a</span> <span class="fc-title light-bg">Free Style</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#FF66FF;border-color:#FF66FF" data-eventid="198445021"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Free Style<br/>Venues - South Rink<br/>1 hour(s) <br/>25 Spot(s) Left</div>"><span class="fc-time">7a</span> <span class="fc-title light-bg">Free Style</span></div></a></td></tr><tr><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#FF66FF;border-color:#FF66FF" data-eventid="198431267"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Free Style<br/>Venues - South Rink<br/>1 hour(s) <br/>23 Spot(s) Left</div>"><span class="fc-time">8a</span> <span class="fc-title light-bg">Free Style</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#FF66FF;border-color:#FF66FF" data-eventid="198509404"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Free Style<br/>Venues - South Rink<br/>1 hour(s) <br/>25 Spot(s) Left</div>"><span class="fc-time">7a</span> <span class="fc-title light-bg">Free Style</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#00CC00;border-color:#00CC00" data-eventid="198445866"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Open Stick &amp; Puck<br/>Venues - North Rink<br/>1 hour(s) 15 minutes <br/>30 Spot(s) Left</div>"><span class="fc-time">7:30a</span> <span class="fc-title">Open Stick &amp; Puck</span></div></a></td></tr><tr><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#00CC00;border-color:#00CC00" data-eventid="198433512"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Open Stick &amp; Puck<br/>Venues - North Rink<br/>1 hour(s) 15 minutes <br/>30 Spot(s) Left</div>"><span class="fc-time">9a</span> <span class="fc-title">Open Stick &amp; Puck</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#00CC00;border-color:#00CC00" data-eventid="203033519"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Open Stick &amp; Puck<br/>Venues - North Rink<br/>1 hour(s) 30 minutes <br/>29 Spot(s) Left</div>"><span class="fc-time">7:45a</span> <span class="fc-title">Open Stick &amp; Puck</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#FF66FF;border-color:#FF66FF" data-eventid="198445034"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Free Style<br/>Venues - South Rink<br/>1 hour(s) <br/>25 Spot(s) Left</div>"><span class="fc-time">8a</span> <span class="fc-title light-bg">Free Style</span></div></a></td></tr><tr><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#00CC00;border-color:#00CC00" data-eventid="198433615"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Open Stick &amp; Puck<br/>Venues - North Rink<br/>1 hour(s) 15 minutes <br/>30 Spot(s) Left</div>"><span class="fc-time">10:30a</span> <span class="fc-title">Open Stick &amp; Puck</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#FF66FF;border-color:#FF66FF" data-eventid="198509405"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Free Style<br/>Venues - South Rink<br/>1 hour(s) <br/>25 Spot(s) Left</div>"><span class="fc-time">8a</span> <span class="fc-title light-bg">Free Style</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#FF0000;border-color:#FF0000" data-eventid="198444221"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Drop-IN Goalie REGISTRATION<br/>Venues - North Rink<br/>15 minutes <br/>1 Spot(s) Left</div>"><span class="fc-time">10a</span> <span class="fc-title">Drop-IN Goalie REGISTRATION</span></div></a></td></tr><tr><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#00CC00;border-color:#00CC00" data-eventid="198433616"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Open Stick &amp; Puck<br/>Venues - North Rink<br/>1 hour(s) <br/>30 Spot(s) Left</div>"><span class="fc-time">12p</span> <span class="fc-title">Open Stick &amp; Puck</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#9900FF;border-color:#9900FF" data-eventid="200047524"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Public Skate<br/>Venues - South Rink<br/>1 hour(s) 45 minutes <br/>50 Spot(s) Left</div>"><span class="fc-time">9:15a</span> <span class="fc-title">Public Skate</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#990000;border-color:#990000" data-eventid="198444319"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Drop - IN HOCKEY<br/>Venues - North Rink<br/>1 hour(s) 30 minutes <br/>25 Spot(s) Left</div>"><span class="fc-time">10:15a</span> <span class="fc-title">Drop - IN HOCKEY</span></div></a></td></tr><tr><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#9900FF;border-color:#9900FF" data-eventid="199945238"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Public Skate<br/>Venues - South Rink<br/>1 hour(s) 45 minutes <br/>50 Spot(s) Left</div>"><span class="fc-time">12:45p</span> <span class="fc-title">Public Skate</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#00CC00;border-color:#00CC00" data-eventid="198510984"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Open Stick &amp; Puck<br/>Venues - North Rink<br/>1 hour(s) 15 minutes <br/>30 Spot(s) Left</div>"><span class="fc-time">9:30a</span> <span class="fc-title">Open Stick &amp; Puck</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#9900FF;border-color:#9900FF" data-eventid="203768797"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Public Skate<br/>Venues - South Rink<br/>2 hour(s) 15 minutes <br/>50 Spot(s) Left</div>"><span class="fc-time">11a</span> <span class="fc-title">Public Skate</span></div></a></td></tr><tr><td class="fc-event-container fc-limited"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#00CC00;border-color:#00CC00" data-eventid="204049409"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Open Stick &amp; Puck<br/>Venues - North Rink<br/>1 hour(s) <br/>30 Spot(s) Left</div>"><span class="fc-time">1:15p</span> <span class="fc-title">Open Stick &amp; Puck</span></div></a></td><td class="fc-more-cell" rowspan="1"><div><a class="fc-more">View More</a></div></td><td class="fc-event-container fc-limited"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#9900FF;border-color:#9900FF" data-eventid="200047525"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Public Skate<br/>Venues - South Rink<br/>1 hour(s) 30 minutes <br/>50 Spot(s) Left</div>"><span class="fc-time">11a</span> <span class="fc-title">Public Skate</span></div></a></td><td class="fc-more-cell" rowspan="1"><div><a class="fc-more">View More</a></div></td><td class="fc-event-container fc-limited"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#00CC00;border-color:#00CC00" data-eventid="198446554"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Open Stick &amp; Puck<br/>Venues - North Rink<br/>1 hour(s) <br/>30 Spot(s) Left</div>"><span class="fc-time">12p</span> <span class="fc-title">Open Stick &amp; Puck</span></div></a></td><td class="fc-more-cell" rowspan="1"><div><a class="fc-more">View More</a></div></td></tr><tr class="fc-limited"><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#00CC00;border-color:#00CC00" data-eventid="204049403"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Open Stick &amp; Puck<br/>Venues - North Rink<br/>1 hour(s) 15 minutes <br/>30 Spot(s) Left</div>"><span class="fc-time">2:30p</span> <span class="fc-title">Open Stick &amp; Puck</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#00CC00;border-color:#00CC00" data-eventid="198510985"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Open Stick &amp; Puck<br/>Venues - North Rink<br/>1 hour(s) 15 minutes <br/>30 Spot(s) Left</div>"><span class="fc-time">11a</span> <span class="fc-title">Open Stick &amp; Puck</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#00CC00;border-color:#00CC00" data-eventid="200047786"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Open Stick &amp; Puck<br/>Venues - North Rink<br/>1 hour(s) <br/>30 Spot(s) Left</div>"><span class="fc-time">1:15p</span> <span class="fc-title">Open Stick &amp; Puck</span></div></a></td></tr><tr class="fc-limited"><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#FF66FF;border-color:#FF66FF" data-eventid="198431270"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Free Style<br/>Venues - South Rink<br/>1 hour(s) <br/>25 Spot(s) Left</div>"><span class="fc-time">2:45p</span> <span class="fc-title light-bg">Free Style</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#9900FF;border-color:#9900FF" data-eventid="198510198"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Public Skate<br/>Venues - South Rink<br/>2 hour(s) <br/>50 Spot(s) Left</div>"><span class="fc-time">12:30p</span> <span class="fc-title">Public Skate</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#9900FF;border-color:#9900FF" data-eventid="198449458"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Public Skate<br/>Venues - South Rink<br/>1 hour(s) 45 minutes <br/>50 Spot(s) Left</div>"><span class="fc-time">1:30p</span> <span class="fc-title">Public Skate</span></div></a></td></tr><tr class="fc-limited"><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#FF66FF;border-color:#FF66FF" data-eventid="198432736"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Free Style<br/>Venues - South Rink<br/>1 hour(s) <br/>24 Spot(s) Left</div>"><span class="fc-time">3:45p</span> <span class="fc-title light-bg">Free Style</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#00CC00;border-color:#00CC00" data-eventid="198510778"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Open Stick &amp; Puck<br/>Venues - North Rink<br/>1 hour(s) 15 minutes <br/>30 Spot(s) Left</div>"><span class="fc-time">12:30p</span> <span class="fc-title">Open Stick &amp; Puck</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#00CC00;border-color:#00CC00" data-eventid="198446555"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Open Stick &amp; Puck<br/>Venues - North Rink<br/>1 hour(s) <br/>30 Spot(s) Left</div>"><span class="fc-time">2:30p</span> <span class="fc-title">Open Stick &amp; Puck</span></div></a></td></tr><tr class="fc-limited"><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#00CC00;border-color:#00CC00" data-eventid="198433513"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Open Stick &amp; Puck<br/>Venues - North Rink<br/>1 hour(s) <br/>30 Spot(s) Left</div>"><span class="fc-time">4p</span> <span class="fc-title">Open Stick &amp; Puck</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#00CC00;border-color:#00CC00" data-eventid="198510779"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Open Stick &amp; Puck<br/>Venues - North Rink<br/>1 hour(s) 30 minutes <br/>30 Spot(s) Left</div>"><span class="fc-time">2p</span> <span class="fc-title">Open Stick &amp; Puck</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#9900FF;border-color:#9900FF" data-eventid="198449459"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Public Skate<br/>Venues - South Rink<br/>1 hour(s) 45 minutes <br/>50 Spot(s) Left</div>"><span class="fc-time">3:30p</span> <span class="fc-title">Public Skate</span></div></a></td></tr><tr class="fc-limited"><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#FF66FF;border-color:#FF66FF" data-eventid="198431268"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Free Style<br/>Venues - South Rink<br/>1 hour(s) <br/>25 Spot(s) Left</div>"><span class="fc-time">4:45p</span> <span class="fc-title light-bg">Free Style</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#FF66FF;border-color:#FF66FF" data-eventid="198509539"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Free Style<br/>Venues - South Rink<br/>1 hour(s) <br/>25 Spot(s) Left</div>"><span class="fc-time">2:45p</span> <span class="fc-title light-bg">Free Style</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#00CC00;border-color:#00CC00" data-eventid="198447737"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Open Stick &amp; Puck<br/>Venues - North Rink<br/>1 hour(s) 15 minutes <br/>30 Spot(s) Left</div>"><span class="fc-time">3:45p</span> <span class="fc-title">Open Stick &amp; Puck</span></div></a></td></tr><tr class="fc-limited"><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#9900FF;border-color:#9900FF" data-eventid="198432800"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Public Skate<br/>Venues - South Rink<br/>1 hour(s) 30 minutes <br/>50 Spot(s) Left</div>"><span class="fc-time">6p</span> <span class="fc-title">Public Skate</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#00CC00;border-color:#00CC00" data-eventid="198510781"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Open Stick &amp; Puck<br/>Venues - North Rink<br/>1 hour(s) 30 minutes <br/>30 Spot(s) Left</div>"><span class="fc-time">3:45p</span> <span class="fc-title">Open Stick &amp; Puck</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#00CC00;border-color:#00CC00" data-eventid="198447738"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Open Stick &amp; Puck<br/>Venues - North Rink<br/>1 hour(s) 15 minutes <br/>30 Spot(s) Left</div>"><span class="fc-time">5:15p</span> <span class="fc-title">Open Stick &amp; Puck</span></div></a></td></tr><tr class="fc-limited"><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#00CC00;border-color:#00CC00" data-eventid="203768744"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Open Stick &amp; Puck<br/>Venues - South Rink<br/>1 hour(s) 15 minutes <br/>30 Spot(s) Left</div>"><span class="fc-time">7:45p</span> <span class="fc-title">Open Stick &amp; Puck</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#FF66FF;border-color:#FF66FF" data-eventid="198509540"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Free Style<br/>Venues - South Rink<br/>1 hour(s) <br/>24 Spot(s) Left</div>"><span class="fc-time">3:45p</span> <span class="fc-title light-bg">Free Style</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#9900FF;border-color:#9900FF" data-eventid="198449460"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Public Skate<br/>Venues - South Rink<br/>1 hour(s) 45 minutes <br/>50 Spot(s) Left</div>"><span class="fc-time">5:30p</span> <span class="fc-title">Public Skate</span></div></a></td></tr><tr class="fc-limited"><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#9900FF;border-color:#9900FF" data-eventid="200179166"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Public Skate<br/>Venues - South Rink<br/>1 hour(s) 45 minutes <br/>50 Spot(s) Left</div>"><span class="fc-time">9:15p</span> <span class="fc-title">Public Skate</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#FF66FF;border-color:#FF66FF" data-eventid="199755963"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Free Style<br/>Venues - South Rink<br/>1 hour(s) <br/>24 Spot(s) Left</div>"><span class="fc-time">4:45p</span> <span class="fc-title light-bg">Free Style</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#00CC00;border-color:#00CC00" data-eventid="198447739"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Open Stick &amp; Puck<br/>Venues - North Rink<br/>1 hour(s) 15 minutes <br/>30 Spot(s) Left</div>"><span class="fc-time">6:45p</span> <span class="fc-title">Open Stick &amp; Puck</span></div></a></td></tr><tr class="fc-limited"><td class="fc-event-container" rowspan="6"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#00CC00;border-color:#00CC00" data-eventid="199945270"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Open Stick &amp; Puck<br/>Venues - North Rink<br/>1 hour(s) 30 minutes <br/>30 Spot(s) Left</div>"><span class="fc-time">9:30p</span> <span class="fc-title">Open Stick &amp; Puck</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#00CC00;border-color:#00CC00" data-eventid="198510939"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Open Stick &amp; Puck<br/>Venues - North Rink<br/>1 hour(s) 15 minutes <br/>30 Spot(s) Left</div>"><span class="fc-time">5:30p</span> <span class="fc-title">Open Stick &amp; Puck</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#9900FF;border-color:#9900FF" data-eventid="198449461"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Public Skate<br/>Venues - South Rink<br/>1 hour(s) 45 minutes <br/>50 Spot(s) Left</div>"><span class="fc-time">7:30p</span> <span class="fc-title">Public Skate</span></div></a></td></tr><tr class="fc-limited"><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#9900FF;border-color:#9900FF" data-eventid="203768763"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Public Skate<br/>Venues - South Rink<br/>1 hour(s) 30 minutes <br/>50 Spot(s) Left</div>"><span class="fc-time">6p</span> <span class="fc-title">Public Skate</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#00CC00;border-color:#00CC00" data-eventid="198447740"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Open Stick &amp; Puck<br/>Venues - North Rink<br/>1 hour(s) 15 minutes <br/>30 Spot(s) Left</div>"><span class="fc-time">8:15p</span> <span class="fc-title">Open Stick &amp; Puck</span></div></a></td></tr><tr class="fc-limited"><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#9900FF;border-color:#9900FF" data-eventid="203768784"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Public Skate<br/>Venues - South Rink<br/>1 hour(s) 15 minutes <br/>50 Spot(s) Left</div>"><span class="fc-time">7:45p</span> <span class="fc-title">Public Skate</span></div></a></td><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#9900FF;border-color:#9900FF" data-eventid="198449462"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Public Skate<br/>Venues - South Rink<br/>1 hour(s) 30 minutes <br/>50 Spot(s) Left</div>"><span class="fc-time">9:30p</span> <span class="fc-title">Public Skate</span></div></a></td></tr><tr class="fc-limited"><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#00CC00;border-color:#00CC00" data-eventid="198514779"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Open Stick &amp; Puck<br/>Venues - North Rink<br/>1 hour(s) 15 minutes <br/>30 Spot(s) Left</div>"><span class="fc-time">8:15p</span> <span class="fc-title">Open Stick &amp; Puck</span></div></a></td><td class="fc-event-container" rowspan="3"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#00CC00;border-color:#00CC00" data-eventid="198447741"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Open Stick &amp; Puck<br/>Venues - North Rink<br/>1 hour(s) 15 minutes <br/>30 Spot(s) Left</div>"><span class="fc-time">9:45p</span> <span class="fc-title">Open Stick &amp; Puck</span></div></a></td></tr><tr class="fc-limited"><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#9900FF;border-color:#9900FF" data-eventid="200295606"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Public Skate<br/>Venues - South Rink<br/>1 hour(s) 45 minutes <br/>50 Spot(s) Left</div>"><span class="fc-time">9:15p</span> <span class="fc-title">Public Skate</span></div></a></td></tr><tr class="fc-limited"><td class="fc-event-container"><a class="fc-day-grid-event fc-h-event fc-event fc-start fc-end" style="background-color:#00CC00;border-color:#00CC00" data-eventid="198514780"><div class="fc-content" data-toggle="popover" data-placement="top" data-content="<div class=&quot;text-left&quot;><span style=&quot;overflow-wrap: anywhere;&quot;>Open Stick &amp; Puck<br/>Venues - North Rink<br/>1 hour(s) 15 minutes <br/>30 Spot(s) Left</div>"><span class="fc-time">9:45p</span> <span class="fc-title">Open Stick &amp; Puck</span></div></a></td></tr></tbody></table></div></div></div></div></td></tr></tbody></table></div></div></div>
+</div>
+
+<!-- Edit event -->
+<div class="modal fade " id="modal-book-reservation" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="card">
+            <form id="frmBook">
+
+                <input type="hidden" id="reservationId" name="reservationId">
+                <input type="hidden" id="reservationTypeId" name="reservationTypeId">
+                <input type="hidden" id="reservationStartDateTime" name="reservationStartDateTime">
+                <input type="hidden" id="reservationEndDateTime" name="reservationEndDateTime">
+                <input type="hidden" id="reservationResourceName" name="reservationResourceName">
+                <input type="hidden" id="reservationTitle" name="reservationTitle">
+                <input type="hidden" id="cultureCode" name="cultureCode" value="en-US">
+                <input type="hidden" id="allowedReservationTypeIDs" name="allowedReservationTypeIDs">
+                <input type="hidden" id="defaultCalendarView" name="defaultCalendarView" value="month">
+                <input type="hidden" id="scheduleInterval" name="defaultCalendarView" value="15">
+                <input type="hidden" id="publicSessions" name="publicSessions" value="false">
+
+                <div id="book-header" class="card-header ch-alt">
+                    <div class="title-addon">
+                        <i class="zmdi zmdi-calendar-alt"></i>
+                    </div>
+                    <h2 class="modal-title">
+                        Book - <span id="displayTitle"></span>
+                    </h2>
+                    <ul class="actions">
+                        <li>
+                            <a href="" data-dismiss="modal">
+                                <i class="zmdi zmdi-close"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card-body card-padding ">
+                    <div class="listview">
+                        <div class="lv-item description" href="">
+                            <div class="media">
+                                <div class="pull-left">
+                                    <div>
+                                        <i class="zmdi p-l-20"></i>
+                                    </div>
+                                </div>
+                                <div class="media-body" id="descriptionContainer">
+                                    <div class="lv-title" id="description"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lv-item" href="">
+                            <div class="media">
+                                <div class="pull-left">
+                                    <div>
+                                        <i class="zmdi zmdi-time"></i>
+                                    </div>
+                                </div>
+                                <div class="media-body">
+                                    <div class="lv-title" id="time"></div>
+                                    <small class="lv-small" id="timeDifference"></small>
+                                </div>
+                            </div>
+                        </div>
+                            <div id="classSize" class="lv-item" href="">
+                                <div class="media">
+                                    <div class="pull-left">
+                                        <div>
+                                            <i class="zmdi zmdi-accounts"></i>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <div class="lv-title">
+                                            <span id="sSpotsLeft"></span> Spot(s) Left <span id="sWaitlisting"></span>
+                                        </div>
+                                        <small class="lv-small">Class size of <span id="sClassSize"></span></small>
+                                    </div>
+                                </div>
+                            </div>
+                        <div id="instructors" class="lv-item">
+                            <div class="media">
+                                <div class="pull-left">
+                                    <div>
+                                        <i class="zmdi zmdi-map"></i>
+                                    </div>
+                                </div>
+                                <div id="instructorList" class="media-body">
+                                    <div class="lv-title">
+                                        Instructors
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="venues" class="lv-item">
+                            <div class="media">
+                                <div class="pull-left">
+                                    <div>
+                                        <i class="zmdi zmdi-map"></i>
+                                    </div>
+                                </div>
+                                <div id="venueList" class="media-body">
+                                    <div class="lv-title">
+                                        Venues
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lv-item package" href="" id="divRelatedClients">
+                            <div class="media">
+                                <div class="pull-left">
+                                    <div>
+                                        <i class="zmdi zmdi-account"></i>
+                                    </div>
+                                </div>
+                                <div class="media-body">
+                                    <div class="lv-title">
+                                        <div>
+                                        </div>
+                                        <div class="input-group form-group">
+                                            
+
+<span class="input-group-addon p-l-0 ">
+Book For</span>
+
+
+
+<div class="btn-group bootstrap-select input-group-btn"><button type="button" class="dropdown-toggle btn btn-default" data-toggle="dropdown" data-id="ddlName" title="Nothing selected"><span class="filter-option pull-left">Nothing selected</span>&nbsp;<span class="bs-caret"><span class="caret"></span></span></button><div class="dropdown-menu open"><ul class="dropdown-menu inner" role="menu"></ul></div><select class="selectpicker" data-container="body" data-style="btn btn-default " id="ddlName" name="ddlName" tabindex="-98"></select></div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="videos" class="lv-item">
+                            <div class="media">
+                                <div class="pull-left">
+                                    <div>
+                                        <i class="zmdi zmdi-collection-video"></i>
+                                    </div>
+                                </div>
+                                <div id="videoList" class="media-body">
+                                    <div class="lv-title">
+                                        Video
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="lv-item package" href="">
+                            <div class="media">
+                                <div class="pull-left">
+                                    <div>
+                                        <i class="zmdi zmdi-book"></i>
+                                    </div>
+                                </div>
+                                <div class="media-body">
+                                    <div class="lv-title">
+                                        <div>
+                                            <span id="packageMessage"></span>
+                                        </div>
+                                        <div class="input-group form-group" id="ddlPackage">
+                                            <span class="input-group-addon">Package</span>
+                                            <div class="btn-group bootstrap-select input-group-btn"><button type="button" class="btn dropdown-toggle btn-default" data-toggle="dropdown" title="Nothing selected"><span class="filter-option pull-left">Nothing selected</span>&nbsp;<span class="bs-caret"><span class="caret"></span></span></button><div class="dropdown-menu open"><ul class="dropdown-menu inner" role="menu"></ul></div><select class="selectpicker" name="packageId" data-container="body" tabindex="-98"></select></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </form>
+            <div class="modal-footer">
+                <h4 id="viewOnlyMessage">Call for more Information!</h4>
+                <h4 id="memberOnlyMessage">Members Only!</h4>
+                <div id="videoSessionMessage" class="align-self-center"></div>
+                    <button id="btnLaunch" class="btn btn-primary waves-effect" style="display: none;">Launch Session</button>
+                    <button id="btnBook" class="btn btn-primary  waves-effect">Book</button>
+                    <button id="btnBuyPackage" class="btn btn-default waves-effect" data-calendar="buy-package">Buy Package</button>
+                    <button id="btnCancelSession" class="btn btn-link waves-effect" data-calendar="cancel-session">Cancel Session</button>
+            </div>
+            <div id="bookedMessage"></div>
+            <iframe id="launchFrame" src="" style="display:none"></iframe>
+
+        </div>
+    </div>
+</div>
+
+<!-- filter calendar -->
+<div class="modal fade" id="modal-filter-events" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="card">
+            <div class="card-header ch-alt">
+                <h2 class="modal-title">
+                    Filter
+                    <small>Use this to show classes/trainings that fit your schedule.</small>
+                </h2>
+            </div>
+
+            <div class="card-body card-padding">
+                <form id="frmFilter">
+                    
+                    <div role="tabpanel" class="tab">
+                        <ul class="tab-nav" role="tablist">
+                            <li class="" id="filterClientsTab" style="display: none;"><a href="#clientTab" aria-controls="clientTab" role="tab" data-toggle="tab" aria-expanded="false"><i class="zmdi zmdi-account-box"></i></a></li>
+                            <li role="presentation" id="filterLocationsTab" class="active"><a href="#locationsTab" aria-controls="locationsTab" role="tab" data-toggle="tab" aria-expanded="true"><i class="zmdi zmdi-pin"></i></a></li>
+                            <li role="presentation"><a href="#timeTab" aria-controls="timeTab" role="tab" data-toggle="tab"><i class="zmdi zmdi-time"></i></a></li>
+                            <li role="presentation"><a href="#sessionTab" aria-controls="sessionTab" role="tab" data-toggle="tab"><i class="zmdi zmdi-calendar-note"></i></a></li>
+                            <li role="presentation"><a href="#resourceTab" aria-controls="messages9" role="tab" data-toggle="tab"><i class="zmdi zmdi-pin-account"></i></a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane animated fadeInRight" id="clientTab">
+
+
+                            </div>
+
+                            <div role="tabpanel" class="tab-pane animated fadeInRight in active" id="locationsTab">
+
+
+
+
+
+<div class="radio form-align ">
+    <div>
+        <label>
+            <input name="LocationId" type="radio" checked="checked" value="13558">
+            <i class="input-helper"></i>
+            Big Bear Ice Arena LLC
+        </label>
+    </div>
+
+</div>
+
+                            </div>
+
+                            <div role="tabpanel" class="tab-pane animated fadeInRight" id="timeTab">
+                                
+                                <div id="onOffContainer">
+    
+
+
+
+<div class="checkbox weekday form-align ">
+    <div>
+        <label>
+            <input id="Sunday" name="Sunday" type="checkbox" checked="checked" value="true">
+            <i class="input-helper" day="Su"></i>
+        </label>
+    </div>
+
+</div>
+
+
+    
+
+
+
+<div class="checkbox weekday form-align ">
+    <div>
+        <label>
+            <input id="Monday" name="Monday" type="checkbox" checked="checked" value="true">
+            <i class="input-helper" day="M"></i>
+        </label>
+    </div>
+
+</div>
+
+
+    
+
+
+
+<div class="checkbox weekday form-align ">
+    <div>
+        <label>
+            <input id="Tuesday" name="Tuesday" type="checkbox" checked="checked" value="true">
+            <i class="input-helper" day="T"></i>
+        </label>
+    </div>
+
+</div>
+
+
+    
+
+
+
+<div class="checkbox weekday form-align ">
+    <div>
+        <label>
+            <input id="Wednesday" name="Wednesday" type="checkbox" checked="checked" value="true">
+            <i class="input-helper" day="W"></i>
+        </label>
+    </div>
+
+</div>
+
+
+    
+
+
+
+<div class="checkbox weekday form-align ">
+    <div>
+        <label>
+            <input id="Thursday" name="Thursday" type="checkbox" checked="checked" value="true">
+            <i class="input-helper" day="T"></i>
+        </label>
+    </div>
+
+</div>
+
+
+    
+
+
+
+<div class="checkbox weekday form-align ">
+    <div>
+        <label>
+            <input id="Friday" name="Friday" type="checkbox" checked="checked" value="true">
+            <i class="input-helper" day="F"></i>
+        </label>
+    </div>
+
+</div>
+
+
+    
+
+
+
+<div class="checkbox weekday form-align ">
+    <div>
+        <label>
+            <input id="Saturday" name="Saturday" type="checkbox" checked="checked" value="true">
+            <i class="input-helper" day="Sa"></i>
+        </label>
+    </div>
+
+</div>
+
+
+</div>
+
+
+                                
+
+                                <div class="input-group static m-t-20">
+                                    <span class="input-group-addon p-l-0"><i class="zmdi zmdi-time"></i></span>
+                                    <div class="fg-line">
+                                        <label class="fg-label" for="startTime">Start Time</label>
+                                        <input id="startTime" name="StartTime" type="text" class="form-control time-picker" placeholder="Start Time" data-dtp="dtp_ER4r0">
+                                    </div>
+                                </div>
+
+                                
+
+                                <div class="input-group static">
+                                    <span class="input-group-addon p-l-0"><i class="zmdi zmdi-time"></i></span>
+                                    <div class="fg-line">
+                                        <label class="fg-label" for="endTime">End Time</label>
+                                        <input id="endTime" name="EndTime" type="text" class="form-control time-picker" placeholder="End Time" data-dtp="dtp_OChhZ">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div role="tabpanel" class="tab-pane animated fadeInRight" id="sessionTab">
+                                
+
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[0].Selected" name="ReservationTypes[0].Selected" type="checkbox" checked="checked" value="true">
+            <i class="input-helper"></i>
+            All
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_0__Id" name="ReservationTypes[0].Id" type="hidden" value="-1">
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[1].Selected" name="ReservationTypes[1].Selected" type="checkbox">
+            <i class="input-helper"></i>
+            Drop - IN HOCKEY
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_1__Id" name="ReservationTypes[1].Id" type="hidden" value="203425">
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[2].Selected" name="ReservationTypes[2].Selected" type="checkbox">
+            <i class="input-helper"></i>
+            Drop-IN Goalie REGISTRATION
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_2__Id" name="ReservationTypes[2].Id" type="hidden" value="208508">
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[3].Selected" name="ReservationTypes[3].Selected" type="checkbox">
+            <i class="input-helper"></i>
+            Family Stick &amp; Puck
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_3__Id" name="ReservationTypes[3].Id" type="hidden" value="215333">
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[4].Selected" name="ReservationTypes[4].Selected" type="checkbox">
+            <i class="input-helper"></i>
+            Free Style
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_4__Id" name="ReservationTypes[4].Id" type="hidden" value="182117">
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[5].Selected" name="ReservationTypes[5].Selected" type="checkbox">
+            <i class="input-helper"></i>
+            Hockey Party Room
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_5__Id" name="ReservationTypes[5].Id" type="hidden" value="227573">
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[6].Selected" name="ReservationTypes[6].Selected" type="checkbox">
+            <i class="input-helper"></i>
+            ICE FOR SALE
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_6__Id" name="ReservationTypes[6].Id" type="hidden" value="217778">
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[7].Selected" name="ReservationTypes[7].Selected" type="checkbox">
+            <i class="input-helper"></i>
+            ICE FOR SALE 60 MIN - $495.00
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_7__Id" name="ReservationTypes[7].Id" type="hidden" value="215383">
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[8].Selected" name="ReservationTypes[8].Selected" type="checkbox">
+            <i class="input-helper"></i>
+            LTS
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_8__Id" name="ReservationTypes[8].Id" type="hidden" value="271335">
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[9].Selected" name="ReservationTypes[9].Selected" type="checkbox">
+            <i class="input-helper"></i>
+            LTS Free event
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_9__Id" name="ReservationTypes[9].Id" type="hidden" value="285107">
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[10].Selected" name="ReservationTypes[10].Selected" type="checkbox">
+            <i class="input-helper"></i>
+            LTS Summer - 24
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_10__Id" name="ReservationTypes[10].Id" type="hidden" value="218387">
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[11].Selected" name="ReservationTypes[11].Selected" type="checkbox">
+            <i class="input-helper"></i>
+            Open Stick &amp; Puck
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_11__Id" name="ReservationTypes[11].Id" type="hidden" value="215334">
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[12].Selected" name="ReservationTypes[12].Selected" type="checkbox">
+            <i class="input-helper"></i>
+            Party Room
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_12__Id" name="ReservationTypes[12].Id" type="hidden" value="190860">
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[13].Selected" name="ReservationTypes[13].Selected" type="checkbox">
+            <i class="input-helper"></i>
+            Public Skate
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_13__Id" name="ReservationTypes[13].Id" type="hidden" value="215332">
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="ReservationTypes[14].Selected" name="ReservationTypes[14].Selected" type="checkbox">
+            <i class="input-helper"></i>
+            Warrior Avalanche Private Ice
+        </label>
+    </div>
+    
+</div>
+<input id="ReservationTypes_14__Id" name="ReservationTypes[14].Id" type="hidden" value="224028">
+                            </div>
+                            <div role="tabpanel" class="tab-pane animated fadeInRight" id="resourceTab">
+                                
+
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="Resources[0].Selected" name="Resources[0].Selected" type="checkbox" checked="checked" value="true">
+            <i class="input-helper"></i>
+            All
+        </label>
+    </div>
+    
+</div>
+<input id="Resources_0__Id" name="Resources[0].Id" type="hidden" value="-1">
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="Resources[1].Selected" name="Resources[1].Selected" type="checkbox">
+            <i class="input-helper"></i>
+            North Rink
+        </label>
+    </div>
+    
+</div>
+<input id="Resources_1__Id" name="Resources[1].Id" type="hidden" value="268382">
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="Resources[2].Selected" name="Resources[2].Selected" type="checkbox">
+            <i class="input-helper"></i>
+            South Rink
+        </label>
+    </div>
+    
+</div>
+<input id="Resources_2__Id" name="Resources[2].Id" type="hidden" value="268383">
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="Resources[3].Selected" name="Resources[3].Selected" type="checkbox">
+            <i class="input-helper"></i>
+            Party Room
+        </label>
+    </div>
+    
+</div>
+<input id="Resources_3__Id" name="Resources[3].Id" type="hidden" value="309500">
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="Resources[4].Selected" name="Resources[4].Selected" type="checkbox">
+            <i class="input-helper"></i>
+            Outdoor Rink
+        </label>
+    </div>
+    
+</div>
+<input id="Resources_4__Id" name="Resources[4].Id" type="hidden" value="350941">
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="Resources[5].Selected" name="Resources[5].Selected" type="checkbox">
+            <i class="input-helper"></i>
+            AR-ROOM
+        </label>
+    </div>
+    
+</div>
+<input id="Resources_5__Id" name="Resources[5].Id" type="hidden" value="354858">
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="Resources[6].Selected" name="Resources[6].Selected" type="checkbox">
+            <i class="input-helper"></i>
+            AR-ROOM{2}
+        </label>
+    </div>
+    
+</div>
+<input id="Resources_6__Id" name="Resources[6].Id" type="hidden" value="396198">
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer ">
+                
+                <button id="btnFilter" class="btn btn-primary waves-effect" data-calendar="update">Filter</button>
+                <button class="btn btn-link waves-effect" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<input data-reservationdata="" id="reservationIdToOpen" name="reservationIdToOpen" type="hidden" value="">
+<input id="isReservationAlreadyBooked" name="isReservationAlreadyBooked" type="hidden" value="False">
+			</div>
+		</section>
+	</section>
+
+
+
+	
+
+<div class="modal fade" id="modal-login" role="dialog">
+    <div class="modal-dialog" style="max-width:510px">
+        <div class="login-content modal-content ">
+            
+            <div class="modal-header p-b-0">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">Login</h4>
+            </div>
+
+            <div id="alertContainer"></div>
+
+            <div class="card no-shadow ">
+
+                <div class="card-body card-padding p-t-0 " style="overflow: hidden;">
+                    <div id="formHolder" class="form-holder">
+                        <div id="formHolderView">
+
+<form action="/Login/_LoginForm" autocomplete="off" class="form-horizontal" id="LoginForm" method="post" role="form" novalidate="novalidate"><input name="__RequestVerificationToken" type="hidden" value="BohSQMv-NLYVtqgFKDgOc_sPMnUmDvTRCOIYP4O5U9p3oqRIg3bydMfPwJGAssR8v-E0TKB31CZae25IU4opZV8Ofuw1">	<input type="hidden" id="g-recaptcha-number" name="g-recaptcha-number">
+	<input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
+	<input type="hidden" name="LoginFromPublicView" id="LoginFromPublicView" value="false">
+	<input type="hidden" name="SmuFormId" id="SmuFormId" value="">
+    <input id="RecaptchaSiteKey" type="hidden">
+	<div class="form-group">
+		<div class="col-xs-11">
+			<div class="input-group fg-float">
+    <span class="input-group-addon"><i class="zmdi zmdi-account-box"></i></span>
+    <div class="fg-line">
+        <input class="form-control input-lg" data-val="true" data-val-length="Username can not be more than 50 characters." data-val-length-max="50" data-val-required="Username is Required." id="Username" name="Username" type="text" value="">
+        <label class="fg-label" for="Username">Username</label>
+    </div>
+    <span class="field-validation-valid" data-valmsg-for="Username" data-valmsg-replace="true"></span>
+</div>
+
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-xs-11">
+			<div class="input-group fg-float">
+    <span class="input-group-addon"><i class="zmdi zmdi-lock "></i></span>
+    <div class="fg-line">
+        <input class="form-control input-lg" data-val="true" data-val-required="Password is Required." id="Password" name="Password" type="password" value="">
+        <label class="fg-label" for="Password">Password</label>
+    </div>
+    <span class="field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span>
+</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-xs-6 ">
+			
+
+
+
+<div class="checkbox form-align ">
+    <div>
+        <label>
+            <input id="RememberMe" name="RememberMe" type="checkbox">
+            <i class="input-helper"></i>
+            Remember Me
+        </label>
+    </div>
+    
+</div>
+
+		</div>
+		<div class="col-xs-5 ">
+			<a class="btn btn-link waves-effect trouble">
+				Having trouble?
+			</a>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-xs-6">
+			<div class="form-align">
+				<button id="btnLogin" type="submit" class="btn btn-primary btn-icon-text no-shadow waves-effect">
+					<i class="zmdi zmdi-lock "></i> Log In
+				</button>
+			</div>
+		</div>
+			<div class="col-xs-5 text-right">
+				<button id="btnRegister" type="button" class="btn default btn-icon-text no-shadow waves-effect">
+					<i class="zmdi zmdi-account-add"></i> Create Account
+				</button>
+			</div>
+		
+		<input type="hidden" name="RedirectUrl" id="RedirectUrl">
+
+	</div>
+</form>                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row p-b-20">
+                <div class="text-center">
+                    <a href="https://www.ezfacility.com/privacy-policy" target="_blank">Privacy Policy</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="mMergeCart" tabindex="-1" role="dialog" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                
+                <h4 class="modal-title" id="myModalLabel">Items In Cart</h4>
+            </div>
+            <div class="modal-body">
+                These are in your cart from a previous session would you like to add them?
+                
+                <div class="listview">
+                    <div class="lv-body">
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnAddExistingItems" class="btn btn-primary waves-effect " data-row="" data-action="">Yes</button>
+                <button id="btnClearExistingItems" class="btn btn-link waves-effect " data-row="">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+	<!-- Page Loader -->
+	<div class="page-loader" style="display: none;">
+		<div class="preloader pls-blue">
+			<svg class="pl-circular" viewBox="25 25 50 50">
+				<circle class="plc-path" cx="50" cy="50" r="20"></circle>
+			</svg>
+
+			<p>Please wait...</p>
+		</div>
+	</div>
+
+	
+	<div class="modal fade" id="authenthicationModal">
+		<div class="modal-dialog modal-lg card-stream">
+			<div class="modal-content">
+				<div class="modal-body text-center">
+					<div id="divAuthContainer">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<footer id="footer">
+    <div class="container toggled">
+        <div class="row body">
+            <div class="col-sm-7">
+                <ul class="contact">
+                        <li><i class="zmdi zmdi-phone"></i> 303-343-1111</li>
+                                            <li><i class="zmdi zmdi-email"></i> vikontessa65@yahoo.com</li>
+                                            <li><i class="zmdi zmdi-pin"></i>8580 E Lowry Blvd, Devnver, CO 80230</li>
+                </ul>
+            </div>
+            <div class="col-sm-5">
+                <ul class="company">
+                    <li>Powered by EZFacility ®</li>
+                    <li>Copyright © 2025 EZFacility Inc.</li>
+                    <li>Service Code: -1-013558/v: 1.0.1</li>
+                    <li><a href="https://www.ezfacility.com/privacy-policy" target="_blank">Privacy Policy</a></li>
+                </ul>
+            </div>
+           
+        </div>
+
+    </div>
+</footer>
+
+
+	
+<div class="modal fade" id="mConfirmation" tabindex="-1" role="dialog" aria-labelledby="mSetSessions">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="mConfirmation-Title">Are you sure you want to cancel?</h4>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary waves-effect confirmation-confirmed" data-row="" data-action="">Yes</button>
+                <button class="btn btn-link waves-effect confirmation-cancelled" data-row="">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+	<!--jQuery-->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	
+	
+	<script>window.jQuery || document.write('<script src="~/Assets/vendors/jquery/dist/jquery.min.js">')</script>
+	<!--jQueryval-->
+	<script src="/bundles/jqueryval?v=QCZfShIrtURhmjizFZvGPfVjGxBuv7I4aEE9el49HmY1"></script>
+
+	<!--Vendors-->
+	<script src="/bundles/vendors?v=LsCyjFrhyTX7GF0GPuSFkMjHBs4JpCllyXKhIxyUsrw1"></script>
+
+	<!--Local-->
+	<script src="/bundles/selfServiceJS?v=XroBdKZVZEqhTp5_DQBGXH5oXJ9272ZR3GR1Yve0G7w1"></script><div class="dtp hidden" id="dtp_ER4r0" style=""><div class="dtp-content" style="margin-left: 0px; top: 0px;"><div class="dtp-date-view"><header class="dtp-header"><div class="dtp-actual-day">Lundi</div><div class="dtp-close"><a href="javascript:void(0);"><i class="zmdi zmdi-close zmdi-hc-fw"></i><!--</div--></a></div></header><div class="dtp-date hidden"><div><div class="left center p10"><a href="javascript:void(0);" class="dtp-select-month-before"><i class="zmdi zmdi-chevron-left zmdi-hc-fw"></i></a></div><div class="dtp-actual-month p80">MAR</div><div class="right center p10"><a href="javascript:void(0);" class="dtp-select-month-after"><i class="zmdi zmdi-chevron-right zmdi-hc-fw"></i></a></div><div class="clearfix"></div></div><div class="dtp-actual-num">13</div><div><div class="left center p10"><a href="javascript:void(0);" class="dtp-select-year-before"><i class="zmdi zmdi-chevron-left zmdi-hc-fw"></i></a></div><div class="dtp-actual-year p80">2014</div><div class="right center p10"><a href="javascript:void(0);" class="dtp-select-year-after"><i class="zmdi zmdi-chevron-right zmdi-hc-fw"></i></a></div><div class="clearfix"></div></div></div><div class="dtp-time hidden"><div class="dtp-actual-maxtime">23:55</div></div><div class="dtp-picker"><div class="dtp-picker-calendar"></div><div class="dtp-picker-datetime hidden"><div class="dtp-actual-meridien"><div class="left p20"><a class="dtp-meridien-am" href="javascript:void(0);">AM</a></div><div class="dtp-actual-time p60"></div><div class="right p20"><a class="dtp-meridien-pm" href="javascript:void(0);">PM</a></div><div class="clearfix"></div></div><div class="dtp-picker-clock"></div></div></div></div><div class="dtp-buttons"><button class="dtp-btn-now btn btn-flat hidden">Now</button><button class="dtp-btn-clear btn btn-flat hidden">Clear</button><button class="dtp-btn-cancel btn btn-link waves-effect">Cancel</button><button class="dtp-btn-ok btn btn-link waves-effect primary">OK</button><div class="clearfix"></div></div></div></div><div class="dtp hidden" id="dtp_OChhZ" style=""><div class="dtp-content" style="margin-left: 0px; top: 0px;"><div class="dtp-date-view"><header class="dtp-header"><div class="dtp-actual-day">Lundi</div><div class="dtp-close"><a href="javascript:void(0);"><i class="zmdi zmdi-close zmdi-hc-fw"></i><!--</div--></a></div></header><div class="dtp-date hidden"><div><div class="left center p10"><a href="javascript:void(0);" class="dtp-select-month-before"><i class="zmdi zmdi-chevron-left zmdi-hc-fw"></i></a></div><div class="dtp-actual-month p80">MAR</div><div class="right center p10"><a href="javascript:void(0);" class="dtp-select-month-after"><i class="zmdi zmdi-chevron-right zmdi-hc-fw"></i></a></div><div class="clearfix"></div></div><div class="dtp-actual-num">13</div><div><div class="left center p10"><a href="javascript:void(0);" class="dtp-select-year-before"><i class="zmdi zmdi-chevron-left zmdi-hc-fw"></i></a></div><div class="dtp-actual-year p80">2014</div><div class="right center p10"><a href="javascript:void(0);" class="dtp-select-year-after"><i class="zmdi zmdi-chevron-right zmdi-hc-fw"></i></a></div><div class="clearfix"></div></div></div><div class="dtp-time hidden"><div class="dtp-actual-maxtime">23:55</div></div><div class="dtp-picker"><div class="dtp-picker-calendar"></div><div class="dtp-picker-datetime hidden"><div class="dtp-actual-meridien"><div class="left p20"><a class="dtp-meridien-am" href="javascript:void(0);">AM</a></div><div class="dtp-actual-time p60"></div><div class="right p20"><a class="dtp-meridien-pm" href="javascript:void(0);">PM</a></div><div class="clearfix"></div></div><div class="dtp-picker-clock"></div></div></div></div><div class="dtp-buttons"><button class="dtp-btn-now btn btn-flat hidden">Now</button><button class="dtp-btn-clear btn btn-flat hidden">Clear</button><button class="dtp-btn-cancel btn btn-link waves-effect">Cancel</button><button class="dtp-btn-ok btn btn-link waves-effect primary">OK</button><div class="clearfix"></div></div></div></div>
+
+
+	
+    <script src="/Assets/vendors/fullcalendar/dist/fullcalendar.js"></script>
+    <script src="/Assets/vendors/fullcalendar-scheduler/dist/scheduler.js"></script>
+    <script src="/bundles/sessionJS?v=kwiWwrfZTNYXpbEGSuXc1QxlfPQsKFNUDtpsWsdotoA1"></script>
+
+
+
+	
+
+
+
+<div><div class="grecaptcha-badge" data-style="bottomright" style="width: 256px; height: 60px; display: block; transition: right 0.3s; position: fixed; bottom: 14px; right: -186px; box-shadow: gray 0px 0px 5px; border-radius: 2px; overflow: hidden;"><div class="grecaptcha-logo"><iframe title="reCAPTCHA" width="256" height="60" role="presentation" name="a-yqkf9wl5lg70" frameborder="0" scrolling="no" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox allow-storage-access-by-user-activation" src="https://www.google.com/recaptcha/api2/anchor?ar=1&amp;k=6Ld3WtcqAAAAAMgqh-UF16VeP-Cg6pm9c1mK084A&amp;co=aHR0cHM6Ly9iaWdiZWFyaWNlYXJlbmEuZXpmYWNpbGl0eS5jb206NDQz&amp;hl=en&amp;v=jt8Oh2-Ue1u7nEbJQUIdocyd&amp;size=invisible&amp;cb=eausdyya5det"></iframe></div><div class="grecaptcha-error"></div><textarea id="g-recaptcha-response-100000" name="g-recaptcha-response" class="g-recaptcha-response" style="width: 250px; height: 40px; border: 1px solid rgb(193, 193, 193); margin: 10px 25px; padding: 0px; resize: none; display: none;"></textarea></div><iframe style="display: none;"></iframe></div></body></html>
