@@ -907,20 +907,20 @@
     "isFeatured": false
   },
   {
-    "id": "fsc-avalanche-2458442",
-    "rinkId": "fsc-avalanche",
-    "title": "Adult Drop In",
-    "startTime": "2025-06-02T12:00:00.000Z",
-    "endTime": "2025-06-02T13:10:00.000Z",
-    "category": "Drop-In Hockey",
-    "isFeatured": false
-  },
-  {
     "id": "sssc-rink3-3020250",
     "rinkId": "sssc-rink3",
     "title": "Take A Shot",
     "startTime": "2025-06-02T12:00:00.000Z",
     "endTime": "2025-06-02T13:00:00.000Z",
+    "category": "Drop-In Hockey",
+    "isFeatured": false
+  },
+  {
+    "id": "fsc-avalanche-2458442",
+    "rinkId": "fsc-avalanche",
+    "title": "Adult Drop In",
+    "startTime": "2025-06-02T12:00:00.000Z",
+    "endTime": "2025-06-02T13:10:00.000Z",
     "category": "Drop-In Hockey",
     "isFeatured": false
   },
@@ -1007,8 +1007,8 @@
     "isFeatured": false
   },
   {
-    "id": "fsc-avalanche-3265749",
-    "rinkId": "fsc-avalanche",
+    "id": "sssc-rink1-3342313",
+    "rinkId": "sssc-rink1",
     "title": "Take A Shot",
     "startTime": "2025-06-04T13:20:00.000Z",
     "endTime": "2025-06-04T14:20:00.000Z",
@@ -1016,8 +1016,8 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink1-3342313",
-    "rinkId": "sssc-rink1",
+    "id": "fsc-avalanche-3265749",
+    "rinkId": "fsc-avalanche",
     "title": "Take A Shot",
     "startTime": "2025-06-04T13:20:00.000Z",
     "endTime": "2025-06-04T14:20:00.000Z",
@@ -1097,20 +1097,20 @@
     "isFeatured": false
   },
   {
-    "id": "fsc-avalanche-2458443",
-    "rinkId": "fsc-avalanche",
-    "title": "Adult Drop In",
-    "startTime": "2025-06-06T12:00:00.000Z",
-    "endTime": "2025-06-06T13:10:00.000Z",
-    "category": "Drop-In Hockey",
-    "isFeatured": false
-  },
-  {
     "id": "sssc-rink3-3020279",
     "rinkId": "sssc-rink3",
     "title": "Take A Shot",
     "startTime": "2025-06-06T12:00:00.000Z",
     "endTime": "2025-06-06T13:00:00.000Z",
+    "category": "Drop-In Hockey",
+    "isFeatured": false
+  },
+  {
+    "id": "fsc-avalanche-2458443",
+    "rinkId": "fsc-avalanche",
+    "title": "Adult Drop In",
+    "startTime": "2025-06-06T12:00:00.000Z",
+    "endTime": "2025-06-06T13:10:00.000Z",
     "category": "Drop-In Hockey",
     "isFeatured": false
   },
@@ -1457,8 +1457,8 @@
     "isFeatured": false
   },
   {
-    "id": "fsc-fixit-3252906",
-    "rinkId": "fsc-fixit",
+    "id": "sssc-rink1-2460144",
+    "rinkId": "sssc-rink1",
     "title": "Take A Shot",
     "startTime": "2025-06-13T15:20:00.000Z",
     "endTime": "2025-06-13T16:20:00.000Z",
@@ -1466,8 +1466,8 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink1-2460144",
-    "rinkId": "sssc-rink1",
+    "id": "fsc-fixit-3252906",
+    "rinkId": "fsc-fixit",
     "title": "Take A Shot",
     "startTime": "2025-06-13T15:20:00.000Z",
     "endTime": "2025-06-13T16:20:00.000Z",
@@ -2012,8 +2012,8 @@
     "isFeatured": false
   },
   {
-    "id": "fsc-avalanche-3319914",
-    "rinkId": "fsc-avalanche",
+    "id": "sssc-rink3-3020547",
+    "rinkId": "sssc-rink3",
     "title": "Take A Shot",
     "startTime": "2025-06-27T13:20:00.000Z",
     "endTime": "2025-06-27T14:20:00.000Z",
@@ -2021,8 +2021,8 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink3-3020547",
-    "rinkId": "sssc-rink3",
+    "id": "fsc-avalanche-3319914",
+    "rinkId": "fsc-avalanche",
     "title": "Take A Shot",
     "startTime": "2025-06-27T13:20:00.000Z",
     "endTime": "2025-06-27T14:20:00.000Z",
@@ -2725,16 +2725,6 @@
     "isFeatured": false
   },
   {
-    "id": "fsc-fixit-3025002",
-    "rinkId": "fsc-fixit",
-    "title": "Take A Shot",
-    "startTime": "2025-07-07T00:10:00.000Z",
-    "endTime": "2025-07-07T01:20:00.000Z",
-    "category": "Drop-In Hockey",
-    "description": "NO Staff lessons",
-    "isFeatured": false
-  },
-  {
     "id": "sssc-rink2-3021489",
     "rinkId": "sssc-rink2",
     "title": "8U Youth Drop In",
@@ -2742,6 +2732,16 @@
     "endTime": "2025-07-07T01:20:00.000Z",
     "category": "Drop-In Hockey",
     "description": "8u - Hardboard Set-Up",
+    "isFeatured": false
+  },
+  {
+    "id": "fsc-fixit-3025002",
+    "rinkId": "fsc-fixit",
+    "title": "Take A Shot",
+    "startTime": "2025-07-07T00:10:00.000Z",
+    "endTime": "2025-07-07T01:20:00.000Z",
+    "category": "Drop-In Hockey",
+    "description": "NO Staff lessons",
     "isFeatured": false
   },
   {
@@ -2792,20 +2792,20 @@
     "isFeatured": false
   },
   {
-    "id": "fsc-avalanche-2458453",
-    "rinkId": "fsc-avalanche",
-    "title": "Adult Drop In",
-    "startTime": "2025-07-11T12:00:00.000Z",
-    "endTime": "2025-07-11T13:10:00.000Z",
-    "category": "Drop-In Hockey",
-    "isFeatured": false
-  },
-  {
     "id": "sssc-rink1-2460108",
     "rinkId": "sssc-rink1",
     "title": "Take A Shot",
     "startTime": "2025-07-11T12:00:00.000Z",
     "endTime": "2025-07-11T13:00:00.000Z",
+    "category": "Drop-In Hockey",
+    "isFeatured": false
+  },
+  {
+    "id": "fsc-avalanche-2458453",
+    "rinkId": "fsc-avalanche",
+    "title": "Adult Drop In",
+    "startTime": "2025-07-11T12:00:00.000Z",
+    "endTime": "2025-07-11T13:10:00.000Z",
     "category": "Drop-In Hockey",
     "isFeatured": false
   },
@@ -2934,20 +2934,20 @@
     "isFeatured": false
   },
   {
-    "id": "fsc-fixit-2458454",
-    "rinkId": "fsc-fixit",
-    "title": "Adult Drop In",
-    "startTime": "2025-07-14T12:00:00.000Z",
-    "endTime": "2025-07-14T13:10:00.000Z",
-    "category": "Drop-In Hockey",
-    "isFeatured": false
-  },
-  {
     "id": "sssc-rink1-2663842",
     "rinkId": "sssc-rink1",
     "title": "Take A Shot",
     "startTime": "2025-07-14T12:00:00.000Z",
     "endTime": "2025-07-14T13:00:00.000Z",
+    "category": "Drop-In Hockey",
+    "isFeatured": false
+  },
+  {
+    "id": "fsc-fixit-2458454",
+    "rinkId": "fsc-fixit",
+    "title": "Adult Drop In",
+    "startTime": "2025-07-14T12:00:00.000Z",
+    "endTime": "2025-07-14T13:10:00.000Z",
     "category": "Drop-In Hockey",
     "isFeatured": false
   },

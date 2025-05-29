@@ -58,7 +58,23 @@ jobs:
         if git diff --staged --quiet; then
           echo "No changes to commit"
         else
-          git commit -m "🏫 Update DU Ritchie schedule data $(date -u '+%Y-%m-%d %H:%M UTC')"
+          # Stash the staged changes
+          git stash push -m "temp stash for sync" --include-untracked
+          
+          # Pull latest changes
+          git pull --ff-only || {
+            echo "Cannot fast-forward, trying rebase approach"
+            git pull --rebase
+          }
+          
+          # Re-apply our changes
+          git stash pop
+          
+          # Re-stage the files (stash pop unstages them)
+          git add public/data/
+          
+          # Commit and push
+          git commit -m "🐻 Update Big Bear schedule data $(date -u '+%Y-%m-%d %H:%M UTC')"
           git push
         fi
 
