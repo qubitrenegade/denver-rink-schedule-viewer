@@ -2,7 +2,7 @@
   "facilityId": "big-bear",
   "facilityName": "Big Bear Ice Arena",
   "displayName": "Big Bear Ice Arena (Denver)",
-  "lastAttempt": "2025-05-30T05:47:20.341Z",
+  "lastAttempt": "2025-05-30T05:48:28.419Z",
   "status": "success",
   "eventCount": 449,
   "sourceUrl": "https://bigbearicearena.ezfacility.com/Sessions",
@@ -12,5 +12,5 @@
       "rinkName": "Main Rink"
     }
   ],
-  "lastSuccessfulScrape": "2025-05-30T05:47:20.341Z"
+  "lastSuccessfulScrape": "2025-05-30T05:48:28.419Z"
 }
