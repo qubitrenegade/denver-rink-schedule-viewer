@@ -1,8 +1,6 @@
 import { RawIceEventData } from '../../src/types.js';
 import { BaseScraper } from './base-scraper.js';
 import * as cheerio from 'cheerio';
-import fs from 'fs';
-import path from 'path';
 
 export class IceRanchScraper extends BaseScraper {
   get rinkId(): string { return 'ice-ranch'; }
@@ -47,15 +45,15 @@ export class IceRanchScraper extends BaseScraper {
       // Use cheerio for robust HTML parsing
       const $ = cheerio.load(html);
       const events: RawIceEventData[] = [];
-      let memorialDayFound = false;
-      let eventsFound = 0;
+      let closureFound = false; // tracks any closure, not just Memorial Day
+      let eventCount = 0;
 
-      // Find all calendar day cells
-      $('#monthViewCalendar td.day, #monthViewCalendar td.day.weekendDay').each((cellIndex: number, cell: cheerio.Element) => {
+      // --- Main calendar day cell loop ---
+      $('#monthViewCalendar td.day, #monthViewCalendar td.day.weekendDay').each((cellIndex, cell) => {
         const $cell = $(cell);
+        // --- Extract date from cell ---
         const dateLink = $cell.find('a.dateLink');
         if (dateLink.length === 0) return;
-        // Extract date from link href
         const dateHref = dateLink.attr('href');
         let eventDate: Date | undefined = undefined;
         if (dateHref) {
@@ -67,10 +65,10 @@ export class IceRanchScraper extends BaseScraper {
         }
         if (!eventDate) return;
 
-        // Check for Memorial Day or Closed events
+        // --- Add closure event if present ---
         const cellText = $cell.text();
         if (cellText.includes('Memorial Day') || cellText.includes('Closed')) {
-          memorialDayFound = true;
+          closureFound = true;
           events.push({
             id: `ice-ranch-memorial-${cellIndex}`,
             rinkId: this.rinkId,
@@ -81,12 +79,12 @@ export class IceRanchScraper extends BaseScraper {
             description: `Holiday closure`,
             eventUrl: undefined
           });
-          eventsFound++;
+          eventCount++;
           return;
         }
 
-        // For each event in the cell
-        $cell.find('div.vevent.scheduled').each((eventIdx: number, vevent: cheerio.Element) => {
+        // --- Extract all real events in the cell ---
+        $cell.find('div.vevent.scheduled').each((eventIdx, vevent) => {
           const $vevent = $(vevent);
           // Title
           let title = $vevent.find('h5.summary a').text().trim();
@@ -132,15 +130,15 @@ export class IceRanchScraper extends BaseScraper {
               description: `Scraped from Ice Ranch calendar`,
               eventUrl: eventUrl
             });
-            eventsFound++;
+            eventCount++;
           }
         });
       });
 
-      console.log(`🎯 Memorial Day found: ${memorialDayFound}`);
-      console.log(`📅 Total events found: ${eventsFound}`);
+      // --- Summary output ---
+      console.log(`🎯 Closure found: ${closureFound}`);
+      console.log(`📅 Total events found: ${eventCount}`);
       events.sort((a, b) => a.startTime.getTime() - b.startTime.getTime());
-      fs.writeFileSync(path.join(__dirname, '../../public/data/ice-ranch.json'), JSON.stringify(events, null, 2));
       return events;
     } catch (error: any) {
       console.error('❌ Ice Ranch scraping failed:', error.message);
