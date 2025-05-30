@@ -1,0 +1,20 @@
+{
+  "facilityId": "ssprd-249",
+  "facilityName": "Family Sports Center",
+  "displayName": "Family Sports Center (Centennial)",
+  "lastAttempt": "2025-05-30T02:49:43.128Z",
+  "status": "success",
+  "eventCount": 1380,
+  "sourceUrl": "https://ssprd.finnlyconnect.com/schedule/249",
+  "rinks": [
+    {
+      "rinkId": "fsc-avalanche",
+      "rinkName": "Avalanche Rink"
+    },
+    {
+      "rinkId": "fsc-fixit",
+      "rinkName": "FixIt 24/7 Rink"
+    }
+  ],
+  "lastSuccessfulScrape": "2025-05-30T02:49:43.128Z"
+}

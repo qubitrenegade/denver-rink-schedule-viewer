@@ -77,3 +77,20 @@ export interface RawIceEventData {
   isFeatured?: boolean;
   eventUrl?: string; // Optional URL for the specific event, often from the source
 }
+
+// Phase 3: Individual facility metadata structure
+export interface FacilityMetadata {
+  facilityId: string;
+  facilityName: string;
+  displayName: string;
+  lastSuccessfulScrape?: string;
+  lastAttempt: string;
+  status: 'success' | 'error';
+  eventCount: number;
+  errorMessage?: string;
+  sourceUrl: string;
+  rinks: Array<{
+    rinkId: string;
+    rinkName: string;
+  }>;
+}
