@@ -1,71 +1,65 @@
+// Type definitions for rink schedule viewer app
+
 export interface RinkInfo {
   id: string;
   name: string;
-  sourceUrl: string; // The URL provided by the user for the calendar
-  memberRinkIds?: string[]; // For group rinks, lists IDs of member rinks
+  sourceUrl: string;
+  memberRinkIds?: string[];
 }
 
-export type EventCategory = 
-  | 'Public Skate' 
-  | 'Stick & Puck' 
-  | 'Hockey League' 
-  | 'Learn to Skate' 
-  | 'Figure Skating' 
+export type EventCategory =
+  | 'Public Skate'
+  | 'Stick & Puck'
+  | 'Hockey League'
+  | 'Learn to Skate'
+  | 'Figure Skating'
   | 'Hockey Practice'
   | 'Drop-In Hockey'
   | 'Special Event'
   | 'Other';
 
-// This interface now uses string for dates to ensure serializability in React state
+// Event as stored in app state (dates as ISO strings)
 export interface IceEvent {
   id: string;
   rinkId: string;
   title: string;
-  startTime: string; // Changed from Date to string (ISO format)
-  endTime: string;   // Changed from Date to string (ISO format)
+  startTime: string;
+  endTime: string;
   description?: string;
   category: EventCategory;
-  isFeatured?: boolean; // For potential special highlighting
-  eventUrl?: string; // Optional URL for the specific event
+  isFeatured?: boolean;
+  eventUrl?: string;
 }
 
-// Used for displaying events, potentially with added info like rinkName
+// Event as displayed (may include rinkName)
 export interface DisplayableIceEvent extends IceEvent {
-  rinkName?: string; 
+  rinkName?: string;
 }
 
 export type FilterMode = 'include' | 'exclude';
-
-// Date filtering options
 export type DateFilterMode = 'next-days' | 'specific-day' | 'date-range';
-
-// Time filtering options  
 export type TimeFilterMode = 'all-times' | 'after-time' | 'before-time' | 'time-range';
 
 export interface FilterSettings {
-  activeCategories: EventCategory[]; 
+  activeCategories: EventCategory[];
   filterMode: FilterMode;
-  activeRinkIds?: string[]; // For filtering rinks in 'All Rinks' view
-  rinkFilterMode?: FilterMode; // Mode for rink filtering ('include' or 'exclude')
-  
-  // Date filtering
+  activeRinkIds?: string[];
+  rinkFilterMode?: FilterMode;
   dateFilterMode: DateFilterMode;
-  numberOfDays?: number; // For 'next-days' mode
-  selectedDate?: string; // For 'specific-day' mode (YYYY-MM-DD format)
-  dateRangeStart?: string; // For 'date-range' mode (YYYY-MM-DD format)
-  dateRangeEnd?: string; // For 'date-range' mode (YYYY-MM-DD format)
-  
-  // Time filtering
+  numberOfDays?: number;
+  selectedDate?: string;
+  dateRangeStart?: string;
+  dateRangeEnd?: string;
   timeFilterMode: TimeFilterMode;
-  afterTime?: string; // For 'after-time' mode (HH:MM format)
-  beforeTime?: string; // For 'before-time' mode (HH:MM format)
-  timeRangeStart?: string; // For 'time-range' mode (HH:MM format)
-  timeRangeEnd?: string; // For 'time-range' mode (HH:MM format)
+  afterTime?: string;
+  beforeTime?: string;
+  timeRangeStart?: string;
+  timeRangeEnd?: string;
 }
 
-export type UrlViewType = string; // Rink ID or 'all-rinks'
+export type UrlViewType = string;
 
-// Interface for the raw event data coming from MOCK_EVENTS_DATA or scrapers, which uses Date objects
+// Raw event data from scrapers (dates as Date objects)
 export interface RawIceEventData {
   id: string;
   rinkId: string;
@@ -75,5 +69,7 @@ export interface RawIceEventData {
   description?: string;
   category: EventCategory;
   isFeatured?: boolean;
-  eventUrl?: string; // Optional URL for the specific event, often from the source
+  eventUrl?: string;
 }
+
+// Only necessary types/interfaces are exported. Comments clarified.

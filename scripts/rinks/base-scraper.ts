@@ -1,14 +1,15 @@
 import { RawIceEventData, EventCategory } from '../../src/types.js';
 import fetch from 'node-fetch';
 
+// Abstract base class for rink scrapers with shared utilities
 export abstract class BaseScraper {
   abstract get rinkId(): string;
   abstract get rinkName(): string;
   abstract scrape(): Promise<RawIceEventData[]>;
 
+  // Fetch HTML with fallback and logging
   protected async fetchWithFallback(url: string): Promise<string> {
-    console.log(`🔄 [${this.rinkName}] Fetching directly: ${url}`);
-    
+    console.log(`🔄 [${this.rinkName}] Fetching: ${url}`);
     try {
       const fetchStart = Date.now();
       const response = await fetch(url, {
@@ -22,82 +23,65 @@ export abstract class BaseScraper {
           'Upgrade-Insecure-Requests': '1',
         }
       });
-      
       const fetchTime = Date.now() - fetchStart;
       console.log(`   📡 Response: ${response.status} after ${fetchTime}ms`);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-      
+      if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       const html = await response.text();
-      console.log(`   ✅ SUCCESS! Got ${html.length} chars of content`);
+      console.log(`   ✅ Got ${html.length} chars of content`);
       return html;
-      
     } catch (error) {
-      console.error(`   ❌ Failed to fetch ${url}:`, error.message);
+      const message = error instanceof Error ? error.message : String(error);
+      console.error(`   ❌ Failed to fetch ${url}:`, message);
       throw error;
     }
   }
 
+  // Parse time string (e.g. '7:30pm') into a Date object
   protected parseTimeWithTimezone(timeStr: string, date: Date): Date {
     const match = timeStr.match(/(\d{1,2}):(\d{2})\s*([ap]m)\s*(\w+)?/i);
     if (!match) return date;
-    
     let hours = parseInt(match[1]);
     const minutes = parseInt(match[2]);
     const ampm = match[3].toLowerCase();
-    
     if (ampm === 'pm' && hours !== 12) hours += 12;
     if (ampm === 'am' && hours === 12) hours = 0;
-    
     const result = new Date(date);
     result.setHours(hours, minutes, 0, 0);
-    
     return result;
   }
 
+  // Parse time string (e.g. '7:30pm') into a Date object, fallback for missing am/pm
   protected parseTimeString(timeStr: string, baseDate: Date): Date {
     const timeMatch = timeStr.match(/(\d{1,2}):(\d{2})\s*([ap]m)?/i);
     if (!timeMatch) return baseDate;
-    
     let hours = parseInt(timeMatch[1]);
     const minutes = parseInt(timeMatch[2]);
     const ampm = timeMatch[3]?.toLowerCase();
-    
     if (!ampm) {
       if (hours < 7) hours += 12;
     } else {
       if (ampm === 'pm' && hours !== 12) hours += 12;
       if (ampm === 'am' && hours === 12) hours = 0;
     }
-    
     const result = new Date(baseDate);
     result.setHours(hours, minutes, 0, 0);
-    
-    if (result < new Date()) {
-      result.setDate(result.getDate() + 1);
-    }
-    
+    if (result < new Date()) result.setDate(result.getDate() + 1);
     return result;
   }
 
+  // Categorize event title to EventCategory
   protected categorizeEvent(title: string): EventCategory {
     const titleLower = title.toLowerCase();
-    
-    if (titleLower.includes('closed') || titleLower.includes('holiday') || titleLower.includes('memorial')) {
-      return 'Special Event';
-    }
+    if (titleLower.includes('closed') || titleLower.includes('holiday') || titleLower.includes('memorial')) return 'Special Event';
     if (titleLower.includes('public skate') || titleLower.includes('open skate')) return 'Public Skate';
     if (titleLower.includes('stick') && titleLower.includes('puck')) return 'Stick & Puck';
-    if (titleLower.includes('take a shot')) return 'Stick & Puck';  // Fixed: was Drop-In Hockey
+    if (titleLower.includes('take a shot')) return 'Stick & Puck';
     if (titleLower.includes('drop') || titleLower.includes('pickup')) return 'Drop-In Hockey';
     if (titleLower.includes('learn') || titleLower.includes('lesson') || titleLower.includes('lts')) return 'Learn to Skate';
     if (titleLower.includes('freestyle') || titleLower.includes('figure')) return 'Figure Skating';
     if (titleLower.includes('practice') || titleLower.includes('training')) return 'Hockey Practice';
     if (titleLower.includes('league') || titleLower.includes('game')) return 'Hockey League';
     if (titleLower.includes('broomball') || titleLower.includes('special')) return 'Special Event';
-    
     return 'Other';
   }
 

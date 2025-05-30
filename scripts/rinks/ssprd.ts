@@ -1,13 +1,14 @@
-import { RawIceEventData, EventCategory } from '../../src/types.js';
+// SSPRDScraper: fetches and parses events from South Suburban rinks
+import { RawIceEventData } from '../../src/types.js';
 import { BaseScraper } from './base-scraper.js';
 import { JSDOM } from 'jsdom';
 
 const facilityIdToRinkIdMap: Record<number, string> = {
-  1904: 'fsc-avalanche',        // FSC Avalanche Rink
-  1905: 'fsc-fixit',            // FSC Fix-it 24/7 Rink
-  1906: 'sssc-rink1',           // SSSC Rink 1
-  1907: 'sssc-rink2',           // SSSC Rink 2
-  1908: 'sssc-rink3',           // SSSC Rink 3
+  1904: 'fsc-avalanche',
+  1905: 'fsc-fixit',
+  1906: 'sssc-rink1',
+  1907: 'sssc-rink2',
+  1908: 'sssc-rink3',
 };
 
 export class SSPRDScraper extends BaseScraper {
@@ -15,39 +16,22 @@ export class SSPRDScraper extends BaseScraper {
     super();
   }
 
-  get rinkId(): string { 
-    return `ssprd-schedule-${this.schedulePageId}`;
-  }
-  
-  get rinkName(): string { 
-    return `SSPRD Schedule Page ${this.schedulePageId}`;
-  }
+  get rinkId() { return `ssprd-schedule-${this.schedulePageId}`; }
+  get rinkName() { return `SSPRD Schedule Page ${this.schedulePageId}`; }
 
   // Parse SSPRD datetime string and convert from Mountain Time to UTC
   private parseSSPRDDateTime(dateTimeStr: string): Date {
-    // SSPRD API returns datetime strings that might be in Mountain Time
-    // We need to handle various possible formats and convert to UTC
-    
     const date = new Date(dateTimeStr);
-    
-    // Check if the date parsed correctly
-    if (isNaN(date.getTime())) {
-      console.warn(`   ⚠️ Invalid date format: ${dateTimeStr}`);
-      return new Date(); // Return current date as fallback
-    }
-    
-    // If the dateTimeStr doesn't include timezone info, JavaScript treats it as local time
+    // If the date parsed correctly
+    if (isNaN(date.getTime())) return new Date(); // Return current date as fallback
+
+    // Check if the dateTimeStr doesn't include timezone info, JavaScript treats it as local time
     // But the SSPRD servers are in Mountain Time, so we need to adjust
-    
-    // Check if the date string includes timezone info
     const hasTimezone = /[+-]\d{2}:?\d{2}|Z|UTC|GMT|[A-Z]{3,4}T?$/i.test(dateTimeStr);
-    
     if (!hasTimezone) {
       // No timezone info, assume it's Mountain Time and convert to UTC
       // Mountain Daylight Time (MDT) is UTC-6, Mountain Standard Time (MST) is UTC-7
       // For current events, assume MDT (UTC-6)
-      
-      // Get the time components as if they were in Mountain Time
       const year = date.getFullYear();
       const month = date.getMonth();
       const day = date.getDate();
@@ -55,18 +39,11 @@ export class SSPRDScraper extends BaseScraper {
       const minutes = date.getMinutes();
       const seconds = date.getSeconds();
       const milliseconds = date.getMilliseconds();
-      
-      // Create a UTC date with these components, then add 6 hours
       const utcDate = new Date(Date.UTC(year, month, day, hours, minutes, seconds, milliseconds));
       utcDate.setTime(utcDate.getTime() + (6 * 60 * 60 * 1000)); // Add 6 hours for MDT->UTC
-      
-      console.log(`   🕐 SSPRD timezone conversion: ${dateTimeStr} -> ${utcDate.toISOString()}`);
-      console.log(`   📍 Mountain Time check: ${utcDate.toLocaleString('en-US', {timeZone: 'America/Denver'})}`);
-      
       return utcDate;
     } else {
       // Timezone info included, use as-is
-      console.log(`   ℹ️ SSPRD date with timezone: ${dateTimeStr} -> ${date.toISOString()}`);
       return date;
     }
   }

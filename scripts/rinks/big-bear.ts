@@ -1,13 +1,14 @@
+// Big Bear scraper: fetches and parses events from Big Bear Ice Arena
 import { RawIceEventData, EventCategory } from '../../src/types.js';
 import { BaseScraper } from './base-scraper.js';
 import fetch from 'node-fetch';
 
 export class BigBearScraper extends BaseScraper {
-  get rinkId(): string { return 'big-bear'; }
-  get rinkName(): string { return 'Big Bear Ice Arena'; }
-
+  get rinkId() { return 'big-bear'; }
+  get rinkName() { return 'Big Bear Ice Arena'; }
   private readonly baseUrl = 'https://bigbearicearena.ezfacility.com';
 
+  // Categorize event by title
   protected categorizeBigBearEvent(title: string): EventCategory {
     const titleLower = title.toLowerCase();
     if (titleLower.includes('public skate')) return 'Public Skate';
@@ -22,46 +23,19 @@ export class BigBearScraper extends BaseScraper {
     // POST to /Sessions/FilterResults to get all events as JSON
     const url = `${this.baseUrl}/Sessions/FilterResults`;
     const formData = new URLSearchParams({
-      LocationId: '13558', // Big Bear Ice Arena
-      Sunday: 'true',
-      Monday: 'true',
-      Tuesday: 'true',
-      Wednesday: 'true',
-      Thursday: 'true',
-      Friday: 'true',
-      Saturday: 'true',
-      StartTime: '12:00 AM',
-      EndTime: '12:00 AM',
-      // Reservation Types:
-      'ReservationTypes[0].Selected': 'true', // All Types (selected)
-      'ReservationTypes[0].Id': '-1',         // All Types
-      'ReservationTypes[1].Id': '203425',     // Drop - IN HOCKEY
-      'ReservationTypes[2].Id': '208508',     // Drop-IN Goalie REGISTRATION
-      'ReservationTypes[3].Id': '215333',     // (unknown)
-      'ReservationTypes[4].Id': '182117',     // Free Style
-      'ReservationTypes[5].Id': '227573',     // (unknown)
-      'ReservationTypes[6].Id': '217778',     // (unknown)
-      'ReservationTypes[7].Id': '215383',     // (unknown)
-      'ReservationTypes[8].Id': '271335',     // (unknown)
-      'ReservationTypes[9].Id': '285107',     // (unknown)
-      'ReservationTypes[10].Id': '218387',    // (unknown)
-      'ReservationTypes[11].Id': '215334',    // Open Stick & Puck
-      'ReservationTypes[12].Id': '190860',    // (unknown)
-      'ReservationTypes[13].Id': '215332',    // Public Skate
-      'ReservationTypes[14].Id': '224028',    // (unknown)
-      // Resources:
-      'Resources[0].Selected': 'true',        // All Resources (selected)
-      'Resources[0].Id': '-1',                // All Resources
-      'Resources[1].Id': '268382',            // North Rink
-      'Resources[2].Id': '268383',            // South Rink
-      'Resources[3].Id': '309500',            // (unknown)
-      'Resources[4].Id': '350941',            // (unknown)
-      'Resources[5].Id': '354858',            // (unknown)
-      'Resources[6].Id': '396198',            // (unknown)
-      StartDate: this.getTodayString(-3), // 3 days before today
-      EndDate: this.getTodayString(32)   // 32 days after today
+      LocationId: '13558',
+      Sunday: 'true', Monday: 'true', Tuesday: 'true', Wednesday: 'true', Thursday: 'true', Friday: 'true', Saturday: 'true',
+      StartTime: '12:00 AM', EndTime: '12:00 AM',
+      'ReservationTypes[0].Selected': 'true', 'ReservationTypes[0].Id': '-1',
+      'ReservationTypes[1].Id': '203425', 'ReservationTypes[2].Id': '208508', 'ReservationTypes[3].Id': '215333',
+      'ReservationTypes[4].Id': '182117', 'ReservationTypes[5].Id': '227573', 'ReservationTypes[6].Id': '217778',
+      'ReservationTypes[7].Id': '215383', 'ReservationTypes[8].Id': '271335', 'ReservationTypes[9].Id': '285107',
+      'ReservationTypes[10].Id': '218387', 'ReservationTypes[11].Id': '215334', 'ReservationTypes[12].Id': '190860',
+      'ReservationTypes[13].Id': '215332', 'ReservationTypes[14].Id': '224028',
+      'Resources[0].Selected': 'true', 'Resources[0].Id': '-1', 'Resources[1].Id': '268382', 'Resources[2].Id': '268383',
+      'Resources[3].Id': '309500', 'Resources[4].Id': '350941', 'Resources[5].Id': '354858', 'Resources[6].Id': '396198',
+      StartDate: this.getTodayString(-3), EndDate: this.getTodayString(32)
     });
-
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -70,25 +44,14 @@ export class BigBearScraper extends BaseScraper {
       },
       body: formData.toString()
     });
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch Big Bear events: ${response.status} ${response.statusText}`);
-    }
+    if (!response.ok) throw new Error(`Failed to fetch Big Bear events: ${response.status} ${response.statusText}`);
     const eventsJson = await response.json();
-    if (!Array.isArray(eventsJson)) {
-      throw new Error('Big Bear API did not return an array');
-    }
-    // eventsJson is an array of event objects
-
+    if (!Array.isArray(eventsJson)) throw new Error('Big Bear API did not return an array');
     // Map to RawIceEventData[]
     const events: RawIceEventData[] = eventsJson.map((ev: any) => {
-      // The API returns times in Mountain Time (MT), but Date parses as UTC.
-      // To store as UTC, add 6 hours to shift from MT to UTC (for MDT).
-      const startTime = new Date(ev.start);
-      const endTime = new Date(ev.end);
-      // Shift both times forward by 6 hours
-      startTime.setHours(startTime.getHours() + 6);
-      endTime.setHours(endTime.getHours() + 6);
+      // The API returns times in Mountain Time (MT), but Date parses as UTC. To store as UTC, add 6 hours.
+      const startTime = new Date(ev.start); startTime.setHours(startTime.getHours() + 6);
+      const endTime = new Date(ev.end); endTime.setHours(endTime.getHours() + 6);
       const rinkName = ev.resourceName || (ev.venues && ev.venues[0]?.Name) || 'Main Rink';
       const category = this.categorizeBigBearEvent(ev.title || ev.reservationType || '');
       return {
@@ -100,12 +63,9 @@ export class BigBearScraper extends BaseScraper {
         description: `${rinkName}${ev.description ? ' - ' + ev.description : ''}`,
         category,
         isFeatured: false,
-        eventUrl: undefined // No direct event URL
+        eventUrl: undefined
       };
     });
-    // Sort by start time
-    events.sort((a, b) => a.startTime.getTime() - b.startTime.getTime());
-    console.log(`🐻 Big Bear: Parsed ${events.length} events from API.`);
     return events;
   }
 

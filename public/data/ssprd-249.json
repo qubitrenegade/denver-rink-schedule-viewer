@@ -1,59 +1,5 @@
 [
   {
-    "id": "fsc-fixit-2443373",
-    "rinkId": "fsc-fixit",
-    "title": "Public Skate / Learn To Skate",
-    "startTime": "2025-05-22T16:00:00.000Z",
-    "endTime": "2025-05-22T17:30:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "sssc-rink2-3194848",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skate / Learn To Skate",
-    "startTime": "2025-05-22T16:00:00.000Z",
-    "endTime": "2025-05-22T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "sssc-rink1-2442403",
-    "rinkId": "sssc-rink1",
-    "title": "Public Skate / Learn To Skate",
-    "startTime": "2025-05-22T18:00:00.000Z",
-    "endTime": "2025-05-22T20:30:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "fsc-fixit-2443454",
-    "rinkId": "fsc-fixit",
-    "title": "Public Skating",
-    "startTime": "2025-05-22T19:00:00.000Z",
-    "endTime": "2025-05-22T20:30:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "sssc-rink1-3196028",
-    "rinkId": "sssc-rink1",
-    "title": "Public Skating",
-    "startTime": "2025-05-22T20:40:00.000Z",
-    "endTime": "2025-05-22T22:15:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "fsc-fixit-2443710",
-    "rinkId": "fsc-fixit",
-    "title": "Public Skate / Learn To Skate",
-    "startTime": "2025-05-23T00:00:00.000Z",
-    "endTime": "2025-05-23T01:30:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2443374",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
@@ -5379,20 +5325,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2962859",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2025-10-06T16:00:00.000Z",
-    "endTime": "2025-10-06T17:20:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961184",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-10-06T16:00:00.000Z",
     "endTime": "2025-10-06T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2962859",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2025-10-06T16:00:00.000Z",
+    "endTime": "2025-10-06T17:20:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -5424,20 +5370,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-3184942",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skate / Learn To Skate",
-    "startTime": "2025-10-07T16:00:00.000Z",
-    "endTime": "2025-10-07T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961185",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-10-07T16:00:00.000Z",
     "endTime": "2025-10-07T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-3184942",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skate / Learn To Skate",
+    "startTime": "2025-10-07T16:00:00.000Z",
+    "endTime": "2025-10-07T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -5469,20 +5415,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2963013",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2025-10-08T16:00:00.000Z",
-    "endTime": "2025-10-08T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961186",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-10-08T16:00:00.000Z",
     "endTime": "2025-10-08T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2963013",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2025-10-08T16:00:00.000Z",
+    "endTime": "2025-10-08T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -5523,20 +5469,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink3-2963622",
-    "rinkId": "sssc-rink3",
-    "title": "Public Skating",
-    "startTime": "2025-10-09T16:00:00.000Z",
-    "endTime": "2025-10-09T18:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961534",
     "rinkId": "fsc-fixit",
     "title": "Public Skate / Learn To Skate",
     "startTime": "2025-10-09T16:00:00.000Z",
     "endTime": "2025-10-09T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink3-2963622",
+    "rinkId": "sssc-rink3",
+    "title": "Public Skating",
+    "startTime": "2025-10-09T16:00:00.000Z",
+    "endTime": "2025-10-09T18:00:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -5649,20 +5595,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2962860",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2025-10-13T16:00:00.000Z",
-    "endTime": "2025-10-13T17:20:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961188",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-10-13T16:00:00.000Z",
     "endTime": "2025-10-13T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2962860",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2025-10-13T16:00:00.000Z",
+    "endTime": "2025-10-13T17:20:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -5694,20 +5640,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-3184943",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skate / Learn To Skate",
-    "startTime": "2025-10-14T16:00:00.000Z",
-    "endTime": "2025-10-14T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961189",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-10-14T16:00:00.000Z",
     "endTime": "2025-10-14T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-3184943",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skate / Learn To Skate",
+    "startTime": "2025-10-14T16:00:00.000Z",
+    "endTime": "2025-10-14T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -5739,20 +5685,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2963014",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2025-10-15T16:00:00.000Z",
-    "endTime": "2025-10-15T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961190",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-10-15T16:00:00.000Z",
     "endTime": "2025-10-15T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2963014",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2025-10-15T16:00:00.000Z",
+    "endTime": "2025-10-15T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -5793,20 +5739,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink3-2963623",
-    "rinkId": "sssc-rink3",
-    "title": "Public Skating",
-    "startTime": "2025-10-16T16:00:00.000Z",
-    "endTime": "2025-10-16T18:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961535",
     "rinkId": "fsc-fixit",
     "title": "Public Skate / Learn To Skate",
     "startTime": "2025-10-16T16:00:00.000Z",
     "endTime": "2025-10-16T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink3-2963623",
+    "rinkId": "sssc-rink3",
+    "title": "Public Skating",
+    "startTime": "2025-10-16T16:00:00.000Z",
+    "endTime": "2025-10-16T18:00:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -5856,8 +5802,8 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2963146",
-    "rinkId": "sssc-rink2",
+    "id": "fsc-fixit-2961191",
+    "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-10-17T16:00:00.000Z",
     "endTime": "2025-10-17T17:30:00.000Z",
@@ -5865,8 +5811,8 @@
     "isFeatured": false
   },
   {
-    "id": "fsc-fixit-2961191",
-    "rinkId": "fsc-fixit",
+    "id": "sssc-rink2-2963146",
+    "rinkId": "sssc-rink2",
     "title": "Public Skating",
     "startTime": "2025-10-17T16:00:00.000Z",
     "endTime": "2025-10-17T17:30:00.000Z",
@@ -5946,20 +5892,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2962861",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2025-10-20T16:00:00.000Z",
-    "endTime": "2025-10-20T17:20:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961192",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-10-20T16:00:00.000Z",
     "endTime": "2025-10-20T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2962861",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2025-10-20T16:00:00.000Z",
+    "endTime": "2025-10-20T17:20:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -5991,20 +5937,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-3184944",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skate / Learn To Skate",
-    "startTime": "2025-10-21T16:00:00.000Z",
-    "endTime": "2025-10-21T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961193",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-10-21T16:00:00.000Z",
     "endTime": "2025-10-21T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-3184944",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skate / Learn To Skate",
+    "startTime": "2025-10-21T16:00:00.000Z",
+    "endTime": "2025-10-21T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -6036,20 +5982,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2963015",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2025-10-22T16:00:00.000Z",
-    "endTime": "2025-10-22T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961194",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-10-22T16:00:00.000Z",
     "endTime": "2025-10-22T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2963015",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2025-10-22T16:00:00.000Z",
+    "endTime": "2025-10-22T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -6090,20 +6036,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink3-2963624",
-    "rinkId": "sssc-rink3",
-    "title": "Public Skating",
-    "startTime": "2025-10-23T16:00:00.000Z",
-    "endTime": "2025-10-23T18:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961536",
     "rinkId": "fsc-fixit",
     "title": "Public Skate / Learn To Skate",
     "startTime": "2025-10-23T16:00:00.000Z",
     "endTime": "2025-10-23T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink3-2963624",
+    "rinkId": "sssc-rink3",
+    "title": "Public Skating",
+    "startTime": "2025-10-23T16:00:00.000Z",
+    "endTime": "2025-10-23T18:00:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -6389,20 +6335,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink3-2963625",
-    "rinkId": "sssc-rink3",
-    "title": "Public Skating",
-    "startTime": "2025-10-30T16:00:00.000Z",
-    "endTime": "2025-10-30T18:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961537",
     "rinkId": "fsc-fixit",
     "title": "Public Skate / Learn To Skate",
     "startTime": "2025-10-30T16:00:00.000Z",
     "endTime": "2025-10-30T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink3-2963625",
+    "rinkId": "sssc-rink3",
+    "title": "Public Skating",
+    "startTime": "2025-10-30T16:00:00.000Z",
+    "endTime": "2025-10-30T18:00:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -6686,20 +6632,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink3-2963626",
-    "rinkId": "sssc-rink3",
-    "title": "Public Skating",
-    "startTime": "2025-11-06T16:00:00.000Z",
-    "endTime": "2025-11-06T18:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961538",
     "rinkId": "fsc-fixit",
     "title": "Public Skate / Learn To Skate",
     "startTime": "2025-11-06T16:00:00.000Z",
     "endTime": "2025-11-06T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink3-2963626",
+    "rinkId": "sssc-rink3",
+    "title": "Public Skating",
+    "startTime": "2025-11-06T16:00:00.000Z",
+    "endTime": "2025-11-06T18:00:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -6947,20 +6893,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink3-2963627",
-    "rinkId": "sssc-rink3",
-    "title": "Public Skating",
-    "startTime": "2025-11-13T16:00:00.000Z",
-    "endTime": "2025-11-13T18:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961539",
     "rinkId": "fsc-fixit",
     "title": "Public Skate / Learn To Skate",
     "startTime": "2025-11-13T16:00:00.000Z",
     "endTime": "2025-11-13T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink3-2963627",
+    "rinkId": "sssc-rink3",
+    "title": "Public Skating",
+    "startTime": "2025-11-13T16:00:00.000Z",
+    "endTime": "2025-11-13T18:00:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -7136,20 +7082,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-3184948",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skate / Learn To Skate",
-    "startTime": "2025-11-18T16:00:00.000Z",
-    "endTime": "2025-11-18T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961209",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-11-18T16:00:00.000Z",
     "endTime": "2025-11-18T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-3184948",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skate / Learn To Skate",
+    "startTime": "2025-11-18T16:00:00.000Z",
+    "endTime": "2025-11-18T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -7181,20 +7127,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2963019",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2025-11-19T16:00:00.000Z",
-    "endTime": "2025-11-19T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961210",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-11-19T16:00:00.000Z",
     "endTime": "2025-11-19T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2963019",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2025-11-19T16:00:00.000Z",
+    "endTime": "2025-11-19T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -7235,20 +7181,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink3-2963628",
-    "rinkId": "sssc-rink3",
-    "title": "Public Skating",
-    "startTime": "2025-11-20T16:00:00.000Z",
-    "endTime": "2025-11-20T18:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961540",
     "rinkId": "fsc-fixit",
     "title": "Public Skate / Learn To Skate",
     "startTime": "2025-11-20T16:00:00.000Z",
     "endTime": "2025-11-20T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink3-2963628",
+    "rinkId": "sssc-rink3",
+    "title": "Public Skating",
+    "startTime": "2025-11-20T16:00:00.000Z",
+    "endTime": "2025-11-20T18:00:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -7298,8 +7244,8 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2963150",
-    "rinkId": "sssc-rink2",
+    "id": "fsc-fixit-2961211",
+    "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-11-21T16:00:00.000Z",
     "endTime": "2025-11-21T17:30:00.000Z",
@@ -7307,8 +7253,8 @@
     "isFeatured": false
   },
   {
-    "id": "fsc-fixit-2961211",
-    "rinkId": "fsc-fixit",
+    "id": "sssc-rink2-2963150",
+    "rinkId": "sssc-rink2",
     "title": "Public Skating",
     "startTime": "2025-11-21T16:00:00.000Z",
     "endTime": "2025-11-21T17:30:00.000Z",
@@ -7388,20 +7334,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2962866",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2025-11-24T16:00:00.000Z",
-    "endTime": "2025-11-24T17:20:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961212",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-11-24T16:00:00.000Z",
     "endTime": "2025-11-24T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2962866",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2025-11-24T16:00:00.000Z",
+    "endTime": "2025-11-24T17:20:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -7433,20 +7379,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-3184949",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skate / Learn To Skate",
-    "startTime": "2025-11-25T16:00:00.000Z",
-    "endTime": "2025-11-25T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961213",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-11-25T16:00:00.000Z",
     "endTime": "2025-11-25T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-3184949",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skate / Learn To Skate",
+    "startTime": "2025-11-25T16:00:00.000Z",
+    "endTime": "2025-11-25T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -7478,20 +7424,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2963020",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2025-11-26T16:00:00.000Z",
-    "endTime": "2025-11-26T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961214",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-11-26T16:00:00.000Z",
     "endTime": "2025-11-26T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2963020",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2025-11-26T16:00:00.000Z",
+    "endTime": "2025-11-26T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -7532,8 +7478,8 @@
     "isFeatured": false
   },
   {
-    "id": "fsc-fixit-2961215",
-    "rinkId": "fsc-fixit",
+    "id": "sssc-rink1-2963151",
+    "rinkId": "sssc-rink1",
     "title": "Public Skating",
     "startTime": "2025-11-28T16:00:00.000Z",
     "endTime": "2025-11-28T17:30:00.000Z",
@@ -7541,8 +7487,8 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink1-2963151",
-    "rinkId": "sssc-rink1",
+    "id": "fsc-fixit-2961215",
+    "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-11-28T16:00:00.000Z",
     "endTime": "2025-11-28T17:30:00.000Z",
@@ -7622,20 +7568,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2962867",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2025-12-01T16:00:00.000Z",
-    "endTime": "2025-12-01T17:20:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961216",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-12-01T16:00:00.000Z",
     "endTime": "2025-12-01T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2962867",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2025-12-01T16:00:00.000Z",
+    "endTime": "2025-12-01T17:20:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -7667,20 +7613,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-3184950",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skate / Learn To Skate",
-    "startTime": "2025-12-02T16:00:00.000Z",
-    "endTime": "2025-12-02T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961217",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-12-02T16:00:00.000Z",
     "endTime": "2025-12-02T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-3184950",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skate / Learn To Skate",
+    "startTime": "2025-12-02T16:00:00.000Z",
+    "endTime": "2025-12-02T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -7712,20 +7658,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2963021",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2025-12-03T16:00:00.000Z",
-    "endTime": "2025-12-03T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961218",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-12-03T16:00:00.000Z",
     "endTime": "2025-12-03T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2963021",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2025-12-03T16:00:00.000Z",
+    "endTime": "2025-12-03T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -7766,20 +7712,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink3-2963630",
-    "rinkId": "sssc-rink3",
-    "title": "Public Skating",
-    "startTime": "2025-12-04T16:00:00.000Z",
-    "endTime": "2025-12-04T18:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961542",
     "rinkId": "fsc-fixit",
     "title": "Public Skate / Learn To Skate",
     "startTime": "2025-12-04T16:00:00.000Z",
     "endTime": "2025-12-04T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink3-2963630",
+    "rinkId": "sssc-rink3",
+    "title": "Public Skating",
+    "startTime": "2025-12-04T16:00:00.000Z",
+    "endTime": "2025-12-04T18:00:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -7883,20 +7829,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2962868",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2025-12-08T16:00:00.000Z",
-    "endTime": "2025-12-08T17:20:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961220",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-12-08T16:00:00.000Z",
     "endTime": "2025-12-08T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2962868",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2025-12-08T16:00:00.000Z",
+    "endTime": "2025-12-08T17:20:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -7928,20 +7874,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-3184951",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skate / Learn To Skate",
-    "startTime": "2025-12-09T16:00:00.000Z",
-    "endTime": "2025-12-09T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961221",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-12-09T16:00:00.000Z",
     "endTime": "2025-12-09T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-3184951",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skate / Learn To Skate",
+    "startTime": "2025-12-09T16:00:00.000Z",
+    "endTime": "2025-12-09T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -7973,20 +7919,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2963022",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2025-12-10T16:00:00.000Z",
-    "endTime": "2025-12-10T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961222",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-12-10T16:00:00.000Z",
     "endTime": "2025-12-10T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2963022",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2025-12-10T16:00:00.000Z",
+    "endTime": "2025-12-10T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -8027,20 +7973,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink3-2963631",
-    "rinkId": "sssc-rink3",
-    "title": "Public Skating",
-    "startTime": "2025-12-11T16:00:00.000Z",
-    "endTime": "2025-12-11T18:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961543",
     "rinkId": "fsc-fixit",
     "title": "Public Skate / Learn To Skate",
     "startTime": "2025-12-11T16:00:00.000Z",
     "endTime": "2025-12-11T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink3-2963631",
+    "rinkId": "sssc-rink3",
+    "title": "Public Skating",
+    "startTime": "2025-12-11T16:00:00.000Z",
+    "endTime": "2025-12-11T18:00:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -8222,20 +8168,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2962869",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2025-12-15T16:00:00.000Z",
-    "endTime": "2025-12-15T17:20:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961224",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-12-15T16:00:00.000Z",
     "endTime": "2025-12-15T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2962869",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2025-12-15T16:00:00.000Z",
+    "endTime": "2025-12-15T17:20:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -8267,20 +8213,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-3184952",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skate / Learn To Skate",
-    "startTime": "2025-12-16T16:00:00.000Z",
-    "endTime": "2025-12-16T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961225",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-12-16T16:00:00.000Z",
     "endTime": "2025-12-16T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-3184952",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skate / Learn To Skate",
+    "startTime": "2025-12-16T16:00:00.000Z",
+    "endTime": "2025-12-16T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -8312,20 +8258,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2963023",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2025-12-17T16:00:00.000Z",
-    "endTime": "2025-12-17T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961226",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-12-17T16:00:00.000Z",
     "endTime": "2025-12-17T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2963023",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2025-12-17T16:00:00.000Z",
+    "endTime": "2025-12-17T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -8366,20 +8312,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink3-2963632",
-    "rinkId": "sssc-rink3",
-    "title": "Public Skating",
-    "startTime": "2025-12-18T16:00:00.000Z",
-    "endTime": "2025-12-18T18:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961544",
     "rinkId": "fsc-fixit",
     "title": "Public Skate / Learn To Skate",
     "startTime": "2025-12-18T16:00:00.000Z",
     "endTime": "2025-12-18T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink3-2963632",
+    "rinkId": "sssc-rink3",
+    "title": "Public Skating",
+    "startTime": "2025-12-18T16:00:00.000Z",
+    "endTime": "2025-12-18T18:00:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -8429,8 +8375,8 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2963153",
-    "rinkId": "sssc-rink2",
+    "id": "fsc-fixit-2961227",
+    "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-12-19T16:00:00.000Z",
     "endTime": "2025-12-19T17:30:00.000Z",
@@ -8438,8 +8384,8 @@
     "isFeatured": false
   },
   {
-    "id": "fsc-fixit-2961227",
-    "rinkId": "fsc-fixit",
+    "id": "sssc-rink2-2963153",
+    "rinkId": "sssc-rink2",
     "title": "Public Skating",
     "startTime": "2025-12-19T16:00:00.000Z",
     "endTime": "2025-12-19T17:30:00.000Z",
@@ -8519,20 +8465,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink3-2962870",
-    "rinkId": "sssc-rink3",
-    "title": "Public Skating",
-    "startTime": "2025-12-22T16:00:00.000Z",
-    "endTime": "2025-12-22T17:20:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961228",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-12-22T16:00:00.000Z",
     "endTime": "2025-12-22T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink3-2962870",
+    "rinkId": "sssc-rink3",
+    "title": "Public Skating",
+    "startTime": "2025-12-22T16:00:00.000Z",
+    "endTime": "2025-12-22T17:20:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -8600,20 +8546,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2963024",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2025-12-24T16:00:00.000Z",
-    "endTime": "2025-12-24T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961230",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-12-24T16:00:00.000Z",
     "endTime": "2025-12-24T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2963024",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2025-12-24T16:00:00.000Z",
+    "endTime": "2025-12-24T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -8654,8 +8600,8 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2963154",
-    "rinkId": "sssc-rink2",
+    "id": "fsc-fixit-2961231",
+    "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-12-26T16:00:00.000Z",
     "endTime": "2025-12-26T17:30:00.000Z",
@@ -8663,8 +8609,8 @@
     "isFeatured": false
   },
   {
-    "id": "fsc-fixit-2961231",
-    "rinkId": "fsc-fixit",
+    "id": "sssc-rink2-2963154",
+    "rinkId": "sssc-rink2",
     "title": "Public Skating",
     "startTime": "2025-12-26T16:00:00.000Z",
     "endTime": "2025-12-26T17:30:00.000Z",
@@ -8744,20 +8690,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2962871",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2025-12-29T16:00:00.000Z",
-    "endTime": "2025-12-29T17:20:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961232",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-12-29T16:00:00.000Z",
     "endTime": "2025-12-29T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2962871",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2025-12-29T16:00:00.000Z",
+    "endTime": "2025-12-29T17:20:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -8789,20 +8735,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-3184953",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skate / Learn To Skate",
-    "startTime": "2025-12-30T16:00:00.000Z",
-    "endTime": "2025-12-30T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961233",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-12-30T16:00:00.000Z",
     "endTime": "2025-12-30T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-3184953",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skate / Learn To Skate",
+    "startTime": "2025-12-30T16:00:00.000Z",
+    "endTime": "2025-12-30T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -8834,20 +8780,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2963025",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2025-12-31T16:00:00.000Z",
-    "endTime": "2025-12-31T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961234",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-12-31T16:00:00.000Z",
     "endTime": "2025-12-31T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2963025",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2025-12-31T16:00:00.000Z",
+    "endTime": "2025-12-31T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -8888,20 +8834,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink3-2963634",
-    "rinkId": "sssc-rink3",
-    "title": "Public Skating",
-    "startTime": "2026-01-01T16:00:00.000Z",
-    "endTime": "2026-01-01T18:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961546",
     "rinkId": "fsc-fixit",
     "title": "Public Skate / Learn To Skate",
     "startTime": "2026-01-01T16:00:00.000Z",
     "endTime": "2026-01-01T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink3-2963634",
+    "rinkId": "sssc-rink3",
+    "title": "Public Skating",
+    "startTime": "2026-01-01T16:00:00.000Z",
+    "endTime": "2026-01-01T18:00:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -8951,8 +8897,8 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2963155",
-    "rinkId": "sssc-rink2",
+    "id": "fsc-fixit-2961235",
+    "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-01-02T16:00:00.000Z",
     "endTime": "2026-01-02T17:30:00.000Z",
@@ -8960,8 +8906,8 @@
     "isFeatured": false
   },
   {
-    "id": "fsc-fixit-2961235",
-    "rinkId": "fsc-fixit",
+    "id": "sssc-rink2-2963155",
+    "rinkId": "sssc-rink2",
     "title": "Public Skating",
     "startTime": "2026-01-02T16:00:00.000Z",
     "endTime": "2026-01-02T17:30:00.000Z",
@@ -9041,20 +8987,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2962872",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2026-01-05T16:00:00.000Z",
-    "endTime": "2026-01-05T17:20:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961236",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-01-05T16:00:00.000Z",
     "endTime": "2026-01-05T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2962872",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2026-01-05T16:00:00.000Z",
+    "endTime": "2026-01-05T17:20:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -9086,20 +9032,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-3184954",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skate / Learn To Skate",
-    "startTime": "2026-01-06T16:00:00.000Z",
-    "endTime": "2026-01-06T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961237",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-01-06T16:00:00.000Z",
     "endTime": "2026-01-06T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-3184954",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skate / Learn To Skate",
+    "startTime": "2026-01-06T16:00:00.000Z",
+    "endTime": "2026-01-06T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -9131,20 +9077,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2963026",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2026-01-07T16:00:00.000Z",
-    "endTime": "2026-01-07T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961238",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-01-07T16:00:00.000Z",
     "endTime": "2026-01-07T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2963026",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2026-01-07T16:00:00.000Z",
+    "endTime": "2026-01-07T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -9185,20 +9131,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink3-2963635",
-    "rinkId": "sssc-rink3",
-    "title": "Public Skating",
-    "startTime": "2026-01-08T16:00:00.000Z",
-    "endTime": "2026-01-08T18:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961547",
     "rinkId": "fsc-fixit",
     "title": "Public Skate / Learn To Skate",
     "startTime": "2026-01-08T16:00:00.000Z",
     "endTime": "2026-01-08T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink3-2963635",
+    "rinkId": "sssc-rink3",
+    "title": "Public Skating",
+    "startTime": "2026-01-08T16:00:00.000Z",
+    "endTime": "2026-01-08T18:00:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -9248,8 +9194,8 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2963156",
-    "rinkId": "sssc-rink2",
+    "id": "fsc-fixit-2961239",
+    "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-01-09T16:00:00.000Z",
     "endTime": "2026-01-09T17:30:00.000Z",
@@ -9257,8 +9203,8 @@
     "isFeatured": false
   },
   {
-    "id": "fsc-fixit-2961239",
-    "rinkId": "fsc-fixit",
+    "id": "sssc-rink2-2963156",
+    "rinkId": "sssc-rink2",
     "title": "Public Skating",
     "startTime": "2026-01-09T16:00:00.000Z",
     "endTime": "2026-01-09T17:30:00.000Z",
@@ -9338,20 +9284,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2962873",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2026-01-12T16:00:00.000Z",
-    "endTime": "2026-01-12T17:20:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961240",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-01-12T16:00:00.000Z",
     "endTime": "2026-01-12T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2962873",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2026-01-12T16:00:00.000Z",
+    "endTime": "2026-01-12T17:20:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -9383,20 +9329,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-3184955",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skate / Learn To Skate",
-    "startTime": "2026-01-13T16:00:00.000Z",
-    "endTime": "2026-01-13T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961241",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-01-13T16:00:00.000Z",
     "endTime": "2026-01-13T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-3184955",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skate / Learn To Skate",
+    "startTime": "2026-01-13T16:00:00.000Z",
+    "endTime": "2026-01-13T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -9428,20 +9374,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2963027",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2026-01-14T16:00:00.000Z",
-    "endTime": "2026-01-14T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961242",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-01-14T16:00:00.000Z",
     "endTime": "2026-01-14T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2963027",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2026-01-14T16:00:00.000Z",
+    "endTime": "2026-01-14T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -9482,20 +9428,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink3-2963636",
-    "rinkId": "sssc-rink3",
-    "title": "Public Skating",
-    "startTime": "2026-01-15T16:00:00.000Z",
-    "endTime": "2026-01-15T18:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961548",
     "rinkId": "fsc-fixit",
     "title": "Public Skate / Learn To Skate",
     "startTime": "2026-01-15T16:00:00.000Z",
     "endTime": "2026-01-15T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink3-2963636",
+    "rinkId": "sssc-rink3",
+    "title": "Public Skating",
+    "startTime": "2026-01-15T16:00:00.000Z",
+    "endTime": "2026-01-15T18:00:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -9545,8 +9491,8 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2963157",
-    "rinkId": "sssc-rink2",
+    "id": "fsc-fixit-2961243",
+    "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-01-16T16:00:00.000Z",
     "endTime": "2026-01-16T17:30:00.000Z",
@@ -9554,8 +9500,8 @@
     "isFeatured": false
   },
   {
-    "id": "fsc-fixit-2961243",
-    "rinkId": "fsc-fixit",
+    "id": "sssc-rink2-2963157",
+    "rinkId": "sssc-rink2",
     "title": "Public Skating",
     "startTime": "2026-01-16T16:00:00.000Z",
     "endTime": "2026-01-16T17:30:00.000Z",
@@ -9645,20 +9591,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2962874",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2026-01-19T16:00:00.000Z",
-    "endTime": "2026-01-19T17:20:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961244",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-01-19T16:00:00.000Z",
     "endTime": "2026-01-19T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2962874",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2026-01-19T16:00:00.000Z",
+    "endTime": "2026-01-19T17:20:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -9690,20 +9636,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-3184956",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skate / Learn To Skate",
-    "startTime": "2026-01-20T16:00:00.000Z",
-    "endTime": "2026-01-20T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961245",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-01-20T16:00:00.000Z",
     "endTime": "2026-01-20T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-3184956",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skate / Learn To Skate",
+    "startTime": "2026-01-20T16:00:00.000Z",
+    "endTime": "2026-01-20T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -9888,20 +9834,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2962875",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2026-01-26T16:00:00.000Z",
-    "endTime": "2026-01-26T17:20:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961248",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-01-26T16:00:00.000Z",
     "endTime": "2026-01-26T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2962875",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2026-01-26T16:00:00.000Z",
+    "endTime": "2026-01-26T17:20:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -9933,20 +9879,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-3184957",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skate / Learn To Skate",
-    "startTime": "2026-01-27T16:00:00.000Z",
-    "endTime": "2026-01-27T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961249",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-01-27T16:00:00.000Z",
     "endTime": "2026-01-27T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-3184957",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skate / Learn To Skate",
+    "startTime": "2026-01-27T16:00:00.000Z",
+    "endTime": "2026-01-27T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -9978,20 +9924,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2963029",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2026-01-28T16:00:00.000Z",
-    "endTime": "2026-01-28T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961250",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-01-28T16:00:00.000Z",
     "endTime": "2026-01-28T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2963029",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2026-01-28T16:00:00.000Z",
+    "endTime": "2026-01-28T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -10032,20 +9978,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink3-2963638",
-    "rinkId": "sssc-rink3",
-    "title": "Public Skating",
-    "startTime": "2026-01-29T16:00:00.000Z",
-    "endTime": "2026-01-29T18:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961550",
     "rinkId": "fsc-fixit",
     "title": "Public Skate / Learn To Skate",
     "startTime": "2026-01-29T16:00:00.000Z",
     "endTime": "2026-01-29T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink3-2963638",
+    "rinkId": "sssc-rink3",
+    "title": "Public Skating",
+    "startTime": "2026-01-29T16:00:00.000Z",
+    "endTime": "2026-01-29T18:00:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -10095,8 +10041,8 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2963159",
-    "rinkId": "sssc-rink2",
+    "id": "fsc-fixit-2961251",
+    "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-01-30T16:00:00.000Z",
     "endTime": "2026-01-30T17:30:00.000Z",
@@ -10104,8 +10050,8 @@
     "isFeatured": false
   },
   {
-    "id": "fsc-fixit-2961251",
-    "rinkId": "fsc-fixit",
+    "id": "sssc-rink2-2963159",
+    "rinkId": "sssc-rink2",
     "title": "Public Skating",
     "startTime": "2026-01-30T16:00:00.000Z",
     "endTime": "2026-01-30T17:30:00.000Z",
@@ -10185,20 +10131,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2962876",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2026-02-02T16:00:00.000Z",
-    "endTime": "2026-02-02T17:20:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961252",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-02-02T16:00:00.000Z",
     "endTime": "2026-02-02T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2962876",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2026-02-02T16:00:00.000Z",
+    "endTime": "2026-02-02T17:20:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -10230,20 +10176,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-3184958",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skate / Learn To Skate",
-    "startTime": "2026-02-03T16:00:00.000Z",
-    "endTime": "2026-02-03T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961253",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-02-03T16:00:00.000Z",
     "endTime": "2026-02-03T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-3184958",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skate / Learn To Skate",
+    "startTime": "2026-02-03T16:00:00.000Z",
+    "endTime": "2026-02-03T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -10275,20 +10221,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2963030",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2026-02-04T16:00:00.000Z",
-    "endTime": "2026-02-04T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961254",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-02-04T16:00:00.000Z",
     "endTime": "2026-02-04T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2963030",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2026-02-04T16:00:00.000Z",
+    "endTime": "2026-02-04T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -10329,20 +10275,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink3-2963639",
-    "rinkId": "sssc-rink3",
-    "title": "Public Skating",
-    "startTime": "2026-02-05T16:00:00.000Z",
-    "endTime": "2026-02-05T18:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961551",
     "rinkId": "fsc-fixit",
     "title": "Public Skate / Learn To Skate",
     "startTime": "2026-02-05T16:00:00.000Z",
     "endTime": "2026-02-05T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink3-2963639",
+    "rinkId": "sssc-rink3",
+    "title": "Public Skating",
+    "startTime": "2026-02-05T16:00:00.000Z",
+    "endTime": "2026-02-05T18:00:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -10392,8 +10338,8 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2963160",
-    "rinkId": "sssc-rink2",
+    "id": "fsc-fixit-2961255",
+    "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-02-06T16:00:00.000Z",
     "endTime": "2026-02-06T17:30:00.000Z",
@@ -10401,8 +10347,8 @@
     "isFeatured": false
   },
   {
-    "id": "fsc-fixit-2961255",
-    "rinkId": "fsc-fixit",
+    "id": "sssc-rink2-2963160",
+    "rinkId": "sssc-rink2",
     "title": "Public Skating",
     "startTime": "2026-02-06T16:00:00.000Z",
     "endTime": "2026-02-06T17:30:00.000Z",
@@ -10482,20 +10428,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2962877",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2026-02-09T16:00:00.000Z",
-    "endTime": "2026-02-09T17:20:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961256",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-02-09T16:00:00.000Z",
     "endTime": "2026-02-09T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2962877",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2026-02-09T16:00:00.000Z",
+    "endTime": "2026-02-09T17:20:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -10527,20 +10473,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-3184959",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skate / Learn To Skate",
-    "startTime": "2026-02-10T16:00:00.000Z",
-    "endTime": "2026-02-10T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961257",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-02-10T16:00:00.000Z",
     "endTime": "2026-02-10T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-3184959",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skate / Learn To Skate",
+    "startTime": "2026-02-10T16:00:00.000Z",
+    "endTime": "2026-02-10T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -10572,20 +10518,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2963031",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2026-02-11T16:00:00.000Z",
-    "endTime": "2026-02-11T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961258",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-02-11T16:00:00.000Z",
     "endTime": "2026-02-11T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2963031",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2026-02-11T16:00:00.000Z",
+    "endTime": "2026-02-11T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -10626,20 +10572,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink3-2963640",
-    "rinkId": "sssc-rink3",
-    "title": "Public Skating",
-    "startTime": "2026-02-12T16:00:00.000Z",
-    "endTime": "2026-02-12T18:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961552",
     "rinkId": "fsc-fixit",
     "title": "Public Skate / Learn To Skate",
     "startTime": "2026-02-12T16:00:00.000Z",
     "endTime": "2026-02-12T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink3-2963640",
+    "rinkId": "sssc-rink3",
+    "title": "Public Skating",
+    "startTime": "2026-02-12T16:00:00.000Z",
+    "endTime": "2026-02-12T18:00:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -10770,20 +10716,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-3184960",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skate / Learn To Skate",
-    "startTime": "2026-02-17T16:00:00.000Z",
-    "endTime": "2026-02-17T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961261",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-02-17T16:00:00.000Z",
     "endTime": "2026-02-17T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-3184960",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skate / Learn To Skate",
+    "startTime": "2026-02-17T16:00:00.000Z",
+    "endTime": "2026-02-17T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -10815,20 +10761,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2963032",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2026-02-18T16:00:00.000Z",
-    "endTime": "2026-02-18T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961262",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-02-18T16:00:00.000Z",
     "endTime": "2026-02-18T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2963032",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2026-02-18T16:00:00.000Z",
+    "endTime": "2026-02-18T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -10869,20 +10815,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink3-2963641",
-    "rinkId": "sssc-rink3",
-    "title": "Public Skating",
-    "startTime": "2026-02-19T16:00:00.000Z",
-    "endTime": "2026-02-19T18:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961553",
     "rinkId": "fsc-fixit",
     "title": "Public Skate / Learn To Skate",
     "startTime": "2026-02-19T16:00:00.000Z",
     "endTime": "2026-02-19T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink3-2963641",
+    "rinkId": "sssc-rink3",
+    "title": "Public Skating",
+    "startTime": "2026-02-19T16:00:00.000Z",
+    "endTime": "2026-02-19T18:00:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -10932,8 +10878,8 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2963162",
-    "rinkId": "sssc-rink2",
+    "id": "fsc-fixit-2961263",
+    "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-02-20T16:00:00.000Z",
     "endTime": "2026-02-20T17:30:00.000Z",
@@ -10941,8 +10887,8 @@
     "isFeatured": false
   },
   {
-    "id": "fsc-fixit-2961263",
-    "rinkId": "fsc-fixit",
+    "id": "sssc-rink2-2963162",
+    "rinkId": "sssc-rink2",
     "title": "Public Skating",
     "startTime": "2026-02-20T16:00:00.000Z",
     "endTime": "2026-02-20T17:30:00.000Z",
@@ -11022,20 +10968,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2962879",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2026-02-23T16:00:00.000Z",
-    "endTime": "2026-02-23T17:20:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961264",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-02-23T16:00:00.000Z",
     "endTime": "2026-02-23T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2962879",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2026-02-23T16:00:00.000Z",
+    "endTime": "2026-02-23T17:20:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -11067,20 +11013,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-3184961",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skate / Learn To Skate",
-    "startTime": "2026-02-24T16:00:00.000Z",
-    "endTime": "2026-02-24T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961265",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-02-24T16:00:00.000Z",
     "endTime": "2026-02-24T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-3184961",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skate / Learn To Skate",
+    "startTime": "2026-02-24T16:00:00.000Z",
+    "endTime": "2026-02-24T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -11112,20 +11058,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2963033",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2026-02-25T16:00:00.000Z",
-    "endTime": "2026-02-25T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961266",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-02-25T16:00:00.000Z",
     "endTime": "2026-02-25T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2963033",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2026-02-25T16:00:00.000Z",
+    "endTime": "2026-02-25T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -11166,20 +11112,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink3-2963642",
-    "rinkId": "sssc-rink3",
-    "title": "Public Skating",
-    "startTime": "2026-02-26T16:00:00.000Z",
-    "endTime": "2026-02-26T18:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961554",
     "rinkId": "fsc-fixit",
     "title": "Public Skate / Learn To Skate",
     "startTime": "2026-02-26T16:00:00.000Z",
     "endTime": "2026-02-26T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink3-2963642",
+    "rinkId": "sssc-rink3",
+    "title": "Public Skating",
+    "startTime": "2026-02-26T16:00:00.000Z",
+    "endTime": "2026-02-26T18:00:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -11229,8 +11175,8 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2963163",
-    "rinkId": "sssc-rink2",
+    "id": "fsc-fixit-2961267",
+    "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-02-27T16:00:00.000Z",
     "endTime": "2026-02-27T17:30:00.000Z",
@@ -11238,8 +11184,8 @@
     "isFeatured": false
   },
   {
-    "id": "fsc-fixit-2961267",
-    "rinkId": "fsc-fixit",
+    "id": "sssc-rink2-2963163",
+    "rinkId": "sssc-rink2",
     "title": "Public Skating",
     "startTime": "2026-02-27T16:00:00.000Z",
     "endTime": "2026-02-27T17:30:00.000Z",
@@ -11319,20 +11265,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2962880",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2026-03-02T16:00:00.000Z",
-    "endTime": "2026-03-02T17:20:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961268",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-03-02T16:00:00.000Z",
     "endTime": "2026-03-02T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2962880",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2026-03-02T16:00:00.000Z",
+    "endTime": "2026-03-02T17:20:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -11364,20 +11310,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-3184962",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skate / Learn To Skate",
-    "startTime": "2026-03-03T16:00:00.000Z",
-    "endTime": "2026-03-03T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961269",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-03-03T16:00:00.000Z",
     "endTime": "2026-03-03T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-3184962",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skate / Learn To Skate",
+    "startTime": "2026-03-03T16:00:00.000Z",
+    "endTime": "2026-03-03T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -11409,20 +11355,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink2-2963034",
-    "rinkId": "sssc-rink2",
-    "title": "Public Skating",
-    "startTime": "2026-03-04T16:00:00.000Z",
-    "endTime": "2026-03-04T17:35:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961270",
     "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2026-03-04T16:00:00.000Z",
     "endTime": "2026-03-04T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-2963034",
+    "rinkId": "sssc-rink2",
+    "title": "Public Skating",
+    "startTime": "2026-03-04T16:00:00.000Z",
+    "endTime": "2026-03-04T17:35:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },
@@ -11463,20 +11409,20 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink3-2963643",
-    "rinkId": "sssc-rink3",
-    "title": "Public Skating",
-    "startTime": "2026-03-05T16:00:00.000Z",
-    "endTime": "2026-03-05T18:00:00.000Z",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "fsc-fixit-2961555",
     "rinkId": "fsc-fixit",
     "title": "Public Skate / Learn To Skate",
     "startTime": "2026-03-05T16:00:00.000Z",
     "endTime": "2026-03-05T17:30:00.000Z",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink3-2963643",
+    "rinkId": "sssc-rink3",
+    "title": "Public Skating",
+    "startTime": "2026-03-05T16:00:00.000Z",
+    "endTime": "2026-03-05T18:00:00.000Z",
     "category": "Public Skate",
     "isFeatured": false
   },

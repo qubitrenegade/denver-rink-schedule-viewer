@@ -1,4 +1,4 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { Component, ErrorInfo, ReactNode } from 'react';
 
 interface Props {
   children: ReactNode;
@@ -11,6 +11,7 @@ interface State {
   errorInfo: ErrorInfo | null;
 }
 
+// ErrorBoundary: catches and displays errors in the React component tree
 class ErrorBoundary extends Component<Props, State> {
   public state: State = {
     hasError: false,
@@ -20,11 +21,13 @@ class ErrorBoundary extends Component<Props, State> {
 
   public static getDerivedStateFromError(error: Error): State {
     // Update state so the next render will show the fallback UI.
+    // Log error for debugging
     console.log("ErrorBoundary getDerivedStateFromError, error:", error);
     return { hasError: true, error: error, errorInfo: null };
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    // Log error and stack for debugging
     console.error("ErrorBoundary componentDidCatch: Uncaught error:", error, errorInfo);
     this.setState({ error, errorInfo });
   }

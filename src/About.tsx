@@ -1,4 +1,4 @@
-import React from "react";
+// About page for the Denver Rink Schedule Viewer
 
 const GITHUB_URL = "https://github.com/qbrd/denver-rink-schedule-viewer";
 

@@ -1,14 +1,15 @@
 import React from 'react';
-import { EventCategory, FilterSettings, FilterMode, RinkInfo, TimeFilterMode } from '../types';
-import { ALL_RINKS_TAB_ID } from '../App'; // Import for comparison
+import { EventCategory, FilterSettings, RinkInfo, TimeFilterMode, DateFilterMode } from '../types';
+import { ALL_RINKS_TAB_ID } from '../App';
 import DateFilter from './DateFilter';
 import TimeFilter from './TimeFilter';
 import RinkFilter from './RinkFilter';
 import CategoryFilter from './CategoryFilter';
 
+// Props for FilterControls: manages all filter UI and state changes
 interface FilterControlsProps {
-  allRinks: RinkInfo[]; // All available rinks
-  selectedRinkId: string; // Currently selected tab ID from App
+  allRinks: RinkInfo[];
+  selectedRinkId: string;
   allCategories: EventCategory[];
   currentFilterSettings: FilterSettings;
   onFilterSettingsChange: (newSettings: FilterSettings) => void;
@@ -21,10 +22,11 @@ const FilterControls: React.FC<FilterControlsProps> = ({
   currentFilterSettings,
   onFilterSettingsChange,
 }) => {
-  const { 
-    activeCategories, 
-    filterMode, 
-    activeRinkIds = [], 
+  // Destructure filter settings for clarity
+  const {
+    activeCategories,
+    filterMode,
+    activeRinkIds = [],
     rinkFilterMode = 'exclude',
     dateFilterMode,
     numberOfDays = 4,
@@ -38,18 +40,15 @@ const FilterControls: React.FC<FilterControlsProps> = ({
     timeRangeEnd
   } = currentFilterSettings;
 
-  // Rink filter handlers
+  // --- Rink filter handlers ---
   const handleRinkToggle = (rinkIdToToggle: string) => {
-    const newActiveRinkIds = [...activeRinkIds];
-    const index = newActiveRinkIds.indexOf(rinkIdToToggle);
-    if (index > -1) {
-      newActiveRinkIds.splice(index, 1);
-    } else {
-      newActiveRinkIds.push(rinkIdToToggle);
-    }
+    // Toggle rink selection
+    const newActiveRinkIds = activeRinkIds.includes(rinkIdToToggle)
+      ? activeRinkIds.filter(id => id !== rinkIdToToggle)
+      : [...activeRinkIds, rinkIdToToggle];
     onFilterSettingsChange({ ...currentFilterSettings, activeRinkIds: newActiveRinkIds });
   };
-  const handleRinkFilterModeChange = (newMode: any) => {
+  const handleRinkFilterModeChange = (newMode: 'include' | 'exclude') => {
     onFilterSettingsChange({ ...currentFilterSettings, rinkFilterMode: newMode });
   };
   const handleToggleAllRinks = (selectAll: boolean) => {
@@ -58,17 +57,11 @@ const FilterControls: React.FC<FilterControlsProps> = ({
       activeRinkIds: selectAll ? allRinks.map(r => r.id) : []
     });
   };
-  const getSelectAllRinksLabel = () => {
-    if (rinkFilterMode === 'include') return 'Include All Rinks';
-    return 'Exclude No Rinks (Show All)';
-  };
-  const getDeselectAllRinksLabel = () => {
-    if (rinkFilterMode === 'include') return 'Include No Rinks';
-    return 'Exclude All Rinks';
-  }
+  const getSelectAllRinksLabel = () => rinkFilterMode === 'include' ? 'Include All Rinks' : 'Exclude No Rinks (Show All)';
+  const getDeselectAllRinksLabel = () => rinkFilterMode === 'include' ? 'Include No Rinks' : 'Exclude All Rinks';
 
-  // Time filter handlers
-  const handleTimeFilterModeChange = (newMode: any) => {
+  // --- Time filter handlers ---
+  const handleTimeFilterModeChange = (newMode: TimeFilterMode) => {
     onFilterSettingsChange({ ...currentFilterSettings, timeFilterMode: newMode });
   };
   const handleAfterTimeChange = (time: string) => {
@@ -78,15 +71,15 @@ const FilterControls: React.FC<FilterControlsProps> = ({
     onFilterSettingsChange({ ...currentFilterSettings, beforeTime: time });
   };
   const handleTimeRangeChange = (start?: string, end?: string) => {
-    onFilterSettingsChange({ 
-      ...currentFilterSettings, 
-      timeRangeStart: start || timeRangeStart,
-      timeRangeEnd: end || timeRangeEnd
+    onFilterSettingsChange({
+      ...currentFilterSettings,
+      timeRangeStart: start ?? timeRangeStart,
+      timeRangeEnd: end ?? timeRangeEnd
     });
   };
 
-  // Date filtering handlers
-  const handleDateFilterModeChange = (newMode: any) => {
+  // --- Date filter handlers ---
+  const handleDateFilterModeChange = (newMode: DateFilterMode) => {
     onFilterSettingsChange({ ...currentFilterSettings, dateFilterMode: newMode });
   };
   const handleNumberOfDaysChange = (days: number) => {
@@ -96,41 +89,32 @@ const FilterControls: React.FC<FilterControlsProps> = ({
     onFilterSettingsChange({ ...currentFilterSettings, selectedDate: date });
   };
   const handleDateRangeChange = (start?: string, end?: string) => {
-    onFilterSettingsChange({ 
-      ...currentFilterSettings, 
-      dateRangeStart: start || dateRangeStart,
-      dateRangeEnd: end || dateRangeEnd
+    onFilterSettingsChange({
+      ...currentFilterSettings,
+      dateRangeStart: start ?? dateRangeStart,
+      dateRangeEnd: end ?? dateRangeEnd
     });
   };
 
-  // Category filter handlers
+  // --- Category filter handlers ---
   const handleCategoryToggle = (category: EventCategory) => {
-    const newActiveCategories = [...activeCategories];
-    const index = newActiveCategories.indexOf(category);
-    if (index > -1) {
-      newActiveCategories.splice(index, 1);
-    } else {
-      newActiveCategories.push(category);
-    }
+    // Toggle category selection
+    const newActiveCategories = activeCategories.includes(category)
+      ? activeCategories.filter(c => c !== category)
+      : [...activeCategories, category];
     onFilterSettingsChange({ ...currentFilterSettings, activeCategories: newActiveCategories });
   };
-  const handleCategoryModeChange = (newMode: any) => {
+  const handleCategoryModeChange = (newMode: 'include' | 'exclude') => {
     onFilterSettingsChange({ ...currentFilterSettings, filterMode: newMode });
   };
   const handleToggleAllCategories = (selectAll: boolean) => {
-    onFilterSettingsChange({ 
-      ...currentFilterSettings, 
-      activeCategories: selectAll ? [...allCategories] : [] 
+    onFilterSettingsChange({
+      ...currentFilterSettings,
+      activeCategories: selectAll ? [...allCategories] : []
     });
   };
-  const getSelectAllCategoriesLabel = () => {
-    if (filterMode === 'include') return 'Include All Categories';
-    return 'Exclude No Categories (Show All)';
-  };
-  const getDeselectAllCategoriesLabel = () => {
-    if (filterMode === 'include') return 'Include No Categories';
-    return 'Exclude All Categories';
-  };
+  const getSelectAllCategoriesLabel = () => filterMode === 'include' ? 'Include All Categories' : 'Exclude No Categories (Show All)';
+  const getDeselectAllCategoriesLabel = () => filterMode === 'include' ? 'Include No Categories' : 'Exclude All Categories';
 
   return (
     <div className="space-y-6">
@@ -158,7 +142,7 @@ const FilterControls: React.FC<FilterControlsProps> = ({
         onBeforeTimeChange={handleBeforeTimeChange}
         onTimeRangeChange={handleTimeRangeChange}
       />
-      {/* Rink Filter Section - Conditional Rendering */}
+      {/* Rink Filter Section - only show for ALL_RINKS_TAB_ID */}
       {selectedRinkId === ALL_RINKS_TAB_ID && (
         <RinkFilter
           allRinks={allRinks}

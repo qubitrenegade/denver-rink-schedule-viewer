@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { RinkInfo } from '../types';
 
@@ -9,7 +8,9 @@ interface RinkTabsProps {
   allRinksTabId: string;
 }
 
+// Tab navigation for rink selection
 const RinkTabs: React.FC<RinkTabsProps> = ({ rinks, selectedRinkId, onSelectRink, allRinksTabId }) => {
+  // Compose tab list: All Rinks + individual rinks
   const tabs = [
     { id: allRinksTabId, name: 'All Rinks' },
     ...rinks,

@@ -1,40 +1,31 @@
+// Foothills Edge scraper: fetches and parses events from the Edge calendar
 import { RawIceEventData, EventCategory } from '../../src/types.js';
 import { BaseScraper } from './base-scraper.js';
 import { JSDOM } from 'jsdom';
 
 export class FoothillsEdgeScraper extends BaseScraper {
-  get rinkId(): string { return 'foothills-edge'; }
-  get rinkName(): string { return 'Foothills Ice Arena (Edge)'; }
-
+  get rinkId() { return 'foothills-edge'; }
+  get rinkName() { return 'Foothills Ice Arena (Edge)'; }
   private readonly calendarUrl = 'https://calendar.ifoothills.org/calendars/edge-ice-arena-drop.php';
 
-  // Parse time and properly handle Mountain Time zone
+  // Parse time and handle Mountain Time zone
   private parseFoothillsTime(timeStr: string, baseDate: Date): Date {
     const timeMatch = timeStr.match(/(\d{1,2}):(\d{2})\s*([AP])\.?M\.?/i);
     if (!timeMatch) return baseDate;
-    
     let hours = parseInt(timeMatch[1]);
     const minutes = parseInt(timeMatch[2]);
     const ampm = timeMatch[3].toLowerCase();
-    
-    // Convert to 24-hour format
     if (ampm === 'p' && hours !== 12) hours += 12;
     if (ampm === 'a' && hours === 12) hours = 0;
-    
-    // Create date in Mountain Time, then convert to UTC for storage
     const result = new Date(baseDate);
     result.setUTCHours(hours, minutes, 0, 0);
-    // Add 6 hours to convert from Mountain Time to UTC (assuming MDT)
     result.setTime(result.getTime() + (6 * 60 * 60 * 1000));
-    
     return result;
   }
 
   // Enhanced categorization for Edge-specific events
   protected categorizeEdgeEvent(title: string): EventCategory {
     const titleLower = title.toLowerCase().trim();
-    
-    console.log(`   🏷️ Categorizing Edge event: "${title}"`);
     
     // Edge-specific patterns from the data
     if (titleLower.includes('drop') && titleLower.includes('hockey')) {
@@ -76,15 +67,10 @@ export class FoothillsEdgeScraper extends BaseScraper {
   private extractEventsFromJavaScript(html: string): RawIceEventData[] {
     const events: RawIceEventData[] = [];
     
-    console.log('🔍 Extracting events from JavaScript data...');
-    
     // Look for the events assignment with data (not the empty declaration)
     // Pattern: events = {"2025-05-22":[...
     const eventsStartMatch = html.match(/events\s*=\s*\{"[0-9]{4}-[0-9]{2}-[0-9]{2}"/);
     if (!eventsStartMatch) {
-      console.log('   ❌ No events JavaScript assignment with data found');
-      console.log('   🔍 Checking for any events assignment...');
-      
       // Debug: show what we can find
       const anyEventsMatch = html.match(/events\s*=\s*[^;]*/g);
       if (anyEventsMatch) {
@@ -115,17 +101,13 @@ export class FoothillsEdgeScraper extends BaseScraper {
       
       // Extract the full object string
       const eventsDataStr = html.substring(startIndex, endIndex + 1);
-      console.log(`   📋 Found events data (${eventsDataStr.length} chars)`);
-      console.log(`   🔍 Sample: ${eventsDataStr.substring(0, 100)}...`);
       
       // Parse the JavaScript object using JSON.parse
       const eventsData = JSON.parse(eventsDataStr);
       
-      console.log(`   📊 Parsed events object with ${Object.keys(eventsData).length} dates`);
-      
       // Process each date and its events
-      Object.entries(eventsData).forEach(([dateStr, dayEvents]: [string, any[]]) => {
-        console.log(`   📅 Processing ${dateStr}: ${dayEvents.length} events`);
+      // Fix Object.entries typing for eventsData
+      Object.entries(eventsData as Record<string, any[]>).forEach(([dateStr, dayEvents]) => {
         
         // Parse the date (YYYY-MM-DD format)
         const [year, month, day] = dateStr.split('-').map(Number);
@@ -136,8 +118,6 @@ export class FoothillsEdgeScraper extends BaseScraper {
             const title = event.name || 'Ice Activity';
             const timeIn = event.TimeIn || '12:00 PM';
             const timeOut = event.TimeOut || '1:30 PM';
-            
-            console.log(`     ➕ "${title}" ${timeIn} - ${timeOut}`);
             
             // Parse start and end times
             const startTime = this.parseFoothillsTime(timeIn, eventDate);
@@ -181,8 +161,6 @@ export class FoothillsEdgeScraper extends BaseScraper {
       console.log(`   📡 Fetching calendar from: ${this.calendarUrl}`);
       
       const html = await this.fetchWithFallback(this.calendarUrl);
-      
-      console.log('🔍 Parsing Edge calendar content...');
       
       // Extract events from the JavaScript data
       const events = this.extractEventsFromJavaScript(html);
@@ -234,8 +212,6 @@ export class FoothillsEdgeScraper extends BaseScraper {
       const timeMatches = allText.match(timePattern);
       
       if (timeMatches) {
-        console.log(`   📋 Found ${timeMatches.length} time patterns in text`);
-        
         const events: RawIceEventData[] = [];
         const today = new Date();
         

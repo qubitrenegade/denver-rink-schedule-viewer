@@ -1,4 +1,4 @@
-import React from 'react';
+// Entry point for the Denver Rink Schedule Viewer app
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -10,9 +10,7 @@ if (!rootElement) {
 
 const root = ReactDOM.createRoot(rootElement);
 root.render(
-  // <React.StrictMode> removed
   <ErrorBoundary fallbackMessage="The application encountered an error. Please try refreshing.">
     <App />
   </ErrorBoundary>
-  // </React.StrictMode> removed
 );

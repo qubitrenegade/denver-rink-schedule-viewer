@@ -1,3 +1,4 @@
+// DU Ritchie Center scraper: fetches and parses events from DU Google Calendars
 import { RawIceEventData, EventCategory } from '../../src/types.js';
 import { BaseScraper } from './base-scraper.js';
 
@@ -12,33 +13,28 @@ interface CalendarEvent {
 }
 
 export class DURitchieScraper extends BaseScraper {
-  get rinkId(): string { return 'du-ritchie'; }
-  get rinkName(): string { return 'DU Ritchie Center'; }
+  get rinkId() { return 'du-ritchie'; }
+  get rinkName() { return 'DU Ritchie Center'; }
 
   // Google Calendar IDs from the embed URL (base64 decoded)
   private readonly calendarIds = [
     '4u0hkl9u6ii0o39uk1v90nnv6o@group.calendar.google.com',
-    'qtst6uerc2tamp5pbn2p4n4dko@group.calendar.google.com', 
+    'qtst6uerc2tamp5pbn2p4n4dko@group.calendar.google.com',
     'pc78u2neckrn16pj4v92r6mufg@group.calendar.google.com',
     '6ej1qanm6fjqmpgkgpu114vijc@group.calendar.google.com'
   ];
 
+  // Clean and summarize HTML description
   private cleanHtmlDescription(htmlDescription: string): string {
     if (!htmlDescription) return '';
     
-    let cleaned = htmlDescription;
-    
-    // Decode HTML entities
-    cleaned = cleaned
+    let cleaned = htmlDescription
       .replace(/&amp;/g, '&')
       .replace(/&lt;/g, '<')
       .replace(/&gt;/g, '>')
       .replace(/&quot;/g, '"')
       .replace(/&#39;/g, "'")
-      .replace(/&nbsp;/g, ' ');
-    
-    // Remove HTML tags but keep some basic formatting
-    cleaned = cleaned
+      .replace(/&nbsp;/g, ' ')
       .replace(/<\/p>/g, '\n\n')           // Paragraphs become double newlines
       .replace(/<\/li>/g, '\n')            // List items become single newlines  
       .replace(/<\/ol>/g, '\n')            // End of ordered list
@@ -74,78 +70,61 @@ export class DURitchieScraper extends BaseScraper {
     return essentialLines.join(' ') || 'Ice session at DU Ritchie Center';
   }
 
-  protected categorizeDUEvent(title: string, description?: string): EventCategory {
+  // Categorize DU event
+  protected categorizeDUEvent(title: string): EventCategory {
     const titleLower = title.toLowerCase().trim();
-    
-    console.log(`   🏷️ Categorizing: "${title}" (lowercase: "${titleLower}")`);
     
     // Be very explicit about exact matches first
     if (titleLower === 'stick & puck' || titleLower === 'stick and puck') {
-      console.log(`     ✅ Exact match: Stick & Puck`);
       return 'Stick & Puck';
     }
     
     if (titleLower === 'public skate') {
-      console.log(`     ✅ Exact match: Public Skate`);
       return 'Public Skate';
     }
     
     if (titleLower === 'drop-in hockey' || titleLower === 'drop in hockey') {
-      console.log(`     ✅ Exact match: Drop-In Hockey`);
       return 'Drop-In Hockey';
     }
     
     // Then try partial matches
     if (titleLower.includes('stick') && titleLower.includes('puck')) {
-      console.log(`     ✅ Partial match: contains "stick" and "puck" -> Stick & Puck`);
       return 'Stick & Puck';
     }
     
-    if (titleLower.includes('drop-in') || titleLower.includes('drop in')) {
-      console.log(`     ✅ Partial match: contains "drop-in" -> Drop-In Hockey`);
-      return 'Drop-In Hockey';
-    }
-    
-    if (titleLower.includes('public') && titleLower.includes('skate')) {
-      console.log(`     ✅ Partial match: contains "public skate" -> Public Skate`);
+    if (titleLower.includes('public skate')) {
       return 'Public Skate';
     }
     
-    if (titleLower.includes('freestyle') || titleLower.includes('figure')) {
-      console.log(`     ✅ Partial match: contains "freestyle" or "figure" -> Figure Skating`);
+    if (titleLower.includes('drop') && titleLower.includes('hockey')) {
+      return 'Drop-In Hockey';
+    }
+    
+    if (titleLower.includes('league')) {
+      return 'Hockey League';
+    }
+    
+    if (titleLower.includes('figure') || titleLower.includes('freestyle')) {
       return 'Figure Skating';
     }
     
-    // DU-specific events
-    const descLower = (description || '').toLowerCase();
-    const combined = `${titleLower} ${descLower}`;
-    
-    if (combined.includes('pioneer') && combined.includes('practice')) {
-      console.log(`     ✅ DU specific: Pioneers practice -> Hockey Practice`);
-      return 'Hockey Practice';
-    }
-    
-    if (combined.includes('university') && (combined.includes('practice') || combined.includes('training'))) {
-      console.log(`     ✅ DU specific: University practice -> Hockey Practice`);
-      return 'Hockey Practice';
-    }
-    
-    if (combined.includes('lesson') || combined.includes('instruction') || combined.includes('learn')) {
-      console.log(`     ✅ Learning related -> Learn to Skate`);
+    if (titleLower.includes('learn') || titleLower.includes('lesson')) {
       return 'Learn to Skate';
     }
     
-    if (combined.includes('closed') || combined.includes('maintenance')) {
-      console.log(`     ✅ Closed/maintenance -> Special Event`);
+    if (titleLower.includes('practice')) {
+      return 'Hockey Practice';
+    }
+    
+    if (titleLower.includes('closed') || titleLower.includes('holiday')) {
       return 'Special Event';
     }
     
-    // Default fallback - but warn about it
-    console.log(`     ⚠️ No specific match found for "${title}", defaulting to Public Skate`);
-    return 'Public Skate';
+    // Default fallback
+    return 'Other';
   }
 
-  private parseICalDate(dateStr: string, timezone?: string): Date {
+  private parseICalDate(dateStr: string): Date {
     if (dateStr.includes('T')) {
       const year = parseInt(dateStr.substr(0, 4));
       const month = parseInt(dateStr.substr(4, 2)) - 1;
@@ -172,7 +151,6 @@ export class DURitchieScraper extends BaseScraper {
     const lines = icalData.split(/\r?\n/);
     
     let currentEvent: Partial<CalendarEvent> | null = null;
-    let currentTimezone = '';
     
     for (let i = 0; i < lines.length; i++) {
       let line = lines[i].trim();
@@ -185,9 +163,8 @@ export class DURitchieScraper extends BaseScraper {
       if (line.startsWith('BEGIN:VTIMEZONE')) {
         while (i + 1 < lines.length && !lines[i + 1].startsWith('END:VTIMEZONE')) {
           i++;
-          if (lines[i].startsWith('TZID:')) {
-            currentTimezone = lines[i].substring(5);
-          }
+          // Remove unused currentTimezone variable
+          // let currentTimezone = '';
         }
       } else if (line === 'BEGIN:VEVENT') {
         currentEvent = {};
@@ -202,9 +179,10 @@ export class DURitchieScraper extends BaseScraper {
         const fieldValue = line.substring(colonIndex + 1);
         
         const baseFieldName = fieldName.split(';')[0];
-        const fieldParams = fieldName.includes(';') ? fieldName.split(';').slice(1) : [];
-        const tzParam = fieldParams.find(p => p.startsWith('TZID='));
-        const timezone = tzParam ? tzParam.substring(5) : currentTimezone;
+        // Remove unused fieldParams variable
+        // const fieldParams = fieldName.includes(';') ? fieldName.split(';').slice(1) : [];
+        // Remove unused tzParam variable
+        // const tzParam = fieldParams.find(p => p.startsWith('TZID='));
         
         switch (baseFieldName) {
           case 'UID':
@@ -215,7 +193,8 @@ export class DURitchieScraper extends BaseScraper {
             break;
           case 'DTSTART':
             try {
-              currentEvent.dtstart = this.parseICalDate(fieldValue, timezone);
+              // Remove timezone argument from parseICalDate
+              currentEvent.dtstart = this.parseICalDate(fieldValue);
               currentEvent.isAllDay = !fieldValue.includes('T');
             } catch (e) {
               console.warn(`      ⚠️ Failed to parse start date: ${fieldValue}`, e);
@@ -223,7 +202,8 @@ export class DURitchieScraper extends BaseScraper {
             break;
           case 'DTEND':
             try {
-              currentEvent.dtend = this.parseICalDate(fieldValue, timezone);
+              // Remove timezone argument from parseICalDate
+              currentEvent.dtend = this.parseICalDate(fieldValue);
             } catch (e) {
               console.warn(`      ⚠️ Failed to parse end date: ${fieldValue}`, e);
             }
@@ -243,14 +223,10 @@ export class DURitchieScraper extends BaseScraper {
 
   async scrape(): Promise<RawIceEventData[]> {
     try {
-      console.log('🏒 Scraping DU Ritchie Center calendars...');
-      
       const allEvents: RawIceEventData[] = [];
       
       for (const calendarId of this.calendarIds) {
         try {
-          console.log(`   📅 Fetching calendar: ${calendarId.substring(0, 20)}...`);
-          
           const icalUrl = `https://calendar.google.com/calendar/ical/${encodeURIComponent(calendarId)}/public/basic.ics`;
           
           const response = await fetch(icalUrl, {
@@ -273,7 +249,6 @@ export class DURitchieScraper extends BaseScraper {
           }
           
           const events = this.parseICalContent(icalData);
-          console.log(`   ✅ Parsed ${events.length} events from calendar`);
           
           // Filter and convert events
           const now = new Date();
@@ -296,10 +271,8 @@ export class DURitchieScraper extends BaseScraper {
             }
             
             const eventId = event.uid || `du-ritchie-${event.dtstart.getTime()}-${index}`;
-            const category = this.categorizeDUEvent(event.summary, event.description);
+            const category = this.categorizeDUEvent(event.summary);
             const cleanDescription = event.description ? this.cleanHtmlDescription(event.description) : undefined;
-            
-            console.log(`   ➕ Adding: "${event.summary}" -> ${category}`);
             
             allEvents.push({
               id: `${this.rinkId}-${eventId}`,
@@ -315,11 +288,10 @@ export class DURitchieScraper extends BaseScraper {
           });
           
         } catch (error) {
-          console.error(`   ❌ Error fetching calendar ${calendarId}:`, error.message);
+          const message = error instanceof Error ? error.message : String(error);
+          console.error(`   ❌ Error fetching calendar ${calendarId}:`, message);
         }
       }
-      
-      console.log(`🏒 DU Ritchie Center: Total events found: ${allEvents.length}`);
       
       // Remove duplicates
       const uniqueEvents = allEvents.filter((event, index, self) => 
@@ -329,24 +301,12 @@ export class DURitchieScraper extends BaseScraper {
         )
       );
       
-      console.log(`🏒 DU Ritchie Center: Unique events after deduplication: ${uniqueEvents.length}`);
-      
-      // Debug: Show final categorization
-      const categoryBreakdown: Record<string, number> = {};
-      uniqueEvents.forEach(event => {
-        categoryBreakdown[event.category] = (categoryBreakdown[event.category] || 0) + 1;
-      });
-      
-      console.log(`🔍 Final category breakdown:`);
-      Object.entries(categoryBreakdown).forEach(([category, count]) => {
-        console.log(`   ${category}: ${count}`);
-      });
-      
       uniqueEvents.sort((a, b) => a.startTime.getTime() - b.startTime.getTime());
       return uniqueEvents;
       
     } catch (error) {
-      console.error('❌ DU Ritchie Center scraping failed:', error);
+      const message = error instanceof Error ? error.message : String(error);
+      console.error('❌ DU Ritchie Center scraping failed:', message);
       return [];
     }
   }

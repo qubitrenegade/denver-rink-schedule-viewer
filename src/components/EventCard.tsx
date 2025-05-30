@@ -1,15 +1,17 @@
 import React from 'react';
 import { DisplayableIceEvent, EventCategory } from '../types';
-import { ClockIcon, TagIcon, InfoIcon, StarIcon, GlobeAltIcon } from './icons'; 
+import { ClockIcon, TagIcon, InfoIcon, StarIcon, GlobeAltIcon, LinkIcon } from './icons'; 
 
 interface EventCardProps {
   event: DisplayableIceEvent;
 }
 
+// Format event time for display
 const formatTime = (dateString: string): string => {
   return new Date(dateString).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
 };
 
+// Get color classes for event category
 const getCategoryColor = (category: EventCategory): string => {
   switch (category) {
     case 'Public Skate': return 'bg-blue-600 text-blue-100';
@@ -24,14 +26,8 @@ const getCategoryColor = (category: EventCategory): string => {
   }
 };
 
-// Link icon component
-const LinkIcon: React.FC<{ className?: string }> = ({ className }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
-  </svg>
-);
-
 const EventCard: React.FC<EventCardProps> = ({ event }) => {
+  // Compute event duration in minutes
   const startTimeDate = new Date(event.startTime);
   const endTimeDate = new Date(event.endTime);
   const duration = (endTimeDate.getTime() - startTimeDate.getTime()) / (1000 * 60); // Duration in minutes
