@@ -27,9 +27,11 @@
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
-    "typescript": "~5.7.2",
-    "jsdom": "^24.0.0",
+    "@types/react": "^19.1.6",
+    "@types/react-dom": "^19.1.5",
     "cheerio": "^1.0.0",
-    "node-fetch": "^3.0.0"
+    "jsdom": "^24.0.0",
+    "node-fetch": "^3.0.0",
+    "typescript": "~5.7.2"
   }
 }

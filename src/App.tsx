@@ -1,79 +1,41 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { RinkInfo, EventCategory, DisplayableIceEvent, FilterSettings, FilterMode, UrlViewType, RawIceEventData, DateFilterMode, TimeFilterMode } from './types';
+import React, { useState, useEffect, useMemo } from 'react';
+import { EventCategory, DisplayableIceEvent, FilterSettings, FilterMode, UrlViewType, RawIceEventData, DateFilterMode, TimeFilterMode } from './types';
 import { RINKS_CONFIG, ALL_INDIVIDUAL_RINKS_FOR_FILTERING } from './rinkConfig';
 import RinkTabs from './components/RinkTabs';
 import EventList from './components/EventList';
 import FilterControls from './components/FilterControls';
 import { LoadingIcon, CalendarIcon, AdjustmentsHorizontalIcon } from './components/icons';
+import { useEventData } from './hooks/useEventData';
+import { useEventFiltering } from './hooks/useEventFiltering';
+import { useUrlState } from './hooks/useUrlState';
 
 export const ALL_RINKS_TAB_ID = 'all-rinks';
-const MS_PER_DAY = 24 * 60 * 60 * 1000;
-
-// Individual facility metadata - using the interface from types.ts
-import type { FacilityMetadata } from './types';
 
 const App: React.FC = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const [facilityErrors, setFacilityErrors] = useState<Record<string, string>>({});
-  const [rinksConfigForTabs] = useState<RinkInfo[]>(RINKS_CONFIG);
-  const [individualRinksForFiltering] = useState<RinkInfo[]>(ALL_INDIVIDUAL_RINKS_FOR_FILTERING);
-  
-  const [staticData, setStaticData] = useState<RawIceEventData[]>([]);
-  const [facilityMetadata, setFacilityMetadata] = useState<Record<string, FacilityMetadata>>({});
-  const [lastFetchTime, setLastFetchTime] = useState<number>(0);
+  // Use the new data hook
+  const {
+    staticData,
+    facilityMetadata,
+    facilityErrors,
+    isLoading,
+    error,
+    refetch
+  } = useEventData();
 
-  const [selectedRinkId, setSelectedRinkId] = useState<UrlViewType>(() => {
-    const params = new URLSearchParams(window.location.search);
-    return params.get('view') || ALL_RINKS_TAB_ID;
-  });
+  // Use the new URL state hook
+  const {
+    selectedRinkId,
+    setSelectedRinkId,
+    filterSettings,
+    setFilterSettings
+  } = useUrlState();
 
-  const [filterSettings, setFilterSettings] = useState<FilterSettings>(() => {
-    const params = new URLSearchParams(window.location.search);
-    const mode = params.get('mode') as FilterMode | null;
-    const categories = params.get('categories');
-    const rinkIdsParam = params.get('rinkIds');
-    const rinkModeParam = params.get('rinkMode') as FilterMode | null;
-    
-    // Date filtering params
-    const dateFilterMode = (params.get('dateMode') as DateFilterMode) || 'next-days';
-    const numberOfDays = parseInt(params.get('days') || '4');
-    const selectedDate = params.get('date') || undefined;
-    const dateRangeStart = params.get('dateStart') || undefined;
-    const dateRangeEnd = params.get('dateEnd') || undefined;
-    
-    // Time filtering params
-    const timeFilterMode = (params.get('timeMode') as TimeFilterMode) || 'all-times';
-    const afterTime = params.get('afterTime') || undefined;
-    const beforeTime = params.get('beforeTime') || undefined;
-    const timeRangeStart = params.get('timeStart') || undefined;
-    const timeRangeEnd = params.get('timeEnd') || undefined;
-    
-    return {
-      activeCategories: categories ? categories.split(',') as EventCategory[] : [],
-      filterMode: mode || 'exclude',
-      activeRinkIds: rinkIdsParam ? rinkIdsParam.split(',') : [],
-      rinkFilterMode: rinkModeParam || 'exclude',
-      dateFilterMode,
-      numberOfDays,
-      selectedDate,
-      dateRangeStart,
-      dateRangeEnd,
-      timeFilterMode,
-      afterTime,
-      beforeTime,
-      timeRangeStart,
-      timeRangeEnd,
-    };
-  });
-  
-  const [events, setEvents] = useState<DisplayableIceEvent[]>([]);
   const [showFilters, setShowFilters] = useState(false);
 
   const allPossibleCategories = useMemo((): EventCategory[] => {
     const categories = new Set<EventCategory>();
     // Get categories from static data
-    staticData.forEach(event => categories.add(event.category));
+    staticData.forEach((event: RawIceEventData) => categories.add(event.category));
     
     // Ensure we have common categories even if not in current data
     ['Public Skate', 'Stick & Puck', 'Hockey League', 'Learn to Skate', 'Figure Skating', 'Hockey Practice', 'Drop-In Hockey', 'Special Event'].forEach(cat => {
@@ -83,387 +45,9 @@ const App: React.FC = () => {
     return Array.from(categories).sort();
   }, [staticData]);
 
-  // Load all facility files and their metadata upfront
-  const fetchStaticData = useCallback(async (forceRefresh: boolean = false) => {
-    // Only refetch if we don't have data or it's been more than 5 minutes (for development)
-    if (staticData.length > 0 && !forceRefresh && Date.now() - lastFetchTime < 5 * 60 * 1000) {
-      console.log(`📋 Using cached data`);
-      return;
-    }
-
-    setIsLoading(true);
-    setError(null);
-    setFacilityErrors({});
-
-    try {
-      console.log(`📡 Fetching all facility data and metadata...`);
-      
-      // All facility files to load
-      const facilityIds = ['ice-ranch', 'big-bear', 'du-ritchie', 'foothills-edge', 'ssprd-249', 'ssprd-250'];
-      console.log(`📋 Loading facilities: ${facilityIds.join(', ')}`);
-      
-      // Load data and metadata files in parallel for each facility
-      const facilityPromises = facilityIds.map(async (facilityId) => {
-        try {
-          console.log(`   📥 Loading ${facilityId}...`);
-          
-          // Load both data and metadata in parallel
-          const [dataResponse, metadataResponse] = await Promise.all([
-            fetch(`/data/${facilityId}.json`),
-            fetch(`/data/${facilityId}-metadata.json`)
-          ]);
-          
-          // Process data file
-          let eventsData = [];
-          let dataError = null;
-          if (dataResponse.ok) {
-            eventsData = await dataResponse.json();
-          } else {
-            dataError = `HTTP ${dataResponse.status}: ${dataResponse.statusText}`;
-          }
-          
-          // Process metadata file
-          let metadata: FacilityMetadata | null = null;
-          if (metadataResponse.ok) {
-            metadata = await metadataResponse.json();
-            console.log(`   📊 Loaded metadata for ${facilityId}: ${metadata.status} (${metadata.eventCount} events)`);
-          } else {
-            console.log(`   ⚠️ No metadata file for ${facilityId}, creating basic metadata`);
-            // Create basic metadata if file doesn't exist
-            metadata = {
-              facilityId,
-              facilityName: facilityId,
-              displayName: facilityId,
-              lastAttempt: new Date().toISOString(),
-              status: dataError ? 'error' : 'success',
-              eventCount: eventsData.length,
-              sourceUrl: '',
-              rinks: [{ rinkId: facilityId, rinkName: 'Main Rink' }],
-              ...(dataError && { errorMessage: dataError }),
-              ...(!dataError && { lastSuccessfulScrape: new Date().toISOString() })
-            };
-          }
-          
-          // Convert string dates back to Date objects
-          const parsedEvents: RawIceEventData[] = eventsData.map((event: any) => ({
-            ...event,
-            startTime: new Date(event.startTime),
-            endTime: new Date(event.endTime),
-          }));
-          
-          console.log(`   ✅ Loaded ${parsedEvents.length} events from ${facilityId}.json`);
-          
-          return {
-            facilityId,
-            events: parsedEvents,
-            metadata,
-            success: !dataError,
-            error: dataError
-          };
-        } catch (err) {
-          const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-          console.error(`   ❌ Failed to load ${facilityId}:`, errorMessage);
-          
-          // Create error metadata
-          const errorMetadata: FacilityMetadata = {
-            facilityId,
-            facilityName: facilityId,
-            displayName: facilityId,
-            lastAttempt: new Date().toISOString(),
-            status: 'error',
-            eventCount: 0,
-            errorMessage: errorMessage,
-            sourceUrl: '',
-            rinks: [{ rinkId: facilityId, rinkName: 'Main Rink' }]
-          };
-          
-          return {
-            facilityId,
-            events: [],
-            metadata: errorMetadata,
-            success: false,
-            error: errorMessage
-          };
-        }
-      });
-      
-      const results = await Promise.all(facilityPromises);
-      
-      // Process results
-      const allEvents: RawIceEventData[] = [];
-      const newFacilityErrors: Record<string, string> = {};
-      const newFacilityMetadata: Record<string, FacilityMetadata> = {};
-      
-      results.forEach(result => {
-        // Always store metadata (success or error)
-        if (result.metadata) {
-          newFacilityMetadata[result.facilityId] = result.metadata;
-        }
-        
-        if (result.success) {
-          allEvents.push(...result.events);
-        } else {
-          if (result.error) {
-            newFacilityErrors[result.facilityId] = result.error;
-          }
-        }
-      });
-      
-      setStaticData(allEvents);
-      setFacilityErrors(newFacilityErrors);
-      setFacilityMetadata(newFacilityMetadata);
-      setLastFetchTime(Date.now());
-      
-      const successCount = results.filter(r => r.success).length;
-      const errorCount = results.filter(r => !r.success).length;
-      
-      console.log(`✅ Data loading complete: ${successCount} successful, ${errorCount} failed`);
-      console.log(`📊 Total events loaded: ${allEvents.length}`);
-      console.log(`📋 Loaded metadata for ${Object.keys(newFacilityMetadata).length} facilities`);
-      
-      // Show metadata info
-      Object.values(newFacilityMetadata).forEach(meta => {
-        console.log(`   📊 ${meta.displayName}: ${meta.status} (${meta.eventCount} events)`);
-      });
-      
-      // Set error message if all facilities failed
-      if (errorCount > 0 && successCount === 0) {
-        setError(`Failed to load data from all facilities. Check your connection and try again.`);
-      }
-      
-    } catch (err) {
-      console.error('Error during data loading:', err);
-      setError(`Failed to load schedule data: ${err instanceof Error ? err.message : 'Unknown error'}`);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [staticData.length, lastFetchTime]);
-
-  // Helper function to parse time string to hours and minutes
-  const parseTime = (timeString: string): { hours: number; minutes: number } => {
-    const [hours, minutes] = timeString.split(':').map(Number);
-    return { hours, minutes };
-  };
-
-  // Helper function to get time in minutes from midnight
-  const getMinutesFromMidnight = (date: Date): number => {
-    return date.getHours() * 60 + date.getMinutes();
-  };
-
-  const filterAndDisplayEvents = useCallback((rinkTabId: UrlViewType, currentFilters: FilterSettings, sourceData: RawIceEventData[]) => {
-    console.log("Filtering data for tab:", { rinkTabId, currentFilters, dataLength: sourceData.length });
-    
-    let processedData = [...sourceData];
-
-    // 1. Date Range Filter
-    let startDate: Date;
-    let endDate: Date;
-
-    if (currentFilters.dateFilterMode === 'next-days') {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      startDate = today;
-      endDate = new Date(today.getTime() + (currentFilters.numberOfDays || 4) * MS_PER_DAY);
-      endDate.setHours(23, 59, 59, 999);
-    } else if (currentFilters.dateFilterMode === 'specific-day') {
-      if (currentFilters.selectedDate) {
-        startDate = new Date(currentFilters.selectedDate + 'T00:00:00');
-        endDate = new Date(currentFilters.selectedDate + 'T23:59:59');
-      } else {
-        // Fallback to today
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        startDate = today;
-        endDate = new Date(today);
-        endDate.setHours(23, 59, 59, 999);
-      }
-    } else if (currentFilters.dateFilterMode === 'date-range') {
-      if (currentFilters.dateRangeStart && currentFilters.dateRangeEnd) {
-        startDate = new Date(currentFilters.dateRangeStart + 'T00:00:00');
-        endDate = new Date(currentFilters.dateRangeEnd + 'T23:59:59');
-      } else {
-        // Fallback to next 7 days
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        startDate = today;
-        endDate = new Date(today.getTime() + 7 * MS_PER_DAY);
-        endDate.setHours(23, 59, 59, 999);
-      }
-    } else {
-      // Fallback
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      startDate = today;
-      endDate = new Date(today.getTime() + 4 * MS_PER_DAY);
-      endDate.setHours(23, 59, 59, 999);
-    }
-    
-    console.log(`Date range: ${startDate.toLocaleDateString()} to ${endDate.toLocaleDateString()}`);
-
-    processedData = processedData.filter(event => {
-      const eventStartTime = event.startTime;
-      return eventStartTime >= startDate && eventStartTime <= endDate;
-    });
-    console.log(`After date filter: ${processedData.length} events`);
-
-    // 2. Time Filter
-    if (currentFilters.timeFilterMode !== 'all-times') {
-      processedData = processedData.filter(event => {
-        const eventTime = getMinutesFromMidnight(event.startTime);
-        
-        if (currentFilters.timeFilterMode === 'after-time' && currentFilters.afterTime) {
-          const { hours, minutes } = parseTime(currentFilters.afterTime);
-          const afterTimeMinutes = hours * 60 + minutes;
-          return eventTime >= afterTimeMinutes;
-        } else if (currentFilters.timeFilterMode === 'before-time' && currentFilters.beforeTime) {
-          const { hours, minutes } = parseTime(currentFilters.beforeTime);
-          const beforeTimeMinutes = hours * 60 + minutes;
-          return eventTime < beforeTimeMinutes;
-        } else if (currentFilters.timeFilterMode === 'time-range' && currentFilters.timeRangeStart && currentFilters.timeRangeEnd) {
-          const { hours: startHours, minutes: startMinutes } = parseTime(currentFilters.timeRangeStart);
-          const { hours: endHours, minutes: endMinutes } = parseTime(currentFilters.timeRangeEnd);
-          const startTimeMinutes = startHours * 60 + startMinutes;
-          const endTimeMinutes = endHours * 60 + endMinutes;
-          return eventTime >= startTimeMinutes && eventTime <= endTimeMinutes;
-        }
-        
-        return true;
-      });
-      
-      console.log(`After time filter: ${processedData.length} events`);
-    }
-
-    // 3. Tab-specific filtering (for individual/group tabs)
-    const selectedTabConfig = rinksConfigForTabs.find(r => r.id === rinkTabId);
-    
-    if (rinkTabId !== ALL_RINKS_TAB_ID) {
-      if (selectedTabConfig?.memberRinkIds) {
-        // Group tab - filter to member rinks
-        processedData = processedData.filter(event => 
-          selectedTabConfig.memberRinkIds!.includes(event.rinkId)
-        );
-      } else {
-        // Individual tab - filter to specific rink
-        processedData = processedData.filter(event => event.rinkId === rinkTabId);
-      }
-      console.log(`After tab-specific filter: ${processedData.length} events`);
-    }
-
-    // 4. Rink Filter (only for 'All Rinks' view, based on individual rinks)
-    if (rinkTabId === ALL_RINKS_TAB_ID && currentFilters.activeRinkIds && currentFilters.activeRinkIds.length > 0) {
-      processedData = processedData.filter(event => {
-        if (currentFilters.rinkFilterMode === 'include') {
-          return currentFilters.activeRinkIds!.includes(event.rinkId);
-        } else { // exclude
-          return !currentFilters.activeRinkIds!.includes(event.rinkId);
-        }
-      });
-      console.log(`After 'All Rinks' view specific rink filter: ${processedData.length} events`);
-    }
-    
-    // 5. Prepare for display (add rinkName)
-    const rawEventsWithDates: Array<RawIceEventData & { rinkName?: string }> = processedData.map(e => ({
-      ...e,
-      rinkName: individualRinksForFiltering.find(r => r.id === e.rinkId)?.name || e.rinkId
-    }));
-    
-    console.log(`After preparing for display (rinkName): ${rawEventsWithDates.length} events`);
-    
-    // 6. Category Filter
-    const processedEvents: DisplayableIceEvent[] = rawEventsWithDates.map(event => ({
-      ...event,
-      startTime: event.startTime.toISOString(),
-      endTime: event.endTime.toISOString(),
-    })).filter(event => {
-      if (currentFilters.filterMode === 'include') {
-        return currentFilters.activeCategories.length === 0 ? false : currentFilters.activeCategories.includes(event.category);
-      } else { 
-        return !currentFilters.activeCategories.includes(event.category);
-      }
-    });
-    console.log(`After category filter: ${processedEvents.length} events`);
-    
-    const sortedEvents = processedEvents.sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
-    console.log("Setting filtered events:", sortedEvents.length);
-    setEvents(sortedEvents);
-  }, [rinksConfigForTabs, individualRinksForFiltering]);
-
-  // Load data when app starts
-  useEffect(() => {
-    fetchStaticData();
-  }, [fetchStaticData]);
-
   // Filter events when data or filters change
-  useEffect(() => {
-    if (staticData.length > 0) {
-      filterAndDisplayEvents(selectedRinkId, filterSettings, staticData);
-    }
-  }, [selectedRinkId, filterSettings, staticData, filterAndDisplayEvents]);
-
-  // URL state management
-  useEffect(() => {
-    const params = new URLSearchParams();
-    params.set('view', selectedRinkId);
-
-    if (filterSettings.filterMode !== 'exclude' || filterSettings.activeCategories.length > 0) {
-      params.set('mode', filterSettings.filterMode);
-    }
-    if (filterSettings.activeCategories.length > 0) {
-      params.set('categories', filterSettings.activeCategories.join(','));
-    }
-    if (filterSettings.rinkFilterMode !== 'exclude' || (filterSettings.activeRinkIds && filterSettings.activeRinkIds.length > 0)) {
-      params.set('rinkMode', filterSettings.rinkFilterMode || 'exclude');
-    }
-    if (filterSettings.activeRinkIds && filterSettings.activeRinkIds.length > 0) {
-      params.set('rinkIds', filterSettings.activeRinkIds.join(','));
-    }
-
-    // Date filtering URL params
-    if (filterSettings.dateFilterMode !== 'next-days') {
-      params.set('dateMode', filterSettings.dateFilterMode);
-    }
-    if (filterSettings.dateFilterMode === 'next-days' && filterSettings.numberOfDays !== 4) {
-      params.set('days', filterSettings.numberOfDays?.toString() || '4');
-    }
-    if (filterSettings.dateFilterMode === 'specific-day' && filterSettings.selectedDate) {
-      params.set('date', filterSettings.selectedDate);
-    }
-    if (filterSettings.dateFilterMode === 'date-range') {
-      if (filterSettings.dateRangeStart) params.set('dateStart', filterSettings.dateRangeStart);
-      if (filterSettings.dateRangeEnd) params.set('dateEnd', filterSettings.dateRangeEnd);
-    }
-
-    // Time filtering URL params
-    if (filterSettings.timeFilterMode !== 'all-times') {
-      params.set('timeMode', filterSettings.timeFilterMode);
-    }
-    if (filterSettings.timeFilterMode === 'after-time' && filterSettings.afterTime) {
-      params.set('afterTime', filterSettings.afterTime);
-    }
-    if (filterSettings.timeFilterMode === 'before-time' && filterSettings.beforeTime) {
-      params.set('beforeTime', filterSettings.beforeTime);
-    }
-    if (filterSettings.timeFilterMode === 'time-range') {
-      if (filterSettings.timeRangeStart) params.set('timeStart', filterSettings.timeRangeStart);
-      if (filterSettings.timeRangeEnd) params.set('timeEnd', filterSettings.timeRangeEnd);
-    }
-
-    const newSearchString = params.toString();
-    const newUrlTarget = newSearchString ? `${window.location.pathname}?${newSearchString}` : window.location.pathname;
-    
-    const currentFullUrl = `${window.location.pathname}${window.location.search}`;
-
-    if (currentFullUrl !== newUrlTarget) {
-      const timeoutId = setTimeout(() => {
-        try {
-          window.history.replaceState(null, '', newUrlTarget);
-        } catch (e: any) {
-          console.error("Error updating URL:", e);
-        }
-      }, 300); 
-      return () => clearTimeout(timeoutId);
-    }
-  }, [selectedRinkId, filterSettings]);
+  // Use useEventFiltering to get filtered/sorted events
+  const filteredEvents = useEventFiltering(staticData, filterSettings, selectedRinkId);
 
   const handleRinkSelect = (rinkId: UrlViewType) => {
     setSelectedRinkId(rinkId);
@@ -473,49 +57,34 @@ const App: React.FC = () => {
     setFilterSettings(newFilterSettings);
   };
 
-  const selectedRinkTabInfo = selectedRinkId !== ALL_RINKS_TAB_ID ? rinksConfigForTabs.find(rink => rink.id === selectedRinkId) : null;
+  const selectedRinkTabInfo = selectedRinkId !== ALL_RINKS_TAB_ID ? RINKS_CONFIG.find(rink => rink.id === selectedRinkId) : null;
 
   const getLastUpdateInfo = () => {
     if (selectedRinkId === ALL_RINKS_TAB_ID) {
-      // For "All Rinks", show the most recent update across all facilities
       let latestUpdate = '';
-      Object.values(facilityMetadata).forEach(meta => {
-        if (meta.lastSuccessfulScrape) {
-          if (!latestUpdate || meta.lastSuccessfulScrape > latestUpdate) {
-            latestUpdate = meta.lastSuccessfulScrape;
-          }
-        }
-      });
-      return latestUpdate ? new Date(latestUpdate).toLocaleString() : 'Unknown';
-    } else {
-      // For individual/group tabs, find relevant metadata
-      const selectedTabConfig = rinksConfigForTabs.find(r => r.id === selectedRinkId);
-      let latestUpdate = '';
-      
-      if (selectedTabConfig?.memberRinkIds) {
-        // Group tab - check all relevant facilities
-        selectedTabConfig.memberRinkIds.forEach(rinkId => {
-          // Map rinkId to facility file
-          let facilityId = rinkId;
-          if (rinkId.startsWith('fsc-')) facilityId = 'ssprd-249';
-          if (rinkId.startsWith('sssc-')) facilityId = 'ssprd-250';
-          
-          const meta = facilityMetadata[facilityId];
+      RINKS_CONFIG.forEach(tab => {
+        if (tab.memberRinkIds) {
+          tab.memberRinkIds.forEach(rinkId => {
+            const meta = facilityMetadata[rinkId] as { lastSuccessfulScrape?: string } | undefined;
+            if (meta?.lastSuccessfulScrape) {
+              if (!latestUpdate || meta.lastSuccessfulScrape > latestUpdate) {
+                latestUpdate = meta.lastSuccessfulScrape;
+              }
+            }
+          });
+        } else {
+          const meta = facilityMetadata[tab.id] as { lastSuccessfulScrape?: string } | undefined;
           if (meta?.lastSuccessfulScrape) {
             if (!latestUpdate || meta.lastSuccessfulScrape > latestUpdate) {
               latestUpdate = meta.lastSuccessfulScrape;
             }
           }
-        });
-      } else {
-        // Individual tab
-        const meta = facilityMetadata[selectedRinkId];
-        if (meta?.lastSuccessfulScrape) {
-          latestUpdate = meta.lastSuccessfulScrape;
         }
-      }
-      
+      });
       return latestUpdate ? new Date(latestUpdate).toLocaleString() : 'Unknown';
+    } else {
+      const meta = facilityMetadata[selectedRinkId] as { lastSuccessfulScrape?: string } | undefined;
+      return meta?.lastSuccessfulScrape ? new Date(meta.lastSuccessfulScrape).toLocaleString() : 'Unknown';
     }
   };
 
@@ -550,6 +119,10 @@ const App: React.FC = () => {
   // Get error message if there are any facility errors
   const hasAnyErrors = Object.keys(facilityErrors).length > 0;
 
+  React.useEffect(() => {
+    refetch();
+  }, [refetch]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-700 text-gray-100 p-4 sm:p-6 md:p-8">
       <header className="mb-6 text-center">
@@ -574,7 +147,7 @@ const App: React.FC = () => {
       <div className="max-w-6xl mx-auto bg-slate-800 shadow-2xl rounded-lg overflow-hidden">
         <div className="p-4 sm:p-6 border-b border-slate-700">
           <RinkTabs
-            rinks={rinksConfigForTabs}
+            rinks={RINKS_CONFIG}
             selectedRinkId={selectedRinkId}
             onSelectRink={handleRinkSelect}
             allRinksTabId={ALL_RINKS_TAB_ID}
@@ -620,7 +193,7 @@ const App: React.FC = () => {
           {showFilters && (
             <div id="filter-panel" className="mt-4 p-4 bg-slate-700/50 rounded-md">
               <FilterControls
-                allRinks={individualRinksForFiltering}
+                allRinks={ALL_INDIVIDUAL_RINKS_FOR_FILTERING}
                 selectedRinkId={selectedRinkId}
                 allCategories={allPossibleCategories}
                 currentFilterSettings={filterSettings}
@@ -683,7 +256,7 @@ const App: React.FC = () => {
             </div>
           )}
           
-          {!isLoading && !error && !hasAnyErrors && events.length === 0 && (
+          {!isLoading && !error && !hasAnyErrors && filteredEvents.length === 0 && (
             <div className="flex flex-col items-center justify-center h-64 text-slate-400">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 mb-4 text-slate-500">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5v-.008ZM9.75 12h.008v.008H9.75v-.008ZM7.5 12h.008v.008H7.5v-.008ZM14.25 15h.008v.008H14.25v-.008ZM14.25 12h.008v.008H14.25v-.008ZM16.5 15h.008v.008H16.5v-.008ZM16.5 12h.008v.008H16.5v-.008Z" />
@@ -695,8 +268,8 @@ const App: React.FC = () => {
             </div>
           )}
 
-          {!isLoading && !error && !hasAnyErrors && events.length > 0 && (
-            <EventList events={events} />
+          {!isLoading && !error && !hasAnyErrors && filteredEvents.length > 0 && (
+            <EventList events={filteredEvents} />
           )}
         </div>
       </div>
