@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { RinkInfo, EventCategory, DisplayableIceEvent, FilterSettings, FilterMode, UrlViewType, RawIceEventData, DateFilterMode, TimeFilterMode } from './types';
-import { RINKS_CONFIG, ALL_INDIVIDUAL_RINKS_FOR_FILTERING } from './mockData';
+import { RINKS_CONFIG, ALL_INDIVIDUAL_RINKS_FOR_FILTERING } from './rinkConfig';
 import RinkTabs from './components/RinkTabs';
 import EventList from './components/EventList';
 import FilterControls from './components/FilterControls';

@@ -966,5 +966,60 @@
     "category": "Stick & Puck",
     "isFeatured": false,
     "eventUrl": "https://calendar.google.com/calendar/event?eid=39752ot4mheh3t9gv8hvasfd76%40google.com"
+  },
+  {
+    "id": "du-ritchie-3loubtpj9eevqgbkrbt3bhj43q@google.com",
+    "rinkId": "du-ritchie",
+    "title": "Stick & Puck",
+    "startTime": "2025-06-28T14:45:00.000Z",
+    "endTime": "2025-06-28T15:45:00.000Z",
+    "description": "Ice session at DU Ritchie Center",
+    "category": "Stick & Puck",
+    "isFeatured": false,
+    "eventUrl": "https://calendar.google.com/calendar/event?eid=3loubtpj9eevqgbkrbt3bhj43q%40google.com"
+  },
+  {
+    "id": "du-ritchie-518eubmlaeb570skcomvjveiek@google.com",
+    "rinkId": "du-ritchie",
+    "title": "Public Skate",
+    "startTime": "2025-06-28T16:00:00.000Z",
+    "endTime": "2025-06-28T18:00:00.000Z",
+    "description": "Ice session at DU Ritchie Center",
+    "category": "Public Skate",
+    "isFeatured": false,
+    "eventUrl": "https://calendar.google.com/calendar/event?eid=518eubmlaeb570skcomvjveiek%40google.com"
+  },
+  {
+    "id": "du-ritchie-17k49tg3h68lhp2ebdsm4e71kq@google.com",
+    "rinkId": "du-ritchie",
+    "title": "Stick & Puck",
+    "startTime": "2025-06-28T21:00:00.000Z",
+    "endTime": "2025-06-28T22:00:00.000Z",
+    "description": "Ice session at DU Ritchie Center",
+    "category": "Stick & Puck",
+    "isFeatured": false,
+    "eventUrl": "https://calendar.google.com/calendar/event?eid=17k49tg3h68lhp2ebdsm4e71kq%40google.com"
+  },
+  {
+    "id": "du-ritchie-7eefcqcam51iti3ocb5eksl8u2@google.com",
+    "rinkId": "du-ritchie",
+    "title": "Public Skate",
+    "startTime": "2025-06-28T22:15:00.000Z",
+    "endTime": "2025-06-28T23:15:00.000Z",
+    "description": "Ice session at DU Ritchie Center",
+    "category": "Public Skate",
+    "isFeatured": false,
+    "eventUrl": "https://calendar.google.com/calendar/event?eid=7eefcqcam51iti3ocb5eksl8u2%40google.com"
+  },
+  {
+    "id": "du-ritchie-5jk2mddqs6ju6vdtoallpaa1kd@google.com",
+    "rinkId": "du-ritchie",
+    "title": "Drop-In Hockey",
+    "startTime": "2025-06-28T23:30:00.000Z",
+    "endTime": "2025-06-29T01:00:00.000Z",
+    "description": "Players must be at least 18 years old and must wear full hockey equipment. Bring all of your own equipment (skates, sticks, pucks, etc.). Please also bring a water bottle.",
+    "category": "Drop-In Hockey",
+    "isFeatured": false,
+    "eventUrl": "https://calendar.google.com/calendar/event?eid=5jk2mddqs6ju6vdtoallpaa1kd%40google.com"
   }
 ]

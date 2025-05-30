@@ -1,21 +1,11 @@
 [
   {
-    "id": "big-bear-198431265",
+    "id": "big-bear-200179166",
     "rinkId": "big-bear",
-    "title": "Free Style",
-    "startTime": "2025-05-29T12:00:00.000Z",
-    "endTime": "2025-05-29T13:00:00.000Z",
-    "category": "Figure Skating",
-    "description": "60 minutes",
-    "isFeatured": false
-  },
-  {
-    "id": "big-bear-198446554",
-    "rinkId": "big-bear",
-    "title": "Open Stick & Puck",
-    "startTime": "2025-05-29T18:00:00.000Z",
-    "endTime": "2025-05-29T19:00:00.000Z",
-    "category": "Stick & Puck",
+    "title": "Public Skate",
+    "startTime": "2025-05-30T03:15:00.000Z",
+    "endTime": "2025-05-30T04:15:00.000Z",
+    "category": "Public Skate",
     "description": "60 minutes",
     "isFeatured": false
   },

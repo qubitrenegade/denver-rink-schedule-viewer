@@ -90,7 +90,8 @@ export abstract class BaseScraper {
     }
     if (titleLower.includes('public skate') || titleLower.includes('open skate')) return 'Public Skate';
     if (titleLower.includes('stick') && titleLower.includes('puck')) return 'Stick & Puck';
-    if (titleLower.includes('drop') || titleLower.includes('pickup') || titleLower.includes('take a shot')) return 'Drop-In Hockey';
+    if (titleLower.includes('take a shot')) return 'Stick & Puck';  // Fixed: was Drop-In Hockey
+    if (titleLower.includes('drop') || titleLower.includes('pickup')) return 'Drop-In Hockey';
     if (titleLower.includes('learn') || titleLower.includes('lesson') || titleLower.includes('lts')) return 'Learn to Skate';
     if (titleLower.includes('freestyle') || titleLower.includes('figure')) return 'Figure Skating';
     if (titleLower.includes('practice') || titleLower.includes('training')) return 'Hockey Practice';
