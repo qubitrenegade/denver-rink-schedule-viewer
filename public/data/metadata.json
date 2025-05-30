@@ -1,41 +1,35 @@
 {
-  "lastCombinedUpdate": "2025-05-30T03:05:40.259Z",
+  "lastCombinedUpdate": "2025-05-30T03:12:15.720Z",
   "rinks": {
-    "du-ritchie": {
-      "lastAttempt": "2025-05-30T03:05:27.171Z",
-      "status": "success",
-      "eventCount": 93,
-      "lastSuccessfulScrape": "2025-05-30T03:05:27.171Z"
-    },
-    "big-bear": {
-      "lastAttempt": "2025-05-30T03:05:40.233Z",
-      "status": "success",
-      "eventCount": 3,
-      "lastSuccessfulScrape": "2025-05-30T03:05:40.233Z"
-    },
-    "ice-ranch": {
-      "lastAttempt": "2025-05-30T01:48:24.306Z",
-      "status": "success",
-      "eventCount": 48,
-      "lastSuccessfulScrape": "2025-05-30T01:48:24.306Z"
-    },
-    "ssprd-249": {
-      "lastAttempt": "2025-05-30T03:05:25.468Z",
-      "status": "success",
-      "eventCount": 1380,
-      "lastSuccessfulScrape": "2025-05-30T03:05:25.468Z"
-    },
-    "ssprd-250": {
-      "lastAttempt": "2025-05-30T03:05:25.451Z",
-      "status": "success",
-      "eventCount": 872,
-      "lastSuccessfulScrape": "2025-05-30T03:05:25.451Z"
-    },
     "foothills-edge": {
-      "lastAttempt": "2025-05-30T03:05:22.822Z",
+      "lastAttempt": "2025-05-30T03:12:09.821Z",
       "status": "success",
       "eventCount": 68,
-      "lastSuccessfulScrape": "2025-05-30T03:05:22.822Z"
+      "lastSuccessfulScrape": "2025-05-30T03:12:09.821Z"
+    },
+    "ssprd-250": {
+      "lastAttempt": "2025-05-30T03:12:12.431Z",
+      "status": "success",
+      "eventCount": 872,
+      "lastSuccessfulScrape": "2025-05-30T03:12:12.431Z"
+    },
+    "ice-ranch": {
+      "lastAttempt": "2025-05-30T03:12:12.431Z",
+      "status": "success",
+      "eventCount": 48,
+      "lastSuccessfulScrape": "2025-05-30T03:12:12.431Z"
+    },
+    "du-ritchie": {
+      "lastAttempt": "2025-05-30T03:12:13.686Z",
+      "status": "success",
+      "eventCount": 93,
+      "lastSuccessfulScrape": "2025-05-30T03:12:13.686Z"
+    },
+    "big-bear": {
+      "lastAttempt": "2025-05-30T03:12:15.697Z",
+      "status": "success",
+      "eventCount": 3,
+      "lastSuccessfulScrape": "2025-05-30T03:12:15.697Z"
     }
   }
 }

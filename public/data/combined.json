@@ -15553,8 +15553,8 @@
     "isFeatured": false
   },
   {
-    "id": "fsc-fixit-2961215",
-    "rinkId": "fsc-fixit",
+    "id": "sssc-rink1-2963151",
+    "rinkId": "sssc-rink1",
     "title": "Public Skating",
     "startTime": "2025-11-28T16:00:00.000Z",
     "endTime": "2025-11-28T17:30:00.000Z",
@@ -15562,8 +15562,8 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink1-2963151",
-    "rinkId": "sssc-rink1",
+    "id": "fsc-fixit-2961215",
+    "rinkId": "fsc-fixit",
     "title": "Public Skating",
     "startTime": "2025-11-28T16:00:00.000Z",
     "endTime": "2025-11-28T17:30:00.000Z",
