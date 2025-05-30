@@ -28,7 +28,7 @@ const SCRAPERS: ScraperConfig[] = [
 class ScraperOrchestrator {
   private writer = new DataFileWriter();
 
-  async scrapeRink(rinkId: string): Promise<void> {
+  async scrapeRink(rinkId: string): Promise<number> {
     const config = SCRAPERS.find(s => s.id === rinkId);
     if (!config) throw new Error(`Unknown rink ID: ${rinkId}. Available: ${SCRAPERS.map(s => s.id).join(', ')}`);
     console.log(`\n🚀 Starting scrape for ${config.name}...`);
@@ -39,6 +39,7 @@ class ScraperOrchestrator {
       await this.writer.writeFacilityMetadata(config.id, 'success', events.length);
       const duration = ((Date.now() - startTime) / 1000).toFixed(1);
       console.log(`✅ ${config.name} completed successfully in ${duration}s: ${events.length} events`);
+      return events.length;
     } catch (error) {
       const duration = ((Date.now() - startTime) / 1000).toFixed(1);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
@@ -48,34 +49,56 @@ class ScraperOrchestrator {
     }
   }
 
-  async scrapeAll(): Promise<void> {
-    console.log('🌟 Starting full scrape of all rinks...');
-    const startTime = Date.now();
-    const results = await Promise.allSettled(SCRAPERS.map(config => this.scrapeRink(config.id)));
-    let successCount = 0;
-    let errorCount = 0;
-    results.forEach((result, index) => {
-      const config = SCRAPERS[index];
-      if (result.status === 'fulfilled') {
-        successCount++;
-      } else {
-        errorCount++;
-        console.error(`❌ ${config.name} failed:`, result.reason);
+  async scrapeAllWithSummary(): Promise<{ id: string; name: string; status: 'success' | 'error'; eventCount: number; error?: string }[]> {
+    const results: { id: string; name: string; status: 'success' | 'error'; eventCount: number; error?: string }[] = [];
+    for (const config of SCRAPERS) {
+      try {
+        const count = await this.scrapeRink(config.id);
+        results.push({ id: config.id, name: config.name, status: 'success', eventCount: count });
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        results.push({ id: config.id, name: config.name, status: 'error', eventCount: 0, error: errorMessage });
       }
-    });
-    const duration = ((Date.now() - startTime) / 1000).toFixed(1);
-    console.log(`\n🌈 Scrape complete: ${successCount} succeeded, ${errorCount} failed in ${duration}s.`);
+    }
+    return results;
   }
 }
 
 // CLI entry point
 async function main() {
+  // Support both positional and --rink/-r arguments
   const args = process.argv.slice(2);
-  const orchestrator = new ScraperOrchestrator();
+  let rinkIds: string[] = [];
   if (args.length === 0) {
-    await orchestrator.scrapeAll();
+    rinkIds = [];
+  } else if (args[0] === '--rink' || args[0] === '-r') {
+    if (args[1]) rinkIds = [args[1]];
+  } else if (args[0].startsWith('--rink=')) {
+    rinkIds = [args[0].split('=')[1]];
   } else {
-    for (const rinkId of args) {
+    rinkIds = args;
+  }
+  const orchestrator = new ScraperOrchestrator();
+  if (rinkIds.length === 0) {
+    // Scrape all and print detailed summary
+    const startTime = Date.now();
+    const results = await orchestrator.scrapeAllWithSummary();
+    const duration = ((Date.now() - startTime) / 1000).toFixed(1);
+    const successCount = results.filter(r => r.status === 'success').length;
+    const errorCount = results.filter(r => r.status === 'error').length;
+    console.log('\n🏁 Full scrape completed in ' + duration + 's:');
+    results.forEach(r => {
+      if (r.status === 'success') {
+        console.log(`   ✅ ${r.name}: ${r.eventCount} events`);
+      } else {
+        console.log(`   ❌ ${r.name}: FAILED (${r.error})`);
+      }
+    });
+    console.log(`   ✅ Successful: ${successCount}/${SCRAPERS.length}`);
+    console.log(`   ❌ Failed: ${errorCount}/${SCRAPERS.length}`);
+    console.log('📋 Individual facility data and metadata files updated');
+  } else {
+    for (const rinkId of rinkIds) {
       await orchestrator.scrapeRink(rinkId);
     }
   }
