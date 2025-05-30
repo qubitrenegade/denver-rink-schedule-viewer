@@ -74,7 +74,7 @@ jobs:
           git add public/data/
           
           # Commit and push
-          git commit -m "🐻 Update Big Bear schedule data $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git commit -m "🏫 Update DU Ritchie schedule data $(date -u '+%Y-%m-%d %H:%M UTC')"
           git push
         fi
 
