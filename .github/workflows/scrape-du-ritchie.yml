@@ -31,10 +31,7 @@ jobs:
         bun-version: latest
 
     - name: Install dependencies
-      run: |
-        export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-        export PUPPETEER_SKIP_DOWNLOAD=true
-        bun install --frozen-lockfile --production
+      run: bun install
 
     # only inject a random sleep when this was kicked off by the schedule,
     # so manual runs skip immediately to scraping

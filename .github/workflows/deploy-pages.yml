@@ -37,10 +37,8 @@ jobs:
       with:
         bun-version: latest
 
-    - name: Install dependencies (skip puppeteer postinstall)
+    - name: Install dependencies (production only)
       run: |
-        export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-        export PUPPETEER_SKIP_DOWNLOAD=true
         bun install --frozen-lockfile --production
 
     - name: Build React app
