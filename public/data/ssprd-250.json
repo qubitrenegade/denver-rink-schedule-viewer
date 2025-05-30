@@ -652,6 +652,16 @@
     "isFeatured": false
   },
   {
+    "id": "sssc-rink3-3349274",
+    "rinkId": "sssc-rink3",
+    "title": "Take A Shot",
+    "startTime": "2025-05-30T21:00:00.000Z",
+    "endTime": "2025-05-30T22:00:00.000Z",
+    "category": "Stick & Puck",
+    "description": "NO Staff Lesson Ice",
+    "isFeatured": false
+  },
+  {
     "id": "fsc-avalanche-2447560",
     "rinkId": "fsc-avalanche",
     "title": "Take A Shot",
@@ -2421,6 +2431,15 @@
     "isFeatured": false
   },
   {
+    "id": "sssc-rink3-2811026",
+    "rinkId": "sssc-rink3",
+    "title": "12U 14U 19U Female Drop In",
+    "startTime": "2025-07-05T14:20:00.000Z",
+    "endTime": "2025-07-05T15:20:00.000Z",
+    "category": "Drop-In Hockey",
+    "isFeatured": false
+  },
+  {
     "id": "sssc-rink1-3261810",
     "rinkId": "sssc-rink1",
     "title": "Take A Shot",
@@ -2428,15 +2447,6 @@
     "endTime": "2025-07-05T15:20:00.000Z",
     "category": "Stick & Puck",
     "description": "NO Staff Lessons",
-    "isFeatured": false
-  },
-  {
-    "id": "sssc-rink3-2811026",
-    "rinkId": "sssc-rink3",
-    "title": "12U 14U 19U Female Drop In",
-    "startTime": "2025-07-05T14:20:00.000Z",
-    "endTime": "2025-07-05T15:20:00.000Z",
-    "category": "Drop-In Hockey",
     "isFeatured": false
   },
   {

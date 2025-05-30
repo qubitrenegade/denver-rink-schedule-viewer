@@ -678,5 +678,15 @@
     "category": "Public Skate",
     "description": "Ice activity at Foothills Edge Ice Arena",
     "isFeatured": false
+  },
+  {
+    "id": "foothills-edge-2025-06-28-3",
+    "rinkId": "foothills-edge",
+    "title": "Drop In Hockey",
+    "startTime": "2025-06-29T03:45:00.000Z",
+    "endTime": "2025-06-29T05:15:00.000Z",
+    "category": "Drop-In Hockey",
+    "description": "Ice activity at Foothills Edge Ice Arena",
+    "isFeatured": false
   }
 ]

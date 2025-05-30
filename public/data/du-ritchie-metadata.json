@@ -2,7 +2,7 @@
   "facilityId": "du-ritchie",
   "facilityName": "DU Ritchie Center",
   "displayName": "DU Ritchie Center (Denver)",
-  "lastAttempt": "2025-05-30T03:18:45.781Z",
+  "lastAttempt": "2025-05-30T05:47:24.273Z",
   "status": "success",
   "eventCount": 93,
   "sourceUrl": "https://ritchiecenter.du.edu/sports/ice-programs",
@@ -12,5 +12,5 @@
       "rinkName": "Main Rink"
     }
   ],
-  "lastSuccessfulScrape": "2025-05-30T03:18:45.781Z"
+  "lastSuccessfulScrape": "2025-05-30T05:47:24.273Z"
 }
