@@ -114,19 +114,16 @@ jobs:
         if git diff --staged --quiet; then
           echo "No changes to commit"
         else
-          # Stash the staged changes
-          git stash push -m "temp stash for sync" --include-untracked
-          
+          # add our changes
+          git add public/data/
+
           # Pull latest changes
           git pull --ff-only || {
             echo "Cannot fast-forward, trying rebase approach"
             git pull --rebase
           }
           
-          # Re-apply our changes
-          git stash pop
-          
-          # Re-stage the files (stash pop unstages them)
+          # ensure any pulled changes are staged
           git add public/data/
           
           # Commit and push
