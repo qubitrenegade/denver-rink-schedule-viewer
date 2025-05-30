@@ -101,6 +101,12 @@ export class BigBearScraper extends BaseScraper {
         console.log('⏳ Waiting for calendar...');
         await page.waitForSelector('#calendar', { timeout: 15000 });
         await page.waitForTimeout(3000);
+
+        const html = await page.content();
+        const fs = require('fs');
+        fs.writeFileSync('bigbear-debug.html', html);
+        await page.screenshot({ path: 'bigbear-debug.png', fullPage: true });
+        console.log('💾 Dumped page HTML to bigbear-debug.html');
         
         console.log('🔍 Extracting events from FullCalendar...');
         
@@ -113,6 +119,7 @@ export class BigBearScraper extends BaseScraper {
           
           eventElements.forEach((eventEl, index) => {
             try {
+              console.log(`Processing event ${index + 1}/${eventElements.length}`);
               // Get event title
               const titleEl = eventEl.querySelector('.fc-title');
               if (!titleEl) return;
@@ -141,6 +148,7 @@ export class BigBearScraper extends BaseScraper {
                     const headCells = contentSkeleton.querySelectorAll('thead .fc-day-top[data-date]');
                     if (headCells[cellIndex]) {
                       dateStr = headCells[cellIndex].getAttribute('data-date') || '';
+                      console.log(`🚨 Found date from header: ${dateStr}`);
                     }
                   }
                 }
@@ -158,6 +166,7 @@ export class BigBearScraper extends BaseScraper {
                       const cellDate = bgCell.getAttribute('data-date');
                       if (cellDate && !bgCell.classList.contains('fc-past')) {
                         dateStr = cellDate;
+                        console.log(`☢️ Found date from background table: ${dateStr}`);
                         break; // Take the first non-past date as fallback
                       }
                     }
@@ -171,11 +180,11 @@ export class BigBearScraper extends BaseScraper {
                 const tomorrow = new Date(today);
                 tomorrow.setDate(tomorrow.getDate() + 1);
                 dateStr = tomorrow.toISOString().split('T')[0]; // Default to tomorrow
-                console.warn(`Using fallback date ${dateStr} for event: ${title}`);
+                console.warn(`❌❌ Using fallback date ${dateStr} for event: ${title}`);
               }
               
               if (!dateStr) {
-                console.warn(`Could not find date for event: ${title}`);
+                console.warn(`❌❌❌ Could not find date for event: ${title}`);
                 return;
               }
               
@@ -184,7 +193,9 @@ export class BigBearScraper extends BaseScraper {
               
               // Get event ID
               const eventId = eventEl.getAttribute('data-eventid') || `bb-${index}`;
-              
+
+              console.log(`title: "${title}", time: "${timeStr}", date: "${dateStr}", eventId: ${eventId}`);
+
               events.push({
                 title,
                 timeStr,
@@ -226,6 +237,11 @@ export class BigBearScraper extends BaseScraper {
             const thirtyDaysFromNow = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
             
             if (startTime < now || startTime > thirtyDaysFromNow) {
+              console.warn(`   `)
+              console.warn(`   `)
+              console.warn(`   ❌ Error processing event ${index} - outside range ❌`);
+              console.warn(`   Event: "${title}" at ${startTime.toLocaleString('en-US', {timeZone: 'America/Denver'})} MT`);
+              console.warn(`   Current Time: ${now.toISOString()}, Range: ${now.toLocaleString('en-US', {timeZone: 'America/Denver'})} to ${thirtyDaysFromNow.toLocaleString('en-US', {timeZone: 'America/Denver'})}`);
               return; // Skip events outside our range
             }
             
