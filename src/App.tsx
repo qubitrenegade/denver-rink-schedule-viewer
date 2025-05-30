@@ -9,7 +9,18 @@ import { LoadingIcon, CalendarIcon, AdjustmentsHorizontalIcon } from './componen
 export const ALL_RINKS_TAB_ID = 'all-rinks';
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
-interface Metadata {
+// Individual facility metadata (for now, simpler structure until Phase 3)
+interface FacilityMetadata {
+  facilityId: string;
+  lastSuccessfulScrape?: string;
+  lastAttempt: string;
+  status: 'success' | 'error';
+  eventCount: number;
+  errorMessage?: string;
+}
+
+// Combined metadata structure (legacy support for now)
+interface LegacyMetadata {
   lastCombinedUpdate: string;
   rinks: Record<string, {
     lastSuccessfulScrape?: string;
@@ -23,11 +34,12 @@ interface Metadata {
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [facilityErrors, setFacilityErrors] = useState<Record<string, string>>({});
   const [rinksConfigForTabs] = useState<RinkInfo[]>(RINKS_CONFIG);
   const [individualRinksForFiltering] = useState<RinkInfo[]>(ALL_INDIVIDUAL_RINKS_FOR_FILTERING);
   
   const [staticData, setStaticData] = useState<RawIceEventData[]>([]);
-  const [metadata, setMetadata] = useState<Metadata | null>(null);
+  const [facilityMetadata, setFacilityMetadata] = useState<Record<string, FacilityMetadata>>({});
   const [lastFetchTime, setLastFetchTime] = useState<number>(0);
 
   const [selectedRinkId, setSelectedRinkId] = useState<UrlViewType>(() => {
@@ -90,52 +102,134 @@ const App: React.FC = () => {
     return Array.from(categories).sort();
   }, [staticData]);
 
+  // Load all facility files upfront (eliminates loading flashes between tabs)
   const fetchStaticData = useCallback(async (forceRefresh: boolean = false) => {
     // Only refetch if we don't have data or it's been more than 5 minutes (for development)
     if (staticData.length > 0 && !forceRefresh && Date.now() - lastFetchTime < 5 * 60 * 1000) {
+      console.log(`📋 Using cached data`);
       return;
     }
 
     setIsLoading(true);
     setError(null);
+    setFacilityErrors({});
 
     try {
-      console.log('📡 Fetching static data...');
+      console.log(`📡 Fetching all facility data...`);
       
-      // Fetch combined events data
-      const eventsResponse = await fetch('/data/combined.json');
-      if (!eventsResponse.ok) {
-        throw new Error(`Failed to fetch events data: ${eventsResponse.status}`);
-      }
+      // Load all facility files (eliminates tab switching loading flashes)
+      const allFiles = ['ice-ranch.json', 'big-bear.json', 'du-ritchie.json', 'foothills-edge.json', 'ssprd-249.json', 'ssprd-250.json'];
+      console.log(`📋 Loading files: ${allFiles.join(', ')}`);
       
-      const eventsData = await eventsResponse.json();
+      // Load all required files in parallel
+      const filePromises = allFiles.map(async (filename) => {
+        const facilityId = filename.replace('.json', '');
+        try {
+          console.log(`   📥 Loading ${filename}...`);
+          const response = await fetch(`/data/${filename}`);
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+          
+          const eventsData = await response.json();
+          
+          // Convert string dates back to Date objects
+          const parsedEvents: RawIceEventData[] = eventsData.map((event: any) => ({
+            ...event,
+            startTime: new Date(event.startTime),
+            endTime: new Date(event.endTime),
+          }));
+          
+          console.log(`   ✅ Loaded ${parsedEvents.length} events from ${filename}`);
+          
+          return {
+            facilityId,
+            events: parsedEvents,
+            success: true,
+            error: null
+          };
+        } catch (err) {
+          const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+          console.error(`   ❌ Failed to load ${filename}:`, errorMessage);
+          return {
+            facilityId,
+            events: [],
+            success: false,
+            error: errorMessage
+          };
+        }
+      });
       
-      // Convert string dates back to Date objects
-      const parsedEvents: RawIceEventData[] = eventsData.map((event: any) => ({
-        ...event,
-        startTime: new Date(event.startTime),
-        endTime: new Date(event.endTime),
-      }));
+      const results = await Promise.all(filePromises);
       
-      // Fetch metadata
-      let metadataData: Metadata | null = null;
+      // Combine all successful results
+      const allEvents: RawIceEventData[] = [];
+      const newFacilityErrors: Record<string, string> = {};
+      const newFacilityMetadata: Record<string, FacilityMetadata> = {};
+      
+      results.forEach(result => {
+        if (result.success) {
+          allEvents.push(...result.events);
+          // Create basic metadata for successful loads
+          newFacilityMetadata[result.facilityId] = {
+            facilityId: result.facilityId,
+            lastAttempt: new Date().toISOString(),
+            status: 'success',
+            eventCount: result.events.length,
+            lastSuccessfulScrape: new Date().toISOString()
+          };
+        } else {
+          if (result.error) {
+            newFacilityErrors[result.facilityId] = result.error;
+          }
+          // Create error metadata
+          newFacilityMetadata[result.facilityId] = {
+            facilityId: result.facilityId,
+            lastAttempt: new Date().toISOString(),
+            status: 'error',
+            eventCount: 0,
+            errorMessage: result.error || 'Unknown error'
+          };
+        }
+      });
+      
+      // Try to load legacy metadata as fallback
       try {
         const metadataResponse = await fetch('/data/metadata.json');
         if (metadataResponse.ok) {
-          metadataData = await metadataResponse.json();
+          const legacyMetadata: LegacyMetadata = await metadataResponse.json();
+          // Merge legacy metadata where we don't have new metadata
+          Object.entries(legacyMetadata.rinks).forEach(([rinkId, meta]) => {
+            if (!newFacilityMetadata[rinkId]) {
+              newFacilityMetadata[rinkId] = {
+                facilityId: rinkId,
+                ...meta
+              };
+            }
+          });
         }
       } catch (metaError) {
-        console.warn('Could not fetch metadata:', metaError);
+        console.warn('Could not fetch legacy metadata:', metaError);
       }
       
-      setStaticData(parsedEvents);
-      setMetadata(metadataData);
+      setStaticData(allEvents);
+      setFacilityErrors(newFacilityErrors);
+      setFacilityMetadata(newFacilityMetadata);
       setLastFetchTime(Date.now());
       
-      console.log(`✅ Loaded ${parsedEvents.length} events from static data`);
+      const successCount = results.filter(r => r.success).length;
+      const errorCount = results.filter(r => !r.success).length;
+      
+      console.log(`✅ Data loading complete: ${successCount} successful, ${errorCount} failed`);
+      console.log(`📊 Total events loaded: ${allEvents.length}`);
+      
+      // Set error message if all facilities failed
+      if (errorCount > 0 && successCount === 0) {
+        setError(`Failed to load data from all facilities. Check your connection and try again.`);
+      }
       
     } catch (err) {
-      console.error('Error fetching static data:', err);
+      console.error('Error during data loading:', err);
       setError(`Failed to load schedule data: ${err instanceof Error ? err.message : 'Unknown error'}`);
     } finally {
       setIsLoading(false);
@@ -236,11 +330,23 @@ const App: React.FC = () => {
       console.log(`After time filter: ${processedData.length} events`);
     }
 
-    // DEBUG: Check for DU events after date filter
-    const duEventsAfterDate = processedData.filter(e => e.rinkId === 'du-ritchie');
-    console.log(`DU events after date/time filter: ${duEventsAfterDate.length}`);
+    // 3. Tab-specific filtering (for individual/group tabs)
+    const selectedTabConfig = rinksConfigForTabs.find(r => r.id === rinkTabId);
+    
+    if (rinkTabId !== ALL_RINKS_TAB_ID) {
+      if (selectedTabConfig?.memberRinkIds) {
+        // Group tab - filter to member rinks
+        processedData = processedData.filter(event => 
+          selectedTabConfig.memberRinkIds!.includes(event.rinkId)
+        );
+      } else {
+        // Individual tab - filter to specific rink
+        processedData = processedData.filter(event => event.rinkId === rinkTabId);
+      }
+      console.log(`After tab-specific filter: ${processedData.length} events`);
+    }
 
-    // 3. Rink Filter (only for 'All Rinks' view, based on individual rinks)
+    // 4. Rink Filter (only for 'All Rinks' view, based on individual rinks)
     if (rinkTabId === ALL_RINKS_TAB_ID && currentFilters.activeRinkIds && currentFilters.activeRinkIds.length > 0) {
       processedData = processedData.filter(event => {
         if (currentFilters.rinkFilterMode === 'include') {
@@ -252,48 +358,15 @@ const App: React.FC = () => {
       console.log(`After 'All Rinks' view specific rink filter: ${processedData.length} events`);
     }
     
-    // 4. Prepare for display (add rinkName) and filter by selected tab (individual or group)
-    let rawEventsWithDates: Array<RawIceEventData & { rinkName?: string }> = [];
+    // 5. Prepare for display (add rinkName)
+    const rawEventsWithDates: Array<RawIceEventData & { rinkName?: string }> = processedData.map(e => ({
+      ...e,
+      rinkName: individualRinksForFiltering.find(r => r.id === e.rinkId)?.name || e.rinkId
+    }));
     
-    const selectedTabConfig = rinksConfigForTabs.find(r => r.id === rinkTabId);
-    console.log("Selected tab config:", selectedTabConfig);
-
-    if (rinkTabId === ALL_RINKS_TAB_ID) {
-      rawEventsWithDates = processedData.map(e => ({
-        ...e,
-        rinkName: individualRinksForFiltering.find(r => r.id === e.rinkId)?.name || e.rinkId
-      }));
-    } else if (selectedTabConfig?.memberRinkIds) { // It's a group tab
-        rawEventsWithDates = processedData
-        .filter(e => selectedTabConfig.memberRinkIds!.includes(e.rinkId))
-        .map(e => ({
-          ...e,
-          // For group tabs, rinkName on event card can still be the specific rink
-          rinkName: individualRinksForFiltering.find(r => r.id === e.rinkId)?.name || e.rinkId 
-        }));
-    } else { // It's a specific, non-grouped rink tab
-      console.log(`Filtering for specific rink tab: ${rinkTabId}`);
-      console.log(`Looking for events with rinkId === "${rinkTabId}"`);
-      
-      const matchingEvents = processedData.filter(e => e.rinkId === rinkTabId);
-      console.log(`Found ${matchingEvents.length} matching events for rinkId "${rinkTabId}"`);
-      
-      if (matchingEvents.length > 0) {
-        console.log("Sample matching event:", matchingEvents[0]);
-      }
-      
-      // DEBUG: Show all unique rinkIds in the data
-      const uniqueRinkIds = [...new Set(processedData.map(e => e.rinkId))];
-      console.log("Available rinkIds in filtered data:", uniqueRinkIds);
-      
-      rawEventsWithDates = matchingEvents.map(e => ({
-        ...e,
-        rinkName: selectedTabConfig?.name // Name of the tab itself
-      }));
-    }
-     console.log(`After preparing for display (rinkName, tab selection): ${rawEventsWithDates.length} events`);
+    console.log(`After preparing for display (rinkName): ${rawEventsWithDates.length} events`);
     
-    // 5. Category Filter
+    // 6. Category Filter
     const processedEvents: DisplayableIceEvent[] = rawEventsWithDates.map(event => ({
       ...event,
       startTime: event.startTime.toISOString(),
@@ -305,14 +378,14 @@ const App: React.FC = () => {
         return !currentFilters.activeCategories.includes(event.category);
       }
     });
-     console.log(`After category filter: ${processedEvents.length} events`);
+    console.log(`After category filter: ${processedEvents.length} events`);
     
     const sortedEvents = processedEvents.sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
     console.log("Setting filtered events:", sortedEvents.length);
     setEvents(sortedEvents);
   }, [rinksConfigForTabs, individualRinksForFiltering]);
 
-  // Initial data fetch
+  // Load data when app starts
   useEffect(() => {
     fetchStaticData();
   }, [fetchStaticData]);
@@ -396,35 +469,46 @@ const App: React.FC = () => {
   const handleFilterSettingsChange = (newFilterSettings: FilterSettings) => {
     setFilterSettings(newFilterSettings);
   };
-  
-
 
   const selectedRinkTabInfo = selectedRinkId !== ALL_RINKS_TAB_ID ? rinksConfigForTabs.find(rink => rink.id === selectedRinkId) : null;
 
   const getLastUpdateInfo = () => {
-    if (!metadata) return 'Unknown';
-    
     if (selectedRinkId === ALL_RINKS_TAB_ID) {
-      return new Date(metadata.lastCombinedUpdate).toLocaleString();
+      // For "All Rinks", show the most recent update across all facilities
+      let latestUpdate = '';
+      Object.values(facilityMetadata).forEach(meta => {
+        if (meta.lastSuccessfulScrape) {
+          if (!latestUpdate || meta.lastSuccessfulScrape > latestUpdate) {
+            latestUpdate = meta.lastSuccessfulScrape;
+          }
+        }
+      });
+      return latestUpdate ? new Date(latestUpdate).toLocaleString() : 'Unknown';
     } else {
-      // Find the most recent update for rinks in this tab
+      // For individual/group tabs, find relevant metadata
+      const selectedTabConfig = rinksConfigForTabs.find(r => r.id === selectedRinkId);
       let latestUpdate = '';
       
-      if (selectedRinkTabInfo?.memberRinkIds) {
-        // Group tab - find latest update among member rinks
-        selectedRinkTabInfo.memberRinkIds.forEach(rinkId => {
-          const rinkMeta = metadata.rinks[rinkId];
-          if (rinkMeta?.lastSuccessfulScrape) {
-            if (!latestUpdate || rinkMeta.lastSuccessfulScrape > latestUpdate) {
-              latestUpdate = rinkMeta.lastSuccessfulScrape;
+      if (selectedTabConfig?.memberRinkIds) {
+        // Group tab - check all relevant facilities
+        selectedTabConfig.memberRinkIds.forEach(rinkId => {
+          // Map rinkId to facility file
+          let facilityId = rinkId;
+          if (rinkId.startsWith('fsc-')) facilityId = 'ssprd-249';
+          if (rinkId.startsWith('sssc-')) facilityId = 'ssprd-250';
+          
+          const meta = facilityMetadata[facilityId];
+          if (meta?.lastSuccessfulScrape) {
+            if (!latestUpdate || meta.lastSuccessfulScrape > latestUpdate) {
+              latestUpdate = meta.lastSuccessfulScrape;
             }
           }
         });
       } else {
-        // Individual rink tab
-        const rinkMeta = metadata.rinks[selectedRinkId];
-        if (rinkMeta?.lastSuccessfulScrape) {
-          latestUpdate = rinkMeta.lastSuccessfulScrape;
+        // Individual tab
+        const meta = facilityMetadata[selectedRinkId];
+        if (meta?.lastSuccessfulScrape) {
+          latestUpdate = meta.lastSuccessfulScrape;
         }
       }
       
@@ -459,6 +543,9 @@ const App: React.FC = () => {
     
     return parts.length > 0 ? `Showing events for ${parts.join(', ')}.` : 'Showing events with custom filtering.';
   };
+
+  // Get error message if there are any facility errors
+  const hasAnyErrors = Object.keys(facilityErrors).length > 0;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-700 text-gray-100 p-4 sm:p-6 md:p-8">
@@ -513,25 +600,31 @@ const App: React.FC = () => {
               <div className="flex items-center px-4 py-2 text-sm bg-green-600/20 text-green-300 rounded-md">
                 <div className="w-2 h-2 rounded-full mr-2 bg-green-300" />
                 Static Data
-                {metadata && (
-                  <span className="ml-2 text-xs opacity-75">
-                    (Updated: {getLastUpdateInfo()})
-                  </span>
-                )}
+                <span className="ml-2 text-xs opacity-75">
+                  (Updated: {getLastUpdateInfo()})
+                </span>
               </div>
+
+              {/* Show facility errors if any */}
+              {Object.keys(facilityErrors).length > 0 && (
+                <div className="flex items-center px-4 py-2 text-sm bg-yellow-600/20 text-yellow-300 rounded-md">
+                  <div className="w-2 h-2 rounded-full mr-2 bg-yellow-300" />
+                  {Object.keys(facilityErrors).length} Facility Error{Object.keys(facilityErrors).length > 1 ? 's' : ''}
+                </div>
+              )}
             </div>
           </div>
-            {showFilters && (
-              <div id="filter-panel" className="mt-4 p-4 bg-slate-700/50 rounded-md">
-                <FilterControls
-                  allRinks={individualRinksForFiltering}
-                  selectedRinkId={selectedRinkId}
-                  allCategories={allPossibleCategories}
-                  currentFilterSettings={filterSettings}
-                  onFilterSettingsChange={handleFilterSettingsChange}
-                />
-              </div>
-            )}
+          {showFilters && (
+            <div id="filter-panel" className="mt-4 p-4 bg-slate-700/50 rounded-md">
+              <FilterControls
+                allRinks={individualRinksForFiltering}
+                selectedRinkId={selectedRinkId}
+                allCategories={allPossibleCategories}
+                currentFilterSettings={filterSettings}
+                onFilterSettingsChange={handleFilterSettingsChange}
+              />
+            </div>
+          )}
         </div>
         
         <div className="p-6 min-h-[400px]">
@@ -542,25 +635,23 @@ const App: React.FC = () => {
                 Source: <a href={selectedRinkTabInfo.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-sky-400 hover:text-sky-300 underline transition-colors">
                   {selectedRinkTabInfo.sourceUrl}
                 </a>
-                 {selectedRinkTabInfo.memberRinkIds && selectedRinkTabInfo.memberRinkIds.length > 0 && (
-                    <span className="ml-2 text-xs text-slate-500">(Showing events for {selectedRinkTabInfo.memberRinkIds.length} rinks)</span>
+                {selectedRinkTabInfo.memberRinkIds && selectedRinkTabInfo.memberRinkIds.length > 0 && (
+                  <span className="ml-2 text-xs text-slate-500">(Showing events for {selectedRinkTabInfo.memberRinkIds.length} rinks)</span>
                 )}
               </p>
             </div>
           )}
-           {selectedRinkId === ALL_RINKS_TAB_ID && (
-             <div className="mb-6 p-4 border border-slate-700 rounded-lg bg-slate-700/50">
-               <h2 className="text-2xl font-semibold text-sky-300 mb-1">All Rinks View</h2>
-               <p className="text-sm text-slate-400">
-                 Showing events from all Denver area ice rinks. Data automatically updated twice daily.
-               </p>
-               {metadata && (
-                 <p className="text-xs text-green-400 mt-1">
-                   📊 {staticData.length} total events loaded (Last update: {new Date(metadata.lastCombinedUpdate).toLocaleString()})
-                 </p>
-               )}
-             </div>
-           )}
+          {selectedRinkId === ALL_RINKS_TAB_ID && (
+            <div className="mb-6 p-4 border border-slate-700 rounded-lg bg-slate-700/50">
+              <h2 className="text-2xl font-semibold text-sky-300 mb-1">All Rinks View</h2>
+              <p className="text-sm text-slate-400">
+                Showing events from all Denver area ice rinks. Data automatically updated twice daily.
+              </p>
+              <p className="text-xs text-green-400 mt-1">
+                📊 {staticData.length} total events loaded
+              </p>
+            </div>
+          )}
 
           {isLoading && (
             <div className="flex flex-col items-center justify-center h-64 text-slate-400">
@@ -569,19 +660,19 @@ const App: React.FC = () => {
             </div>
           )}
 
-          {!isLoading && error && (
+          {!isLoading && (error || hasAnyErrors) && (
             <div className="flex flex-col items-center justify-center h-64 text-red-400 bg-red-900/20 p-6 rounded-md">
-               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 mb-4">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
               </svg>
               <p className="text-lg font-semibold">Error Loading Data</p>
-              <p className="text-sm text-center">{error}</p>
+              <p className="text-sm text-center">{error || 'Some facilities failed to load'}</p>
               <p className="text-xs text-slate-500 mt-2">Data updates automatically via GitHub Actions</p>
             </div>
           )}
           
-          {!isLoading && !error && events.length === 0 && (
-             <div className="flex flex-col items-center justify-center h-64 text-slate-400">
+          {!isLoading && !error && !hasAnyErrors && events.length === 0 && (
+            <div className="flex flex-col items-center justify-center h-64 text-slate-400">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 mb-4 text-slate-500">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5v-.008ZM9.75 12h.008v.008H9.75v-.008ZM7.5 12h.008v.008H7.5v-.008ZM14.25 15h.008v.008H14.25v-.008ZM14.25 12h.008v.008H14.25v-.008ZM16.5 15h.008v.008H16.5v-.008ZM16.5 12h.008v.008H16.5v-.008Z" />
               </svg>
@@ -592,7 +683,7 @@ const App: React.FC = () => {
             </div>
           )}
 
-          {!isLoading && !error && events.length > 0 && (
+          {!isLoading && !error && !hasAnyErrors && events.length > 0 && (
             <EventList events={events} />
           )}
         </div>
@@ -600,7 +691,7 @@ const App: React.FC = () => {
       <footer className="text-center mt-8 text-sm text-slate-500">
         <p>&copy; {new Date().getFullYear()} Denver Rink Schedule. Data updated automatically via GitHub Actions.</p>
         <p className="mt-1">
-          Last data update: {metadata ? new Date(metadata.lastCombinedUpdate).toLocaleString() : 'Loading...'}
+          Last data update: {getLastUpdateInfo()}
         </p>
       </footer>
     </div>
