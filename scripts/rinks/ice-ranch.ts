@@ -6,6 +6,8 @@ export class IceRanchScraper extends BaseScraper {
   get rinkId(): string { return 'ice-ranch'; }
   get rinkName(): string { return 'Ice Ranch'; }
 
+  private readonly baseUrl = 'https://www.theiceranch.com';
+
   // Parse time and properly handle Mountain Time zone
   private parseIceRanchTime(timeStr: string, baseDate: Date): Date {
     const timeMatch = timeStr.match(/(\d{1,2}):(\d{2})\s*([ap]m)/i);
@@ -69,9 +71,11 @@ export class IceRanchScraper extends BaseScraper {
           
           if (dateLinks.length > 0) {
             const link = dateLinks[0] as HTMLAnchorElement;
-            eventUrl = link.href;
+            const relativePath = link.href;
+            // Convert relative path to full URL
+            eventUrl = relativePath.startsWith('http') ? relativePath : `${this.baseUrl}${relativePath}`;
             
-            const dateMatch = link.href.match(/\/event\/\d+\/(\d{4})\/(\d{1,2})\/(\d{1,2})/);
+            const dateMatch = relativePath.match(/\/event\/\d+\/(\d{4})\/(\d{1,2})\/(\d{1,2})/);
             if (dateMatch) {
               const [, year, month, day] = dateMatch;
               eventDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
@@ -102,9 +106,11 @@ export class IceRanchScraper extends BaseScraper {
           
           if (dateLinks.length > 0) {
             const link = dateLinks[0] as HTMLAnchorElement;
-            eventUrl = link.href;
+            const relativePath = link.href;
+            // Convert relative path to full URL
+            eventUrl = relativePath.startsWith('http') ? relativePath : `${this.baseUrl}${relativePath}`;
             
-            const dateMatch = link.href.match(/\/event\/\d+\/(\d{4})\/(\d{1,2})\/(\d{1,2})/);
+            const dateMatch = relativePath.match(/\/event\/\d+\/(\d{4})\/(\d{1,2})\/(\d{1,2})/);
             if (dateMatch) {
               const [, year, month, day] = dateMatch;
               eventDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
