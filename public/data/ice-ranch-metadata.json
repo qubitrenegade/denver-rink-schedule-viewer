@@ -2,9 +2,9 @@
   "facilityId": "ice-ranch",
   "facilityName": "The Ice Ranch",
   "displayName": "The Ice Ranch (Littleton)",
-  "lastAttempt": "2025-05-30T03:18:44.038Z",
+  "lastAttempt": "2025-05-30T05:33:20.447Z",
   "status": "success",
-  "eventCount": 48,
+  "eventCount": 46,
   "sourceUrl": "https://www.theiceranch.com/page/show/1652320-calendar",
   "rinks": [
     {
@@ -12,5 +12,5 @@
       "rinkName": "Main Rink"
     }
   ],
-  "lastSuccessfulScrape": "2025-05-30T03:18:44.038Z"
+  "lastSuccessfulScrape": "2025-05-30T05:33:20.447Z"
 }

@@ -1,6 +1,8 @@
 import { RawIceEventData } from '../../src/types.js';
 import { BaseScraper } from './base-scraper.js';
-import { JSDOM } from 'jsdom';
+import * as cheerio from 'cheerio';
+import fs from 'fs';
+import path from 'path';
 
 export class IceRanchScraper extends BaseScraper {
   get rinkId(): string { return 'ice-ranch'; }
@@ -41,47 +43,34 @@ export class IceRanchScraper extends BaseScraper {
       console.log('🏒 Scraping Ice Ranch...');
       const url = 'https://www.theiceranch.com/page/show/1652320-calendar';
       const html = await this.fetchWithFallback(url);
-      
-      const dom = new JSDOM(html);
-      const doc = dom.window.document;
-      
+
+      // Use cheerio for robust HTML parsing
+      const $ = cheerio.load(html);
       const events: RawIceEventData[] = [];
-      
-      console.log('🔍 Parsing Ice Ranch calendar...');
-      
-      const calendarCells = doc.querySelectorAll('td');
-      console.log(`   Found ${calendarCells.length} calendar cells`);
-      
       let memorialDayFound = false;
       let eventsFound = 0;
-      
-      calendarCells.forEach((cell, cellIndex) => {
-        const cellText = cell.textContent || '';
-        
-        if (cellText.trim().length < 10) return;
-        
+
+      // Find all calendar day cells
+      $('#monthViewCalendar td.day, #monthViewCalendar td.day.weekendDay').each((cellIndex: number, cell: cheerio.Element) => {
+        const $cell = $(cell);
+        const dateLink = $cell.find('a.dateLink');
+        if (dateLink.length === 0) return;
+        // Extract date from link href
+        const dateHref = dateLink.attr('href');
+        let eventDate: Date | undefined = undefined;
+        if (dateHref) {
+          const dateMatch = dateHref.match(/(\d{4})\/(\d{1,2})\/(\d{1,2})$/);
+          if (dateMatch) {
+            const [, year, month, day] = dateMatch;
+            eventDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+          }
+        }
+        if (!eventDate) return;
+
         // Check for Memorial Day or Closed events
+        const cellText = $cell.text();
         if (cellText.includes('Memorial Day') || cellText.includes('Closed')) {
           memorialDayFound = true;
-          console.log(`🎯 Found Memorial Day/Closed in cell ${cellIndex}`);
-          
-          let eventDate = new Date();
-          const dateLinks = cell.querySelectorAll('a[href*="/event/"]');
-          let eventUrl: string | undefined;
-          
-          if (dateLinks.length > 0) {
-            const link = dateLinks[0] as HTMLAnchorElement;
-            const relativePath = link.href;
-            // Convert relative path to full URL
-            eventUrl = relativePath.startsWith('http') ? relativePath : `${this.baseUrl}${relativePath}`;
-            
-            const dateMatch = relativePath.match(/\/event\/\d+\/(\d{4})\/(\d{1,2})\/(\d{1,2})/);
-            if (dateMatch) {
-              const [, year, month, day] = dateMatch;
-              eventDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-            }
-          }
-          
           events.push({
             id: `ice-ranch-memorial-${cellIndex}`,
             rinkId: this.rinkId,
@@ -90,96 +79,70 @@ export class IceRanchScraper extends BaseScraper {
             endTime: new Date(eventDate.getTime() + 24 * 60 * 60 * 1000),
             category: 'Special Event',
             description: `Holiday closure`,
-            eventUrl: eventUrl
+            eventUrl: undefined
           });
-          
           eventsFound++;
+          return;
         }
-        
-        // Look for regular time patterns like "3:15pm MDT-4:45pm MDT"
-        const timeMatches = cellText.match(/(\d{1,2}:\d{2}[ap]m)\s+\w+-(\d{1,2}:\d{2}[ap]m)\s+\w+/gi);
-        
-        if (timeMatches) {
-          let eventDate = new Date();
-          const dateLinks = cell.querySelectorAll('a[href*="/event/"]');
-          let eventUrl: string | undefined;
-          
-          if (dateLinks.length > 0) {
-            const link = dateLinks[0] as HTMLAnchorElement;
-            const relativePath = link.href;
-            // Convert relative path to full URL
-            eventUrl = relativePath.startsWith('http') ? relativePath : `${this.baseUrl}${relativePath}`;
-            
-            const dateMatch = relativePath.match(/\/event\/\d+\/(\d{4})\/(\d{1,2})\/(\d{1,2})/);
-            if (dateMatch) {
-              const [, year, month, day] = dateMatch;
-              eventDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+
+        // For each event in the cell
+        $cell.find('div.vevent.scheduled').each((eventIdx: number, vevent: cheerio.Element) => {
+          const $vevent = $(vevent);
+          // Title
+          let title = $vevent.find('h5.summary a').text().trim();
+          if (!title) title = 'Ice Time';
+          // Times
+          const timeLi = $vevent.find('ul.details li.time');
+          let startTime: Date | undefined = undefined;
+          let endTime: Date | undefined = undefined;
+          let startTimeStr = '', endTimeStr = '';
+          if (timeLi.length) {
+            const abbrs = timeLi.find('abbr.dtstart, abbr.dtend');
+            if (abbrs.length >= 2) {
+              startTimeStr = abbrs.eq(0).attr('title') || '';
+              endTimeStr = abbrs.eq(1).attr('title') || '';
             }
           }
-          
-          timeMatches.forEach((timeMatch, timeIndex) => {
-            // Parse pattern like "3:15pm MDT-4:45pm MDT"
-            const timePattern = /(\d{1,2}:\d{2}[ap]m)\s+\w+-(\d{1,2}:\d{2}[ap]m)\s+\w+/i;
-            const timeMatchResult = timeMatch.match(timePattern);
-            
-            if (timeMatchResult) {
-              const [, startTimeStr, endTimeStr] = timeMatchResult;
-              
-              console.log(`🕐 Ice Ranch parsing: "${timeMatch}"`);
-              console.log(`   Extracting: ${startTimeStr} to ${endTimeStr} (Mountain Time)`);
-              
-              // Parse times with proper timezone handling
-              const startTime = this.parseIceRanchTime(startTimeStr, eventDate);
-              const endTime = this.parseIceRanchTime(endTimeStr, eventDate);
-              
-              console.log(`   ✅ Converted to UTC: ${startTime.toISOString()} to ${endTime.toISOString()}`);
-              console.log(`   📍 Mountain Time equivalent: ${startTime.toLocaleString('en-US', {timeZone: 'America/Denver'})} to ${endTime.toLocaleString('en-US', {timeZone: 'America/Denver'})}`);
-              
-              // Extract event title
-              let title = 'Ice Time';
-              const lines = cellText.split('\n').map(l => l.trim()).filter(l => l);
-              
-              for (const line of lines) {
-                if (!line.match(/\d{1,2}:\d{2}[ap]m/) && 
-                    line.length > 5 && 
-                    line.length < 80 &&
-                    !line.includes('Click Location') &&
-                    !line.includes('Tag(s):') &&
-                    !line.includes('Event Category:') &&
-                    !line.includes('The Ice Ranch')) {
-                  
-                  const cleanTitle = this.cleanTitle(line);
-                  if (cleanTitle.length > 3) {
-                    title = cleanTitle;
-                    break;
-                  }
-                }
-              }
-              
-              events.push({
-                id: `ice-ranch-${eventDate.getTime()}-${cellIndex}-${timeIndex}`,
-                rinkId: this.rinkId,
-                title: title,
-                startTime: startTime,
-                endTime: endTime,
-                category: this.categorizeEvent(title),
-                description: `Scraped from Ice Ranch calendar`,
-                eventUrl: eventUrl
-              });
-              
-              eventsFound++;
+          if (startTimeStr && endTimeStr) {
+            // Parse ISO8601 with timezone offset
+            startTime = new Date(startTimeStr);
+            endTime = new Date(endTimeStr);
+          }
+          // Fallback: try to parse from text if abbrs missing
+          if ((!startTime || !endTime) && timeLi.length) {
+            const timeText = timeLi.text();
+            const match = timeText.match(/(\d{1,2}:\d{2}[ap]m)[^\d]+(\d{1,2}:\d{2}[ap]m)/i);
+            if (match && eventDate) {
+              startTime = this.parseIceRanchTime(match[1], eventDate);
+              endTime = this.parseIceRanchTime(match[2], eventDate);
             }
-          });
-        }
+          }
+          // Event URL
+          let eventUrl: string | undefined = $vevent.find('h5.summary a').attr('href');
+          if (eventUrl && !eventUrl.startsWith('http')) eventUrl = this.baseUrl + eventUrl;
+
+          if (startTime && endTime) {
+            events.push({
+              id: `ice-ranch-${eventDate.getTime()}-${cellIndex}-${eventIdx}`,
+              rinkId: this.rinkId,
+              title: title,
+              startTime: startTime,
+              endTime: endTime,
+              category: this.categorizeEvent(title),
+              description: `Scraped from Ice Ranch calendar`,
+              eventUrl: eventUrl
+            });
+            eventsFound++;
+          }
+        });
       });
-      
+
       console.log(`🎯 Memorial Day found: ${memorialDayFound}`);
       console.log(`📅 Total events found: ${eventsFound}`);
-      
       events.sort((a, b) => a.startTime.getTime() - b.startTime.getTime());
+      fs.writeFileSync(path.join(__dirname, '../../public/data/ice-ranch.json'), JSON.stringify(events, null, 2));
       return events;
-      
-    } catch (error) {
+    } catch (error: any) {
       console.error('❌ Ice Ranch scraping failed:', error.message);
       throw error;
     }

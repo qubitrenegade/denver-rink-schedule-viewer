@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>  <html lang="en-us" id="ngin8090" class="ie ie6 lte9 lte8 lte7"> <![endif]-->
+<!--[if IE 7]>     <html lang="en-us" id="ngin8090" class="ie ie7 lte9 lte8 lte7"> <![endif]-->
+<!--[if IE 8]>     <html lang="en-us" id="ngin8090" class="ie ie8 lte9 lte8"> <![endif]-->
+<!--[if IE 9]>     <html lang="en-us" id="ngin8090" class="ie ie9 lte9"> <![endif]-->
+<!--[if gt IE 9]>  <html lang="en-us" id="ngin8090"> <![endif]-->
+<!--[if !IE]><!--> <html lang="en-us" id="ngin8090"> <!--<![endif]-->
+<head>
+  
+  
+
+    <script>
+      window.dataLayer = window.dataLayer || []
+      window.dataLayer.push({ intercom: { renderIntercom: false } })
+    </script>
+    <script src="/javascripts/se-analytics-js.umd.min.js?16737052261"></script>
+    <script>
+      window.seAnalyticsGateway = /\.(sportngin\.com|ngin-staging\.com|sportngin\.com\.dev)$/.test(window.origin) === false
+      window.addEventListener('message', function(event){
+        if (event.data === 'utd:ready') {
+
+          var displayAds = (false || false);
+          var platformDL = {'siteId': '8090', 'siteName': 'The Ice Ranch',
+                            'siteShortName': 'The Ice Ranch', 'sportType': 'none',
+                            'addrState': 'CO', 'displayAds': displayAds,
+                            'inEditMode': false,
+                            'propertySubSection': 'cms', 'property': 'Ngin'};
+          var quantcastDL = {'quantcastID': ''};
+          var elevioAdditionalGroups = ["ngin_super_reg:0", "Ngin:cms"];
+
+          window.seAnalytics.push({ type: 'dataLayerData', data: {
+            platform: platformDL,
+            quantcast: quantcastDL,
+            elevioAddlGroups: elevioAdditionalGroups,
+          } })
+        }
+      })
+      window.seAnalytics = new window['se-analytics-js'].SeFeAnalytics({
+        platProp: 'ngin',
+        platformSubSec: 'cms',
+        currentEnv: 'production',
+        orgId: 10131
+      })
+    </script>
+
+  <script>
+  function inIframe() {
+    try {
+      return window.self !== window.top;
+    } catch (e) {
+      return true;
+    }
+  }
+  </script>
+
+  <!-- Google Tag Manager for NGIN -->
+  <script>
+  if(!inIframe()) {
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-TMK6MGB');
+  }
+  </script>
+  <!-- End Google Tag Manager for NGIN-->
+
+  <!-- Google Tag Manager for SE Global -->
+  <script>
+  if(!inIframe()) {
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-KGG8ZWR');
+  }
+  </script>
+  <!-- End Google Tag Manager for SE Global -->
+
+
+<!--[if lte IE 9]>
+    <meta http-equiv="refresh" content="0; url=/unsupported_browser" />
+    <script type="text/javascript">
+        window.top.location = '/unsupported_browser';
+    </script>
+<![endif]-->
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="csrf-param" content="authenticity_token" />
+<meta name="csrf-token" content="zgLJ6fwnSFntHTZh5x8mazlLcRP5k2o31mOmNFZY+COd3Dw6Opo7hB6u78RGi9wbhG4BN1cEyIPw9i7Oja4yHA==" />
+<meta name="trace-id" content="05a70f7e-ed14-4fd0-9b54-2d63ffab4c19" />
+  <title>Calendar</title>
+
+  <!-- application -->
+
+  <link rel="shortcut icon" href="https://assets.ngin.com/site_files/8090/favicon.ico" />
+
+  
+
+
+  <link rel="stylesheet" media="screen" href="/site_stylesheets_secure/8090/page_elements.css?17075077351" />
+  
+  <link rel="stylesheet" media="screen" href="/site_stylesheets_secure/8090/breakaway_v3.css?17075077351" id="LayoutThemeCSS" />
+  <link rel="stylesheet" media="screen" href="/site_stylesheets_secure/jquery_treeTable.css?17075077351" />
+  <link rel="stylesheet" media="screen" href="/stylesheets/sn/shared_components.css?17075077351" />
+  <link rel="stylesheet" media="screen" href="//s3.amazonaws.com/sportngin-snap-production/ui_themes/ngin/latest/ngin-bar.css?20190108" />
+
+  <!--[if IE 9]>
+  <script type="text/javascript" charset="utf-8">var IE = "9";</script>
+  <link rel="stylesheet" media="screen" href="/stylesheets/ie9/default_ie9.css?17075077351" />
+<![endif]-->
+
+<!--[if IE 8]>
+  <script type="text/javascript" charset="utf-8">var IE = "8";</script>
+<![endif]-->
+
+<!--[if IE 7]>
+  <script type="text/javascript" charset="utf-8">var IE = "7";</script>
+<![endif]-->
+
+<!--[if IE 6]>
+  <script type="text/javascript" charset="utf-8">var IE = "6";</script>
+<![endif]-->
+
+<!--[if lte IE 6]>
+  <script type="text/javascript" charset="utf-8">var IE = "6";</script>
+<![endif]-->
+
+<!--[if !IE]><!--><script type="text/javascript" charset="utf-8">var IE = null;</script><!-- <![endif]-->
+
+
+  
+
+  <link rel="stylesheet" media="print" href="/stylesheets/print/website_print.css?17075077351" />
+
+  <script type='text/javascript' src='/javascripts/jquery/jquery-1.7.1.min.js'></script>
+<script type='text/javascript'>
+  var $j = jQuery.noConflict();
+</script>
+
+
+  
+  <style>
+/* Calendar fix for FF Win7 */
+.contentTabs { margin:1px; }
+</style>
+
+<link href='https://fonts.googleapis.com/css?family=Vast+Shadow' rel='stylesheet' type='text/css'>
+
+<link rel="stylesheet" href="//assets.ngin.com/site_files/8090/8090_styles.css" />
+    <style type="text/css">
+    
+  </style>
+
+<style type="text/css">
+html {
+  background-color: #d4e1e3;background-image: url(https://cdn1.sportngin.com/attachments/background_graphic/4695/4118/background.jpg);background-repeat: no-repeat;background-position: center top;background-attachment: scroll;
+}
+</style>
+
+
+  
+
+  <script src="/javascripts/base_packaged.js?16737052261"></script>
+<script src="/javascripts/angular_packaged.js?16737052261"></script>
+
+  <script src="/javascripts/dropdown_nav.js?16737052261"></script>
+
+  
+  
+
+    <link rel="stylesheet" href="//s3.amazonaws.com/sportngin-snap-production/ui_themes/inline-manual/1/main.css?20190108" type="text/css" />
+
+  <script>
+      window.inlineManualOptions = {
+        tracking: {
+          enabled: false
+        }
+      }
+  </script>
+
+  <script>
+      NGIN.inlineManual.setVars({
+        in_edit_mode: false,
+        org_id: 10131,
+        
+        site_name: "The Ice Ranch",
+        site_short_name: "The Ice Ranch",
+        site_url: "https://www.theiceranch.com",
+        site_id: 8090
+      });
+
+  </script>
+
+  <script>!function(){var e=document.createElement("script"),t=document.getElementsByTagName("script")[0];e.async=1,e.src="https://inlinemanual.com/embed/player.cacb2d9a339b3500c03525980ca2a24c.js",e.charset="UTF-8",t.parentNode.insertBefore(e,t)}();</script>
+
+
+        <meta property="og:title" content="Calendar"/>
+<meta property="og:type" content="website"/>
+<meta property="og:description" content="">
+ <meta property="og:url" content="http://www.theiceranch.com/page/show/1652320-calendar"/> 
+<meta property="og:site_name" content="The Ice Ranch"/>
+
+
+
+    
+
+
+  
+  
+
+
+  <script>
+  var recaptchaSiteKey = "6LePJx8TAAAAACXrjU21ZdxvkXD_rh3yzhSeoJ0a"
+</script>
+<script src="/javascripts/grecaptcha.js?16737052261"></script>
+<script src="https://www.google.com/recaptcha/api.js?onload=recaptchaOnloadCallback&render=explicit" async defer></script>
+
+
+  <script>
+//<![CDATA[
+  window.nginSite = {"domain_name":"theiceranch.com","subdomain":"www","name":"The Ice Ranch","short_name":"The Ice Ranch","secure_subdomain":"theiceranch"}
+
+//]]>
+</script>
+
+</head>
+
+<body class="breakaway_v3 user_mode">
+
+  <script>
+//<![CDATA[
+window.seAnalytics.push(JSON.parse('{"type":"pageView","data":{"depth1":"Sitebuilder","title":"Calendar"}}'))
+//]]>
+</script>
+  <!-- Needs to be immediately after the opening <body> tag -->
+  <!-- Google Tag Manager (noscript) -->
+  <noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TMK6MGB" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KGG8ZWR" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+  </noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+    <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  // js.src = "//connect.facebook.net/en_US/all/debug.js#xfbml=1&version=v2.3"; // use if debugging
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.3";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+  <a href="#yieldContent" style="color:#FFF;position:absolute;height:1px;width:1px;left:-9999px;">skip navigation</a>
+
+  
+
+  <div id="top"></div>
+  
+  
+  
+
+
+  <div id="siteContainer2" class="siteContainer two_panel">
+        <ul id="accountNav">
+      
+        <li class="currentSite noSiteLogo">
+          <a title="The Ice Ranch Homepage" href="https://www.theiceranch.com"></a>
+        </li>
+        <li class='enabled' id='login'><span><a class="enabled" title="Login" href="https://login.sportngin.com">Login</a></span></li>
+        <li class='secondary enabled' id='account_new'><span><a class="secondary enabled" title="Create an Account" href="https://user.sportngin.com/users/sign_up?user_return_to=https%3A%2F%2Flogin.sportngin.com%3Fnext_url%3Dhttps%253A%252F%252Fwww.theiceranch.com%252Fpage%252Fshow%252F1652320-calendar%26set_site_id%3D8090&amp;brand=">Create an Account</a></span></li>
+      
+      
+      <li class="nginLogo"><a href="https://www.sportsengine.com/?utm_source=https://www.theiceranch.com&utm_medium=usertopnav&utm_campaign=applications" onclick="javascript:window.location=('https://www.sportsengine.com/?utm_source=https://www.theiceranch.com&utm_medium=usertopnav&utm_campaign=applications'); return false;">SportsEngine</a></li>
+
+
+
+
+    </ul>
+
+    
+    <div id="siteHeader" class="bannerGraphic">
+            <div class="bannerGraphicTextBanner">
+      <h1></h1>
+  </div>
+
+  
+  
+  
+</div>
+
+    
+<div id="topNav">
+    <table>
+  <tr>
+      <td align="center" class="home enabled firstNavElement" id="top_nav_node_page_node_1652315">
+        <a id="nav_id-page_node_1652315" href="/page/show/1652315-home" title="click to go to &#39;Home&#39;"  >
+          Home
+        </a>
+      </td>
+      <td align="center" class="enabled" id="top_nav_node_page_node_1652321">
+        <a id="nav_id-page_node_1652321" href="/page/show/1652321-news" title="click to go to &#39;News&#39;"  >
+          News
+        </a>
+      </td>
+      <td align="center" class="enabled" id="top_nav_node_page_node_1652320">
+        <a id="nav_id-page_node_1652320" href="/page/show/1652320-calendar" title="click to go to &#39;Calendar&#39;"  >
+          Calendar
+        </a>
+      </td>
+      <td align="center" class="enabled" id="top_nav_node_page_node_1719013">
+        <a id="nav_id-page_node_1719013" href="/page/show/1719013-league-results" title="click to go to &#39;League Results&#39;"  >
+          League Results
+        </a>
+      </td>
+      <td align="center" class="enabled" id="top_nav_node_page_node_1670166">
+        <a id="nav_id-page_node_1670166" href="/cellys" title="click to go to &#39;Celly&#39;s Bar and Grill&#39;"  >
+          Celly&#39;s
+        </a>
+      </td>
+      <td align="center" class="enabled" id="top_nav_node_page_node_1696176">
+        <a id="nav_id-page_node_1696176" href="/page/show/1696176-ice-ranch-coffee-shop" title="click to go to &#39;Ice Ranch Coffee Shop&#39;"  >
+          Coffee Shop
+        </a>
+      </td>
+      <td align="center" class="enabled" id="top_nav_node_page_node_1696177">
+        <a id="nav_id-page_node_1696177" href="/smokey" title="click to go to &#39;Smokey&#39;s Skate Shop&#39;"  >
+          Pro Shop
+        </a>
+      </td>
+      <td align="center" class="enabled" id="top_nav_node_page_node_1664525">
+        <a id="nav_id-page_node_1664525" href="/page/show/1664525-contact-us" title="click to go to &#39;Contact Us&#39;"  >
+          Contact Us
+        </a>
+      </td>
+      <td align="center" class="enabled lastNavElement" id="top_nav_node_toolsLink">
+        <a id="nav_id-toolsLink" href="/dib_sessions" title="Dibs"  >
+          Dibs
+        </a>
+      </td>
+
+
+
+  </tr>
+</table>
+
+
+
+</div>
+
+<script type="text/javascript" charset="utf-8">
+
+
+  ;(function($) {
+
+    function topNavSelect() {
+      $(function() {
+        $('#nav_id-page_node_1652320').addClass('selected').closest('td').addClass('selected');
+        $('#topNav').trigger('topnav.loaded');
+      });
+    }
+
+      topNavSelect();
+
+
+  })(jQuery);
+
+</script>
+
+
+    
+    <div id="pageContentContainer">
+      
+        <div id="panelOne">
+          <div class="subNavContainer">
+  <div class="subNav">
+    <h4>Current Section</h4>
+      <ul class="parents" id="parent_nodes">
+        <li id="page_node_1652320" class="enabled selected"><a href="/page/show/1652320-calendar" title="click to go to 'Calendar'">Calendar</a></li>
+      </ul>
+
+      <ul class="children" id="child_nodes">
+          <li id="page_node_7870619" class="enabled"><a href="/lunch" title="click to go to 'Adult Lunch Leagues & Learn to Play'">Lunch League/LTS</a></li>
+      </ul>
+  </div>
+
+</div>
+
+
+          
+<div id="leftHandGraphics">
+      <div class="clientGraphic image">
+          <a target="_blank" href="https://perfectskating.ca/?location=denver"><img src="https://cdn1.sportngin.com/attachments/lefthand_graphic/5d10-185263227/CircleLogo__1_.png" /></a>
+      </div>
+      <div class="clientGraphic image">
+          <a target="_blank" href="http://prideautocare.com/"><img src="https://cdn1.sportngin.com/attachments/lefthand_graphic/4647/4283/pride-autocare.jpg" /></a>
+      </div>
+      <div class="clientGraphic image">
+          <a target="_blank" href="http://mountainhighhockey.com"><img src="https://cdn1.sportngin.com/attachments/lefthand_graphic/6805/3591/WhiteSilhouette_BT.png" /></a>
+      </div>
+</div>
+
+
+
+        </div><!-- closing panelOne -->
+      <div id="panelTwo">
+        <div id="displayBodyContent">
+          <div id="yieldContent">
+                  <h2 id="displayBodyHeader" class=""><span>Calendar</span></h2>
+
+
+            <div id="errorNotice">
+  
+  
+  
+  
+  
+</div>
+
+
+
+            <div class='yieldAdminContent'></div>
+            <div class='yieldPageContent'>
+                    
+        <div class="layoutContainer oneColumn ">
+    
+          <div class="column1 column pe100">
+                <div id="pageEl_422013811" class="pageEl"  >
+  
+      <div class="pageElement textBlockElement clearfix">
+  
+
+
+    <div class="text clearfix">
+      <p style="text-align: center;">Please register for events in advance. Some events will be filled days prior. If the registration link does not work, the list is full. If you would like to be added to the waiting list please call the front desk at 303-285-2113.</p>
+
+    </div>
+</div>
+
+  <span class="clearAll"></span>
+</div>
+
+
+                <div id="pageEl_137192738" class="pageEl"  >
+  
+      <style type="text/css">
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #monthViewCalendar, #monthViewCalendar * {
+        visibility: visible;
+      }
+      #monthViewCalendar {
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+    }
+  </style>
+
+  
+
+  <ul class="contentTabs">
+    <li class="selected"><span><a class="monthViewLink icon" href="/page/show/1652320-calendar">Calendar View</a></span></li>
+    <li><span><a class="icon siteMapLink" href="/event/show_month_list/1652320">Month List View</a></span></li>
+    <li><span><a class="icon iconDayCal" href="/event/1652320/2025/5/29">Day View</a></span></li>
+  </ul>
+
+  <div id="monthViewCalendar">
+    <table class="vcalendar" summary="Monthly Calendar View"><caption class="caption"><a href="#" onclick="new Ajax.Request(&#39;/event/change_month/1652320-calendar?month=4&amp;amp;year=2025&#39;, {asynchronous:true, evalScripts:true, parameters:&#39;authenticity_token=&#39; + encodeURIComponent(&#39;JMzkeN/mFcJFA9pGlP+cToHNJ/7nzQW171mNuFXoSol3EhGrGVtmH7awA+M1a2Y+POhX2klapwHJzAVCjh6Atg==&#39;)}); return false;">&laquo;</a>&nbsp;May 2025&nbsp;<a href="#" onclick="new Ajax.Request(&#39;/event/change_month/1652320-calendar?month=6&amp;amp;year=2025&#39;, {asynchronous:true, evalScripts:true, parameters:&#39;authenticity_token=&#39; + encodeURIComponent(&#39;6mDbl1sbnUw5t9C+c9QNLh/N0/b+lFk7zSGgVFVlAX65vi5EnabukcoECRvSQPdeouij0lAD+4/rtCiujpPLQQ==&#39;)}); return false;">&raquo;</a></caption><tr><th scope='col' title='Sunday' >Sunday</th><th scope='col' title='Monday' >Monday</th><th scope='col' title='Tuesday' >Tuesday</th><th scope='col' title='Wednesday' >Wednesday</th><th scope='col' title='Thursday' >Thursday</th><th scope='col' title='Friday' >Friday</th><th scope='col' title='Saturday' >Saturday</th></tr><tr><td class="otherMonth weekendDay">27</td><td class="otherMonth">28</td><td class="otherMonth">29</td><td class="otherMonth">30</td><td class="day"><a class="dateLink" href="/event/1652320/2025/5/1">1</a><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/577622990">All Ages Stick &amp; Puck</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-01T15:15:00-06:00">Thursday, 3:15pm MDT</abbr>-<abbr class="dtend" title="2025-05-01T16:45:00-06:00">4:45pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=577622990"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283655">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_577622990_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div></td><td class="day"><a class="dateLink" href="/event/1652320/2025/5/2">2</a><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/577772094">Coach's Ice</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-02T06:30:00-06:00">Friday, 6:30am MDT</abbr>-<abbr class="dtend" title="2025-05-02T07:30:00-06:00">7:30am MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=577772094"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283715">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_577772094_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/577772101">All Ages Stick &amp; Puck No Lessons</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-02T07:00:00-06:00">Friday, 7:00am MDT</abbr>-<abbr class="dtend" title="2025-05-02T08:30:00-06:00">8:30am MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=577772101"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283716">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_577772101_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/577710114">All Ages Stick &amp; Puck No Lessons</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-02T15:15:00-06:00">Friday, 3:15pm MDT</abbr>-<abbr class="dtend" title="2025-05-02T16:45:00-06:00">4:45pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=577710114"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283672">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_577710114_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/577710140">Coach's Ice</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-02T19:15:00-06:00">Friday, 7:15pm MDT</abbr>-<abbr class="dtend" title="2025-05-02T20:15:00-06:00">8:15pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=577710140"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283676">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_577710140_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div></td><td class="day weekendDay"><a class="dateLink" href="/event/1652320/2025/5/3">3</a><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/577777611">All Ages Stick &amp; Puck No Lessons</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-03T12:30:00-06:00">Saturday, 12:30pm MDT</abbr>-<abbr class="dtend" title="2025-05-03T14:00:00-06:00">2:00pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=577777611"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283717">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_577777611_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div></td></tr><tr><td class="day weekendDay"><a class="dateLink" href="/event/1652320/2025/5/4">4</a><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/577710122">All Ages Stick &amp; Puck No Lessons</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-04T08:45:00-06:00">Sunday, 8:45am MDT</abbr>-<abbr class="dtend" title="2025-05-04T10:15:00-06:00">10:15am MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=577710122"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283673">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_577710122_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/577710161">Adult Drop In</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-04T10:30:00-06:00">Sunday, 10:30am MDT</abbr>-<abbr class="dtend" title="2025-05-04T12:00:00-06:00">12:00pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=577710161"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283679">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_577710161_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/577710153">Coach's Ice</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-04T10:45:00-06:00">Sunday, 10:45am MDT</abbr>-<abbr class="dtend" title="2025-05-04T11:45:00-06:00">11:45am MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=577710153"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283678">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_577710153_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/577710126">All Ages Stick &amp; Puck No Lessons</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-04T12:15:00-06:00">Sunday, 12:15pm MDT</abbr>-<abbr class="dtend" title="2025-05-04T13:45:00-06:00">1:45pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=577710126"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283674">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_577710126_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/577710145">Coach's Ice</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-04T14:00:00-06:00">Sunday, 2:00pm MDT</abbr>-<abbr class="dtend" title="2025-05-04T15:00:00-06:00">3:00pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=577710145"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283677">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_577710145_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div><div class="vevent" style="text-align:left"><small><a href="/event/1652320/2025/5/4">2 more events</a></small></div></td><td class="day"><a class="dateLink" href="/event/1652320/2025/5/5">5</a><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/577882952">All Ages Stick &amp; Puck</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-05T15:15:00-06:00">Monday, 3:15pm MDT</abbr>-<abbr class="dtend" title="2025-05-05T16:45:00-06:00">4:45pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=577882952"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283728">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_577882952_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/577883170">All Ages Stick &amp; Puck No Lessons</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-05T19:30:00-06:00">Monday, 7:30pm MDT</abbr>-<abbr class="dtend" title="2025-05-05T21:00:00-06:00">9:00pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=577883170"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283733">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_577883170_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div></td><td class="day"><a class="dateLink" href="/event/1652320/2025/5/6">6</a><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/577882970">All Ages Stick &amp; Puck</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-06T15:15:00-06:00">Tuesday, 3:15pm MDT</abbr>-<abbr class="dtend" title="2025-05-06T16:45:00-06:00">4:45pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=577882970"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283729">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_577882970_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div></td><td class="day"><a class="dateLink" href="/event/1652320/2025/5/7">7</a><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/577883092">All Ages Stick &amp; Puck</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-07T15:15:00-06:00">Wednesday, 3:15pm MDT</abbr>-<abbr class="dtend" title="2025-05-07T16:45:00-06:00">4:45pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=577883092"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283730">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_577883092_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div></td><td class="day"><a class="dateLink" href="/event/1652320/2025/5/8">8</a><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/577883165">All Ages Stick &amp; Puck</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-08T15:15:00-06:00">Thursday, 3:15pm MDT</abbr>-<abbr class="dtend" title="2025-05-08T16:45:00-06:00">4:45pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=577883165"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283731">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_577883165_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div></td><td class="day"><a class="dateLink" href="/event/1652320/2025/5/9">9</a><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/577883168">All Ages Stick &amp; Puck</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-09T15:15:00-06:00">Friday, 3:15pm MDT</abbr>-<abbr class="dtend" title="2025-05-09T16:45:00-06:00">4:45pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=577883168"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283732">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_577883168_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div></td><td class="day weekendDay"><a class="dateLink" href="/event/1652320/2025/5/10">10</a></td></tr><tr><td class="day weekendDay"><a class="dateLink" href="/event/1652320/2025/5/11">11</a><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578083469">All Ages Stick &amp; Puck No Lessons</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-11T16:30:00-06:00">Sunday, 4:30pm MDT</abbr>-<abbr class="dtend" title="2025-05-11T18:00:00-06:00">6:00pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578083469"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283792">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_578083469_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div></td><td class="day"><a class="dateLink" href="/event/1652320/2025/5/12">12</a><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578105066">All Ages Stick &amp; Puck</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-12T15:15:00-06:00">Monday, 3:15pm MDT</abbr>-<abbr class="dtend" title="2025-05-12T16:45:00-06:00">4:45pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578105066"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283793">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_578105066_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div></td><td class="day"><a class="dateLink" href="/event/1652320/2025/5/13">13</a><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578105067">All Ages Stick &amp; Puck</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-13T15:15:00-06:00">Tuesday, 3:15pm MDT</abbr>-<abbr class="dtend" title="2025-05-13T16:45:00-06:00">4:45pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578105067"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283794">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_578105067_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div></td><td class="day"><a class="dateLink" href="/event/1652320/2025/5/14">14</a><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578105069">All Ages Stick &amp; Puck</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-14T15:15:00-06:00">Wednesday, 3:15pm MDT</abbr>-<abbr class="dtend" title="2025-05-14T16:45:00-06:00">4:45pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578105069"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283795">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_578105069_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div></td><td class="day"><a class="dateLink" href="/event/1652320/2025/5/15">15</a><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578105071">All Ages Stick &amp; Puck</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-15T15:15:00-06:00">Thursday, 3:15pm MDT</abbr>-<abbr class="dtend" title="2025-05-15T16:45:00-06:00">4:45pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578105071"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283796">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_578105071_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div></td><td class="day"><a class="dateLink" href="/event/1652320/2025/5/16">16</a><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578105081">All Ages Stick &amp; Puck</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-16T15:15:00-06:00">Friday, 3:15pm MDT</abbr>-<abbr class="dtend" title="2025-05-16T16:45:00-06:00">4:45pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578105081"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283797">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_578105081_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div></td><td class="day weekendDay"><a class="dateLink" href="/event/1652320/2025/5/17">17</a></td></tr><tr><td class="day weekendDay"><a class="dateLink" href="/event/1652320/2025/5/18">18</a></td><td class="day"><a class="dateLink" href="/event/1652320/2025/5/19">19</a><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578332241">Coach's Ice</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-19T07:00:00-06:00">Monday, 7:00am MDT</abbr>-<abbr class="dtend" title="2025-05-19T08:00:00-06:00">8:00am MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578332241"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283822">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_578332241_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578332227">All Ages Stick &amp; Puck</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-19T15:00:00-06:00">Monday, 3:00pm MDT</abbr>-<abbr class="dtend" title="2025-05-19T16:30:00-06:00">4:30pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578332227"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283818">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_578332227_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div></td><td class="day"><a class="dateLink" href="/event/1652320/2025/5/20">20</a><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578332231">All Ages Stick &amp; Puck</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-20T15:00:00-06:00">Tuesday, 3:00pm MDT</abbr>-<abbr class="dtend" title="2025-05-20T16:30:00-06:00">4:30pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578332231"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283819">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_578332231_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div></td><td class="day"><a class="dateLink" href="/event/1652320/2025/5/21">21</a><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578332234">All Ages Stick &amp; Puck</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-21T15:00:00-06:00">Wednesday, 3:00pm MDT</abbr>-<abbr class="dtend" title="2025-05-21T16:30:00-06:00">4:30pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578332234"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283820">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_578332234_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div></td><td class="day"><a class="dateLink" href="/event/1652320/2025/5/22">22</a><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578332246">Coach's Ice</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-22T07:00:00-06:00">Thursday, 7:00am MDT</abbr>-<abbr class="dtend" title="2025-05-22T08:00:00-06:00">8:00am MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578332246"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283823">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_578332246_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578332236">All Ages Stick &amp; Puck</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-22T15:00:00-06:00">Thursday, 3:00pm MDT</abbr>-<abbr class="dtend" title="2025-05-22T16:30:00-06:00">4:30pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578332236"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283821">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_578332236_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578424534">Coach's Ice</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-22T18:00:00-06:00">Thursday, 6:00pm MDT</abbr>-<abbr class="dtend" title="2025-05-22T19:00:00-06:00">7:00pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578424534"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283854">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_578424534_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div></td><td class="day"><a class="dateLink" href="/event/1652320/2025/5/23">23</a><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578424568">All Ages Stick &amp; Puck No Lessons</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-23T15:15:00-06:00">Friday, 3:15pm MDT</abbr>-<abbr class="dtend" title="2025-05-23T16:45:00-06:00">4:45pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578424568"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283856">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_578424568_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578424548">Coach's Ice</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-23T20:00:00-06:00">Friday, 8:00pm MDT</abbr>-<abbr class="dtend" title="2025-05-23T21:00:00-06:00">9:00pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578424548"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283855">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_578424548_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div></td><td class="day weekendDay"><a class="dateLink" href="/event/1652320/2025/5/24">24</a><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578469315">Coach's Ice</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-24T17:45:00-06:00">Saturday, 5:45pm MDT</abbr>-<abbr class="dtend" title="2025-05-24T18:45:00-06:00">6:45pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578469315"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283877">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_578469315_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578469321">All Ages Stick &amp; Puck No Lessons</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-24T19:00:00-06:00">Saturday, 7:00pm MDT</abbr>-<abbr class="dtend" title="2025-05-24T20:30:00-06:00">8:30pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578469321"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283878">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_578469321_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div></td></tr><tr><td class="day weekendDay"><a class="dateLink" href="/event/1652320/2025/5/25">25</a><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578517046?dy=25&amp;mth=5&amp;yr=2025">Closed: Memorial Day</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-25">All Day Event</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578517046"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li style="display:none" class="tags" id="event_578517046_2025-05-25_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;<a href="/page/show/1652320">Calendar</a> &nbsp;<a href="/page/show/7870619">Lunch League/LTS</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div></td><td class="day"><a class="dateLink" href="/event/1652320/2025/5/26">26</a><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578517046?dy=26&amp;mth=5&amp;yr=2025">Closed: Memorial Day</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-26">All Day Event</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578517046"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li style="display:none" class="tags" id="event_578517046_2025-05-26_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;<a href="/page/show/1652320">Calendar</a> &nbsp;<a href="/page/show/7870619">Lunch League/LTS</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div></td><td class="day"><a class="dateLink" href="/event/1652320/2025/5/27">27</a><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578517044">All Ages Stick &amp; Puck</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-27T11:15:00-06:00">Tuesday, 11:15am MDT</abbr>-<abbr class="dtend" title="2025-05-27T12:45:00-06:00">12:45pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578517044"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283884">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_578517044_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578517027">All Ages Stick &amp; Puck No Lessons</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-27T15:15:00-06:00">Tuesday, 3:15pm MDT</abbr>-<abbr class="dtend" title="2025-05-27T16:45:00-06:00">4:45pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578517027"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283880">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_578517027_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div></td><td class="day"><a class="dateLink" href="/event/1652320/2025/5/28">28</a><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578517036">All Ages Stick &amp; Puck No Lessons</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-28T15:15:00-06:00">Wednesday, 3:15pm MDT</abbr>-<abbr class="dtend" title="2025-05-28T16:45:00-06:00">4:45pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578517036"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283881">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_578517036_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div></td><td class="today"><a class="dateLink" href="/event/1652320/2025/5/29">29</a><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578517045">All Ages Stick &amp; Puck</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-29T11:15:00-06:00">Thursday, 11:15am MDT</abbr>-<abbr class="dtend" title="2025-05-29T12:45:00-06:00">12:45pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578517045"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283885">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_578517045_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578517041">All Ages Stick &amp; Puck No Lessons</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-29T17:15:00-06:00">Thursday, 5:15pm MDT</abbr>-<abbr class="dtend" title="2025-05-29T18:45:00-06:00">6:45pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578517041"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283882">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_578517041_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div></td><td class="day"><a class="dateLink" href="/event/1652320/2025/5/30">30</a><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578517049">Coach's Ice</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-30T16:15:00-06:00">Friday, 4:15pm MDT</abbr>-<abbr class="dtend" title="2025-05-30T17:15:00-06:00">5:15pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578517049"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283886">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_578517049_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578517043">All Ages Stick &amp; Puck No Lessons</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-30T17:30:00-06:00">Friday, 5:30pm MDT</abbr>-<abbr class="dtend" title="2025-05-30T19:00:00-06:00">7:00pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578517043"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283883">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_578517043_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div></td><td class="day weekendDay"><a class="dateLink" href="/event/1652320/2025/5/31">31</a><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578674831">Coach's Ice</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-31T08:30:00-06:00">Saturday, 8:30am MDT</abbr>-<abbr class="dtend" title="2025-05-31T09:30:00-06:00">9:30am MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578674831"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283899">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_578674831_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578674796">All Ages Stick &amp; Puck No Lessons</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-31T09:45:00-06:00">Saturday, 9:45am MDT</abbr>-<abbr class="dtend" title="2025-05-31T11:15:00-06:00">11:15am MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578674796"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283894">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_578674796_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578674843">Adult Drop In</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-31T11:30:00-06:00">Saturday, 11:30am MDT</abbr>-<abbr class="dtend" title="2025-05-31T13:00:00-06:00">1:00pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578674843"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283901">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_578674843_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578674800">All Ages Stick &amp; Puck No Lessons</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-31T13:15:00-06:00">Saturday, 1:15pm MDT</abbr>-<abbr class="dtend" title="2025-05-31T14:45:00-06:00">2:45pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578674800"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li class="description">Click Location Link to Register</li><li span="" class="location"><a target="_self" href="https://login.ezfacility.com/OnlineRegistrations/Register.aspx?CompanyID=855&amp;GroupID=283895">The Ice Ranch</a></li><li style="display:none" class="tags" id="event_578674800_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div><div class="vevent scheduled"><h5 class="summary"><a class="url uid" target="_self" href="https://www.theiceranch.com/event/show/578674844">Public Skate</a></h5><ul class="details"><li class="time">
+  <abbr class="dtstart"><abbr class="dtstart" title="2025-05-31T15:00:00-06:00">Saturday, 3:00pm MDT</abbr>-<abbr class="dtend" title="2025-05-31T17:00:00-06:00">5:00pm MDT</abbr></abbr>
+  &nbsp;
+  <a title="Download" target="_self" href="https://www.theiceranch.com/single_event/ical_feed?event_id=578674844"><img class="ics_file_download" src="/app_images/ical_event_icon.png?17075077351" /></a>
+</li>
+<li span="" class="location">The Ice Ranch</li><li style="display:none" class="tags" id="event_578674844_tags">Tag(s): <a href="/page/show/1652315">Home</a> &nbsp;</li><li class="type">Event Category: <span class="category">Meeting</span>, <span class="category">Game</span></li></ul></div><div class="vevent" style="text-align:left"><small><a href="/event/1652320/2025/5/31">2 more events</a></small></div></td></tr><tr></tr></table>
+
+<link href="/event_rss_feed?tags=1652315,1652320,1718896,1718895,1718913,1718914,1718915,1718916,1718917,7870619" rel="alternate" title="WWW Events with Tags: Home, Calendar, Adult Drop In, All Ages Stick &amp; Puck, Teen Drop In, 12 &amp; Under Stick &amp; Puck, 13 &amp; Over Stick &amp; Puck, Coach Ice, Public Skate, Lunch League/LTS" type="application/rss+xml" id="rssFeed" />
+
+  </div>
+
+    <form id="main_calendar_form">
+    <input type="hidden" name="calendar_type" id="calendar_type" value="calendar" />
+    <div id="nodePicker-main" class="nodePickerContainer pageElement" data-nodepicker='{"opened":false}'  >
+      <div id="nodePickerSlideBox_main" style="display:none;">
+      <div class="selectedNodes">
+        <select name="match_option" id="match_option" style="float:right;"><option selected="selected" value="0">Match Any</option>
+<option value="1">Match All</option></select>
+      <div class="loading">
+        <img align="absmiddle" border="0" id="busy" style="display: none;" src="/app_images/miniLoader.gif?17075077351" />
+      </div>
+      <h3>Currently Selected Tag(s):</h3>
+  
+      <div id="nodePicker-preselectedTags-8090-main" class="nodePicker-preselectedTags">
+            <input type="hidden" name="node_ids[]" id="node_ids_" value="1652315" />
+            <input type="hidden" name="node_ids[]" id="node_ids_" value="1652320" />
+            <input type="hidden" name="node_ids[]" id="node_ids_" value="1718896" />
+            <input type="hidden" name="node_ids[]" id="node_ids_" value="1718895" />
+            <input type="hidden" name="node_ids[]" id="node_ids_" value="1718913" />
+            <input type="hidden" name="node_ids[]" id="node_ids_" value="1718914" />
+            <input type="hidden" name="node_ids[]" id="node_ids_" value="1718915" />
+            <input type="hidden" name="node_ids[]" id="node_ids_" value="1718916" />
+            <input type="hidden" name="node_ids[]" id="node_ids_" value="1718917" />
+            <input type="hidden" name="node_ids[]" id="node_ids_" value="7870619" />
+      </div>
+
+      <div id="selectedNodeChoices_main_8090" data-siteID="8090" class="selectedNodeChoices_main clearfix wrap">
+                <a class="tag" target="_blank" data-nodekey="486805-page" href="http://www.theiceranch.com/page/show/1652315-home">Home</a>
+                <a class="tag" target="_blank" data-nodekey="6585-calendar" href="http://www.theiceranch.com/page/show/1652320-calendar">Calendar</a>
+                <a class="tag" target="_blank" data-nodekey="506202-page" href="http://www.theiceranch.com/page/show/1718896-all-ages-stick-and-puck">All Ages Stick &amp; Puck</a>
+                <a class="tag" target="_blank" data-nodekey="506201-page" href="http://www.theiceranch.com/page/show/1718895-adult-drop-in">Adult Drop In</a>
+                <a class="tag" target="_blank" data-nodekey="506204-page" href="http://www.theiceranch.com/page/show/1718913-teen-drop-in">Teen Drop In</a>
+                <a class="tag" target="_blank" data-nodekey="506205-page" href="http://www.theiceranch.com/page/show/1718914-12-and-under-stick-and-puck">12 &amp; Under Stick &amp; Puck</a>
+                <a class="tag" target="_blank" data-nodekey="506206-page" href="http://www.theiceranch.com/page/show/1718915-13-and-over-stick-and-puck">13 &amp; Over Stick &amp; Puck</a>
+                <a class="tag" target="_blank" data-nodekey="506207-page" href="http://www.theiceranch.com/page/show/1718916-coach-ice">Coach Ice</a>
+                <a class="tag" target="_blank" data-nodekey="506208-page" href="http://www.theiceranch.com/page/show/1718917-public-skate">Public Skate</a>
+                <a class="tag" target="_blank" data-nodekey="1888848-page" href="http://www.theiceranch.com/page/show/7870619-adult-lunch-leagues-and-learn-to-play">Adult Lunch Leagues &amp; Learn to Play</a>
+      </div>
+        <div class="nodePicker-formControls nodePicker-formControls-main" data-siteID="8090" style="display:none;">
+          <a class="nodePicker-selectAllTags-main nodePicker-button" id="nodePickerSelectAllTags-main-8090" href="#" data-site="8090">Select All Tags</a>
+          <a class="nodePicker-clearTags-main nodePicker-button" id="nodePickerClearTags-main-8090" href="#" data-site="8090" data-connected=true>Clear All Tags</a>
+        </div>
+
+
+    </div>
+      <div class="nodePickerSeasonsOnly">
+    <input type="checkbox" name="only_current_subseason" id="only_current_subseason" value="1" class="nodePicker-showTagMenuCurrentSeasonsOnly" checked="checked" /> Show Current Seasons Only
+  </div>
+<div id="nodePickerSlideBox_main" class="nodePickerSlideBox"  >
+  <div id="nodePickerLoader_main">
+    <h2>Loading&hellip; <img align="absmiddle" border="0" id="busy" src="/app_images/loaderBarUserMode.gif?17075077351" /></h2>
+    <p>Please wait&hellip; loading tags.</p>
+  </div>
+    <div id="nodePickerSite_8090_main" class = "nodePickerSiteBox" >
+      <ul id="nodePicker_main" class="unlimitedHierarchy">
+      </ul>
+    </div>
+</div>
+
+  </div>
+
+    <div class="tab" id="tabHide_main" style="display:none;">
+  <a class="upArrow nodePicker-hideTagMenu" href="#nodePicker-main" onclick="return false;">Hide Tag Menu</a>
+</div>
+<div class="tab" id="tabShow_main">
+  <a class="downArrow nodePicker-showTagMenu" href="#nodePicker-main" onclick="return false;">Show Tag Menu</a>
+</div>
+
+</div>
+<script type="text/javascript" charset="utf-8">
+
+  if ( typeof nodePickers == 'undefined' ) {
+    nodePickers = {};
+  }
+
+  nodePickers['main'] = new NodePicker({
+                                                            'display_location' : 'main',
+                                                            
+                                                            'ajax_url' : '/node_list/node_list?model=event',
+                                                            'initialSiteID' : "8090",
+                                                            'name_string' : 'node_ids[]',
+                                                            'using_V2' : false,
+                                                            'connected_sites_type' : '',
+                                                            'expanded' : false,
+                                                            'is_calendar_page' : 'Calendar'
+                                                          });
+</script>
+
+  </form>
+
+  <script type="text/javascript" charset="utf-8">
+    new Form.Observer('main_calendar_form', 0.25, function(element, value) {
+      var nodePicker = $j(element).find('.nodePickerContainer');
+      show_spinner();
+        $j.ajax({
+          url: '/event/build_event_selection/1652320-calendar',
+          type: 'POST',
+          data: value,
+          success: function(){
+            hide_spinner();
+            initToggleLinks('tags', true, true);
+            var node_list = Cookie.get("node_selection");
+            if (node_list && node_list != 0) {
+              showIfExists('calendar_options');
+            }
+            else {
+              hideIfExists('calendar_options');
+            }
+          }
+        });
+    })
+  </script>
+
+
+  <div id="bottom_options" class="bottomOptions">
+      <ul class="pageOptions feed_links_div" id="calendar_options" style="">
+      <li><a class="icon tagLink toggle_tags" style="text-transform: capitalize;" href="#">Toggle Tags</a></li>
+    <li><a class="printLink icon" onclick="window.print()" style="cursor: pointer;">Print Page</a></li>
+    <li><a style="display:none" class="rssLink icon lbOn" href="/event/rss_instructions">Subscribe to RSS Feed</a></li>
+    <li><a style="display:none" class="iCalLink icon lbOn" href="/event/ical_instructions">Subscribe to iCal Feed</a></li>
+  </ul>
+
+  </div>
+
+
+
+  <span class="clearAll"></span>
+</div>
+
+
+        </div>
+    <span class="clearAll"></span>
+  </div>
+
+      <div class="layoutContainer oneColumn ">
+    
+          <div class="column1 column pe100">
+        </div>
+    <span class="clearAll"></span>
+  </div>
+
+      <div class="layoutContainer twoColumn6633 ">
+    
+          <div class="column1 column pe66">
+        </div>
+          <div class="column2 column pe33">
+        </div>
+    <span class="clearAll"></span>
+  </div>
+
+
+
+
+
+  
+
+<script type="text/javascript">
+  var init_nss = function() {
+    var $nss = $j('.newsSlideShow-container');
+    // debug.info("Found "+$nss.length+" News Slideshow Elements");
+    $nss.each(function(){
+      var $ss = $j(this);
+      if ( ! $ss.data('activenewsslideshow') ) {
+        $ss.data('activenewsslideshow',true);
+        $ss.newsSlideShow();
+      }
+    });
+  }
+  // call on document ready for most browsers
+  init_nss();
+  // call again on window load for IE :(
+  $j(window).load(init_nss);
+  // check for new slideshow elements after valid.deactivate
+  $j('body').bind('pageElement.render',init_nss);
+</script>
+
+
+            </div>
+
+
+          </div>
+        </div>
+        <div class="clearAll"></div>
+      </div><!-- closing panelTwo -->
+
+      
+      
+      <div class="clearAll"></div>
+      
+    </div><!--  closing pageContentContainer3  -->
+  <div class="footerPush"></div>
+  </div><!--  closing siteContainer3  -->
+
+  <div id="siteFooter">
+  
+    
+    
+    <ul class="se-footer">
+      <li class="se-footer-copyright">
+        This website is powered by SportsEngine's
+        <a class="legalLink" target="_blank" href="https://www.sportsengine.com/solutions/">
+          Sports Relationship Management
+        </a>
+        (SRM) software, but is owned by and subject to the  The Ice Ranch privacy policy.
+        <a class="legalLink" target="_blank" href="https://www.sportsengine.com/corp">
+          &copy;2025 SportsEngine, Inc.
+        </a>
+        <br>
+      </li>
+        <li class="se-footer-link">
+          <a class="legalLink" target="_blank" href="/privacy_policy.pdf">Privacy Policy</a>
+        </li>
+      <li id="poweredByNGIN" class="se-footer-logo" style="text-align: center;">
+        <br>
+        <a href="https://www.sportsengine.com/?utm_source=Sitebuilder&utm_medium=Footer&utm_campaign=SportsEngine+Internal+Link&utm_term=Footer"
+           onclick="javascript:window.location=('https://www.sportsengine.com/?utm_source=Sitebuilder&utm_medium=Footer&utm_campaign=SportsEngine+Internal+Link&utm_term=Footer'); return false;">
+          <img src="/logo_images/white_logo.png" alt="Powered by SportsEngine" title="Click here to learn how SportsEngine can empower your organization!">
+        </a>
+      </li>
+    </ul>
+</div>
+
+    
+    
+
+
+  
+  
+  
+</body>
+</html>
