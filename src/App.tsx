@@ -9,27 +9,8 @@ import { LoadingIcon, CalendarIcon, AdjustmentsHorizontalIcon } from './componen
 export const ALL_RINKS_TAB_ID = 'all-rinks';
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
-// Individual facility metadata (for now, simpler structure until Phase 3)
-interface FacilityMetadata {
-  facilityId: string;
-  lastSuccessfulScrape?: string;
-  lastAttempt: string;
-  status: 'success' | 'error';
-  eventCount: number;
-  errorMessage?: string;
-}
-
-// Combined metadata structure (legacy support for now)
-interface LegacyMetadata {
-  lastCombinedUpdate: string;
-  rinks: Record<string, {
-    lastSuccessfulScrape?: string;
-    lastAttempt: string;
-    status: 'success' | 'error';
-    eventCount: number;
-    errorMessage?: string;
-  }>;
-}
+// Individual facility metadata - using the interface from types.ts
+import type { FacilityMetadata } from './types';
 
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -102,7 +83,7 @@ const App: React.FC = () => {
     return Array.from(categories).sort();
   }, [staticData]);
 
-  // Load all facility files upfront (eliminates loading flashes between tabs)
+  // Load all facility files and their metadata upfront
   const fetchStaticData = useCallback(async (forceRefresh: boolean = false) => {
     // Only refetch if we don't have data or it's been more than 5 minutes (for development)
     if (staticData.length > 0 && !forceRefresh && Date.now() - lastFetchTime < 5 * 60 * 1000) {
@@ -115,23 +96,53 @@ const App: React.FC = () => {
     setFacilityErrors({});
 
     try {
-      console.log(`📡 Fetching all facility data...`);
+      console.log(`📡 Fetching all facility data and metadata...`);
       
-      // Load all facility files (eliminates tab switching loading flashes)
-      const allFiles = ['ice-ranch.json', 'big-bear.json', 'du-ritchie.json', 'foothills-edge.json', 'ssprd-249.json', 'ssprd-250.json'];
-      console.log(`📋 Loading files: ${allFiles.join(', ')}`);
+      // All facility files to load
+      const facilityIds = ['ice-ranch', 'big-bear', 'du-ritchie', 'foothills-edge', 'ssprd-249', 'ssprd-250'];
+      console.log(`📋 Loading facilities: ${facilityIds.join(', ')}`);
       
-      // Load all required files in parallel
-      const filePromises = allFiles.map(async (filename) => {
-        const facilityId = filename.replace('.json', '');
+      // Load data and metadata files in parallel for each facility
+      const facilityPromises = facilityIds.map(async (facilityId) => {
         try {
-          console.log(`   📥 Loading ${filename}...`);
-          const response = await fetch(`/data/${filename}`);
-          if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          console.log(`   📥 Loading ${facilityId}...`);
+          
+          // Load both data and metadata in parallel
+          const [dataResponse, metadataResponse] = await Promise.all([
+            fetch(`/data/${facilityId}.json`),
+            fetch(`/data/${facilityId}-metadata.json`)
+          ]);
+          
+          // Process data file
+          let eventsData = [];
+          let dataError = null;
+          if (dataResponse.ok) {
+            eventsData = await dataResponse.json();
+          } else {
+            dataError = `HTTP ${dataResponse.status}: ${dataResponse.statusText}`;
           }
           
-          const eventsData = await response.json();
+          // Process metadata file
+          let metadata: FacilityMetadata | null = null;
+          if (metadataResponse.ok) {
+            metadata = await metadataResponse.json();
+            console.log(`   📊 Loaded metadata for ${facilityId}: ${metadata.status} (${metadata.eventCount} events)`);
+          } else {
+            console.log(`   ⚠️ No metadata file for ${facilityId}, creating basic metadata`);
+            // Create basic metadata if file doesn't exist
+            metadata = {
+              facilityId,
+              facilityName: facilityId,
+              displayName: facilityId,
+              lastAttempt: new Date().toISOString(),
+              status: dataError ? 'error' : 'success',
+              eventCount: eventsData.length,
+              sourceUrl: '',
+              rinks: [{ rinkId: facilityId, rinkName: 'Main Rink' }],
+              ...(dataError && { errorMessage: dataError }),
+              ...(!dataError && { lastSuccessfulScrape: new Date().toISOString() })
+            };
+          }
           
           // Convert string dates back to Date objects
           const parsedEvents: RawIceEventData[] = eventsData.map((event: any) => ({
@@ -140,77 +151,63 @@ const App: React.FC = () => {
             endTime: new Date(event.endTime),
           }));
           
-          console.log(`   ✅ Loaded ${parsedEvents.length} events from ${filename}`);
+          console.log(`   ✅ Loaded ${parsedEvents.length} events from ${facilityId}.json`);
           
           return {
             facilityId,
             events: parsedEvents,
-            success: true,
-            error: null
+            metadata,
+            success: !dataError,
+            error: dataError
           };
         } catch (err) {
           const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-          console.error(`   ❌ Failed to load ${filename}:`, errorMessage);
+          console.error(`   ❌ Failed to load ${facilityId}:`, errorMessage);
+          
+          // Create error metadata
+          const errorMetadata: FacilityMetadata = {
+            facilityId,
+            facilityName: facilityId,
+            displayName: facilityId,
+            lastAttempt: new Date().toISOString(),
+            status: 'error',
+            eventCount: 0,
+            errorMessage: errorMessage,
+            sourceUrl: '',
+            rinks: [{ rinkId: facilityId, rinkName: 'Main Rink' }]
+          };
+          
           return {
             facilityId,
             events: [],
+            metadata: errorMetadata,
             success: false,
             error: errorMessage
           };
         }
       });
       
-      const results = await Promise.all(filePromises);
+      const results = await Promise.all(facilityPromises);
       
-      // Combine all successful results
+      // Process results
       const allEvents: RawIceEventData[] = [];
       const newFacilityErrors: Record<string, string> = {};
       const newFacilityMetadata: Record<string, FacilityMetadata> = {};
       
       results.forEach(result => {
+        // Always store metadata (success or error)
+        if (result.metadata) {
+          newFacilityMetadata[result.facilityId] = result.metadata;
+        }
+        
         if (result.success) {
           allEvents.push(...result.events);
-          // Create basic metadata for successful loads
-          newFacilityMetadata[result.facilityId] = {
-            facilityId: result.facilityId,
-            lastAttempt: new Date().toISOString(),
-            status: 'success',
-            eventCount: result.events.length,
-            lastSuccessfulScrape: new Date().toISOString()
-          };
         } else {
           if (result.error) {
             newFacilityErrors[result.facilityId] = result.error;
           }
-          // Create error metadata
-          newFacilityMetadata[result.facilityId] = {
-            facilityId: result.facilityId,
-            lastAttempt: new Date().toISOString(),
-            status: 'error',
-            eventCount: 0,
-            errorMessage: result.error || 'Unknown error'
-          };
         }
       });
-      
-      // Try to load legacy metadata as fallback
-      try {
-        const metadataResponse = await fetch('/data/metadata.json');
-        if (metadataResponse.ok) {
-          const legacyMetadata: LegacyMetadata = await metadataResponse.json();
-          // Merge legacy metadata where we don't have new metadata
-          Object.entries(legacyMetadata.rinks).forEach(([rinkId, meta]) => {
-            if (!newFacilityMetadata[rinkId]) {
-              newFacilityMetadata[rinkId] = {
-                facilityId: rinkId,
-                ...meta
-              };
-            }
-          });
-        }
-      } catch (metaError) {
-        console.warn('Could not fetch legacy metadata:', metaError);
-      }
       
       setStaticData(allEvents);
       setFacilityErrors(newFacilityErrors);
@@ -222,6 +219,12 @@ const App: React.FC = () => {
       
       console.log(`✅ Data loading complete: ${successCount} successful, ${errorCount} failed`);
       console.log(`📊 Total events loaded: ${allEvents.length}`);
+      console.log(`📋 Loaded metadata for ${Object.keys(newFacilityMetadata).length} facilities`);
+      
+      // Show metadata info
+      Object.values(newFacilityMetadata).forEach(meta => {
+        console.log(`   📊 ${meta.displayName}: ${meta.status} (${meta.eventCount} events)`);
+      });
       
       // Set error message if all facilities failed
       if (errorCount > 0 && successCount === 0) {
@@ -599,7 +602,7 @@ const App: React.FC = () => {
               
               <div className="flex items-center px-4 py-2 text-sm bg-green-600/20 text-green-300 rounded-md">
                 <div className="w-2 h-2 rounded-full mr-2 bg-green-300" />
-                Static Data
+                Individual Metadata
                 <span className="ml-2 text-xs opacity-75">
                   (Updated: {getLastUpdateInfo()})
                 </span>
@@ -630,7 +633,16 @@ const App: React.FC = () => {
         <div className="p-6 min-h-[400px]">
           {selectedRinkTabInfo && (
             <div className="mb-6 p-4 border border-slate-700 rounded-lg bg-slate-700/50">
-              <h2 className="text-2xl font-semibold text-sky-300 mb-1">{selectedRinkTabInfo.name}</h2>
+              <h2 className="text-2xl font-semibold text-sky-300 mb-1">
+                {/* Use display name from metadata if available */}
+                {(() => {
+                  const facilityId = selectedRinkTabInfo.memberRinkIds 
+                    ? (selectedRinkTabInfo.memberRinkIds[0].startsWith('fsc-') ? 'ssprd-249' : 'ssprd-250')
+                    : selectedRinkId;
+                  const metadata = facilityMetadata[facilityId];
+                  return metadata?.displayName || selectedRinkTabInfo.name;
+                })()}
+              </h2>
               <p className="text-sm text-slate-400">
                 Source: <a href={selectedRinkTabInfo.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-sky-400 hover:text-sky-300 underline transition-colors">
                   {selectedRinkTabInfo.sourceUrl}
@@ -648,7 +660,7 @@ const App: React.FC = () => {
                 Showing events from all Denver area ice rinks. Data automatically updated twice daily.
               </p>
               <p className="text-xs text-green-400 mt-1">
-                📊 {staticData.length} total events loaded
+                📊 {staticData.length} total events loaded from {Object.keys(facilityMetadata).length} facilities
               </p>
             </div>
           )}

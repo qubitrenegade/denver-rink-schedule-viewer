@@ -69,7 +69,7 @@ class ScraperOrchestrator {
     try {
       const events: RawIceEventData[] = await config.scraper.scrape();
       await this.writer.writeRinkData(config.id, events);
-      await this.writer.updateMetadata(config.id, 'success', events.length);
+      await this.writer.writeFacilityMetadata(config.id, 'success', events.length);
       
       const duration = ((Date.now() - startTime) / 1000).toFixed(1);
       console.log(`✅ ${config.name} completed successfully in ${duration}s: ${events.length} events`);
@@ -78,7 +78,7 @@ class ScraperOrchestrator {
       const duration = ((Date.now() - startTime) / 1000).toFixed(1);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
-      await this.writer.updateMetadata(config.id, 'error', 0, errorMessage);
+      await this.writer.writeFacilityMetadata(config.id, 'error', 0, errorMessage);
       console.error(`❌ ${config.name} failed after ${duration}s: ${errorMessage}`);
       throw error;
     }
@@ -105,13 +105,11 @@ class ScraperOrchestrator {
       }
     });
     
-    // Always regenerate combined file (even if some scrapers failed)
-    await this.writer.regenerateCombinedFile();
-    
     const duration = ((Date.now() - startTime) / 1000).toFixed(1);
     console.log(`\n🏁 Full scrape completed in ${duration}s:`);
     console.log(`   ✅ Successful: ${successCount}/${SCRAPERS.length}`);
     console.log(`   ❌ Failed: ${errorCount}/${SCRAPERS.length}`);
+    console.log(`📋 Individual facility data and metadata files updated`);
     
     if (errorCount > 0) {
       process.exit(1); // Exit with error code for GitHub Actions
@@ -119,32 +117,29 @@ class ScraperOrchestrator {
   }
 
   async showStatus(): Promise<void> {
-    const metadata = await this.writer.readMetadata();
-    if (!metadata) {
-      console.log('📊 No metadata found. Run a scrape first.');
-      return;
-    }
-
     console.log('\n📊 Scraper Status Report');
     console.log('========================');
-    console.log(`Last Combined Update: ${new Date(metadata.lastCombinedUpdate).toLocaleString()}`);
-    console.log('');
+    console.log('Loading status from individual facility metadata files...\n');
 
-    Object.entries(metadata.rinks).forEach(([rinkId, meta]) => {
-      const config = SCRAPERS.find(s => s.id === rinkId);
-      const rinkName = config?.name || rinkId;
+    for (const config of SCRAPERS) {
+      const metadata = await this.writer.readFacilityMetadata(config.id);
       
-      console.log(`${meta.status === 'success' ? '✅' : '❌'} ${rinkName}`);
-      console.log(`   Last Attempt: ${new Date(meta.lastAttempt).toLocaleString()}`);
-      if (meta.lastSuccessfulScrape) {
-        console.log(`   Last Success: ${new Date(meta.lastSuccessfulScrape).toLocaleString()}`);
+      if (metadata) {
+        console.log(`${metadata.status === 'success' ? '✅' : '❌'} ${metadata.displayName}`);
+        console.log(`   Last Attempt: ${new Date(metadata.lastAttempt).toLocaleString()}`);
+        if (metadata.lastSuccessfulScrape) {
+          console.log(`   Last Success: ${new Date(metadata.lastSuccessfulScrape).toLocaleString()}`);
+        }
+        console.log(`   Events: ${metadata.eventCount}`);
+        if (metadata.errorMessage) {
+          console.log(`   Error: ${metadata.errorMessage}`);
+        }
+        console.log('');
+      } else {
+        console.log(`❓ ${config.name}: No metadata found`);
+        console.log('');
       }
-      console.log(`   Events: ${meta.eventCount}`);
-      if (meta.errorMessage) {
-        console.log(`   Error: ${meta.errorMessage}`);
-      }
-      console.log('');
-    });
+    }
   }
 }
 
@@ -173,6 +168,8 @@ Examples:
   bun run scraper.ts --rink du-ritchie
   bun run scraper.ts --ssprd  
   bun run scraper.ts          (scrape all rinks)
+
+Note: Individual facility files and metadata are generated. Legacy combined.json is no longer used.
 `);
     return;
   }
@@ -188,13 +185,11 @@ Examples:
     } else if (args.includes('--ssprd')) {
       await orchestrator.scrapeRink('ssprd-249');
       await orchestrator.scrapeRink('ssprd-250');
-      await orchestrator.writer.regenerateCombinedFile();
     } else {
       const rinkIndex = args.indexOf('--rink');
       if (rinkIndex !== -1 && args[rinkIndex + 1]) {
         const rinkId = args[rinkIndex + 1];
         await orchestrator.scrapeRink(rinkId);
-        await orchestrator.writer.regenerateCombinedFile();
       } else {
         await orchestrator.scrapeAll();
       }
@@ -204,12 +199,5 @@ Examples:
     process.exit(1);
   }
 }
-
-// Add random delay for GitHub Actions (staggered execution)
-// if (process.env.GITHUB_ACTIONS) {
-//   const delay = Math.floor(Math.random() * 3600); // 0-60 minutes
-//   console.log(`⏱️ GitHub Actions: Adding ${Math.floor(delay/60)}m ${delay%60}s random delay...`);
-//   await new Promise(resolve => setTimeout(resolve, delay * 1000));
-// }
 
 await main();
