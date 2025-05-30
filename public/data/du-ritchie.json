@@ -1021,5 +1021,27 @@
     "category": "Drop-In Hockey",
     "isFeatured": false,
     "eventUrl": "https://calendar.google.com/calendar/event?eid=5jk2mddqs6ju6vdtoallpaa1kd%40google.com"
+  },
+  {
+    "id": "du-ritchie-0lidakhqbt0pic5886d6rq872f@google.com",
+    "rinkId": "du-ritchie",
+    "title": "Drop-In Hockey",
+    "startTime": "2025-06-29T13:00:00.000Z",
+    "endTime": "2025-06-29T14:30:00.000Z",
+    "description": "Players must be at least 18 years old and must wear full hockey equipment. Bring all of your own equipment (skates, sticks, pucks, etc.). Please also bring a water bottle.",
+    "category": "Drop-In Hockey",
+    "isFeatured": false,
+    "eventUrl": "https://calendar.google.com/calendar/event?eid=0lidakhqbt0pic5886d6rq872f%40google.com"
+  },
+  {
+    "id": "du-ritchie-7nr6p8gkckvci5c34rcgqbpmc1@google.com",
+    "rinkId": "du-ritchie",
+    "title": "Stick & Puck",
+    "startTime": "2025-06-29T13:00:00.000Z",
+    "endTime": "2025-06-29T14:00:00.000Z",
+    "description": "Ice session at DU Ritchie Center",
+    "category": "Stick & Puck",
+    "isFeatured": false,
+    "eventUrl": "https://calendar.google.com/calendar/event?eid=7nr6p8gkckvci5c34rcgqbpmc1%40google.com"
   }
 ]
