@@ -23,16 +23,15 @@
   "dependencies": {
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "vite": "^6.2.0"
+    "vite": "^6.2.0",
+    "node-fetch": "^3.3.2"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
     "typescript": "~5.7.2"
   },
   "optionalDependencies": {
-    "node-fetch": "^3.3.2",
     "jsdom": "^23.0.1",
-    "@types/jsdom": "^21.1.6",
-    "puppeteer": "^21.0.0"
+    "@types/jsdom": "^21.1.6"
   }
 }

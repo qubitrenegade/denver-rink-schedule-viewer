@@ -1,6 +1,6 @@
 import { RawIceEventData, EventCategory } from '../../src/types.js';
 import { BaseScraper } from './base-scraper.js';
-import puppeteer from 'puppeteer';
+import fetch from 'node-fetch';
 
 export class BigBearScraper extends BaseScraper {
   get rinkId(): string { return 'big-bear'; }
@@ -10,276 +10,109 @@ export class BigBearScraper extends BaseScraper {
 
   protected categorizeBigBearEvent(title: string): EventCategory {
     const titleLower = title.toLowerCase();
-    
     if (titleLower.includes('public skate')) return 'Public Skate';
     if (titleLower.includes('freestyle') || titleLower.includes('free style')) return 'Figure Skating';
     if (titleLower.includes('stick') && titleLower.includes('puck')) return 'Stick & Puck';
     if (titleLower.includes('drop-in') || titleLower.includes('drop in')) return 'Drop-In Hockey';
     if (titleLower.includes('party room') || titleLower.includes('hockey party')) return 'Special Event';
-    
     return this.categorizeEvent(title);
   }
 
-  // Convert Mountain Time to UTC
-  private convertMTtoUTC(dateStr: string, timeStr: string): Date {
-    // Parse date: "2025-05-29"
-    const [year, month, day] = dateStr.split('-').map(Number);
-    
-    // Parse time: "6a", "8:45p", "10:30a", etc.
-    const timeMatch = timeStr.match(/(\d{1,2})(?::(\d{2}))?\s*([ap])(?:m)?/i);
-    if (!timeMatch) {
-      console.warn(`Could not parse time: ${timeStr}`);
-      return new Date();
-    }
-    
-    let hours = parseInt(timeMatch[1]);
-    const minutes = parseInt(timeMatch[2] || '0');
-    const ampm = timeMatch[3].toLowerCase();
-    
-    // Convert to 24-hour format
-    if (ampm === 'p' && hours !== 12) hours += 12;
-    if (ampm === 'a' && hours === 12) hours = 0;
-    
-    // Create UTC date: MT time + 6 hours = UTC time (for MDT)
-    const utcDate = new Date(Date.UTC(year, month - 1, day, hours + 6, minutes, 0, 0));
-    
-    console.log(`   Converting ${timeStr} MT on ${dateStr} -> ${utcDate.toISOString()} UTC`);
-    
-    return utcDate;
-  }
-
-  // Parse the popover content to extract duration and venue
-  private parsePopoverContent(content: string): { duration: number; venue?: string } {
-    let duration = 60; // default 1 hour
-    let venue: string | undefined;
-    
-    // Extract duration: "2 hour(s) 15 minutes" or "1 hour(s)"
-    const durationMatch = content.match(/(\d+)\s+hour\(s\)(?:\s+(\d+)\s+minutes)?/);
-    if (durationMatch) {
-      const hours = parseInt(durationMatch[1]);
-      const minutes = parseInt(durationMatch[2] || '0');
-      duration = hours * 60 + minutes;
-    }
-    
-    // Extract venue: "Venues - South Rink" or "Venues - North Rink"
-    const venueMatch = content.match(/Venues\s*-\s*([^<]+)/);
-    if (venueMatch) {
-      venue = venueMatch[1].trim();
-    }
-    
-    return { duration, venue };
-  }
-
   async scrape(): Promise<RawIceEventData[]> {
-    try {
-      console.log('🐻 Scraping Big Bear Ice Arena...');
-      
-      const browser = await puppeteer.launch({
-        headless: "new",
-        executablePath: '/usr/bin/google-chrome-stable',
-        args: [
-          '--no-sandbox',
-          '--disable-setuid-sandbox',
-          '--disable-dev-shm-usage',
-          '--no-first-run',
-          '--no-zygote',
-          '--single-process',
-          '--disable-gpu'
-        ]
-      });
-      
-      try {
-        const page = await browser.newPage();
-        await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36');
-        
-        console.log(`📄 Loading: ${this.baseUrl}/Sessions`);
-        await page.goto(`${this.baseUrl}/Sessions`, { 
-          waitUntil: 'networkidle2', 
-          timeout: 30000 
-        });
-        
-        console.log('⏳ Waiting for calendar...');
-        await page.waitForSelector('#calendar', { timeout: 15000 });
-        await page.waitForTimeout(3000);
+    // POST to /Sessions/FilterResults to get all events as JSON
+    const url = `${this.baseUrl}/Sessions/FilterResults`;
+    const formData = new URLSearchParams({
+      LocationId: '13558', // Big Bear Ice Arena
+      Sunday: 'true',
+      Monday: 'true',
+      Tuesday: 'true',
+      Wednesday: 'true',
+      Thursday: 'true',
+      Friday: 'true',
+      Saturday: 'true',
+      StartTime: '12:00 AM',
+      EndTime: '12:00 AM',
+      // Reservation Types:
+      'ReservationTypes[0].Selected': 'true', // All Types (selected)
+      'ReservationTypes[0].Id': '-1',         // All Types
+      'ReservationTypes[1].Id': '203425',     // Drop - IN HOCKEY
+      'ReservationTypes[2].Id': '208508',     // Drop-IN Goalie REGISTRATION
+      'ReservationTypes[3].Id': '215333',     // (unknown)
+      'ReservationTypes[4].Id': '182117',     // Free Style
+      'ReservationTypes[5].Id': '227573',     // (unknown)
+      'ReservationTypes[6].Id': '217778',     // (unknown)
+      'ReservationTypes[7].Id': '215383',     // (unknown)
+      'ReservationTypes[8].Id': '271335',     // (unknown)
+      'ReservationTypes[9].Id': '285107',     // (unknown)
+      'ReservationTypes[10].Id': '218387',    // (unknown)
+      'ReservationTypes[11].Id': '215334',    // Open Stick & Puck
+      'ReservationTypes[12].Id': '190860',    // (unknown)
+      'ReservationTypes[13].Id': '215332',    // Public Skate
+      'ReservationTypes[14].Id': '224028',    // (unknown)
+      // Resources:
+      'Resources[0].Selected': 'true',        // All Resources (selected)
+      'Resources[0].Id': '-1',                // All Resources
+      'Resources[1].Id': '268382',            // North Rink
+      'Resources[2].Id': '268383',            // South Rink
+      'Resources[3].Id': '309500',            // (unknown)
+      'Resources[4].Id': '350941',            // (unknown)
+      'Resources[5].Id': '354858',            // (unknown)
+      'Resources[6].Id': '396198',            // (unknown)
+      StartDate: this.getTodayString(-3), // 3 days before today
+      EndDate: this.getTodayString(32)   // 32 days after today
+    });
 
-        const html = await page.content();
-        const fs = require('fs');
-        fs.writeFileSync('bigbear-debug.html', html);
-        await page.screenshot({ path: 'bigbear-debug.png', fullPage: true });
-        console.log('💾 Dumped page HTML to bigbear-debug.html');
-        
-        console.log('🔍 Extracting events from FullCalendar...');
-        
-        const eventData = await page.evaluate(() => {
-          const events: any[] = [];
-          
-          // Find all FullCalendar event elements
-          const eventElements = document.querySelectorAll('.fc-day-grid-event');
-          console.log(`Found ${eventElements.length} event elements`);
-          
-          eventElements.forEach((eventEl, index) => {
-            try {
-              console.log(`Processing event ${index + 1}/${eventElements.length}`);
-              // Get event title
-              const titleEl = eventEl.querySelector('.fc-title');
-              if (!titleEl) return;
-              const title = titleEl.textContent?.trim() || '';
-              
-              // Get event time
-              const timeEl = eventEl.querySelector('.fc-time');
-              if (!timeEl) return;
-              const timeStr = timeEl.textContent?.trim() || '';
-              
-              // Find date by looking at column position in FullCalendar
-              let dateStr = '';
-              
-              // Method 1: Try to find date from the table structure
-              const eventCell = eventEl.closest('td.fc-event-container');
-              if (eventCell) {
-                // Find the parent row and get cell index
-                const row = eventCell.closest('tr');
-                if (row) {
-                  const cells = Array.from(row.querySelectorAll('td'));
-                  const cellIndex = cells.indexOf(eventCell as HTMLTableCellElement);
-                  
-                  // Look for the header row with dates
-                  const contentSkeleton = eventCell.closest('.fc-content-skeleton');
-                  if (contentSkeleton) {
-                    const headCells = contentSkeleton.querySelectorAll('thead .fc-day-top[data-date]');
-                    if (headCells[cellIndex]) {
-                      dateStr = headCells[cellIndex].getAttribute('data-date') || '';
-                      console.log(`🚨 Found date from header: ${dateStr}`);
-                    }
-                  }
-                }
-              }
-              
-              // Method 2: If that fails, try to find from background table
-              if (!dateStr) {
-                const dayGrid = eventEl.closest('.fc-day-grid');
-                if (dayGrid) {
-                  const bgTable = dayGrid.querySelector('.fc-bg table');
-                  if (bgTable) {
-                    const bgCells = bgTable.querySelectorAll('td[data-date]');
-                    // Try to match position or just take today/future dates
-                    for (const bgCell of bgCells) {
-                      const cellDate = bgCell.getAttribute('data-date');
-                      if (cellDate && !bgCell.classList.contains('fc-past')) {
-                        dateStr = cellDate;
-                        console.log(`☢️ Found date from background table: ${dateStr}`);
-                        break; // Take the first non-past date as fallback
-                      }
-                    }
-                  }
-                }
-              }
-              
-              // Method 3: Last resort - extract from current date context
-              if (!dateStr) {
-                const today = new Date();
-                const tomorrow = new Date(today);
-                tomorrow.setDate(tomorrow.getDate() + 1);
-                dateStr = tomorrow.toISOString().split('T')[0]; // Default to tomorrow
-                console.warn(`❌❌ Using fallback date ${dateStr} for event: ${title}`);
-              }
-              
-              if (!dateStr) {
-                console.warn(`❌❌❌ Could not find date for event: ${title}`);
-                return;
-              }
-              
-              // Get popover content for duration and venue
-              const popoverContent = eventEl.getAttribute('data-content') || '';
-              
-              // Get event ID
-              const eventId = eventEl.getAttribute('data-eventid') || `bb-${index}`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'User-Agent': 'Mozilla/5.0'
+      },
+      body: formData.toString()
+    });
 
-              console.log(`title: "${title}", time: "${timeStr}", date: "${dateStr}", eventId: ${eventId}`);
-
-              events.push({
-                title,
-                timeStr,
-                dateStr,
-                popoverContent,
-                eventId,
-                index
-              });
-              
-              console.log(`Event ${index}: "${title}" at ${timeStr} on ${dateStr}`);
-              
-            } catch (error) {
-              console.warn(`Error processing event ${index}:`, error);
-            }
-          });
-          
-          return events;
-        });
-        
-        console.log(`🎯 Found ${eventData.length} raw events from FullCalendar`);
-        
-        const processedEvents: RawIceEventData[] = [];
-        
-        eventData.forEach((event, index) => {
-          try {
-            const { title, timeStr, dateStr, popoverContent, eventId } = event;
-            
-            // Parse start time
-            const startTime = this.convertMTtoUTC(dateStr, timeStr);
-            
-            // Parse duration and venue from popover content
-            const { duration, venue } = this.parsePopoverContent(popoverContent);
-            
-            // Calculate end time
-            const endTime = new Date(startTime.getTime() + duration * 60 * 1000);
-            
-            // Filter for reasonable time range (next 30 days)
-            const now = new Date();
-            const thirtyDaysFromNow = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
-            
-            if (startTime < now || startTime > thirtyDaysFromNow) {
-              console.warn(`   `)
-              console.warn(`   `)
-              console.warn(`   ❌ Error processing event ${index} - outside range ❌`);
-              console.warn(`   Event: "${title}" at ${startTime.toLocaleString('en-US', {timeZone: 'America/Denver'})} MT`);
-              console.warn(`   Current Time: ${now.toISOString()}, Range: ${now.toLocaleString('en-US', {timeZone: 'America/Denver'})} to ${thirtyDaysFromNow.toLocaleString('en-US', {timeZone: 'America/Denver'})}`);
-              return; // Skip events outside our range
-            }
-            
-            // Create the event
-            const processedEvent: RawIceEventData = {
-              id: `${this.rinkId}-${eventId}`,
-              rinkId: this.rinkId,
-              title: this.cleanTitle(title),
-              startTime: startTime,
-              endTime: endTime,
-              category: this.categorizeBigBearEvent(title),
-              description: venue ? `${venue} - ${duration} minutes` : `${duration} minutes`,
-              isFeatured: false
-            };
-            
-            processedEvents.push(processedEvent);
-            
-            console.log(`   ✅ Processed: "${processedEvent.title}" at ${startTime.toLocaleString('en-US', {timeZone: 'America/Denver'})} MT`);
-            
-          } catch (error) {
-            console.warn(`   ❌ Error processing event ${index}:`, error);
-          }
-        });
-        
-        console.log(`🐻 Big Bear: Successfully processed ${processedEvents.length} events`);
-        
-        // Sort by start time
-        processedEvents.sort((a, b) => a.startTime.getTime() - b.startTime.getTime());
-        
-        return processedEvents;
-        
-      } finally {
-        await browser.close();
-      }
-      
-    } catch (error) {
-      console.error('❌ Big Bear scraping failed:', error);
-      return [];
+    if (!response.ok) {
+      throw new Error(`Failed to fetch Big Bear events: ${response.status} ${response.statusText}`);
     }
+    const eventsJson = await response.json();
+    if (!Array.isArray(eventsJson)) {
+      throw new Error('Big Bear API did not return an array');
+    }
+    // eventsJson is an array of event objects
+
+    // Map to RawIceEventData[]
+    const events: RawIceEventData[] = eventsJson.map((ev: any) => {
+      // The API returns times in Mountain Time (MT), but Date parses as UTC.
+      // To store as UTC, add 6 hours to shift from MT to UTC (for MDT).
+      const startTime = new Date(ev.start);
+      const endTime = new Date(ev.end);
+      // Shift both times forward by 6 hours
+      startTime.setHours(startTime.getHours() + 6);
+      endTime.setHours(endTime.getHours() + 6);
+      const rinkName = ev.resourceName || (ev.venues && ev.venues[0]?.Name) || 'Main Rink';
+      const category = this.categorizeBigBearEvent(ev.title || ev.reservationType || '');
+      return {
+        id: `big-bear-${ev.id}`,
+        rinkId: 'big-bear',
+        title: this.cleanTitle(ev.title || ''),
+        startTime,
+        endTime,
+        description: `${rinkName}${ev.description ? ' - ' + ev.description : ''}`,
+        category,
+        isFeatured: false,
+        eventUrl: undefined // No direct event URL
+      };
+    });
+    // Sort by start time
+    events.sort((a, b) => a.startTime.getTime() - b.startTime.getTime());
+    console.log(`🐻 Big Bear: Parsed ${events.length} events from API.`);
+    return events;
+  }
+
+  // Helper to get YYYY-MM-DD string for N days from today
+  private getTodayString(offsetDays: number = 0): string {
+    const d = new Date();
+    d.setDate(d.getDate() + offsetDays);
+    return d.toISOString().split('T')[0];
   }
 }
