@@ -408,53 +408,23 @@
     "eventUrl": "https://www.theiceranch.com/event/show/578517041"
   },
   {
-    "id": "ice-ranch-1748649600000-29-0",
+    "id": "ice-ranch-1748563200000-29-0",
     "rinkId": "ice-ranch",
     "title": "Coach's Ice",
-    "startTime": "2025-05-31T14:30:00.000Z",
-    "endTime": "2025-05-31T15:30:00.000Z",
+    "startTime": "2025-05-30T22:15:00.000Z",
+    "endTime": "2025-05-30T23:15:00.000Z",
     "category": "Other",
     "description": "Scraped from Ice Ranch calendar",
-    "eventUrl": "https://www.theiceranch.com/event/show/578674831"
+    "eventUrl": "https://www.theiceranch.com/event/show/578517049"
   },
   {
-    "id": "ice-ranch-1748649600000-29-1",
+    "id": "ice-ranch-1748563200000-29-1",
     "rinkId": "ice-ranch",
     "title": "All Ages Stick & Puck No Lessons",
-    "startTime": "2025-05-31T15:45:00.000Z",
-    "endTime": "2025-05-31T17:15:00.000Z",
+    "startTime": "2025-05-30T23:30:00.000Z",
+    "endTime": "2025-05-31T01:00:00.000Z",
     "category": "Stick & Puck",
     "description": "Scraped from Ice Ranch calendar",
-    "eventUrl": "https://www.theiceranch.com/event/show/578674796"
-  },
-  {
-    "id": "ice-ranch-1748649600000-29-2",
-    "rinkId": "ice-ranch",
-    "title": "Adult Drop In",
-    "startTime": "2025-05-31T17:30:00.000Z",
-    "endTime": "2025-05-31T19:00:00.000Z",
-    "category": "Drop-In Hockey",
-    "description": "Scraped from Ice Ranch calendar",
-    "eventUrl": "https://www.theiceranch.com/event/show/578674843"
-  },
-  {
-    "id": "ice-ranch-1748649600000-29-3",
-    "rinkId": "ice-ranch",
-    "title": "All Ages Stick & Puck No Lessons",
-    "startTime": "2025-05-31T19:15:00.000Z",
-    "endTime": "2025-05-31T20:45:00.000Z",
-    "category": "Stick & Puck",
-    "description": "Scraped from Ice Ranch calendar",
-    "eventUrl": "https://www.theiceranch.com/event/show/578674800"
-  },
-  {
-    "id": "ice-ranch-1748649600000-29-4",
-    "rinkId": "ice-ranch",
-    "title": "Public Skate",
-    "startTime": "2025-05-31T21:00:00.000Z",
-    "endTime": "2025-05-31T23:00:00.000Z",
-    "category": "Public Skate",
-    "description": "Scraped from Ice Ranch calendar",
-    "eventUrl": "https://www.theiceranch.com/event/show/578674844"
+    "eventUrl": "https://www.theiceranch.com/event/show/578517043"
   }
 ]
