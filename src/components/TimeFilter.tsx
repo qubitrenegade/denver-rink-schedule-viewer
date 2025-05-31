@@ -80,8 +80,9 @@ const TimeFilter: React.FC<TimeFilterProps> = ({
     {timeFilterMode === 'time-range' && (
       <div className="bg-slate-800 p-4 rounded-md space-y-3">
         <div>
-          <label className="block text-sm text-slate-300 mb-2">Start time:</label>
+          <label htmlFor="time-filter-start-time" className="block text-sm text-slate-300 mb-2">Start time:</label>
           <input
+            id="time-filter-start-time"
             type="time"
             value={timeRangeStart || '10:00'}
             onChange={e => onTimeRangeChange(e.target.value, undefined)}
@@ -89,8 +90,9 @@ const TimeFilter: React.FC<TimeFilterProps> = ({
           />
         </div>
         <div>
-          <label className="block text-sm text-slate-300 mb-2">End time:</label>
+          <label htmlFor="time-filter-end-time" className="block text-sm text-slate-300 mb-2">End time:</label>
           <input
+            id="time-filter-end-time"
             type="time"
             value={timeRangeEnd || '15:00'}
             onChange={e => onTimeRangeChange(undefined, e.target.value)}

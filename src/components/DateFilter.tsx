@@ -80,8 +80,9 @@ const DateFilter: React.FC<DateFilterProps> = ({
     )}
     {dateFilterMode === 'specific-day' && (
       <div className="bg-slate-800 p-4 rounded-md">
-        <label className="block text-sm text-slate-300 mb-2">Select specific date:</label>
+        <label htmlFor="date-filter-specific-date" className="block text-sm text-slate-300 mb-2">Select specific date:</label>
         <input
+          id="date-filter-specific-date"
           type="date"
           value={selectedDate || getTodayString()}
           onChange={e => onSelectedDateChange(e.target.value)}
