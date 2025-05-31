@@ -1,77 +1,5 @@
 [
   {
-    "id": "fsc-avalanche-2446318",
-    "rinkId": "fsc-avalanche",
-    "title": "Adult Drop In",
-    "startTime": "2025-05-23T12:00:00.000Z",
-    "endTime": "2025-05-23T13:30:00.000Z",
-    "category": "Drop-In Hockey",
-    "isFeatured": false
-  },
-  {
-    "id": "sssc-rink3-3246035",
-    "rinkId": "sssc-rink3",
-    "title": "Take A Shot",
-    "startTime": "2025-05-23T16:30:00.000Z",
-    "endTime": "2025-05-23T17:30:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "fsc-avalanche-2443422",
-    "rinkId": "fsc-avalanche",
-    "title": "Adult Drop In",
-    "startTime": "2025-05-23T17:40:00.000Z",
-    "endTime": "2025-05-23T19:10:00.000Z",
-    "category": "Drop-In Hockey",
-    "isFeatured": false
-  },
-  {
-    "id": "fsc-fixit-2770273",
-    "rinkId": "fsc-fixit",
-    "title": "Take A Shot",
-    "startTime": "2025-05-23T17:40:00.000Z",
-    "endTime": "2025-05-23T18:40:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "fsc-avalanche-3264848",
-    "rinkId": "fsc-avalanche",
-    "title": "Take A Shot",
-    "startTime": "2025-05-23T19:20:00.000Z",
-    "endTime": "2025-05-23T20:20:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "sssc-rink3-3156482",
-    "rinkId": "sssc-rink3",
-    "title": "Take A Shot",
-    "startTime": "2025-05-23T20:20:00.000Z",
-    "endTime": "2025-05-23T21:20:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "fsc-avalanche-3264854",
-    "rinkId": "fsc-avalanche",
-    "title": "Take A Shot",
-    "startTime": "2025-05-23T20:40:00.000Z",
-    "endTime": "2025-05-23T21:40:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "fsc-avalanche-3264852",
-    "rinkId": "fsc-avalanche",
-    "title": "Take A Shot",
-    "startTime": "2025-05-23T21:50:00.000Z",
-    "endTime": "2025-05-23T22:50:00.000Z",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
     "id": "sssc-rink3-2770281",
     "rinkId": "sssc-rink3",
     "title": "Take A Shot",
@@ -1117,11 +1045,11 @@
     "isFeatured": false
   },
   {
-    "id": "sssc-rink3-2622556",
-    "rinkId": "sssc-rink3",
+    "id": "sssc-rink1-2622556",
+    "rinkId": "sssc-rink1",
     "title": "Take A Shot",
-    "startTime": "2025-06-08T12:15:00.000Z",
-    "endTime": "2025-06-08T13:15:00.000Z",
+    "startTime": "2025-06-08T12:10:00.000Z",
+    "endTime": "2025-06-08T13:10:00.000Z",
     "category": "Stick & Puck",
     "description": "NO Staff Lessons",
     "isFeatured": false
@@ -1140,8 +1068,8 @@
     "id": "sssc-rink1-3252778",
     "rinkId": "sssc-rink1",
     "title": "Take A Shot",
-    "startTime": "2025-06-08T13:30:00.000Z",
-    "endTime": "2025-06-08T14:30:00.000Z",
+    "startTime": "2025-06-08T13:20:00.000Z",
+    "endTime": "2025-06-08T14:20:00.000Z",
     "category": "Stick & Puck",
     "description": "NO Staff Lessons",
     "isFeatured": false
@@ -1152,16 +1080,6 @@
     "title": "Take A Shot",
     "startTime": "2025-06-08T13:50:00.000Z",
     "endTime": "2025-06-08T14:50:00.000Z",
-    "category": "Stick & Puck",
-    "description": "NO Staff Lessons",
-    "isFeatured": false
-  },
-  {
-    "id": "fsc-avalanche-3198598",
-    "rinkId": "fsc-avalanche",
-    "title": "Take A Shot",
-    "startTime": "2025-06-08T15:00:00.000Z",
-    "endTime": "2025-06-08T16:00:00.000Z",
     "category": "Stick & Puck",
     "description": "NO Staff Lessons",
     "isFeatured": false
