@@ -1,16 +1,5 @@
 [
   {
-    "id": "du-ritchie-4dbrm4fqchdnkf2mcdvt1o3101@google.com",
-    "rinkId": "du-ritchie",
-    "title": "Stick & Puck",
-    "startTime": "2025-05-31T14:45:00.000Z",
-    "endTime": "2025-05-31T15:45:00.000Z",
-    "description": "Ice session at DU Ritchie Center",
-    "category": "Stick & Puck",
-    "isFeatured": false,
-    "eventUrl": "https://calendar.google.com/calendar/event?eid=4dbrm4fqchdnkf2mcdvt1o3101%40google.com"
-  },
-  {
     "id": "du-ritchie-0to2rrqdmta570qff3ss5a41lq@google.com",
     "rinkId": "du-ritchie",
     "title": "Public Skate",
@@ -1043,5 +1032,27 @@
     "category": "Stick & Puck",
     "isFeatured": false,
     "eventUrl": "https://calendar.google.com/calendar/event?eid=7nr6p8gkckvci5c34rcgqbpmc1%40google.com"
+  },
+  {
+    "id": "du-ritchie-76emeck5krr597t2ut21c007u0@google.com",
+    "rinkId": "du-ritchie",
+    "title": "Stick & Puck",
+    "startTime": "2025-06-30T12:00:00.000Z",
+    "endTime": "2025-06-30T13:00:00.000Z",
+    "description": "Ice session at DU Ritchie Center",
+    "category": "Stick & Puck",
+    "isFeatured": false,
+    "eventUrl": "https://calendar.google.com/calendar/event?eid=76emeck5krr597t2ut21c007u0%40google.com"
+  },
+  {
+    "id": "du-ritchie-52903pei8cvuovg9rkp9tcs7pa@google.com",
+    "rinkId": "du-ritchie",
+    "title": "Stick & Puck",
+    "startTime": "2025-06-30T14:30:00.000Z",
+    "endTime": "2025-06-30T15:30:00.000Z",
+    "description": "Ice session at DU Ritchie Center",
+    "category": "Stick & Puck",
+    "isFeatured": false,
+    "eventUrl": "https://calendar.google.com/calendar/event?eid=52903pei8cvuovg9rkp9tcs7pa%40google.com"
   }
 ]
