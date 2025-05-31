@@ -2,7 +2,7 @@
   "facilityId": "foothills-edge",
   "facilityName": "Foothills Edge Ice Arena",
   "displayName": "Foothills Edge Ice Arena (Littleton)",
-  "lastAttempt": "2025-05-31T20:16:58.281Z",
+  "lastAttempt": "2025-05-31T20:22:30.112Z",
   "status": "success",
   "eventCount": 64,
   "sourceUrl": "https://www.ifoothills.org/cal-edge/",
@@ -12,5 +12,5 @@
       "rinkName": "Edge Rink"
     }
   ],
-  "lastSuccessfulScrape": "2025-05-31T20:16:58.281Z"
+  "lastSuccessfulScrape": "2025-05-31T20:22:30.112Z"
 }

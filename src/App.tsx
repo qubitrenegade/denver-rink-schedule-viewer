@@ -128,7 +128,7 @@ const App: React.FC = () => {
       <header className="mb-6 text-center">
         <div className="max-w-6xl mx-auto mb-4">
           <img 
-            src="/images/header.png" 
+            src="/images/header.webp"
             alt="Denver Rink Schedule" 
             className="w-full max-h-48 object-contain rounded-lg shadow-lg"
           />
