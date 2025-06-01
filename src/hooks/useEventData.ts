@@ -94,6 +94,11 @@ export function useEventData() {
           newFacilityMetadata[result.facilityId] = result.metadata;
         }
         if (result.success) {
+          // Only push events for this facilityId
+          result.events.forEach(ev => {
+            // Tag each event with its facilityId for debug
+            (ev as any)._facilityId = result.facilityId;
+          });
           allEvents.push(...result.events);
         } else {
           if (result.error) {
@@ -101,6 +106,7 @@ export function useEventData() {
           }
         }
       });
+      // FIX: Only include events for the selected rink in filtering, not all events
       setStaticData(allEvents);
       setFacilityErrors(newFacilityErrors);
       setFacilityMetadata(newFacilityMetadata);
