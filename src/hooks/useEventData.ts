@@ -52,6 +52,7 @@ export function useEventData() {
           }
           const parsedEvents: RawIceEventData[] = eventsData.map((event: any) => ({
             ...event,
+            // Parse as local time for filtering consistency
             startTime: new Date(event.startTime),
             endTime: new Date(event.endTime),
           }));
