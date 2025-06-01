@@ -1,133 +1,5 @@
 [
   {
-    "id": "sssc-rink3-2770281",
-    "rinkId": "sssc-rink3",
-    "title": "Take A Shot",
-    "startTime": "2025-05-24T11:50:00.000Z",
-    "endTime": "2025-05-24T12:50:00.000Z",
-    "category": "Stick & Puck",
-    "description": "NO Staff Lessons",
-    "isFeatured": false
-  },
-  {
-    "id": "fsc-avalanche-2779754",
-    "rinkId": "fsc-avalanche",
-    "title": "Adult Drop In",
-    "startTime": "2025-05-24T13:00:00.000Z",
-    "endTime": "2025-05-24T14:30:00.000Z",
-    "category": "Drop-In Hockey",
-    "isFeatured": false
-  },
-  {
-    "id": "sssc-rink3-3235433",
-    "rinkId": "sssc-rink3",
-    "title": "Take A Shot",
-    "startTime": "2025-05-24T13:00:00.000Z",
-    "endTime": "2025-05-24T14:00:00.000Z",
-    "category": "Stick & Puck",
-    "description": "NO Staff Lessons",
-    "isFeatured": false
-  },
-  {
-    "id": "sssc-rink3-3235447",
-    "rinkId": "sssc-rink3",
-    "title": "Take A Shot",
-    "startTime": "2025-05-24T14:10:00.000Z",
-    "endTime": "2025-05-24T15:10:00.000Z",
-    "category": "Stick & Puck",
-    "description": "NO Staff Lessons",
-    "isFeatured": false
-  },
-  {
-    "id": "fsc-avalanche-3246088",
-    "rinkId": "fsc-avalanche",
-    "title": "Take A Shot",
-    "startTime": "2025-05-24T15:00:00.000Z",
-    "endTime": "2025-05-24T16:00:00.000Z",
-    "category": "Stick & Puck",
-    "description": "NO Staff Lessons",
-    "isFeatured": false
-  },
-  {
-    "id": "sssc-rink2-3089389",
-    "rinkId": "sssc-rink2",
-    "title": "Take A Shot",
-    "startTime": "2025-05-24T16:20:00.000Z",
-    "endTime": "2025-05-24T17:30:00.000Z",
-    "category": "Stick & Puck",
-    "description": "NO Staff Lessons",
-    "isFeatured": false
-  },
-  {
-    "id": "fsc-avalanche-3246083",
-    "rinkId": "fsc-avalanche",
-    "title": "Adult Drop In",
-    "startTime": "2025-05-24T17:30:00.000Z",
-    "endTime": "2025-05-24T18:50:00.000Z",
-    "category": "Drop-In Hockey",
-    "isFeatured": false
-  },
-  {
-    "id": "sssc-rink3-3089392",
-    "rinkId": "sssc-rink3",
-    "title": "Take A Shot",
-    "startTime": "2025-05-24T17:40:00.000Z",
-    "endTime": "2025-05-24T18:40:00.000Z",
-    "category": "Stick & Puck",
-    "description": "NO Staff Lessons",
-    "isFeatured": false
-  },
-  {
-    "id": "fsc-avalanche-3246090",
-    "rinkId": "fsc-avalanche",
-    "title": "Take A Shot",
-    "startTime": "2025-05-24T19:10:00.000Z",
-    "endTime": "2025-05-24T20:10:00.000Z",
-    "category": "Stick & Puck",
-    "description": "NO Staff Lessons",
-    "isFeatured": false
-  },
-  {
-    "id": "sssc-rink1-2437885",
-    "rinkId": "sssc-rink1",
-    "title": "Take A Shot",
-    "startTime": "2025-05-24T20:10:00.000Z",
-    "endTime": "2025-05-24T21:10:00.000Z",
-    "category": "Stick & Puck",
-    "description": "NO Staff Lessons",
-    "isFeatured": false
-  },
-  {
-    "id": "fsc-avalanche-3246091",
-    "rinkId": "fsc-avalanche",
-    "title": "Take A Shot",
-    "startTime": "2025-05-24T20:20:00.000Z",
-    "endTime": "2025-05-24T21:20:00.000Z",
-    "category": "Stick & Puck",
-    "description": "NO Staff Lessons",
-    "isFeatured": false
-  },
-  {
-    "id": "sssc-rink1-3089399",
-    "rinkId": "sssc-rink1",
-    "title": "Take A Shot",
-    "startTime": "2025-05-24T21:20:00.000Z",
-    "endTime": "2025-05-24T22:20:00.000Z",
-    "category": "Stick & Puck",
-    "description": "NO Staff Lessons",
-    "isFeatured": false
-  },
-  {
-    "id": "fsc-avalanche-3246092",
-    "rinkId": "fsc-avalanche",
-    "title": "Take A Shot",
-    "startTime": "2025-05-24T21:30:00.000Z",
-    "endTime": "2025-05-24T22:30:00.000Z",
-    "category": "Stick & Puck",
-    "description": "NO Staff Lessons",
-    "isFeatured": false
-  },
-  {
     "id": "sssc-rink1-2452360",
     "rinkId": "sssc-rink1",
     "title": "10U Youth Drop In",
@@ -651,6 +523,16 @@
     "title": "Take A Shot",
     "startTime": "2025-05-31T23:30:00.000Z",
     "endTime": "2025-06-01T00:30:00.000Z",
+    "category": "Stick & Puck",
+    "description": "No Staff Lessons",
+    "isFeatured": false
+  },
+  {
+    "id": "sssc-rink2-3354881",
+    "rinkId": "sssc-rink2",
+    "title": "Take A Shot",
+    "startTime": "2025-06-01T01:30:00.000Z",
+    "endTime": "2025-06-01T02:30:00.000Z",
     "category": "Stick & Puck",
     "description": "No Staff Lessons",
     "isFeatured": false

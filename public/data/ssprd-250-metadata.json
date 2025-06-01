@@ -2,9 +2,9 @@
   "facilityId": "ssprd-250",
   "facilityName": "South Suburban Sports Complex",
   "displayName": "South Suburban Sports Complex (Littleton)",
-  "lastAttempt": "2025-05-31T20:22:32.005Z",
+  "lastAttempt": "2025-06-01T19:32:33.691Z",
   "status": "success",
-  "eventCount": 857,
+  "eventCount": 845,
   "sourceUrl": "https://ssprd.finnlyconnect.com/schedule/250",
   "rinks": [
     {
@@ -20,5 +20,5 @@
       "rinkName": "Rink 3"
     }
   ],
-  "lastSuccessfulScrape": "2025-05-31T20:22:32.005Z"
+  "lastSuccessfulScrape": "2025-06-01T19:32:33.691Z"
 }

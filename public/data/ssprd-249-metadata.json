@@ -2,9 +2,9 @@
   "facilityId": "ssprd-249",
   "facilityName": "Family Sports Center",
   "displayName": "Family Sports Center (Centennial)",
-  "lastAttempt": "2025-05-31T20:22:31.334Z",
+  "lastAttempt": "2025-06-01T19:32:33.010Z",
   "status": "success",
-  "eventCount": 1368,
+  "eventCount": 1362,
   "sourceUrl": "https://ssprd.finnlyconnect.com/schedule/249",
   "rinks": [
     {
@@ -16,5 +16,5 @@
       "rinkName": "FixIt 24/7 Rink"
     }
   ],
-  "lastSuccessfulScrape": "2025-05-31T20:22:31.334Z"
+  "lastSuccessfulScrape": "2025-06-01T19:32:33.010Z"
 }

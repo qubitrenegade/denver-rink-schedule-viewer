@@ -1,82 +1,5 @@
 [
   {
-    "id": "du-ritchie-609mndu042m3kjisqub5msvg85@google.com",
-    "rinkId": "du-ritchie",
-    "title": "Stick & Puck",
-    "startTime": "2025-05-31T21:00:00.000Z",
-    "endTime": "2025-05-31T22:00:00.000Z",
-    "description": "Ice session at DU Ritchie Center",
-    "category": "Stick & Puck",
-    "isFeatured": false,
-    "eventUrl": "https://calendar.google.com/calendar/event?eid=609mndu042m3kjisqub5msvg85%40google.com"
-  },
-  {
-    "id": "du-ritchie-4a4bl4dm6l12i0j8cesurhfg47@google.com",
-    "rinkId": "du-ritchie",
-    "title": "Public Skate",
-    "startTime": "2025-05-31T22:15:00.000Z",
-    "endTime": "2025-05-31T23:15:00.000Z",
-    "description": "Ice session at DU Ritchie Center",
-    "category": "Public Skate",
-    "isFeatured": false,
-    "eventUrl": "https://calendar.google.com/calendar/event?eid=4a4bl4dm6l12i0j8cesurhfg47%40google.com"
-  },
-  {
-    "id": "du-ritchie-01r9k4305oap0j8r6qfqqn6lp4@google.com",
-    "rinkId": "du-ritchie",
-    "title": "Drop-In Hockey",
-    "startTime": "2025-05-31T23:30:00.000Z",
-    "endTime": "2025-06-01T01:00:00.000Z",
-    "description": "Players must be at least 18 years old and must wear full hockey equipment. Bring all of your own equipment (skates, sticks, pucks, etc.). Please also bring a water bottle.",
-    "category": "Drop-In Hockey",
-    "isFeatured": false,
-    "eventUrl": "https://calendar.google.com/calendar/event?eid=01r9k4305oap0j8r6qfqqn6lp4%40google.com"
-  },
-  {
-    "id": "du-ritchie-223cpf56o5knjb1ggp15vs13s4@google.com",
-    "rinkId": "du-ritchie",
-    "title": "Drop-In Hockey",
-    "startTime": "2025-06-01T13:00:00.000Z",
-    "endTime": "2025-06-01T14:30:00.000Z",
-    "description": "Players must be at least 18 years old and must wear full hockey equipment. Bring all of your own equipment (skates, sticks, pucks, etc.). Please also bring a water bottle.",
-    "category": "Drop-In Hockey",
-    "isFeatured": false,
-    "eventUrl": "https://calendar.google.com/calendar/event?eid=223cpf56o5knjb1ggp15vs13s4%40google.com"
-  },
-  {
-    "id": "du-ritchie-1k9he0jshoqep6pp4moa2dtued@google.com",
-    "rinkId": "du-ritchie",
-    "title": "Public Skate",
-    "startTime": "2025-06-01T14:45:00.000Z",
-    "endTime": "2025-06-01T15:45:00.000Z",
-    "description": "Ice session at DU Ritchie Center",
-    "category": "Public Skate",
-    "isFeatured": false,
-    "eventUrl": "https://calendar.google.com/calendar/event?eid=1k9he0jshoqep6pp4moa2dtued%40google.com"
-  },
-  {
-    "id": "du-ritchie-645hdeacr6ijhrsk917ho50el1@google.com",
-    "rinkId": "du-ritchie",
-    "title": "Stick & Puck",
-    "startTime": "2025-06-01T16:00:00.000Z",
-    "endTime": "2025-06-01T17:00:00.000Z",
-    "description": "Ice session at DU Ritchie Center",
-    "category": "Stick & Puck",
-    "isFeatured": false,
-    "eventUrl": "https://calendar.google.com/calendar/event?eid=645hdeacr6ijhrsk917ho50el1%40google.com"
-  },
-  {
-    "id": "du-ritchie-4tqfjhlqm9fbu657bosbv08pdt@google.com",
-    "rinkId": "du-ritchie",
-    "title": "Public Skate",
-    "startTime": "2025-06-01T17:15:00.000Z",
-    "endTime": "2025-06-01T19:15:00.000Z",
-    "description": "Ice session at DU Ritchie Center",
-    "category": "Public Skate",
-    "isFeatured": false,
-    "eventUrl": "https://calendar.google.com/calendar/event?eid=4tqfjhlqm9fbu657bosbv08pdt%40google.com"
-  },
-  {
     "id": "du-ritchie-2pk4j2jlku32r1b0krot1a3q4r@google.com",
     "rinkId": "du-ritchie",
     "title": "Stick & Puck",
@@ -1065,5 +988,16 @@
     "category": "Public Skate",
     "isFeatured": false,
     "eventUrl": "https://calendar.google.com/calendar/event?eid=3uf2hc930e3l871valdpic6q8o%40google.com"
+  },
+  {
+    "id": "du-ritchie-6krv90g0acrqvtdqbqjkrmtb40@google.com",
+    "rinkId": "du-ritchie",
+    "title": "Stick & Puck",
+    "startTime": "2025-06-30T21:30:00.000Z",
+    "endTime": "2025-06-30T22:30:00.000Z",
+    "description": "Ice session at DU Ritchie Center",
+    "category": "Stick & Puck",
+    "isFeatured": false,
+    "eventUrl": "https://calendar.google.com/calendar/event?eid=6krv90g0acrqvtdqbqjkrmtb40%40google.com"
   }
 ]
