@@ -26,7 +26,7 @@ export function useEventData() {
     setFacilityErrors({});
 
     try {
-      console.log(`📡 Fetching data from CloudFlare Workers API: ${WORKER_API_BASE}`);
+      console.log(`📡 Fetching data from API`);
 
       // Try to fetch from the new /api/all-events and /api/all-metadata endpoints first
       try {
