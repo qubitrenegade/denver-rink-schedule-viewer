@@ -1,0 +1,15 @@
+# wrangler-ssprd.toml - SSPRD scrapers worker (handles both 249 and 250)
+name = "rink-scraper-ssprd"
+main = "workers/scrapers/ssprd.ts"
+compatibility_date = "2024-10-21"
+
+[[kv_namespaces]]
+binding = "RINK_DATA"
+id = "a38bbfdc3fe74d69a0ef39550960eca3"
+preview_id = "81d647252e8e4e4caa0047a42ae2bd29"
+
+[triggers]
+crons = [
+  "0 */12 * * *"
+]
+

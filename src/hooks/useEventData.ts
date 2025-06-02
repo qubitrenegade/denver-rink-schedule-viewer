@@ -1,5 +1,10 @@
+// Updated useEventData hook to fetch from CloudFlare Workers instead of static files
 import { useState, useCallback } from 'react';
 import { RawIceEventData, FacilityMetadata } from '../types';
+
+// Configuration for CloudFlare Worker API endpoint
+const WORKER_API_BASE = import.meta.env.WORKER_API_BASE || 
+  (import.meta.env.PROD ? 'https://api.geticeti.me' : 'https://api.geticeti.me');
 
 export function useEventData() {
   const [staticData, setStaticData] = useState<RawIceEventData[]>([]);
@@ -10,33 +15,94 @@ export function useEventData() {
   const [lastFetchTime, setLastFetchTime] = useState<number>(0);
 
   const fetchData = useCallback(async (forceRefresh = false) => {
+    // Use cache for 5 minutes unless force refresh
     if (staticData.length > 0 && !forceRefresh && Date.now() - lastFetchTime < 5 * 60 * 1000) {
       console.log(`📋 Using cached data`);
       return;
     }
+
     setIsLoading(true);
     setError(null);
     setFacilityErrors({});
+
     try {
-      console.log(`📡 Fetching all facility data and metadata...`);
+      console.log(`📡 Fetching data from CloudFlare Workers API: ${WORKER_API_BASE}`);
+
+      // Try to fetch from the new /api/all-events and /api/all-metadata endpoints first
+      try {
+        const [eventsResponse, metadataResponse] = await Promise.all([
+          fetch(`${WORKER_API_BASE}/api/all-events`, {
+            headers: {
+              'Accept': 'application/json',
+            }
+          }),
+          fetch(`${WORKER_API_BASE}/api/all-metadata`, {
+            headers: {
+              'Accept': 'application/json',  
+            }
+          })
+        ]);
+
+        console.log(`📊 Events response: ${eventsResponse.status}, Metadata response: ${metadataResponse.status}`);
+
+        if (eventsResponse.ok && metadataResponse.ok) {
+          const allEventsData = await eventsResponse.json();
+          const allMetadataData = await metadataResponse.json();
+
+          console.log(`📊 Loaded ${allEventsData.length} events, ${Object.keys(allMetadataData).length} facilities via bulk API`);
+
+          // Process events data
+          const allEvents: RawIceEventData[] = allEventsData.map((event: any) => ({
+            ...event,
+            startTime: new Date(event.startTime),
+            endTime: new Date(event.endTime),
+          }));
+
+          setStaticData(allEvents);
+          setFacilityMetadata(allMetadataData);
+          setLastFetchTime(Date.now());
+
+          console.log(`✅ Successfully loaded ${allEvents.length} events from ${Object.keys(allMetadataData).length} facilities`);
+          return;
+        } else {
+          console.warn(`⚠️ Bulk API failed - Events: ${eventsResponse.status}, Metadata: ${metadataResponse.status}`);
+        }
+      } catch (bulkError) {
+        console.warn('⚠️ Bulk API failed, falling back to individual requests:', bulkError);
+      }
+
+      // Fallback: fetch each facility individually (maintains compatibility)
       const facilityIds = ['ice-ranch', 'big-bear', 'du-ritchie', 'foothills-edge', 'ssprd-249', 'ssprd-250'];
+      
       const facilityPromises = facilityIds.map(async (facilityId) => {
         try {
           const [dataResponse, metadataResponse] = await Promise.all([
-            fetch(`/data/${facilityId}.json`),
-            fetch(`/data/${facilityId}-metadata.json`)
+            fetch(`${WORKER_API_BASE}/data/${facilityId}.json`, {
+              headers: {
+                'Accept': 'application/json',
+              }
+            }),
+            fetch(`${WORKER_API_BASE}/data/${facilityId}-metadata.json`, {
+              headers: {
+                'Accept': 'application/json',
+              }
+            })
           ]);
+
           let eventsData = [];
           let dataError = null;
+
           if (dataResponse.ok) {
             eventsData = await dataResponse.json();
           } else {
             dataError = `HTTP ${dataResponse.status}: ${dataResponse.statusText}`;
           }
+
           let metadata: FacilityMetadata | null = null;
           if (metadataResponse.ok) {
             metadata = await metadataResponse.json();
           } else {
+            // Create default metadata if not available
             metadata = {
               facilityId,
               facilityName: facilityId,
@@ -50,12 +116,13 @@ export function useEventData() {
               ...(!dataError && { lastSuccessfulScrape: new Date().toISOString() })
             };
           }
+
           const parsedEvents: RawIceEventData[] = eventsData.map((event: any) => ({
             ...event,
-            // Parse as local time for filtering consistency
             startTime: new Date(event.startTime),
             endTime: new Date(event.endTime),
           }));
+
           return {
             facilityId,
             events: parsedEvents,
@@ -63,8 +130,10 @@ export function useEventData() {
             success: !dataError,
             error: dataError
           };
+
         } catch (err) {
           const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+          
           const errorMetadata: FacilityMetadata = {
             facilityId,
             facilityName: facilityId,
@@ -76,6 +145,7 @@ export function useEventData() {
             sourceUrl: '',
             rinks: [{ rinkId: facilityId, rinkName: 'Main Rink' }]
           };
+
           return {
             facilityId,
             events: [],
@@ -85,20 +155,19 @@ export function useEventData() {
           };
         }
       });
+
       const results = await Promise.all(facilityPromises);
+      
       const allEvents: RawIceEventData[] = [];
       const newFacilityErrors: Record<string, string> = {};
       const newFacilityMetadata: Record<string, FacilityMetadata> = {};
+
       results.forEach(result => {
         if (result.metadata) {
           newFacilityMetadata[result.facilityId] = result.metadata;
         }
+
         if (result.success) {
-          // Only push events for this facilityId
-          result.events.forEach(ev => {
-            // Tag each event with its facilityId for debug
-            (ev as any)._facilityId = result.facilityId;
-          });
           allEvents.push(...result.events);
         } else {
           if (result.error) {
@@ -106,18 +175,25 @@ export function useEventData() {
           }
         }
       });
-      // FIX: Only include events for the selected rink in filtering, not all events
+
       setStaticData(allEvents);
       setFacilityErrors(newFacilityErrors);
       setFacilityMetadata(newFacilityMetadata);
       setLastFetchTime(Date.now());
+
       const successCount = results.filter(r => r.success).length;
       const errorCount = results.filter(r => !r.success).length;
+
+      console.log(`✅ Loaded ${allEvents.length} events from ${successCount}/${facilityIds.length} facilities`);
+
       if (errorCount > 0 && successCount === 0) {
         setError(`Failed to load data from all facilities. Check your connection and try again.`);
       }
+
     } catch (err) {
-      setError(`Failed to load schedule data: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      console.error('Failed to fetch data:', errorMessage);
+      setError(`Failed to load schedule data: ${errorMessage}`);
     } finally {
       setIsLoading(false);
     }
