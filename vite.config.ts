@@ -5,8 +5,10 @@ export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
     return {
       define: {
-        'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-        'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY)
+        // Add worker API base URL for proper environment detection
+        'import.meta.env.WORKER_API_BASE': JSON.stringify(
+          mode === 'production' ? 'https://api.geticeti.me' : 'http://localhost:8787'
+        )
       },
       resolve: {
         alias: {

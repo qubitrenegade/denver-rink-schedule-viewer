@@ -1,0 +1,14 @@
+name = "rink-data-api"
+main = "workers/data-api.ts"
+compatibility_date = "2024-10-21"
+
+# Custom domain routes (move routes outside kv_namespaces)
+routes = [
+  { pattern = "api.geticeti.me/*", zone_name = "geticeti.me" }
+]
+
+# KV namespace for storing rink data
+[[kv_namespaces]]
+binding = "RINK_DATA"
+id = "a38bbfdc3fe74d69a0ef39550960eca3"
+preview_id = "81d647252e8e4e4caa0047a42ae2bd29"

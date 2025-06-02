@@ -24,6 +24,7 @@
     "react": "18",
     "react-dom": "18",
     "vite": "^6.2.0",
+    "wrangler": "^4.18.0",
     "xml2js": "^0.6.2"
   },
   "devDependencies": {
