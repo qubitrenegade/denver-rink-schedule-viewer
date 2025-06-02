@@ -42,6 +42,49 @@ async function handleDataRequest(
   console.log(`🔍 Request path: ${path}`);
 
   try {
+    // GET /data/{facilityId}-metadata.json - Get metadata for specific facility
+    const metadataMatch = path.match(/^\/data\/([a-z0-9-]+)-metadata\.json$/);
+    if (metadataMatch) {
+      const facilityId = metadataMatch[1];
+      console.log(`📋 Fetching metadata for facility: ${facilityId}`);
+      const metadataData = await env.RINK_DATA.get(`metadata:${facilityId}`);
+      console.log(`Metadata request for ${facilityId}, found: ${!!metadataData}, value:`, metadataData);
+      
+      if (!metadataData || metadataData.trim() === '[]') {
+        console.log(`⚠️ No metadata found for ${facilityId} (empty or []), returning default`);
+        // Return default metadata if not found or if value is []
+        const defaultMetadata = {
+          facilityId,
+          facilityName: facilityId,
+          displayName: facilityId,
+          lastAttempt: new Date().toISOString(),
+          status: 'error' as const,
+          eventCount: 0,
+          errorMessage: 'No data available',
+          sourceUrl: '',
+          rinks: [{ rinkId: facilityId, rinkName: 'Main Rink' }]
+        };
+        return new Response(JSON.stringify(defaultMetadata), {
+          status: 200,
+          headers: {
+            'Content-Type': 'application/json',
+            'Cache-Control': 'public, max-age=60', // 1 minute for error cases
+            ...corsHeaders
+          }
+        });
+      }
+
+      console.log(`✅ Found metadata for ${facilityId}`);
+      return new Response(metadataData, {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'public, max-age=300', // 5 minutes
+          ...corsHeaders
+        }
+      });
+    }
+
     // GET /data/{facilityId}.json - Get events for specific facility
     const eventMatch = path.match(/^\/data\/([a-z0-9-]+)\.json$/);
     if (eventMatch) {
@@ -63,51 +106,6 @@ async function handleDataRequest(
 
       console.log(`✅ Found events data for ${facilityId}`);
       return new Response(eventsData, {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-          'Cache-Control': 'public, max-age=300', // 5 minutes
-          ...corsHeaders
-        }
-      });
-    }
-
-    // GET /data/{facilityId}-metadata.json - Get metadata for specific facility
-    const metadataMatch = path.match(/^\/data\/([a-z0-9-]+)-metadata\.json$/);
-    if (metadataMatch) {
-      const facilityId = metadataMatch[1];
-      console.log(`📋 Fetching metadata for facility: ${facilityId}`);
-      const metadataData = await env.RINK_DATA.get(`metadata:${facilityId}`);
-      
-      console.log(`Metadata request for ${facilityId}, found: ${!!metadataData}`);
-      
-      if (!metadataData) {
-        console.log(`⚠️ No metadata found for ${facilityId}, returning default`);
-        // Return default metadata if not found
-        const defaultMetadata = {
-          facilityId,
-          facilityName: facilityId,
-          displayName: facilityId,
-          lastAttempt: new Date().toISOString(),
-          status: 'error' as const,
-          eventCount: 0,
-          errorMessage: 'No data available',
-          sourceUrl: '',
-          rinks: [{ rinkId: facilityId, rinkName: 'Main Rink' }]
-        };
-
-        return new Response(JSON.stringify(defaultMetadata), {
-          status: 200,
-          headers: {
-            'Content-Type': 'application/json',
-            'Cache-Control': 'public, max-age=60', // 1 minute for error cases
-            ...corsHeaders
-          }
-        });
-      }
-
-      console.log(`✅ Found metadata for ${facilityId}`);
-      return new Response(metadataData, {
         status: 200,
         headers: {
           'Content-Type': 'application/json',

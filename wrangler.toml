@@ -12,3 +12,7 @@ routes = [
 binding = "RINK_DATA"
 id = "a38bbfdc3fe74d69a0ef39550960eca3"
 preview_id = "81d647252e8e4e4caa0047a42ae2bd29"
+
+# wrangler.toml (wrangler v3.88.0^)
+[observability.logs]
+enabled = true

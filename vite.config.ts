@@ -6,9 +6,7 @@ export default defineConfig(({ mode }) => {
     return {
       define: {
         // Add worker API base URL for proper environment detection
-        'import.meta.env.WORKER_API_BASE': JSON.stringify(
-          mode === 'production' ? 'https://api.geticeti.me' : 'http://localhost:8787'
-        )
+        'import.meta.env.WORKER_API_BASE': JSON.stringify('https://api.geticeti.me')
       },
       resolve: {
         alias: {
