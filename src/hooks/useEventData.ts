@@ -4,7 +4,7 @@ import { RawIceEventData, FacilityMetadata } from '../types';
 
 // Configuration for CloudFlare Worker API endpoint
 const WORKER_API_BASE = import.meta.env.WORKER_API_BASE || 
-  (import.meta.env.PROD ? 'https://api.geticeti.me' : 'http://localhost:8787');
+  (import.meta.env.PROD ? 'https://api.geticeti.me' : 'https://api.geticeti.me');
 
 export function useEventData() {
   const [staticData, setStaticData] = useState<RawIceEventData[]>([]);

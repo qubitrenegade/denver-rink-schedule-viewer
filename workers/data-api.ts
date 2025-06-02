@@ -1,4 +1,4 @@
-// CloudFlare Worker: Data API
+// CloudFlare Worker: Data API (Fixed)
 // This worker serves rink data from KV to the frontend
 
 interface Env {
@@ -39,14 +39,18 @@ async function handleDataRequest(
   const url = new URL(request.url);
   const path = url.pathname;
 
+  console.log(`🔍 Request path: ${path}`);
+
   try {
     // GET /data/{facilityId}.json - Get events for specific facility
     const eventMatch = path.match(/^\/data\/([a-z0-9-]+)\.json$/);
     if (eventMatch) {
       const facilityId = eventMatch[1];
+      console.log(`📊 Fetching events for facility: ${facilityId}`);
       const eventsData = await env.RINK_DATA.get(`events:${facilityId}`);
       
       if (!eventsData) {
+        console.log(`⚠️ No events data found for ${facilityId}`);
         return new Response(JSON.stringify([]), {
           status: 200,
           headers: {
@@ -57,6 +61,7 @@ async function handleDataRequest(
         });
       }
 
+      console.log(`✅ Found events data for ${facilityId}`);
       return new Response(eventsData, {
         status: 200,
         headers: {
@@ -71,11 +76,13 @@ async function handleDataRequest(
     const metadataMatch = path.match(/^\/data\/([a-z0-9-]+)-metadata\.json$/);
     if (metadataMatch) {
       const facilityId = metadataMatch[1];
+      console.log(`📋 Fetching metadata for facility: ${facilityId}`);
       const metadataData = await env.RINK_DATA.get(`metadata:${facilityId}`);
       
       console.log(`Metadata request for ${facilityId}, found: ${!!metadataData}`);
       
       if (!metadataData) {
+        console.log(`⚠️ No metadata found for ${facilityId}, returning default`);
         // Return default metadata if not found
         const defaultMetadata = {
           facilityId,
@@ -99,6 +106,7 @@ async function handleDataRequest(
         });
       }
 
+      console.log(`✅ Found metadata for ${facilityId}`);
       return new Response(metadataData, {
         status: 200,
         headers: {
@@ -111,6 +119,7 @@ async function handleDataRequest(
 
     // GET /api/all-events - Get all events from all facilities
     if (path === '/api/all-events') {
+      console.log(`📊 Fetching all events`);
       const allEvents = [];
       
       for (const facilityId of FACILITY_IDS) {
@@ -119,12 +128,16 @@ async function handleDataRequest(
           if (eventsData) {
             const events = JSON.parse(eventsData);
             allEvents.push(...events);
+            console.log(`✅ Loaded ${events.length} events from ${facilityId}`);
+          } else {
+            console.log(`⚠️ No events data for ${facilityId}`);
           }
         } catch (error) {
-          console.warn(`Failed to load events for ${facilityId}:`, error);
+          console.warn(`❌ Failed to load events for ${facilityId}:`, error);
         }
       }
 
+      console.log(`📊 Total events loaded: ${allEvents.length}`);
       return new Response(JSON.stringify(allEvents), {
         status: 200,
         headers: {
@@ -137,6 +150,7 @@ async function handleDataRequest(
 
     // GET /api/all-metadata - Get metadata for all facilities
     if (path === '/api/all-metadata') {
+      console.log(`📋 Fetching all metadata`);
       const allMetadata: Record<string, any> = {};
       
       for (const facilityId of FACILITY_IDS) {
@@ -144,12 +158,16 @@ async function handleDataRequest(
           const metadataData = await env.RINK_DATA.get(`metadata:${facilityId}`);
           if (metadataData) {
             allMetadata[facilityId] = JSON.parse(metadataData);
+            console.log(`✅ Loaded metadata for ${facilityId}`);
+          } else {
+            console.log(`⚠️ No metadata for ${facilityId}`);
           }
         } catch (error) {
-          console.warn(`Failed to load metadata for ${facilityId}:`, error);
+          console.warn(`❌ Failed to load metadata for ${facilityId}:`, error);
         }
       }
 
+      console.log(`📋 Total metadata loaded for ${Object.keys(allMetadata).length} facilities`);
       return new Response(JSON.stringify(allMetadata), {
         status: 200,
         headers: {
@@ -162,6 +180,7 @@ async function handleDataRequest(
 
     // GET /api/health - Health check with KV status
     if (path === '/api/health') {
+      console.log(`🏥 Health check`);
       const healthData = {
         status: 'ok',
         timestamp: new Date().toISOString(),
@@ -198,8 +217,41 @@ async function handleDataRequest(
       });
     }
 
+    // GET / or /api - Root endpoint with basic info
+    if (path === '/' || path === '/api') {
+      return new Response(JSON.stringify({
+        service: 'Denver Rink Schedule Data API',
+        version: '1.0.0',
+        endpoints: [
+          '/api/health',
+          '/api/all-events', 
+          '/api/all-metadata',
+          '/data/{facilityId}.json',
+          '/data/{facilityId}-metadata.json'
+        ],
+        availableFacilities: FACILITY_IDS
+      }), {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          ...corsHeaders
+        }
+      });
+    }
+
     // 404 for unknown paths
-    return new Response(JSON.stringify({ error: 'Not found' }), {
+    console.log(`❌ Unknown path: ${path}`);
+    return new Response(JSON.stringify({ 
+      error: 'Not found',
+      path: path,
+      availableEndpoints: [
+        '/api/health',
+        '/api/all-events', 
+        '/api/all-metadata',
+        '/data/{facilityId}.json',
+        '/data/{facilityId}-metadata.json'
+      ]
+    }), {
       status: 404,
       headers: {
         'Content-Type': 'application/json',
@@ -208,11 +260,12 @@ async function handleDataRequest(
     });
 
   } catch (error) {
-    console.error('Error handling request:', error);
+    console.error('❌ Error handling request:', error);
     
     return new Response(JSON.stringify({
       error: 'Internal server error',
-      message: error instanceof Error ? error.message : 'Unknown error'
+      message: error instanceof Error ? error.message : 'Unknown error',
+      path: path
     }), {
       status: 500,
       headers: {
