@@ -1,35 +1,5 @@
 [
   {
-    "id": "big-bear-201386328",
-    "rinkId": "big-bear",
-    "title": "Public Skate",
-    "startTime": "2025-06-01T19:45:00.000Z",
-    "endTime": "2025-06-01T21:15:00.000Z",
-    "description": "South Rink - Public Skate , 60 Minutes long, Individual Skate, NO COACHING ALLOWED",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
-    "id": "big-bear-201386318",
-    "rinkId": "big-bear",
-    "title": "Open Stick & Puck",
-    "startTime": "2025-06-01T21:00:00.000Z",
-    "endTime": "2025-06-01T22:15:00.000Z",
-    "description": "North Rink - Open Sick and Puck, 60 Minutes long, Individual Skate, NO COACHING ALLOWED",
-    "category": "Stick & Puck",
-    "isFeatured": false
-  },
-  {
-    "id": "big-bear-201386329",
-    "rinkId": "big-bear",
-    "title": "Public Skate",
-    "startTime": "2025-06-01T21:30:00.000Z",
-    "endTime": "2025-06-01T23:15:00.000Z",
-    "description": "South Rink - Public Skate , 60 Minutes long, Individual Skate, NO COACHING ALLOWED",
-    "category": "Public Skate",
-    "isFeatured": false
-  },
-  {
     "id": "big-bear-201386297",
     "rinkId": "big-bear",
     "title": "Open Stick & Puck",
@@ -4075,6 +4045,106 @@
     "title": "Open Stick & Puck",
     "startTime": "2025-07-03T03:45:00.000Z",
     "endTime": "2025-07-03T05:00:00.000Z",
+    "description": "South Rink - Open Sick and Puck, 60 Minutes long, Individual Skate, NO COACHING ALLOWED",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "big-bear-203278458",
+    "rinkId": "big-bear",
+    "title": "Free Style",
+    "startTime": "2025-07-03T12:00:00.000Z",
+    "endTime": "2025-07-03T13:00:00.000Z",
+    "description": "South Rink - Freestyle Session, 60 Minutes long, Individual Skate",
+    "category": "Figure Skating",
+    "isFeatured": false
+  },
+  {
+    "id": "big-bear-203278459",
+    "rinkId": "big-bear",
+    "title": "Free Style",
+    "startTime": "2025-07-03T13:00:00.000Z",
+    "endTime": "2025-07-03T14:00:00.000Z",
+    "description": "South Rink - Freestyle Session, 60 Minutes long, Individual Skate",
+    "category": "Figure Skating",
+    "isFeatured": false
+  },
+  {
+    "id": "big-bear-203278460",
+    "rinkId": "big-bear",
+    "title": "Free Style",
+    "startTime": "2025-07-03T14:00:00.000Z",
+    "endTime": "2025-07-03T15:00:00.000Z",
+    "description": "South Rink - Freestyle Session, 60 Minutes long, Individual Skate",
+    "category": "Figure Skating",
+    "isFeatured": false
+  },
+  {
+    "id": "big-bear-203278485",
+    "rinkId": "big-bear",
+    "title": "Public Skate",
+    "startTime": "2025-07-03T15:15:00.000Z",
+    "endTime": "2025-07-03T16:45:00.000Z",
+    "description": "South Rink - Public Skate , 60 Minutes long, Individual Skate, NO COACHING ALLOWED",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "big-bear-203278496",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-07-03T17:00:00.000Z",
+    "endTime": "2025-07-03T18:15:00.000Z",
+    "description": "South Rink - Open Sick and Puck, 60 Minutes long, Individual Skate, NO COACHING ALLOWED",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "big-bear-203278497",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-07-03T18:30:00.000Z",
+    "endTime": "2025-07-03T19:45:00.000Z",
+    "description": "South Rink - Open Sick and Puck, 60 Minutes long, Individual Skate, NO COACHING ALLOWED",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "big-bear-203278536",
+    "rinkId": "big-bear",
+    "title": "Public Skate",
+    "startTime": "2025-07-03T20:00:00.000Z",
+    "endTime": "2025-07-03T21:45:00.000Z",
+    "description": "South Rink - Public Skate , 60 Minutes long, Individual Skate, NO COACHING ALLOWED",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "big-bear-203278557",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-07-03T22:00:00.000Z",
+    "endTime": "2025-07-03T23:30:00.000Z",
+    "description": "South Rink - Open Sick and Puck, 60 Minutes long, Individual Skate, NO COACHING ALLOWED",
+    "category": "Stick & Puck",
+    "isFeatured": false
+  },
+  {
+    "id": "big-bear-203278603",
+    "rinkId": "big-bear",
+    "title": "Public Skate",
+    "startTime": "2025-07-03T23:45:00.000Z",
+    "endTime": "2025-07-04T01:30:00.000Z",
+    "description": "South Rink - Public Skate , 60 Minutes long, Individual Skate, NO COACHING ALLOWED",
+    "category": "Public Skate",
+    "isFeatured": false
+  },
+  {
+    "id": "big-bear-203278620",
+    "rinkId": "big-bear",
+    "title": "Open Stick & Puck",
+    "startTime": "2025-07-04T03:15:00.000Z",
+    "endTime": "2025-07-04T04:45:00.000Z",
     "description": "South Rink - Open Sick and Puck, 60 Minutes long, Individual Skate, NO COACHING ALLOWED",
     "category": "Stick & Puck",
     "isFeatured": false
