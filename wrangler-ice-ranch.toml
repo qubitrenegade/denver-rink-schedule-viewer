@@ -12,6 +12,6 @@ preview_id = "81d647252e8e4e4caa0047a42ae2bd29"
 # Cron triggers for randomized scheduling
 [triggers]
 crons = [
-  "0 */12 * * *" # Every 12 hours - worker will add random delay
+  "0 */2 * * *" # Every 12 hours - worker will add random delay
 ]
 

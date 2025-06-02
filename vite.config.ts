@@ -5,8 +5,11 @@ export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
     return {
       define: {
-        // Add worker API base URL for proper environment detection
-        'import.meta.env.WORKER_API_BASE': JSON.stringify('https://api.geticeti.me')
+        // use production api for both modes for testing
+        // TODO: fix this
+        'import.meta.env.WORKER_API_BASE': JSON.stringify(
+          mode === 'production' ? 'https://api.geticeti.me' : 'https://api.geticeti.me'
+        )
       },
       resolve: {
         alias: {
