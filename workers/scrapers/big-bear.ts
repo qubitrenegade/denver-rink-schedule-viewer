@@ -1,4 +1,4 @@
-// workers/scrapers/big-bear.ts - Big Bear scraper worker
+// workers/scrapers/big-bear.ts - Big Bear scraper worker (Cloudflare Worker compatible)
 interface Env {
   RINK_DATA: KVNamespace;
 }
@@ -36,6 +36,16 @@ class BigBearScraper {
   private readonly rinkName = 'Big Bear Ice Arena';
   private readonly baseUrl = 'https://bigbearicearena.ezfacility.com';
 
+  private cleanTitle(rawTitle: string): string {
+    let cleanTitle = rawTitle.trim();
+    cleanTitle = cleanTitle.replace(/^\d{1,2}([A-Za-z])/, '$1');
+    cleanTitle = cleanTitle.replace(/^-\s*/, '');
+    cleanTitle = cleanTitle.replace(/register/gi, '');
+    cleanTitle = cleanTitle.replace(/click here/gi, '');
+    cleanTitle = cleanTitle.replace(/^\W+/, '');
+    return cleanTitle.trim();
+  }
+
   private categorizeEvent(title: string): string {
     const titleLower = title.toLowerCase();
     if (titleLower.includes('public skate')) return 'Public Skate';
@@ -51,16 +61,6 @@ class BigBearScraper {
     return 'Other';
   }
 
-  private cleanTitle(rawTitle: string): string {
-    let cleanTitle = rawTitle.trim();
-    cleanTitle = cleanTitle.replace(/^\d{1,2}([A-Za-z])/, '$1');
-    cleanTitle = cleanTitle.replace(/^-\s*/, '');
-    cleanTitle = cleanTitle.replace(/register/gi, '');
-    cleanTitle = cleanTitle.replace(/click here/gi, '');
-    cleanTitle = cleanTitle.replace(/^\W+/, '');
-    return cleanTitle.trim();
-  }
-
   private getTodayString(offsetDays: number = 0): string {
     const d = new Date();
     d.setDate(d.getDate() + offsetDays);
@@ -69,17 +69,20 @@ class BigBearScraper {
 
   async scrape(): Promise<RawIceEventData[]> {
     const url = `${this.baseUrl}/Sessions/FilterResults`;
-    
     const formData = new URLSearchParams({
       LocationId: '13558',
-      Sunday: 'true', Monday: 'true', Tuesday: 'true', Wednesday: 'true', 
-      Thursday: 'true', Friday: 'true', Saturday: 'true',
+      Sunday: 'true', Monday: 'true', Tuesday: 'true', Wednesday: 'true', Thursday: 'true', Friday: 'true', Saturday: 'true',
       StartTime: '12:00 AM', EndTime: '12:00 AM',
       'ReservationTypes[0].Selected': 'true', 'ReservationTypes[0].Id': '-1',
-      StartDate: this.getTodayString(-3), 
-      EndDate: this.getTodayString(32)
+      'ReservationTypes[1].Id': '203425', 'ReservationTypes[2].Id': '208508', 'ReservationTypes[3].Id': '215333',
+      'ReservationTypes[4].Id': '182117', 'ReservationTypes[5].Id': '227573', 'ReservationTypes[6].Id': '217778',
+      'ReservationTypes[7].Id': '215383', 'ReservationTypes[8].Id': '271335', 'ReservationTypes[9].Id': '285107',
+      'ReservationTypes[10].Id': '218387', 'ReservationTypes[11].Id': '215334', 'ReservationTypes[12].Id': '190860',
+      'ReservationTypes[13].Id': '215332', 'ReservationTypes[14].Id': '224028',
+      'Resources[0].Selected': 'true', 'Resources[0].Id': '-1', 'Resources[1].Id': '268382', 'Resources[2].Id': '268383',
+      'Resources[3].Id': '309500', 'Resources[4].Id': '350941', 'Resources[5].Id': '354858', 'Resources[6].Id': '396198',
+      StartDate: this.getTodayString(-3), EndDate: this.getTodayString(32)
     });
-
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -88,51 +91,37 @@ class BigBearScraper {
       },
       body: formData.toString()
     });
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch Big Bear events: ${response.status} ${response.statusText}`);
-    }
-
+    if (!response.ok) throw new Error(`Failed to fetch Big Bear events: ${response.status} ${response.statusText}`);
     const eventsJson = await response.json();
-    if (!Array.isArray(eventsJson)) {
-      throw new Error('Big Bear API did not return an array');
-    }
-
+    if (!Array.isArray(eventsJson)) throw new Error('Big Bear API did not return an array');
     const events: RawIceEventData[] = eventsJson.map((ev: any) => {
-      // Convert Mountain Time to UTC by adding 6 hours
-      const startTime = new Date(ev.start);
-      startTime.setHours(startTime.getHours() + 6);
-      
-      const endTime = new Date(ev.end);
-      endTime.setHours(endTime.getHours() + 6);
-
+      // The API returns times in Mountain Time (MT), but Date parses as UTC. To store as UTC, add 6 hours.
+      const startTime = new Date(ev.start); startTime.setHours(startTime.getHours() + 6);
+      const endTime = new Date(ev.end); endTime.setHours(endTime.getHours() + 6);
       const rinkName = ev.resourceName || (ev.venues && ev.venues[0]?.Name) || 'Main Rink';
       const category = this.categorizeEvent(ev.title || ev.reservationType || '');
-
       return {
         id: `big-bear-${ev.id}`,
-        rinkId: this.rinkId,
+        rinkId: 'big-bear',
         title: this.cleanTitle(ev.title || ''),
         startTime: startTime.toISOString(),
         endTime: endTime.toISOString(),
         description: `${rinkName}${ev.description ? ' - ' + ev.description : ''}`,
         category,
-        isFeatured: false
+        isFeatured: false,
+        eventUrl: undefined
       };
     });
-
     return events;
   }
 }
 
-// Add randomization to spread load
 function getRandomDelay(maxMinutes: number = 60): number {
   return Math.floor(Math.random() * maxMinutes * 60 * 1000);
 }
 
 async function writeToKV(env: Env, rinkId: string, events: RawIceEventData[]): Promise<void> {
   await env.RINK_DATA.put(`events:${rinkId}`, JSON.stringify(events));
-  
   const metadata: FacilityMetadata = {
     facilityId: rinkId,
     facilityName: 'Big Bear Ice Arena',
@@ -144,7 +133,6 @@ async function writeToKV(env: Env, rinkId: string, events: RawIceEventData[]): P
     rinks: [{ rinkId, rinkName: 'Main Rink' }],
     lastSuccessfulScrape: new Date().toISOString()
   };
-  
   await env.RINK_DATA.put(`metadata:${rinkId}`, JSON.stringify(metadata));
   console.log(`💾 Stored ${events.length} events and metadata for ${rinkId}`);
 }
@@ -152,11 +140,9 @@ async function writeToKV(env: Env, rinkId: string, events: RawIceEventData[]): P
 export default {
   async scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionContext): Promise<void> {
     console.log(`🕐 Big Bear scraper triggered at ${new Date().toISOString()}`);
-    
     const delay = getRandomDelay(60);
     console.log(`⏱️ Waiting ${Math.floor(delay / 1000 / 60)} minutes before scraping...`);
     await new Promise(resolve => setTimeout(resolve, delay));
-    
     try {
       const scraper = new BigBearScraper();
       const events = await scraper.scrape();
@@ -164,7 +150,6 @@ export default {
       console.log(`✅ Big Bear scraping completed successfully: ${events.length} events`);
     } catch (error) {
       console.error(`❌ Big Bear scraping failed:`, error);
-      
       const errorMetadata: FacilityMetadata = {
         facilityId: 'big-bear',
         facilityName: 'Big Bear Ice Arena',
@@ -176,7 +161,6 @@ export default {
         sourceUrl: 'https://bigbearicearena.ezfacility.com/Sessions',
         rinks: [{ rinkId: 'big-bear', rinkName: 'Main Rink' }]
       };
-      
       await env.RINK_DATA.put(`metadata:big-bear`, JSON.stringify(errorMetadata));
       throw error;
     }
@@ -189,7 +173,6 @@ export default {
         const scraper = new BigBearScraper();
         const events = await scraper.scrape();
         await writeToKV(env, 'big-bear', events);
-        
         return new Response(JSON.stringify({
           success: true,
           eventCount: events.length,
@@ -215,7 +198,6 @@ export default {
         });
       }
     }
-    
     return new Response('Big Bear Scraper Worker - Use POST to trigger scraping', { 
       status: 200,
       headers: {
