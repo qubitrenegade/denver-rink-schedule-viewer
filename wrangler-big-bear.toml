@@ -16,6 +16,9 @@ class_name = "BigBearScheduler"
 tag = "v1"
 new_sqlite_classes = ["BigBearScheduler"]
 
+[vars]
+SCRAPER_SPLAY_MINUTES = "360"
+
 [triggers]
 crons = [
   "0 */12 * * *" # Every 12 hours with worker-level randomization

@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => {
         // use production api for both modes for testing
         // TODO: fix this
         'import.meta.env.WORKER_API_BASE': JSON.stringify(
-          mode === 'production' ? 'https://api.geticeti.me' : 'https://api.geticeti.me'
+          mode === 'production' ? 'https://api.geticeti.me' : 'http://localhost:8787'
         )
       },
       resolve: {

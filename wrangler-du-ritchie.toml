@@ -16,6 +16,9 @@ class_name = "DURitchieScheduler"
 tag = "v1"
 new_sqlite_classes = [ "DURitchieScheduler" ]
 
+[vars]
+SCRAPER_SPLAY_MINUTES = "360"
+
 [triggers]
 crons = [
   "0 */12 * * *"

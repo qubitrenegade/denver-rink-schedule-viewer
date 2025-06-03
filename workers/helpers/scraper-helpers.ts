@@ -68,7 +68,19 @@ export class ScraperHelpers {
    * Get random delay in milliseconds within the specified minutes
    */
   static getRandomDelay(maxMinutes: number): number {
-    return Math.floor(Math.random() * maxMinutes * 60 * 1000);
+    // Random delay between 5 minutes and maxMinutes
+    const minMinutes = 5;
+    const randomMinutes = Math.floor(Math.random() * (maxMinutes - minMinutes) + minMinutes);
+    return randomMinutes * 60 * 1000; // Convert to milliseconds
+  }
+
+  /**
+   * Get alarm time with random splay delay
+   */
+  static getAlarmTime(splayMinutesEnvVar?: string): number {
+    const splayMinutes = parseInt(splayMinutesEnvVar || '360', 10);
+    const delay = ScraperHelpers.getRandomDelay(splayMinutes);
+    return Date.now() + delay;
   }
 
   /**
@@ -294,6 +306,108 @@ export class ScraperHelpers {
     return events.sort((a, b) => 
       new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
     );
+  }
+
+  /**
+   * Common Durable Object scheduler fetch handler
+   */
+  static async handleSchedulerFetch(
+    request: Request,
+    state: any,
+    env: any,
+    rinkId: string,
+    runScraperFn: () => Promise<Response>
+  ): Promise<Response> {
+    const url = new URL(request.url);
+    const path = url.pathname;
+
+    if (path === '/status') {
+      const nextAlarm = await state.storage.getAlarm();
+      const lastRun = await state.storage.get('lastRun');
+      
+      return ScraperHelpers.jsonResponse({
+        nextAlarm: nextAlarm ? new Date(nextAlarm).toISOString() : null,
+        lastRun: lastRun || null,
+        rinkId
+      });
+    }
+
+    if (path === '/schedule' || request.method === 'GET') {
+      const alarmTime = ScraperHelpers.getAlarmTime(env.SCRAPER_SPLAY_MINUTES);
+      await state.storage.setAlarm(alarmTime);
+      
+      return new Response(
+        `${rinkId} Worker - Scheduling alarm for ${new Date(alarmTime).toISOString()}`,
+        { headers: ScraperHelpers.corsHeaders() }
+      );
+    }
+
+    if (request.method === 'POST') {
+      return await runScraperFn();
+    }
+
+    return new Response(`${rinkId} Scheduler - Use GET to schedule, POST to run manually, /status for info`, {
+      headers: ScraperHelpers.corsHeaders()
+    });
+  }
+
+  /**
+   * Common Durable Object alarm handler with automatic rescheduling
+   */
+  static async handleSchedulerAlarm(
+    state: any,
+    env: any,
+    rinkId: string,
+    runScraperFn: () => Promise<Response>
+  ): Promise<void> {
+    console.log(`⏰ ${rinkId} alarm triggered at ${new Date().toISOString()}`);
+    
+    try {
+      await runScraperFn();
+      
+      // Schedule next alarm with configured splay
+      const splayMinutes = parseInt(env.SCRAPER_SPLAY_MINUTES || '360', 10);
+      const nextAlarmTime = ScraperHelpers.getNextScheduledTime(splayMinutes);
+      await state.storage.setAlarm(nextAlarmTime);
+      console.log(`📅 Next ${rinkId} alarm scheduled for ${nextAlarmTime.toISOString()}`);
+      
+    } catch (error) {
+      console.error(`❌ ${rinkId} alarm failed:`, error);
+      
+      // Still schedule next alarm even if this one failed
+      const splayMinutes = parseInt(env.SCRAPER_SPLAY_MINUTES || '360', 10);
+      const nextAlarmTime = ScraperHelpers.getNextScheduledTime(splayMinutes);
+      await state.storage.setAlarm(nextAlarmTime);
+    }
+  }
+
+  /**
+   * Enhanced date parsing for various Mountain Time formats
+   */
+  static parseVariousMountainTimeFormats(dateStr: string, timeStr?: string): Date {
+    // Try parsing as complete datetime first
+    let date = ScraperHelpers.parseMountainTime(dateStr);
+    
+    // If we have separate time string, combine them
+    if (timeStr) {
+      const baseDate = new Date(dateStr);
+      const timeMatch = timeStr.match(/(\d{1,2}):(\d{2})\s*([AP])\.?M\.?/i);
+      if (timeMatch) {
+        let hours = parseInt(timeMatch[1]);
+        const minutes = parseInt(timeMatch[2]);
+        const ampm = timeMatch[3].toLowerCase();
+        
+        if (ampm === 'p' && hours !== 12) hours += 12;
+        if (ampm === 'a' && hours === 12) hours = 0;
+        
+        baseDate.setUTCHours(hours, minutes, 0, 0);
+        // Convert from Mountain Time to UTC (add 6 hours for MDT)
+        baseDate.setTime(baseDate.getTime() + (6 * 60 * 60 * 1000));
+        return baseDate;
+      }
+    }
+    
+    return date;
   }
 }
 

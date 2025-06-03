@@ -4,6 +4,7 @@ import { ScraperHelpers, RawIceEventData } from '../helpers/scraper-helpers';
 interface Env {
   RINK_DATA: KVNamespace;
   SSPRD_SCHEDULER: DurableObjectNamespace;
+  SCRAPER_SPLAY_MINUTES: string;
 }
 
 const facilityIdToRinkIdMap: Record<number, string> = {
@@ -104,39 +105,22 @@ export class SSPRDScheduler {
   }
 
   async fetch(request: Request): Promise<Response> {
-    const url = new URL(request.url);
-    
-    if (request.method === 'GET' && url.pathname === '/status') {
-      const nextAlarm = await this.state.storage.getAlarm();
-      const lastRun = await this.state.storage.get('lastRun');
-      
-      return new Response(JSON.stringify({
-        nextAlarm: nextAlarm ? new Date(nextAlarm).toISOString() : null,
-        lastRun: lastRun || null,
-        rinkId: 'ssprd'
-      }), {
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
-
-    if (request.method === 'GET') {
-      // Schedule an alarm with random delay (5-60 minutes)
-      const delay = Math.floor(Math.random() * 55 + 5) * 60 * 1000; // 5-60 minutes in ms
-      const alarmTime = Date.now() + delay;
-      await this.state.storage.setAlarm(alarmTime);
-      
-      return new Response(`SSPRD Worker - Scheduling alarm for ${new Date(alarmTime).toISOString()}`);
-    }
-
-    if (request.method === 'POST') {
-      return await this.runScraper();
-    }
-
-    return new Response('Method not allowed', { status: 405 });
+    return ScraperHelpers.handleSchedulerFetch(
+      request,
+      this.state,
+      this.env,
+      'ssprd',
+      () => this.runScraper()
+    );
   }
 
   async alarm(): Promise<void> {
-    await this.runScraper();
+    return ScraperHelpers.handleSchedulerAlarm(
+      this.state,
+      this.env,
+      'ssprd',
+      () => this.runScraper()
+    );
   }
 
   private async runScraper(): Promise<Response> {

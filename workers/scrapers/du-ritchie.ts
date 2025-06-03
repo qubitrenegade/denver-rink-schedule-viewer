@@ -4,6 +4,7 @@ import { ScraperHelpers, RawIceEventData } from '../helpers/scraper-helpers';
 interface Env {
   RINK_DATA: KVNamespace;
   DU_RITCHIE_SCHEDULER: DurableObjectNamespace;
+  SCRAPER_SPLAY_MINUTES: string;
 }
 
 interface CalendarEvent {
@@ -265,58 +266,22 @@ export class DURitchieScheduler {
   }
 
   async fetch(request: Request): Promise<Response> {
-    const url = new URL(request.url);
-    const path = url.pathname;
-
-    if (path === '/status') {
-      const nextAlarm = await this.state.storage.getAlarm();
-      const lastRun = await this.state.storage.get('lastRun');
-      
-      return ScraperHelpers.jsonResponse({
-        nextAlarm: nextAlarm ? new Date(nextAlarm).toISOString() : null,
-        lastRun: lastRun || null,
-        rinkId: 'du-ritchie'
-      });
-    }
-
-    if (path === '/schedule' || request.method === 'GET') {
-      // Schedule alarm with 6 hour splay (360 minutes)
-      const nextAlarmTime = ScraperHelpers.getNextScheduledTime(360);
-      await this.state.storage.setAlarm(nextAlarmTime);
-      
-      return new Response(
-        `DU Ritchie Worker - Scheduling alarm for ${nextAlarmTime.toISOString()}`,
-        { headers: ScraperHelpers.corsHeaders() }
-      );
-    }
-
-    if (request.method === 'POST') {
-      return await this.runScraper();
-    }
-
-    return new Response('DU Ritchie Scheduler - Use GET to schedule, POST to run manually, /status for info', {
-      headers: ScraperHelpers.corsHeaders()
-    });
+    return ScraperHelpers.handleSchedulerFetch(
+      request,
+      this.state,
+      this.env,
+      'du-ritchie',
+      () => this.runScraper()
+    );
   }
 
   async alarm(): Promise<void> {
-    console.log(`⏰ DU Ritchie alarm triggered at ${new Date().toISOString()}`);
-    
-    try {
-      await this.runScraper();
-      
-      // Schedule next alarm with 6 hour splay
-      const nextAlarmTime = ScraperHelpers.getNextScheduledTime(360);
-      await this.state.storage.setAlarm(nextAlarmTime);
-      console.log(`📅 Next DU Ritchie alarm scheduled for ${nextAlarmTime.toISOString()}`);
-      
-    } catch (error) {
-      console.error('❌ DU Ritchie alarm failed:', error);
-      
-      // Still schedule next alarm even if this one failed
-      const nextAlarmTime = ScraperHelpers.getNextScheduledTime(360);
-      await this.state.storage.setAlarm(nextAlarmTime);
-    }
+    return ScraperHelpers.handleSchedulerAlarm(
+      this.state,
+      this.env,
+      'du-ritchie',
+      () => this.runScraper()
+    );
   }
 
   private async runScraper(): Promise<Response> {
@@ -376,7 +341,7 @@ export default {
     return stub.fetch(request);
   },
 
-  async scheduled(_event: ScheduledEvent, env: Env, _ctx: ExecutionContext): Promise<void> {
+  async scheduled(_event: unknown, env: Env, _ctx: unknown): Promise<void> {
     console.log(`🕐 DU Ritchie cron triggered at ${new Date().toISOString()}`);
     
     // Get the Durable Object and trigger scheduling

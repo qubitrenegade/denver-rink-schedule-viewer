@@ -1,9 +1,10 @@
 // workers/scrapers/ice-ranch.ts - Ice Ranch scraper with Durable Objects scheduling
-import { ScraperHelpers, RawIceEventData, FacilityMetadata } from '../helpers/scraper-helpers';
+import { ScraperHelpers, RawIceEventData } from '../helpers/scraper-helpers';
 
 interface Env {
   RINK_DATA: KVNamespace;
   ICE_RANCH_SCHEDULER: DurableObjectNamespace;
+  SCRAPER_SPLAY_MINUTES: string;
 }
 
 // Tag ID to category mapping (from ice-ranch.html UI)
@@ -104,7 +105,7 @@ class IceRanchScraper {
       description = description.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
 
       // Parse start time from pubDate - this is the event's actual datetime
-      const startTime = pubDate ? new Date(pubDate) : new Date();
+      let startTime = pubDate ? new Date(pubDate) : new Date();
 
       // Try to extract more precise times from description
       let endTime: Date = new Date(startTime);
@@ -112,27 +113,18 @@ class IceRanchScraper {
       if (timeMatch) {
         const [, startStr, endStr] = timeMatch;
         
-        // Parse start time from description to override pubDate time
+        // Parse start time from description using Mountain Time conversion
         const startMatch = startStr.trim().match(/(\d{1,2}):(\d{2})\s*([ap]m)/i);
         if (startMatch) {
-          const [, startHour, startMinute, startPeriod] = startMatch;
-          let hour = parseInt(startHour, 10);
-          if (startPeriod.toLowerCase() === 'pm' && hour < 12) hour += 12;
-          if (startPeriod.toLowerCase() === 'am' && hour === 12) hour = 0;
-          
-          // Use the date from pubDate but set the time from description
-          startTime.setHours(hour, parseInt(startMinute, 10), 0, 0);
+          const timeStr = `${startMatch[1]}:${startMatch[2]} ${startMatch[3]}`;
+          startTime = ScraperHelpers.parseMountainTime(timeStr, startTime);
         }
         
-        // Parse end time
+        // Parse end time using Mountain Time conversion
         const endMatch = endStr.match(/(\d{1,2}):(\d{2})([ap]m)/i);
         if (endMatch) {
-          const [, endHour, endMinute, endPeriod] = endMatch;
-          endTime = new Date(startTime);
-          let hour = parseInt(endHour, 10);
-          if (endPeriod.toLowerCase() === 'pm' && hour < 12) hour += 12;
-          if (endPeriod.toLowerCase() === 'am' && hour === 12) hour = 0;
-          endTime.setHours(hour, parseInt(endMinute, 10), 0, 0);
+          const timeStr = `${endMatch[1]}:${endMatch[2]} ${endMatch[3]}`;
+          endTime = ScraperHelpers.parseMountainTime(timeStr, startTime);
         }
       } else {
         // If no time range found, default to 1 hour duration
@@ -201,58 +193,22 @@ export class IceRanchScheduler {
   }
 
   async fetch(request: Request): Promise<Response> {
-    const url = new URL(request.url);
-    const path = url.pathname;
-
-    if (path === '/status') {
-      const nextAlarm = await this.state.storage.getAlarm();
-      const lastRun = await this.state.storage.get('lastRun');
-      
-      return ScraperHelpers.jsonResponse({
-        nextAlarm: nextAlarm ? new Date(nextAlarm).toISOString() : null,
-        lastRun: lastRun || null,
-        rinkId: 'ice-ranch'
-      });
-    }
-
-    if (path === '/schedule' || request.method === 'GET') {
-      // Schedule alarm with 6 hour splay (360 minutes)
-      const nextAlarmTime = ScraperHelpers.getNextScheduledTime(360);
-      await this.state.storage.setAlarm(nextAlarmTime);
-      
-      return new Response(
-        `Ice Ranch Worker - Scheduling alarm for ${nextAlarmTime.toISOString()}`,
-        { headers: ScraperHelpers.corsHeaders() }
-      );
-    }
-
-    if (request.method === 'POST') {
-      return await this.runScraper();
-    }
-
-    return new Response('Ice Ranch Scheduler - Use GET to schedule, POST to run manually, /status for info', {
-      headers: ScraperHelpers.corsHeaders()
-    });
+    return ScraperHelpers.handleSchedulerFetch(
+      request,
+      this.state,
+      this.env,
+      'ice-ranch',
+      () => this.runScraper()
+    );
   }
 
   async alarm(): Promise<void> {
-    console.log(`⏰ Ice Ranch alarm triggered at ${new Date().toISOString()}`);
-    
-    try {
-      await this.runScraper();
-      
-      // Schedule next alarm with 6 hour splay
-      const nextAlarmTime = ScraperHelpers.getNextScheduledTime(360);
-      await this.state.storage.setAlarm(nextAlarmTime);
-      console.log(`📅 Next Ice Ranch alarm scheduled for ${nextAlarmTime.toISOString()}`);
-      
-    } catch (error) {
-      console.error('❌ Ice Ranch alarm failed:', error);
-      
-      // Still schedule next alarm even if this one failed
-      const nextAlarmTime = ScraperHelpers.getNextScheduledTime(360);
-      await this.state.storage.setAlarm(nextAlarmTime);
-    }
+    return ScraperHelpers.handleSchedulerAlarm(
+      this.state,
+      this.env,
+      'ice-ranch',
+      () => this.runScraper()
+    );
   }
 
   private async runScraper(): Promise<Response> {
@@ -312,7 +268,7 @@ export default {
     return stub.fetch(request);
   },
 
-  async scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionContext): Promise<void> {
+  async scheduled(_event: unknown, env: Env, _ctx: unknown): Promise<void> {
     console.log(`🕐 Ice Ranch cron triggered at ${new Date().toISOString()}`);
     
     // Get the Durable Object and trigger scheduling

@@ -4,33 +4,33 @@ import { RinkInfo } from './types';
 export const RINKS_CONFIG: RinkInfo[] = [
   {
     id: 'ice-ranch',
-    name: 'The Ice Ranch (Littleton)',
+    name: 'The Ice Ranch (Littleton - South Park)',
     sourceUrl: 'https://www.theiceranch.com/page/show/1652320-calendar',
   },
   {
     id: 'big-bear',
-    name: 'Big Bear Ice Arena (Denver)',
+    name: 'Big Bear Ice Arena (Lowry)',
     sourceUrl: 'https://bigbearicearena.ezfacility.com/Sessions',
   },
   {
     id: 'du-ritchie',
-    name: 'DU Ritchie Center (Denver)',
+    name: 'DU Ritchie Center (University of Denver)',
     sourceUrl: 'https://ritchiecenter.du.edu/sports/ice-programs',
   },
   {
     id: 'foothills-edge',
-    name: 'Foothills Edge Ice Arena (Littleton)',
+    name: 'Foothills Edge Ice Arena (Littleton - Ken Caryl)',
     sourceUrl: 'https://www.ifoothills.org/cal-edge/',
   },
   {
     id: 'ssprd-family-sports',
-    name: 'Family Sports Center (Centennial)',
+    name: 'Family Sports Center (Englewood)',
     sourceUrl: 'https://ssprd.finnlyconnect.com/schedule/249',
     memberRinkIds: ['fsc-avalanche', 'fsc-fixit'],
   },
   {
     id: 'ssprd-sports-complex',
-    name: 'South Suburban Sports Complex (Littleton)',
+    name: 'South Suburban Sports Complex (Highlands Ranch)',
     sourceUrl: 'https://ssprd.finnlyconnect.com/schedule/250',
     memberRinkIds: ['sssc-rink1', 'sssc-rink2', 'sssc-rink3'],
   },

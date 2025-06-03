@@ -18,6 +18,9 @@ class_name = "IceRanchScheduler"
 tag = "v1"
 new_sqlite_classes = [ "IceRanchScheduler" ]
 
+[vars]
+SCRAPER_SPLAY_MINUTES = "360"
+
 # Cron triggers to wake up and schedule alarms
 [triggers]
 crons = [

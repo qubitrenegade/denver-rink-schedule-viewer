@@ -4,6 +4,7 @@ import { ScraperHelpers, RawIceEventData } from '../helpers/scraper-helpers';
 interface Env {
   RINK_DATA: KVNamespace;
   FOOTHILLS_EDGE_SCHEDULER: DurableObjectNamespace;
+  SCRAPER_SPLAY_MINUTES: string;
 }
 
 class FoothillsEdgeScraper {
@@ -112,39 +113,22 @@ export class FoothillsEdgeScheduler {
   }
 
   async fetch(request: Request): Promise<Response> {
-    const url = new URL(request.url);
-    
-    if (request.method === 'GET' && url.pathname === '/status') {
-      const nextAlarm = await this.state.storage.getAlarm();
-      const lastRun = await this.state.storage.get('lastRun');
-      
-      return new Response(JSON.stringify({
-        nextAlarm: nextAlarm ? new Date(nextAlarm).toISOString() : null,
-        lastRun: lastRun || null,
-        rinkId: 'foothills-edge'
-      }), {
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
-
-    if (request.method === 'GET') {
-      // Schedule an alarm with random delay (5-60 minutes)
-      const delay = Math.floor(Math.random() * 55 + 5) * 60 * 1000; // 5-60 minutes in ms
-      const alarmTime = Date.now() + delay;
-      await this.state.storage.setAlarm(alarmTime);
-      
-      return new Response(`Foothills Edge Worker - Scheduling alarm for ${new Date(alarmTime).toISOString()}`);
-    }
-
-    if (request.method === 'POST') {
-      return await this.runScraper();
-    }
-
-    return new Response('Method not allowed', { status: 405 });
+    return ScraperHelpers.handleSchedulerFetch(
+      request,
+      this.state,
+      this.env,
+      'foothills-edge',
+      () => this.runScraper()
+    );
   }
 
   async alarm(): Promise<void> {
-    await this.runScraper();
+    return ScraperHelpers.handleSchedulerAlarm(
+      this.state,
+      this.env,
+      'foothills-edge',
+      () => this.runScraper()
+    );
   }
 
   private async runScraper(): Promise<Response> {
