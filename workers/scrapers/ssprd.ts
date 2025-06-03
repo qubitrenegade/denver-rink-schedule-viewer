@@ -1,34 +1,9 @@
-// workers/scrapers/ssprd.ts - SSPRD scraper worker (Cloudflare Worker compatible)
+// workers/scrapers/ssprd.ts - SSPRD scraper with Durable Objects scheduling
+import { ScraperHelpers, RawIceEventData } from '../helpers/scraper-helpers';
+
 interface Env {
   RINK_DATA: KVNamespace;
-}
-
-interface RawIceEventData {
-  id: string;
-  rinkId: string;
-  title: string;
-  startTime: string;
-  endTime: string;
-  description?: string;
-  category: string;
-  isFeatured?: boolean;
-  eventUrl?: string;
-}
-
-interface FacilityMetadata {
-  facilityId: string;
-  facilityName: string;
-  displayName: string;
-  lastAttempt: string;
-  status: 'success' | 'error';
-  eventCount: number;
-  errorMessage?: string;
-  sourceUrl: string;
-  rinks: Array<{
-    rinkId: string;
-    rinkName: string;
-  }>;
-  lastSuccessfulScrape?: string;
+  SSPRD_SCHEDULER: DurableObjectNamespace;
 }
 
 const facilityIdToRinkIdMap: Record<number, string> = {
@@ -67,24 +42,13 @@ class SSPRDScraper {
   }
 
   private categorizeEvent(title: string): string {
-    const titleLower = title.toLowerCase();
-    if (titleLower.includes('closed') || titleLower.includes('holiday') || titleLower.includes('memorial')) return 'Special Event';
-    if (titleLower.includes('public skate') || titleLower.includes('open skate')) return 'Public Skate';
-    if (titleLower.includes('stick') && titleLower.includes('puck')) return 'Stick & Puck';
-    if (titleLower.includes('take a shot')) return 'Stick & Puck';
-    if (titleLower.includes('drop') || titleLower.includes('pickup')) return 'Drop-In Hockey';
-    if (titleLower.includes('learn') || titleLower.includes('lesson') || titleLower.includes('lts')) return 'Learn to Skate';
-    if (titleLower.includes('freestyle') || titleLower.includes('figure')) return 'Figure Skating';
-    if (titleLower.includes('practice') || titleLower.includes('training')) return 'Hockey Practice';
-    if (titleLower.includes('league') || titleLower.includes('game')) return 'Hockey League';
-    if (titleLower.includes('broomball') || titleLower.includes('special')) return 'Special Event';
-    return 'Other';
+    return ScraperHelpers.categorizeEvent(title);
   }
 
   async scrape(): Promise<RawIceEventData[]> {
     const response = await fetch(this.schedulePageUrl, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; DenverRinkScheduler/1.0)'
+        'User-Agent': ScraperHelpers.getUserAgent()
       }
     });
     if (!response.ok) throw new Error(`Failed to fetch SSPRD schedule: ${response.status} ${response.statusText}`);
@@ -130,127 +94,184 @@ class SSPRDScraper {
   }
 }
 
-function getRandomDelay(maxMinutes: number = 60): number {
-  return Math.floor(Math.random() * maxMinutes * 60 * 1000);
-}
+export class SSPRDScheduler {
+  private state: DurableObjectState;
+  private env: Env;
 
-async function writeRinkEventsToKV(env: Env, rinkId: string, events: RawIceEventData[], sourceUrl: string) {
-  await env.RINK_DATA.put(`events:${rinkId}`, JSON.stringify(events));
-  const metadata: FacilityMetadata = {
-    facilityId: rinkId,
-    facilityName: rinkId.startsWith('fsc-') ? 'SSPRD Family Sports' : 'SSPRD South Suburban',
-    displayName: rinkId,
-    lastAttempt: new Date().toISOString(),
-    status: 'success',
-    eventCount: events.length,
-    sourceUrl,
-    rinks: [{ rinkId, rinkName: 'Main Rink' }],
-    lastSuccessfulScrape: new Date().toISOString()
-  };
-  await env.RINK_DATA.put(`metadata:${rinkId}`, JSON.stringify(metadata));
-  console.log(`💾 Stored ${events.length} events and metadata for ${rinkId}`);
-}
+  constructor(state: DurableObjectState, env: Env) {
+    this.state = state;
+    this.env = env;
+  }
 
-export default {
-  async scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionContext): Promise<void> {
-    console.log(`🕐 SSPRD scraper triggered at ${new Date().toISOString()}`);
-    const delay = getRandomDelay(60);
-    console.log(`⏱️ Waiting ${Math.floor(delay / 1000 / 60)} minutes before scraping...`);
-    await new Promise(resolve => setTimeout(resolve, delay));
+  async fetch(request: Request): Promise<Response> {
+    const url = new URL(request.url);
+    
+    if (request.method === 'GET' && url.pathname === '/status') {
+      const nextAlarm = await this.state.storage.getAlarm();
+      const lastRun = await this.state.storage.get('lastRun');
+      
+      return new Response(JSON.stringify({
+        nextAlarm: nextAlarm ? new Date(nextAlarm).toISOString() : null,
+        lastRun: lastRun || null,
+        rinkId: 'ssprd'
+      }), {
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    if (request.method === 'GET') {
+      // Schedule an alarm with random delay (5-60 minutes)
+      const delay = Math.floor(Math.random() * 55 + 5) * 60 * 1000; // 5-60 minutes in ms
+      const alarmTime = Date.now() + delay;
+      await this.state.storage.setAlarm(alarmTime);
+      
+      return new Response(`SSPRD Worker - Scheduling alarm for ${new Date(alarmTime).toISOString()}`);
+    }
+
+    if (request.method === 'POST') {
+      return await this.runScraper();
+    }
+
+    return new Response('Method not allowed', { status: 405 });
+  }
+
+  async alarm(): Promise<void> {
+    await this.runScraper();
+  }
+
+  private async runScraper(): Promise<Response> {
+    const startTime = Date.now();
+    
     try {
+      console.log('🏢 Starting SSPRD scraper...');
       const scrapers = [
         new SSPRDScraper('249', 'https://ssprd.finnlyconnect.com/schedule/249'),
         new SSPRDScraper('250', 'https://ssprd.finnlyconnect.com/schedule/250')
       ];
+      
       let allEvents: RawIceEventData[] = [];
       for (const scraper of scrapers) {
         const events = await scraper.scrape();
         allEvents = allEvents.concat(events);
       }
+      
       // Group by rinkId
       const eventsByRink: Record<string, RawIceEventData[]> = {};
       for (const event of allEvents) {
         if (!eventsByRink[event.rinkId]) eventsByRink[event.rinkId] = [];
         eventsByRink[event.rinkId].push(event);
       }
-      for (const rinkId of Object.keys(eventsByRink)) {
-        await writeRinkEventsToKV(env, rinkId, eventsByRink[rinkId], 'https://ssprd.finnlyconnect.com');
+      
+      // Write each rink's events to KV
+      const facilityEvents: Record<string, RawIceEventData[]> = {
+        'ssprd-249': [],
+        'ssprd-250': []
+      };
+      
+      for (const [rinkId, events] of Object.entries(eventsByRink)) {
+        const facilityName = rinkId.startsWith('fsc-') ? 'Family Sports Center' : 'South Suburban Sports Complex';
+        const displayName = rinkId.startsWith('fsc-') ? 'Family Sports Center (Centennial)' : 'South Suburban Sports Complex (Littleton)';
+        
+        // Write individual rink data
+        await ScraperHelpers.writeToKV(
+          this.env.RINK_DATA,
+          rinkId,
+          events,
+          {
+            facilityName,
+            displayName,
+            sourceUrl: 'https://ssprd.finnlyconnect.com',
+            rinkName: this.getRinkName(rinkId)
+          }
+        );
+        
+        // Also aggregate into facility-level collections
+        if (rinkId.startsWith('fsc-')) {
+          facilityEvents['ssprd-249'] = facilityEvents['ssprd-249'].concat(events);
+        } else if (rinkId.startsWith('sssc-')) {
+          facilityEvents['ssprd-250'] = facilityEvents['ssprd-250'].concat(events);
+        }
       }
-      console.log(`✅ SSPRD scraping completed for rinks: ${Object.keys(eventsByRink).join(', ')}`);
+      
+      // Write facility-level aggregated data
+      await ScraperHelpers.writeToKV(
+        this.env.RINK_DATA,
+        'ssprd-249',
+        facilityEvents['ssprd-249'],
+        {
+          facilityName: 'Family Sports Center',
+          displayName: 'Family Sports Center (Centennial)',
+          sourceUrl: 'https://ssprd.finnlyconnect.com/schedule/249',
+          rinkName: 'Family Sports Center'
+        }
+      );
+      
+      await ScraperHelpers.writeToKV(
+        this.env.RINK_DATA,
+        'ssprd-250',
+        facilityEvents['ssprd-250'],
+        {
+          facilityName: 'South Suburban Sports Complex',
+          displayName: 'South Suburban Sports Complex (Littleton)',
+          sourceUrl: 'https://ssprd.finnlyconnect.com/schedule/250',
+          rinkName: 'South Suburban Sports Complex'
+        }
+      );
+
+      const duration = Date.now() - startTime;
+      await this.state.storage.put('lastRun', new Date().toISOString());
+      
+      const totalEvents = Object.values(eventsByRink).reduce((sum, events) => sum + events.length, 0);
+      console.log(`✅ SSPRD: ${totalEvents} events scraped across ${Object.keys(eventsByRink).length} rinks in ${duration}ms`);
+      
+      return new Response(JSON.stringify({
+        success: true,
+        message: 'Successfully scraped SSPRD events',
+        rinkEventCounts: Object.fromEntries(Object.entries(eventsByRink).map(([k, v]) => [k, v.length])),
+        timestamp: new Date().toISOString(),
+        duration: `${duration}ms`
+      }), {
+        headers: { 'Content-Type': 'application/json' }
+      });
+      
     } catch (error) {
-      console.error(`❌ SSPRD scraping failed:`, error);
-      // Write error metadata for all rinks
-      for (const rinkId of Object.values(facilityIdToRinkIdMap)) {
-        const errorMetadata: FacilityMetadata = {
-          facilityId: rinkId,
-          facilityName: rinkId.startsWith('fsc-') ? 'SSPRD Family Sports' : 'SSPRD South Suburban',
-          displayName: rinkId,
-          lastAttempt: new Date().toISOString(),
-          status: 'error',
-          eventCount: 0,
-          errorMessage: error instanceof Error ? error.message : 'Unknown error',
-          sourceUrl: 'https://ssprd.finnlyconnect.com',
-          rinks: [{ rinkId, rinkName: 'Main Rink' }]
-        };
-        await env.RINK_DATA.put(`metadata:${rinkId}`, JSON.stringify(errorMetadata));
-      }
-      throw error;
+      console.error('❌ SSPRD scraper error:', error);
+      
+      return new Response(JSON.stringify({
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+        timestamp: new Date().toISOString()
+      }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
+  }
+
+  private getRinkName(rinkId: string): string {
+    const rinkNames: Record<string, string> = {
+      'fsc-avalanche': 'Avalanche Rink',
+      'fsc-fixit': 'FixIt 24/7 Rink',
+      'sssc-rink1': 'Rink 1',
+      'sssc-rink2': 'Rink 2',
+      'sssc-rink3': 'Rink 3'
+    };
+    return rinkNames[rinkId] || 'Main Rink';
+  }
+}
+
+export default {
+  async scheduled(_event: unknown, env: Env, _ctx: unknown): Promise<void> {
+    // Cron trigger - wake up a random Durable Object instance
+    const id = env.SSPRD_SCHEDULER.idFromName('scheduler');
+    const obj = env.SSPRD_SCHEDULER.get(id);
+    await obj.fetch('https://dummy-url/', { method: 'GET' });
   },
 
   async fetch(request: Request, env: Env): Promise<Response> {
-    if (request.method === 'POST') {
-      try {
-        console.log('🔧 Manual trigger received');
-        const scrapers = [
-          new SSPRDScraper('249', 'https://ssprd.finnlyconnect.com/schedule/249'),
-          new SSPRDScraper('250', 'https://ssprd.finnlyconnect.com/schedule/250')
-        ];
-        let allEvents: RawIceEventData[] = [];
-        for (const scraper of scrapers) {
-          const events = await scraper.scrape();
-          allEvents = allEvents.concat(events);
-        }
-        // Group by rinkId
-        const eventsByRink: Record<string, RawIceEventData[]> = {};
-        for (const event of allEvents) {
-          if (!eventsByRink[event.rinkId]) eventsByRink[event.rinkId] = [];
-          eventsByRink[event.rinkId].push(event);
-        }
-        for (const rinkId of Object.keys(eventsByRink)) {
-          await writeRinkEventsToKV(env, rinkId, eventsByRink[rinkId], 'https://ssprd.finnlyconnect.com');
-        }
-        return new Response(JSON.stringify({
-          success: true,
-          message: 'Successfully scraped SSPRD events',
-          rinkEventCounts: Object.fromEntries(Object.entries(eventsByRink).map(([k, v]) => [k, v.length])),
-          timestamp: new Date().toISOString()
-        }), {
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-          }
-        });
-      } catch (error) {
-        return new Response(JSON.stringify({
-          success: false,
-          error: error instanceof Error ? error.message : 'Unknown error',
-          timestamp: new Date().toISOString()
-        }), {
-          status: 500,
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-          }
-        });
-      }
-    }
-    return new Response('SSPRD Scraper Worker - Use POST to trigger scraping', {
-      status: 200,
-      headers: {
-        'Content-Type': 'text/plain',
-        'Access-Control-Allow-Origin': '*'
-      }
-    });
+    // Route requests to the Durable Object
+    const id = env.SSPRD_SCHEDULER.idFromName('scheduler');
+    const obj = env.SSPRD_SCHEDULER.get(id);
+    return obj.fetch(request);
   }
 };
