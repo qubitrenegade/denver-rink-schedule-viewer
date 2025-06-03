@@ -2,7 +2,8 @@
 import { ScraperHelpers, RawIceEventData } from '../helpers/scraper-helpers';
 
 interface Env {
-  RINK_DATA: KVNamespace;
+  RINK_      // Write events for Family Sports Center facility
+      await ScraperHelpers.writeToKV(this.env.RINK_DATA, 'fsc-avalanche', facilityEvents['ssprd-249']);space;
   SSPRD_SCHEDULER: DurableObjectNamespace;
   SCRAPER_SPLAY_MINUTES: string;
 }
@@ -153,21 +154,8 @@ export class SSPRDScheduler {
       };
       
       for (const [rinkId, events] of Object.entries(eventsByRink)) {
-        const facilityName = rinkId.startsWith('fsc-') ? 'Family Sports Center' : 'South Suburban Sports Complex';
-        const displayName = rinkId.startsWith('fsc-') ? 'Family Sports Center (Centennial)' : 'South Suburban Sports Complex (Littleton)';
-        
-        // Write individual rink data
-        await ScraperHelpers.writeToKV(
-          this.env.RINK_DATA,
-          rinkId,
-          events,
-          {
-            facilityName,
-            displayName,
-            sourceUrl: 'https://ssprd.finnlyconnect.com',
-            rinkName: this.getRinkName(rinkId)
-          }
-        );
+        // Write individual rink data using shared config
+        await ScraperHelpers.writeToKV(this.env.RINK_DATA, rinkId, events);
         
         // Also aggregate into facility-level collections
         if (rinkId.startsWith('fsc-')) {
@@ -177,14 +165,14 @@ export class SSPRDScheduler {
         }
       }
       
-      // Write facility-level aggregated data
+      // Write facility-level aggregated data (these don't use shared config as they're aggregations)
       await ScraperHelpers.writeToKV(
         this.env.RINK_DATA,
         'ssprd-249',
         facilityEvents['ssprd-249'],
         {
           facilityName: 'Family Sports Center',
-          displayName: 'Family Sports Center (Centennial)',
+          displayName: 'Family Sports Center (Englewood)',
           sourceUrl: 'https://ssprd.finnlyconnect.com/schedule/249',
           rinkName: 'Family Sports Center'
         }
@@ -196,7 +184,7 @@ export class SSPRDScheduler {
         facilityEvents['ssprd-250'],
         {
           facilityName: 'South Suburban Sports Complex',
-          displayName: 'South Suburban Sports Complex (Littleton)',
+          displayName: 'South Suburban Sports Complex (Highlands Ranch)',
           sourceUrl: 'https://ssprd.finnlyconnect.com/schedule/250',
           rinkName: 'South Suburban Sports Complex'
         }

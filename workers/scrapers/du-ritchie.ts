@@ -292,12 +292,7 @@ export class DURitchieScheduler {
       const scraper = new DURitchieScraper();
       const events = await scraper.scrape();
       
-      await ScraperHelpers.writeToKV(this.env.RINK_DATA, 'du-ritchie', events, {
-        facilityName: 'DU Ritchie Center',
-        displayName: 'DU Ritchie Center (Denver)',
-        sourceUrl: 'https://ritchiecenter.du.edu/sports/ice-programs',
-        rinkName: 'Main Rink'
-      });
+      await ScraperHelpers.writeToKV(this.env.RINK_DATA, 'du-ritchie', events);
 
       // Update last run time
       await this.state.storage.put('lastRun', new Date().toISOString());
@@ -316,12 +311,7 @@ export class DURitchieScheduler {
     } catch (error) {
       console.error('❌ DU Ritchie scraping failed:', error);
       
-      await ScraperHelpers.writeErrorMetadata(this.env.RINK_DATA, 'du-ritchie', error, {
-        facilityName: 'DU Ritchie Center',
-        displayName: 'DU Ritchie Center (Denver)',
-        sourceUrl: 'https://ritchiecenter.du.edu/sports/ice-programs',
-        rinkName: 'Main Rink'
-      });
+      await ScraperHelpers.writeErrorMetadata(this.env.RINK_DATA, 'du-ritchie', error);
 
       return ScraperHelpers.jsonResponse({
         success: false,

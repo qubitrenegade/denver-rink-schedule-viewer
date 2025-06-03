@@ -219,12 +219,7 @@ export class IceRanchScheduler {
       const scraper = new IceRanchScraper();
       const events = await scraper.scrape();
       
-      await ScraperHelpers.writeToKV(this.env.RINK_DATA, 'ice-ranch', events, {
-        facilityName: 'Ice Ranch',
-        displayName: 'The Ice Ranch (Littleton)',
-        sourceUrl: ICE_RANCH_RSS_URL,
-        rinkName: 'Main Rink'
-      });
+      await ScraperHelpers.writeToKV(this.env.RINK_DATA, 'ice-ranch', events);
 
       // Update last run time
       await this.state.storage.put('lastRun', new Date().toISOString());
@@ -243,12 +238,7 @@ export class IceRanchScheduler {
     } catch (error) {
       console.error('❌ Ice Ranch scraping failed:', error);
       
-      await ScraperHelpers.writeErrorMetadata(this.env.RINK_DATA, 'ice-ranch', error, {
-        facilityName: 'Ice Ranch',
-        displayName: 'The Ice Ranch (Littleton)',
-        sourceUrl: ICE_RANCH_RSS_URL,
-        rinkName: 'Main Rink'
-      });
+      await ScraperHelpers.writeErrorMetadata(this.env.RINK_DATA, 'ice-ranch', error);
 
       return ScraperHelpers.jsonResponse({
         success: false,

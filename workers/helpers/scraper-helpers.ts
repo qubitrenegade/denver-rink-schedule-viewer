@@ -1,5 +1,7 @@
 // workers/helpers/scraper-helpers.ts - Common functions for all scrapers
 
+import { getRinkConfig } from '../shared/rink-config';
+
 export interface RawIceEventData {
   id: string;
   rinkId: string;
@@ -97,14 +99,35 @@ export class ScraperHelpers {
   }
 
   /**
-   * Write events and metadata to KV storage
+   * Write events and metadata to KV storage using shared config
    */
   static async writeToKV(
     kvNamespace: KVNamespace,
     rinkId: string,
+    events: RawIceEventData[]
+  ): Promise<void>;
+  static async writeToKV(
+    kvNamespace: KVNamespace,
+    rinkId: string,
     events: RawIceEventData[],
-    config: RinkConfig
+    customConfig: RinkConfig
+  ): Promise<void>;
+  static async writeToKV(
+    kvNamespace: KVNamespace,
+    rinkId: string,
+    events: RawIceEventData[],
+    customConfig?: RinkConfig
   ): Promise<void> {
+    let config: RinkConfig;
+    
+    if (customConfig) {
+      // Use provided custom config (for aggregations)
+      config = customConfig;
+    } else {
+      // Use shared config lookup (for individual rinks)
+      config = getRinkConfig(rinkId);
+    }
+    
     // Store events data
     await kvNamespace.put(`events:${rinkId}`, JSON.stringify(events));
     
@@ -127,14 +150,35 @@ export class ScraperHelpers {
   }
 
   /**
-   * Write error metadata to KV storage when scraping fails
+   * Write error metadata to KV storage when scraping fails using shared config
    */
   static async writeErrorMetadata(
     kvNamespace: KVNamespace,
     rinkId: string,
+    error: any
+  ): Promise<void>;
+  static async writeErrorMetadata(
+    kvNamespace: KVNamespace,
+    rinkId: string,
     error: any,
-    config: RinkConfig
+    customConfig: RinkConfig
+  ): Promise<void>;
+  static async writeErrorMetadata(
+    kvNamespace: KVNamespace,
+    rinkId: string,
+    error: any,
+    customConfig?: RinkConfig
   ): Promise<void> {
+    let config: RinkConfig;
+    
+    if (customConfig) {
+      // Use provided custom config (for aggregations)
+      config = customConfig;
+    } else {
+      // Use shared config lookup (for individual rinks)
+      config = getRinkConfig(rinkId);
+    }
+    
     const errorMetadata: FacilityMetadata = {
       facilityId: rinkId,
       facilityName: config.facilityName,
@@ -147,7 +191,7 @@ export class ScraperHelpers {
       rinks: [{ rinkId, rinkName: config.rinkName }]
     };
     
-    await kvNamespace.put(`metadata:${rinkId}`, JSON.stringify(errorMetadata));
+    await kvNamespace.put(`metadata:${rinkId}`, JSON.stringify(metadata));
     console.log(`💾 Stored error metadata for ${rinkId}: ${errorMetadata.errorMessage}`);
   }
 

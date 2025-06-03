@@ -126,12 +126,7 @@ export class BigBearScheduler {
       const scraper = new BigBearScraper();
       const events = await scraper.scrape();
       
-      await ScraperHelpers.writeToKV(this.env.RINK_DATA, 'big-bear', events, {
-        facilityName: 'Big Bear Ice Arena',
-        displayName: 'Big Bear Ice Arena (Denver)',
-        sourceUrl: 'https://bigbearicearena.ezfacility.com/Sessions',
-        rinkName: 'Main Rink'
-      });
+      await ScraperHelpers.writeToKV(this.env.RINK_DATA, 'big-bear', events);
 
       // Update last run time
       await this.state.storage.put('lastRun', new Date().toISOString());
@@ -150,12 +145,7 @@ export class BigBearScheduler {
     } catch (error) {
       console.error('❌ Big Bear scraping failed:', error);
       
-      await ScraperHelpers.writeErrorMetadata(this.env.RINK_DATA, 'big-bear', error, {
-        facilityName: 'Big Bear Ice Arena',
-        displayName: 'Big Bear Ice Arena (Denver)',
-        sourceUrl: 'https://bigbearicearena.ezfacility.com/Sessions',
-        rinkName: 'Main Rink'
-      });
+      await ScraperHelpers.writeErrorMetadata(this.env.RINK_DATA, 'big-bear', error);
 
       return ScraperHelpers.jsonResponse({
         success: false,

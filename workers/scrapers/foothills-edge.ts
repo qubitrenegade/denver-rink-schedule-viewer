@@ -139,17 +139,7 @@ export class FoothillsEdgeScheduler {
       const scraper = new FoothillsEdgeScraper();
       const events = await scraper.scrape();
       
-      await ScraperHelpers.writeToKV(
-        this.env.RINK_DATA,
-        'foothills-edge',
-        events,
-        {
-          facilityName: 'Foothills Ice Arena (Edge)',
-          displayName: 'Foothills Ice Arena (Edge)',
-          sourceUrl: 'https://calendar.ifoothills.org/calendars/edge-ice-arena-drop.php',
-          rinkName: 'Main Rink'
-        }
-      );
+      await ScraperHelpers.writeToKV(this.env.RINK_DATA, 'foothills-edge', events);
 
       const duration = Date.now() - startTime;
       await this.state.storage.put('lastRun', new Date().toISOString());
