@@ -1,5 +1,5 @@
 // workers/scrapers/ice-ranch.ts - Ice Ranch scraper with Durable Objects scheduling
-import { ScraperHelpers, RawIceEventData, FacilityMetadata } from './scraper-helpers';
+import { ScraperHelpers, RawIceEventData, FacilityMetadata } from '../helpers/scraper-helpers';
 
 interface Env {
   RINK_DATA: KVNamespace;

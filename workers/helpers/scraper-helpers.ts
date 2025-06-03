@@ -270,7 +270,8 @@ export class ScraperHelpers {
    * Generate a user agent string for scraping
    */
   static getUserAgent(): string {
-    return 'Mozilla/5.0 (compatible; DenverRinkScheduler/1.0)';
+    // return 'Mozilla/5.0 (compatible; DenverRinkScheduler/1.0)';
+    return 'Mozilla/5.0 (Macintosh; Intel Mac OS X 9_3_4; en-US) AppleWebKit/533.23 (KHTML, like Gecko) Chrome/49.0.1461.334 Safari/602';
   }
 
   /**
