@@ -9,14 +9,14 @@ binding = "RINK_DATA"
 id = "a38bbfdc3fe74d69a0ef39550960eca3"
 preview_id = "81d647252e8e4e4caa0047a42ae2bd29"
 
+[[migrations]]
+tag = "v1"
+new_classes = [ "IceRanchScheduler" ]
+
 # Durable Object for scheduling
 [[durable_objects.bindings]]
 name = "ICE_RANCH_SCHEDULER"
 class_name = "IceRanchScheduler"
-
-[[migrations]]
-tag = "v1"
-new_classes = [ "IceRanchScheduler" ]
 
 # Cron triggers to wake up and schedule alarms
 [triggers]
