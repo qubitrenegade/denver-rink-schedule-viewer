@@ -1,37 +1,9 @@
-// CloudFlare Worker: Ice Ranch Scraper with Durable Object scheduling
-// This worker uses a Durable Object to schedule scraping at random times
+// workers/scrapers/ice-ranch.ts - Ice Ranch scraper with Durable Objects scheduling
+import { ScraperHelpers, RawIceEventData, FacilityMetadata } from './scraper-helpers';
 
 interface Env {
   RINK_DATA: KVNamespace;
   ICE_RANCH_SCHEDULER: DurableObjectNamespace;
-}
-
-interface RawIceEventData {
-  id: string;
-  rinkId: string;
-  title: string;
-  startTime: string; // ISO string in worker
-  endTime: string;   // ISO string in worker
-  description?: string;
-  category: string;
-  isFeatured?: boolean;
-  eventUrl?: string;
-}
-
-interface FacilityMetadata {
-  facilityId: string;
-  facilityName: string;
-  displayName: string;
-  lastSuccessfulScrape?: string;
-  lastAttempt: string;
-  status: 'success' | 'error';
-  eventCount: number;
-  errorMessage?: string;
-  sourceUrl: string;
-  rinks: Array<{
-    rinkId: string;
-    rinkName: string;
-  }>;
 }
 
 // Tag ID to category mapping (from ice-ranch.html UI)
@@ -53,31 +25,6 @@ const ICE_RANCH_RSS_URL = 'https://www.theiceranch.com/event_rss_feed?tags=16523
 class IceRanchScraper {
   private readonly rinkId = 'ice-ranch';
   private readonly rinkName = 'Ice Ranch';
-
-  // Clean event title
-  private cleanTitle(rawTitle: string): string {
-    let cleanTitle = rawTitle.trim();
-    cleanTitle = cleanTitle.replace(/^\d{1,2}([A-Za-z])/, '$1');
-    cleanTitle = cleanTitle.replace(/^-\s*/, '');
-    cleanTitle = cleanTitle.replace(/register/gi, '');
-    cleanTitle = cleanTitle.replace(/click here/gi, '');
-    cleanTitle = cleanTitle.replace(/^\W+/, '');
-    return cleanTitle.trim();
-  }
-
-  // Categorize event by title
-  private categorizeEvent(title: string): string {
-    const titleLower = title.toLowerCase();
-    if (titleLower.includes('closed') || titleLower.includes('holiday')) return 'Special Event';
-    if (titleLower.includes('public skate') || titleLower.includes('open skate')) return 'Public Skate';
-    if (titleLower.includes('stick') && titleLower.includes('puck')) return 'Stick & Puck';
-    if (titleLower.includes('drop') || titleLower.includes('pickup')) return 'Drop-In Hockey';
-    if (titleLower.includes('learn') || titleLower.includes('lesson')) return 'Learn to Skate';
-    if (titleLower.includes('freestyle') || titleLower.includes('figure')) return 'Figure Skating';
-    if (titleLower.includes('practice') || titleLower.includes('training')) return 'Hockey Practice';
-    if (titleLower.includes('league') || titleLower.includes('game')) return 'Hockey League';
-    return 'Other';
-  }
 
   // Parse XML using basic string parsing (no xml2js in workers)
   private parseBasicXML(xml: string): any[] {
@@ -109,9 +56,7 @@ class IceRanchScraper {
       const pubDateMatch = itemContent.match(/<pubDate>(.*?)<\/pubDate>/s);
       if (pubDateMatch) item.pubDate = pubDateMatch[1];
 
-      // Debug logging
       console.log(`Parsed item: title="${item.title}", desc length=${item.description?.length || 0}`);
-
       items.push(item);
     }
 
@@ -124,7 +69,7 @@ class IceRanchScraper {
     
     const response = await fetch(ICE_RANCH_RSS_URL, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; DenverRinkScheduler/1.0)',
+        'User-Agent': ScraperHelpers.getUserAgent(),
       }
     });
 
@@ -146,7 +91,7 @@ class IceRanchScraper {
       
       // Remove date prefix if present
       title = title.replace(/^[A-Za-z]+ [A-Za-z]+ \d{1,2}, \d{4}:\s*/, '');
-      title = this.cleanTitle(title);
+      title = ScraperHelpers.cleanTitle(title);
 
       const description: string = item.description || '';
       const link: string = item.link || '';
@@ -184,7 +129,7 @@ class IceRanchScraper {
           }
         }
       } else {
-        category = this.categorizeEvent(title);
+        category = ScraperHelpers.categorizeEvent(title);
       }
 
       return {
@@ -200,213 +145,141 @@ class IceRanchScraper {
       };
     });
 
-    events.sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
     console.log(`🧊 Ice Ranch: Found ${events.length} events from RSS`);
     return events;
   }
 }
 
-async function writeToKV(kvNamespace: KVNamespace, rinkId: string, events: RawIceEventData[]): Promise<void> {
-  // Store events data
-  await kvNamespace.put(`events:${rinkId}`, JSON.stringify(events));
-  
-  // Store metadata
-  const metadata: FacilityMetadata = {
-    facilityId: rinkId,
-    facilityName: 'Ice Ranch',
-    displayName: 'The Ice Ranch (Littleton)',
-    lastAttempt: new Date().toISOString(),
-    status: 'success',
-    eventCount: events.length,
-    sourceUrl: ICE_RANCH_RSS_URL,
-    rinks: [{ rinkId, rinkName: 'Main Rink' }],
-    lastSuccessfulScrape: new Date().toISOString()
-  };
-  
-  await kvNamespace.put(`metadata:${rinkId}`, JSON.stringify(metadata));
-  
-  console.log(`💾 Stored ${events.length} events and metadata for ${rinkId}`);
-}
-
-async function writeErrorMetadata(kvNamespace: KVNamespace, rinkId: string, error: any): Promise<void> {
-  const errorMetadata: FacilityMetadata = {
-    facilityId: rinkId,
-    facilityName: 'Ice Ranch',
-    displayName: 'The Ice Ranch (Littleton)',
-    lastAttempt: new Date().toISOString(),
-    status: 'error',
-    eventCount: 0,
-    errorMessage: error instanceof Error ? error.message : 'Unknown error',
-    sourceUrl: ICE_RANCH_RSS_URL,
-    rinks: [{ rinkId: rinkId, rinkName: 'Main Rink' }]
-  };
-  
-  await kvNamespace.put(`metadata:${rinkId}`, JSON.stringify(errorMetadata));
-  console.log(`💾 Stored error metadata for ${rinkId}: ${errorMetadata.errorMessage}`);
-}
-
-// Durable Object for scheduling scraping
+// Durable Object for scheduling Ice Ranch scraper
 export class IceRanchScheduler {
-  private state: DurableObjectState;
-  private env: Env;
+  state: DurableObjectState;
+  env: Env;
 
   constructor(state: DurableObjectState, env: Env) {
     this.state = state;
     this.env = env;
   }
 
-  // Get random delay between 0 and maxMinutes
-  private getRandomDelay(maxMinutes: number = 360): number {
-    return Math.floor(Math.random() * maxMinutes * 60 * 1000);
-  }
-
-  // Schedule the next scrape with random splay
-  async scheduleNextScrape(): Promise<void> {
-    const delay = this.getRandomDelay(360); // 0-6 hours
-    const nextScrapeTime = new Date(Date.now() + delay);
-    
-    console.log(`🕐 Scheduling next Ice Ranch scrape for ${nextScrapeTime.toISOString()} (in ${Math.floor(delay/60000)} minutes)`);
-    
-    // Set alarm for the scheduled time
-    await this.state.storage.setAlarm(nextScrapeTime);
-    await this.state.storage.put('lastScheduled', nextScrapeTime.toISOString());
-  }
-
-  // Perform the actual scraping
-  async performScrape(): Promise<{ success: boolean; eventCount?: number; error?: string }> {
-    try {
-      console.log(`🧊 Starting scheduled Ice Ranch scrape at ${new Date().toISOString()}`);
-      
-      const scraper = new IceRanchScraper();
-      const events = await scraper.scrape();
-      await writeToKV(this.env.RINK_DATA, 'ice-ranch', events);
-      
-      console.log(`✅ Ice Ranch scraping completed successfully: ${events.length} events`);
-      
-      // Schedule the next scrape
-      await this.scheduleNextScrape();
-      
-      return { success: true, eventCount: events.length };
-    } catch (error) {
-      console.error(`❌ Ice Ranch scraping failed:`, error);
-      
-      // Store error metadata
-      await writeErrorMetadata(this.env.RINK_DATA, 'ice-ranch', error);
-      
-      // Still schedule next scrape even after failure
-      await this.scheduleNextScrape();
-      
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Unknown error' 
-      };
-    }
-  }
-
-  // Handle alarm (when it's time to scrape)
-  async alarm(): Promise<void> {
-    console.log(`⏰ Ice Ranch scraper alarm triggered at ${new Date().toISOString()}`);
-    await this.performScrape();
-  }
-
-  // Handle requests to the Durable Object
   async fetch(request: Request): Promise<Response> {
     const url = new URL(request.url);
-    
-    if (url.pathname === '/schedule') {
-      // Schedule next scrape (called by cron)
-      await this.scheduleNextScrape();
-      return new Response(JSON.stringify({
-        success: true,
-        message: 'Next scrape scheduled',
-        timestamp: new Date().toISOString()
-      }), {
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
-    
-    if (url.pathname === '/scrape-now') {
-      // Manual trigger
-      const result = await this.performScrape();
-      return new Response(JSON.stringify({
-        ...result,
-        timestamp: new Date().toISOString()
-      }), {
-        status: result.success ? 200 : 500,
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
-    
-    if (url.pathname === '/status') {
-      // Get status
-      const lastScheduled = await this.state.storage.get('lastScheduled');
+    const path = url.pathname;
+
+    if (path === '/status') {
       const nextAlarm = await this.state.storage.getAlarm();
+      const lastRun = await this.state.storage.get('lastRun');
       
-      return new Response(JSON.stringify({
-        lastScheduled,
+      return ScraperHelpers.jsonResponse({
         nextAlarm: nextAlarm ? new Date(nextAlarm).toISOString() : null,
-        timestamp: new Date().toISOString()
-      }), {
-        headers: { 'Content-Type': 'application/json' }
+        lastRun: lastRun || null,
+        rinkId: 'ice-ranch'
       });
     }
-    
-    return new Response('Ice Ranch Scheduler - Available endpoints: /schedule, /scrape-now, /status', {
-      status: 404,
-      headers: { 'Content-Type': 'text/plain' }
+
+    if (path === '/schedule' || request.method === 'GET') {
+      // Schedule alarm with 6 hour splay (360 minutes)
+      const nextAlarmTime = ScraperHelpers.getNextScheduledTime(360);
+      await this.state.storage.setAlarm(nextAlarmTime);
+      
+      return new Response(
+        `Ice Ranch Worker - Scheduling alarm for ${nextAlarmTime.toISOString()}`,
+        { headers: ScraperHelpers.corsHeaders() }
+      );
+    }
+
+    if (request.method === 'POST') {
+      return await this.runScraper();
+    }
+
+    return new Response('Ice Ranch Scheduler - Use GET to schedule, POST to run manually, /status for info', {
+      headers: ScraperHelpers.corsHeaders()
     });
+  }
+
+  async alarm(): Promise<void> {
+    console.log(`⏰ Ice Ranch alarm triggered at ${new Date().toISOString()}`);
+    
+    try {
+      await this.runScraper();
+      
+      // Schedule next alarm with 6 hour splay
+      const nextAlarmTime = ScraperHelpers.getNextScheduledTime(360);
+      await this.state.storage.setAlarm(nextAlarmTime);
+      console.log(`📅 Next Ice Ranch alarm scheduled for ${nextAlarmTime.toISOString()}`);
+      
+    } catch (error) {
+      console.error('❌ Ice Ranch alarm failed:', error);
+      
+      // Still schedule next alarm even if this one failed
+      const nextAlarmTime = ScraperHelpers.getNextScheduledTime(360);
+      await this.state.storage.setAlarm(nextAlarmTime);
+    }
+  }
+
+  private async runScraper(): Promise<Response> {
+    const startTime = Date.now();
+    
+    try {
+      console.log('🔧 Ice Ranch scraper triggered');
+      const scraper = new IceRanchScraper();
+      const events = await scraper.scrape();
+      
+      await ScraperHelpers.writeToKV(this.env.RINK_DATA, 'ice-ranch', events, {
+        facilityName: 'Ice Ranch',
+        displayName: 'The Ice Ranch (Littleton)',
+        sourceUrl: ICE_RANCH_RSS_URL,
+        rinkName: 'Main Rink'
+      });
+
+      // Update last run time
+      await this.state.storage.put('lastRun', new Date().toISOString());
+
+      const duration = Date.now() - startTime;
+      console.log(`✅ Ice Ranch scraping completed in ${duration}ms`);
+
+      return ScraperHelpers.jsonResponse({
+        success: true,
+        eventCount: events.length,
+        timestamp: new Date().toISOString(),
+        duration: `${duration}ms`,
+        message: `Successfully scraped ${events.length} events`
+      });
+
+    } catch (error) {
+      console.error('❌ Ice Ranch scraping failed:', error);
+      
+      await ScraperHelpers.writeErrorMetadata(this.env.RINK_DATA, 'ice-ranch', error, {
+        facilityName: 'Ice Ranch',
+        displayName: 'The Ice Ranch (Littleton)',
+        sourceUrl: ICE_RANCH_RSS_URL,
+        rinkName: 'Main Rink'
+      });
+
+      return ScraperHelpers.jsonResponse({
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+        timestamp: new Date().toISOString()
+      }, 500);
+    }
   }
 }
 
-// Named export for Durable Object (required by Cloudflare)
-//export { IceRanchScheduler };
-
-// Main worker export
 export default {
-  async scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionContext): Promise<void> {
-    console.log(`🕐 Ice Ranch scheduler cron triggered at ${new Date().toISOString()}`);
-    
-    try {
-      // Get the Durable Object instance
-      const id = env.ICE_RANCH_SCHEDULER.idFromName('ice-ranch-scheduler');
-      const stub = env.ICE_RANCH_SCHEDULER.get(id);
-      
-      // Tell it to schedule the next scrape
-      const response = await stub.fetch('http://internal/schedule');
-      const result = await response.json();
-      
-      console.log(`📅 Scheduler response:`, result);
-    } catch (error) {
-      console.error(`❌ Failed to schedule Ice Ranch scrape:`, error);
-    }
-  },
-
   async fetch(request: Request, env: Env): Promise<Response> {
-    const url = new URL(request.url);
-    
     // Get the Durable Object instance
-    const id = env.ICE_RANCH_SCHEDULER.idFromName('ice-ranch-scheduler');
+    const id = env.ICE_RANCH_SCHEDULER.idFromName('ice-ranch');
     const stub = env.ICE_RANCH_SCHEDULER.get(id);
     
-    if (request.method === 'POST') {
-      // Manual trigger - forward to Durable Object
-      const response = await stub.fetch('http://internal/scrape-now');
-      return response;
-    }
+    return stub.fetch(request);
+  },
+
+  async scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionContext): Promise<void> {
+    console.log(`🕐 Ice Ranch cron triggered at ${new Date().toISOString()}`);
     
-    if (url.pathname === '/status') {
-      // Status check - forward to Durable Object
-      const response = await stub.fetch('http://internal/status');
-      return response;
-    }
+    // Get the Durable Object and trigger scheduling
+    const id = env.ICE_RANCH_SCHEDULER.idFromName('ice-ranch');
+    const stub = env.ICE_RANCH_SCHEDULER.get(id);
     
-    // Default response
-    return new Response('Ice Ranch Scraper Worker - Use POST to trigger scraping, /status for status', { 
-      status: 200,
-      headers: {
-        'Content-Type': 'text/plain',
-        'Access-Control-Allow-Origin': '*'
-      }
-    });
+    // Call the GET endpoint to schedule an alarm
+    await stub.fetch(new Request('https://fake.url/', { method: 'GET' }));
   }
 };
