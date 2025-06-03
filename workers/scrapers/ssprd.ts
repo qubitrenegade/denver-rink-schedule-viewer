@@ -2,8 +2,7 @@
 import { ScraperHelpers, RawIceEventData } from '../helpers/scraper-helpers';
 
 interface Env {
-  RINK_      // Write events for Family Sports Center facility
-      await ScraperHelpers.writeToKV(this.env.RINK_DATA, 'fsc-avalanche', facilityEvents['ssprd-249']);space;
+  RINK_DATA: KVNamespace;
   SSPRD_SCHEDULER: DurableObjectNamespace;
   SCRAPER_SPLAY_MINUTES: string;
 }
