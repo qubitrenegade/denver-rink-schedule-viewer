@@ -85,27 +85,47 @@ class IceRanchScraper {
       return [];
     }
 
-    const events: RawIceEventData[] = items.map((item: any, idx: number) => {
+    const events: RawIceEventData[] = items.map((item: any) => {
       // Example title: "Sunday June 1, 2025: Coach's Ice"
       let title: string = item.title || 'Untitled Event';
       
       // Remove date prefix if present
       title = title.replace(/^[A-Za-z]+ [A-Za-z]+ \d{1,2}, \d{4}:\s*/, '');
+      
+      // Decode HTML entities in title
+      title = title.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
       title = ScraperHelpers.cleanTitle(title);
 
-      const description: string = item.description || '';
+      let description: string = item.description || '';
       const link: string = item.link || '';
       const pubDate: string = item.pubDate || '';
 
-      // Parse start time from pubDate
+      // Decode HTML entities in description
+      description = description.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+
+      // Parse start time from pubDate - this is the event's actual datetime
       const startTime = pubDate ? new Date(pubDate) : new Date();
 
-      // Try to extract end time from description
+      // Try to extract more precise times from description
       let endTime: Date = new Date(startTime);
-      const timeMatch = description.match(/Time:\s*([\d:apm ]+)-(\d{1,2}:\d{2}[ap]m)/i);
+      const timeMatch = description.match(/Time:\s*([\d:apm ]+)\s*-\s*(\d{1,2}:\d{2}[ap]m)/i);
       if (timeMatch) {
-        const [, , endStr] = timeMatch;
-        const endMatch = endStr.match(/(\d{1,2}):(\d{2})(am|pm)/i);
+        const [, startStr, endStr] = timeMatch;
+        
+        // Parse start time from description to override pubDate time
+        const startMatch = startStr.trim().match(/(\d{1,2}):(\d{2})\s*([ap]m)/i);
+        if (startMatch) {
+          const [, startHour, startMinute, startPeriod] = startMatch;
+          let hour = parseInt(startHour, 10);
+          if (startPeriod.toLowerCase() === 'pm' && hour < 12) hour += 12;
+          if (startPeriod.toLowerCase() === 'am' && hour === 12) hour = 0;
+          
+          // Use the date from pubDate but set the time from description
+          startTime.setHours(hour, parseInt(startMinute, 10), 0, 0);
+        }
+        
+        // Parse end time
+        const endMatch = endStr.match(/(\d{1,2}):(\d{2})([ap]m)/i);
         if (endMatch) {
           const [, endHour, endMinute, endPeriod] = endMatch;
           endTime = new Date(startTime);
@@ -114,18 +134,34 @@ class IceRanchScraper {
           if (endPeriod.toLowerCase() === 'am' && hour === 12) hour = 0;
           endTime.setHours(hour, parseInt(endMinute, 10), 0, 0);
         }
+      } else {
+        // If no time range found, default to 1 hour duration
+        endTime = new Date(startTime.getTime() + (60 * 60 * 1000));
       }
 
       // Extract category from tags or title
       let category = 'Other';
-      const tagMatch = description.match(/Tag\(s\): ([^<]+)/);
+      const tagMatch = description.match(/Tag\(s\): ([^<\n]+)/);
       if (tagMatch) {
         const tags = tagMatch[1].split(',').map(t => t.trim());
+        // Find the most specific category (not Home or Calendar)
         for (const tag of tags) {
-          const mapped = Object.values(ICE_RANCH_TAGS).find(cat => tag === cat);
-          if (mapped) {
-            category = mapped;
-            break;
+          if (tag !== 'Home' && tag !== 'Calendar') {
+            const tagId = Object.keys(ICE_RANCH_TAGS).find(id => ICE_RANCH_TAGS[id] === tag);
+            if (tagId) {
+              category = tag;
+              break;
+            }
+          }
+        }
+        // If no specific tag found, fallback to any tag
+        if (category === 'Other') {
+          for (const tag of tags) {
+            const tagId = Object.keys(ICE_RANCH_TAGS).find(id => ICE_RANCH_TAGS[id] === tag);
+            if (tagId) {
+              category = tag;
+              break;
+            }
           }
         }
       } else {
@@ -133,7 +169,7 @@ class IceRanchScraper {
       }
 
       return {
-        id: `ice-ranch-${startTime.getTime()}-${idx}`,
+        id: `ice-ranch-${startTime.getTime()}`,
         rinkId: this.rinkId,
         title,
         startTime: startTime.toISOString(),
@@ -145,8 +181,12 @@ class IceRanchScraper {
       };
     });
 
-    console.log(`🧊 Ice Ranch: Found ${events.length} events from RSS`);
-    return events;
+    // Sort events by start time and filter to next 30 days
+    const sortedEvents = ScraperHelpers.sortEventsByTime(events);
+    const filteredEvents = ScraperHelpers.filterEventsToNext30Days(sortedEvents);
+
+    console.log(`🧊 Ice Ranch: Found ${filteredEvents.length} events from RSS`);
+    return filteredEvents;
   }
 }
 
