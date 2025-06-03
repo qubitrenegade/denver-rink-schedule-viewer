@@ -105,7 +105,7 @@ deploy_worker() {
     log_info "Deploying $description..."
     echo "  Config: $config"
     
-    if wrangler publish --config "$config"; then
+    if wrangler deploy --config "$config"; then
         log_success "$description deployed successfully"
     else
         log_error "Failed to deploy $description"
