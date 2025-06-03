@@ -1,36 +1,9 @@
-// workers/scrapers/foothills-edge.ts - Cloudflare Worker for Foothills Edge Ice Arena
-// Scrapes events from the Edge calendar and stores in KV
+// workers/scrapers/foothills-edge.ts - Foothills Edge scraper with Durable Objects scheduling
+import { ScraperHelpers, RawIceEventData } from '../helpers/scraper-helpers';
 
 interface Env {
   RINK_DATA: KVNamespace;
-}
-
-interface RawIceEventData {
-  id: string;
-  rinkId: string;
-  title: string;
-  startTime: string;
-  endTime: string;
-  description?: string;
-  category: string;
-  isFeatured?: boolean;
-  eventUrl?: string;
-}
-
-interface FacilityMetadata {
-  facilityId: string;
-  facilityName: string;
-  displayName: string;
-  lastSuccessfulScrape?: string;
-  lastAttempt: string;
-  status: 'success' | 'error';
-  eventCount: number;
-  errorMessage?: string;
-  sourceUrl: string;
-  rinks: Array<{
-    rinkId: string;
-    rinkName: string;
-  }>;
+  FOOTHILLS_EDGE_SCHEDULER: DurableObjectNamespace;
 }
 
 class FoothillsEdgeScraper {
@@ -39,26 +12,11 @@ class FoothillsEdgeScraper {
   private readonly calendarUrl = 'https://calendar.ifoothills.org/calendars/edge-ice-arena-drop.php';
 
   private cleanTitle(rawTitle: string): string {
-    let cleanTitle = rawTitle.trim();
-    cleanTitle = cleanTitle.replace(/^\d{1,2}([A-Za-z])/, '$1');
-    cleanTitle = cleanTitle.replace(/^-\s*/, '');
-    cleanTitle = cleanTitle.replace(/register/gi, '');
-    cleanTitle = cleanTitle.replace(/click here/gi, '');
-    cleanTitle = cleanTitle.replace(/^\W+/, '');
-    return cleanTitle.trim();
+    return ScraperHelpers.cleanTitle(rawTitle);
   }
 
   private categorizeEvent(title: string): string {
-    const titleLower = title.toLowerCase().trim();
-    if (titleLower.includes('drop') && titleLower.includes('hockey')) return 'Drop-In Hockey';
-    if (titleLower.includes('stick') && titleLower.includes('puck')) return 'Stick & Puck';
-    if (titleLower.includes('public skate')) return 'Public Skate';
-    if (titleLower.includes('figure skating') || titleLower.includes('freestyle')) return 'Figure Skating';
-    if (titleLower.includes('learn to skate') || titleLower.includes('skating lessons')) return 'Learn to Skate';
-    if (titleLower.includes('hockey practice') || titleLower.includes('practice')) return 'Hockey Practice';
-    if (titleLower.includes('hockey league') || titleLower.includes('league')) return 'Hockey League';
-    if (titleLower.includes('closed') || titleLower.includes('maintenance')) return 'Special Event';
-    return 'Other';
+    return ScraperHelpers.categorizeEvent(title);
   }
 
   // Parse time and handle Mountain Time zone
@@ -126,7 +84,7 @@ class FoothillsEdgeScraper {
   async scrape(): Promise<RawIceEventData[]> {
     const response = await fetch(this.calendarUrl, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; DenverRinkScheduler/1.0)'
+        'User-Agent': ScraperHelpers.getUserAgent()
       }
     });
     if (!response.ok) throw new Error(`Failed to fetch Foothills Edge calendar: ${response.status} ${response.statusText}`);
@@ -144,88 +102,113 @@ class FoothillsEdgeScraper {
   }
 }
 
-function getRandomDelay(maxMinutes: number = 60): number {
-  return Math.floor(Math.random() * maxMinutes * 60 * 1000);
-}
+export class FoothillsEdgeScheduler {
+  private state: DurableObjectState;
+  private env: Env;
 
-async function writeToKV(env: Env, rinkId: string, events: RawIceEventData[]): Promise<void> {
-  await env.RINK_DATA.put(`events:${rinkId}`, JSON.stringify(events));
-  const metadata: FacilityMetadata = {
-    facilityId: rinkId,
-    facilityName: 'Foothills Ice Arena (Edge)',
-    displayName: 'Foothills Ice Arena (Edge)',
-    lastAttempt: new Date().toISOString(),
-    status: 'success',
-    eventCount: events.length,
-    sourceUrl: 'https://calendar.ifoothills.org/calendars/edge-ice-arena-drop.php',
-    rinks: [{ rinkId, rinkName: 'Main Rink' }],
-    lastSuccessfulScrape: new Date().toISOString()
-  };
-  await env.RINK_DATA.put(`metadata:${rinkId}`, JSON.stringify(metadata));
+  constructor(state: DurableObjectState, env: Env) {
+    this.state = state;
+    this.env = env;
+  }
+
+  async fetch(request: Request): Promise<Response> {
+    const url = new URL(request.url);
+    
+    if (request.method === 'GET' && url.pathname === '/status') {
+      const nextAlarm = await this.state.storage.getAlarm();
+      const lastRun = await this.state.storage.get('lastRun');
+      
+      return new Response(JSON.stringify({
+        nextAlarm: nextAlarm ? new Date(nextAlarm).toISOString() : null,
+        lastRun: lastRun || null,
+        rinkId: 'foothills-edge'
+      }), {
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    if (request.method === 'GET') {
+      // Schedule an alarm with random delay (5-60 minutes)
+      const delay = Math.floor(Math.random() * 55 + 5) * 60 * 1000; // 5-60 minutes in ms
+      const alarmTime = Date.now() + delay;
+      await this.state.storage.setAlarm(alarmTime);
+      
+      return new Response(`Foothills Edge Worker - Scheduling alarm for ${new Date(alarmTime).toISOString()}`);
+    }
+
+    if (request.method === 'POST') {
+      return await this.runScraper();
+    }
+
+    return new Response('Method not allowed', { status: 405 });
+  }
+
+  async alarm(): Promise<void> {
+    await this.runScraper();
+  }
+
+  private async runScraper(): Promise<Response> {
+    const startTime = Date.now();
+    
+    try {
+      console.log('🏔️ Starting Foothills Edge scraper...');
+      const scraper = new FoothillsEdgeScraper();
+      const events = await scraper.scrape();
+      
+      await ScraperHelpers.writeToKV(
+        this.env.RINK_DATA,
+        'foothills-edge',
+        events,
+        {
+          facilityName: 'Foothills Ice Arena (Edge)',
+          displayName: 'Foothills Ice Arena (Edge)',
+          sourceUrl: 'https://calendar.ifoothills.org/calendars/edge-ice-arena-drop.php',
+          rinkName: 'Main Rink'
+        }
+      );
+
+      const duration = Date.now() - startTime;
+      await this.state.storage.put('lastRun', new Date().toISOString());
+      
+      console.log(`✅ Foothills Edge: ${events.length} events scraped in ${duration}ms`);
+      
+      return new Response(JSON.stringify({
+        success: true,
+        eventCount: events.length,
+        timestamp: new Date().toISOString(),
+        duration: `${duration}ms`,
+        message: `Successfully scraped ${events.length} events`
+      }), {
+        headers: { 'Content-Type': 'application/json' }
+      });
+      
+    } catch (error) {
+      console.error('❌ Foothills Edge scraper error:', error);
+      
+      return new Response(JSON.stringify({
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+        timestamp: new Date().toISOString()
+      }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+  }
 }
 
 export default {
-  async scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionContext): Promise<void> {
-    const delay = getRandomDelay(60);
-    await new Promise(resolve => setTimeout(resolve, delay));
-    try {
-      const scraper = new FoothillsEdgeScraper();
-      const events = await scraper.scrape();
-      await writeToKV(env, 'foothills-edge', events);
-    } catch (error) {
-      const errorMetadata: FacilityMetadata = {
-        facilityId: 'foothills-edge',
-        facilityName: 'Foothills Ice Arena (Edge)',
-        displayName: 'Foothills Ice Arena (Edge)',
-        lastAttempt: new Date().toISOString(),
-        status: 'error',
-        eventCount: 0,
-        errorMessage: error instanceof Error ? error.message : 'Unknown error',
-        sourceUrl: 'https://calendar.ifoothills.org/calendars/edge-ice-arena-drop.php',
-        rinks: [{ rinkId: 'foothills-edge', rinkName: 'Main Rink' }]
-      };
-      await env.RINK_DATA.put(`metadata:foothills-edge`, JSON.stringify(errorMetadata));
-      throw error;
-    }
+  async scheduled(_event: unknown, env: Env, _ctx: unknown): Promise<void> {
+    // Cron trigger - wake up a random Durable Object instance
+    const id = env.FOOTHILLS_EDGE_SCHEDULER.idFromName('scheduler');
+    const obj = env.FOOTHILLS_EDGE_SCHEDULER.get(id);
+    await obj.fetch('https://dummy-url/', { method: 'GET' });
   },
 
   async fetch(request: Request, env: Env): Promise<Response> {
-    if (request.method === 'POST') {
-      try {
-        const scraper = new FoothillsEdgeScraper();
-        const events = await scraper.scrape();
-        await writeToKV(env, 'foothills-edge', events);
-        return new Response(JSON.stringify({
-          success: true,
-          eventCount: events.length,
-          timestamp: new Date().toISOString(),
-          message: `Successfully scraped ${events.length} events`
-        }), {
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-          }
-        });
-      } catch (error) {
-        return new Response(JSON.stringify({
-          success: false,
-          error: error instanceof Error ? error.message : 'Unknown error',
-          timestamp: new Date().toISOString()
-        }), {
-          status: 500,
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-          }
-        });
-      }
-    }
-    return new Response('Foothills Edge Scraper Worker - Use POST to trigger scraping', {
-      status: 200,
-      headers: {
-        'Content-Type': 'text/plain',
-        'Access-Control-Allow-Origin': '*'
-      }
-    });
+    // Route requests to the Durable Object
+    const id = env.FOOTHILLS_EDGE_SCHEDULER.idFromName('scheduler');
+    const obj = env.FOOTHILLS_EDGE_SCHEDULER.get(id);
+    return obj.fetch(request);
   }
 };
