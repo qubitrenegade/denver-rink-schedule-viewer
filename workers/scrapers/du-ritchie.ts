@@ -1,34 +1,9 @@
-// workers/scrapers/du-ritchie.ts - DU Ritchie scraper worker
+// workers/scrapers/du-ritchie.ts - DU Ritchie scraper with Durable Objects scheduling
+import { ScraperHelpers, RawIceEventData } from '../helpers/scraper-helpers';
+
 interface Env {
   RINK_DATA: KVNamespace;
-}
-
-interface RawIceEventData {
-  id: string;
-  rinkId: string;
-  title: string;
-  startTime: string;
-  endTime: string;
-  description?: string;
-  category: string;
-  isFeatured?: boolean;
-  eventUrl?: string;
-}
-
-interface FacilityMetadata {
-  facilityId: string;
-  facilityName: string;
-  displayName: string;
-  lastAttempt: string;
-  status: 'success' | 'error';
-  eventCount: number;
-  errorMessage?: string;
-  sourceUrl: string;
-  rinks: Array<{
-    rinkId: string;
-    rinkName: string;
-  }>;
-  lastSuccessfulScrape?: string;
+  DU_RITCHIE_SCHEDULER: DurableObjectNamespace;
 }
 
 interface CalendarEvent {
@@ -54,53 +29,11 @@ class DURitchieScraper {
   ];
 
   private cleanTitle(rawTitle: string): string {
-    let cleanTitle = rawTitle.trim();
-    cleanTitle = cleanTitle.replace(/^\d{1,2}([A-Za-z])/, '$1');
-    cleanTitle = cleanTitle.replace(/^-\s*/, '');
-    cleanTitle = cleanTitle.replace(/register/gi, '');
-    cleanTitle = cleanTitle.replace(/click here/gi, '');
-    cleanTitle = cleanTitle.replace(/^\W+/, '');
-    return cleanTitle.trim();
+    return ScraperHelpers.cleanTitle(rawTitle);
   }
 
   private categorizeEvent(title: string): string {
-    const titleLower = title.toLowerCase().trim();
-    
-    if (titleLower === 'stick & puck' || titleLower === 'stick and puck') {
-      return 'Stick & Puck';
-    }
-    if (titleLower === 'public skate') {
-      return 'Public Skate';
-    }
-    if (titleLower === 'drop-in hockey' || titleLower === 'drop in hockey') {
-      return 'Drop-In Hockey';
-    }
-    if (titleLower.includes('stick') && titleLower.includes('puck')) {
-      return 'Stick & Puck';
-    }
-    if (titleLower.includes('public skate')) {
-      return 'Public Skate';
-    }
-    if (titleLower.includes('drop') && titleLower.includes('hockey')) {
-      return 'Drop-In Hockey';
-    }
-    if (titleLower.includes('league')) {
-      return 'Hockey League';
-    }
-    if (titleLower.includes('figure') || titleLower.includes('freestyle')) {
-      return 'Figure Skating';
-    }
-    if (titleLower.includes('learn') || titleLower.includes('lesson')) {
-      return 'Learn to Skate';
-    }
-    if (titleLower.includes('practice')) {
-      return 'Hockey Practice';
-    }
-    if (titleLower.includes('closed') || titleLower.includes('holiday')) {
-      return 'Special Event';
-    }
-    
-    return 'Other';
+    return ScraperHelpers.categorizeEvent(title);
   }
 
   private cleanHtmlDescription(htmlDescription: string): string {
@@ -244,7 +177,7 @@ class DURitchieScraper {
         
         const response = await fetch(icalUrl, {
           headers: {
-            'User-Agent': 'Mozilla/5.0 (compatible; DenverRinkScheduler/1.0)',
+            'User-Agent': ScraperHelpers.getUserAgent(),
             'Accept': 'text/calendar,*/*',
           }
         });
@@ -304,116 +237,154 @@ class DURitchieScraper {
       }
     }
     
-    // Remove duplicates
+    // Remove duplicates and apply filters
     const uniqueEvents = allEvents.filter((event, index, self) => 
       index === self.findIndex((e) => 
         e.title === event.title && 
         e.startTime === event.startTime
       )
     );
-    
-    uniqueEvents.sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
-    return uniqueEvents;
+
+    // Sort events by start time and filter to next 30 days
+    const sortedEvents = ScraperHelpers.sortEventsByTime(uniqueEvents);
+    const filteredEvents = ScraperHelpers.filterEventsToNext30Days(sortedEvents);
+
+    console.log(`🏫 DU Ritchie: Found ${filteredEvents.length} events`);
+    return filteredEvents;
   }
 }
 
-function getRandomDelay(maxMinutes: number = 60): number {
-  return Math.floor(Math.random() * maxMinutes * 60 * 1000);
-}
+// Durable Object for scheduling DU Ritchie scraper
+export class DURitchieScheduler {
+  state: DurableObjectState;
+  env: Env;
 
-async function writeToKV(env: Env, rinkId: string, events: RawIceEventData[]): Promise<void> {
-  await env.RINK_DATA.put(`events:${rinkId}`, JSON.stringify(events));
-  
-  const metadata: FacilityMetadata = {
-    facilityId: rinkId,
-    facilityName: 'DU Ritchie Center',
-    displayName: 'DU Ritchie Center (Denver)',
-    lastAttempt: new Date().toISOString(),
-    status: 'success',
-    eventCount: events.length,
-    sourceUrl: 'https://ritchiecenter.du.edu/sports/ice-programs',
-    rinks: [{ rinkId, rinkName: 'Main Rink' }],
-    lastSuccessfulScrape: new Date().toISOString()
-  };
-  
-  await env.RINK_DATA.put(`metadata:${rinkId}`, JSON.stringify(metadata));
-  console.log(`💾 Stored ${events.length} events and metadata for ${rinkId}`);
+  constructor(state: DurableObjectState, env: Env) {
+    this.state = state;
+    this.env = env;
+  }
+
+  async fetch(request: Request): Promise<Response> {
+    const url = new URL(request.url);
+    const path = url.pathname;
+
+    if (path === '/status') {
+      const nextAlarm = await this.state.storage.getAlarm();
+      const lastRun = await this.state.storage.get('lastRun');
+      
+      return ScraperHelpers.jsonResponse({
+        nextAlarm: nextAlarm ? new Date(nextAlarm).toISOString() : null,
+        lastRun: lastRun || null,
+        rinkId: 'du-ritchie'
+      });
+    }
+
+    if (path === '/schedule' || request.method === 'GET') {
+      // Schedule alarm with 6 hour splay (360 minutes)
+      const nextAlarmTime = ScraperHelpers.getNextScheduledTime(360);
+      await this.state.storage.setAlarm(nextAlarmTime);
+      
+      return new Response(
+        `DU Ritchie Worker - Scheduling alarm for ${nextAlarmTime.toISOString()}`,
+        { headers: ScraperHelpers.corsHeaders() }
+      );
+    }
+
+    if (request.method === 'POST') {
+      return await this.runScraper();
+    }
+
+    return new Response('DU Ritchie Scheduler - Use GET to schedule, POST to run manually, /status for info', {
+      headers: ScraperHelpers.corsHeaders()
+    });
+  }
+
+  async alarm(): Promise<void> {
+    console.log(`⏰ DU Ritchie alarm triggered at ${new Date().toISOString()}`);
+    
+    try {
+      await this.runScraper();
+      
+      // Schedule next alarm with 6 hour splay
+      const nextAlarmTime = ScraperHelpers.getNextScheduledTime(360);
+      await this.state.storage.setAlarm(nextAlarmTime);
+      console.log(`📅 Next DU Ritchie alarm scheduled for ${nextAlarmTime.toISOString()}`);
+      
+    } catch (error) {
+      console.error('❌ DU Ritchie alarm failed:', error);
+      
+      // Still schedule next alarm even if this one failed
+      const nextAlarmTime = ScraperHelpers.getNextScheduledTime(360);
+      await this.state.storage.setAlarm(nextAlarmTime);
+    }
+  }
+
+  private async runScraper(): Promise<Response> {
+    const startTime = Date.now();
+    
+    try {
+      console.log('🔧 DU Ritchie scraper triggered');
+      const scraper = new DURitchieScraper();
+      const events = await scraper.scrape();
+      
+      await ScraperHelpers.writeToKV(this.env.RINK_DATA, 'du-ritchie', events, {
+        facilityName: 'DU Ritchie Center',
+        displayName: 'DU Ritchie Center (Denver)',
+        sourceUrl: 'https://ritchiecenter.du.edu/sports/ice-programs',
+        rinkName: 'Main Rink'
+      });
+
+      // Update last run time
+      await this.state.storage.put('lastRun', new Date().toISOString());
+
+      const duration = Date.now() - startTime;
+      console.log(`✅ DU Ritchie scraping completed in ${duration}ms`);
+
+      return ScraperHelpers.jsonResponse({
+        success: true,
+        eventCount: events.length,
+        timestamp: new Date().toISOString(),
+        duration: `${duration}ms`,
+        message: `Successfully scraped ${events.length} events`
+      });
+
+    } catch (error) {
+      console.error('❌ DU Ritchie scraping failed:', error);
+      
+      await ScraperHelpers.writeErrorMetadata(this.env.RINK_DATA, 'du-ritchie', error, {
+        facilityName: 'DU Ritchie Center',
+        displayName: 'DU Ritchie Center (Denver)',
+        sourceUrl: 'https://ritchiecenter.du.edu/sports/ice-programs',
+        rinkName: 'Main Rink'
+      });
+
+      return ScraperHelpers.jsonResponse({
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+        timestamp: new Date().toISOString()
+      }, 500);
+    }
+  }
 }
 
 export default {
-  async scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionContext): Promise<void> {
-    console.log(`🕐 DU Ritchie scraper triggered at ${new Date().toISOString()}`);
+  async fetch(request: Request, env: Env): Promise<Response> {
+    // Get the Durable Object instance
+    const id = env.DU_RITCHIE_SCHEDULER.idFromName('du-ritchie');
+    const stub = env.DU_RITCHIE_SCHEDULER.get(id);
     
-    const delay = getRandomDelay(60);
-    console.log(`⏱️ Waiting ${Math.floor(delay / 1000 / 60)} minutes before scraping...`);
-    await new Promise(resolve => setTimeout(resolve, delay));
-    
-    try {
-      const scraper = new DURitchieScraper();
-      const events = await scraper.scrape();
-      await writeToKV(env, 'du-ritchie', events);
-      console.log(`✅ DU Ritchie scraping completed successfully: ${events.length} events`);
-    } catch (error) {
-      console.error(`❌ DU Ritchie scraping failed:`, error);
-      
-      const errorMetadata: FacilityMetadata = {
-        facilityId: 'du-ritchie',
-        facilityName: 'DU Ritchie Center',
-        displayName: 'DU Ritchie Center (Denver)',
-        lastAttempt: new Date().toISOString(),
-        status: 'error',
-        eventCount: 0,
-        errorMessage: error instanceof Error ? error.message : 'Unknown error',
-        sourceUrl: 'https://ritchiecenter.du.edu/sports/ice-programs',
-        rinks: [{ rinkId: 'du-ritchie', rinkName: 'Main Rink' }]
-      };
-      
-      await env.RINK_DATA.put(`metadata:du-ritchie`, JSON.stringify(errorMetadata));
-      throw error;
-    }
+    return stub.fetch(request);
   },
 
-  async fetch(request: Request, env: Env): Promise<Response> {
-    if (request.method === 'POST') {
-      try {
-        console.log('🔧 Manual trigger received');
-        const scraper = new DURitchieScraper();
-        const events = await scraper.scrape();
-        await writeToKV(env, 'du-ritchie', events);
-        
-        return new Response(JSON.stringify({
-          success: true,
-          eventCount: events.length,
-          timestamp: new Date().toISOString(),
-          message: `Successfully scraped ${events.length} events`
-        }), {
-          headers: { 
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-          }
-        });
-      } catch (error) {
-        return new Response(JSON.stringify({
-          success: false,
-          error: error instanceof Error ? error.message : 'Unknown error',
-          timestamp: new Date().toISOString()
-        }), {
-          status: 500,
-          headers: { 
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-          }
-        });
-      }
-    }
+  async scheduled(_event: ScheduledEvent, env: Env, _ctx: ExecutionContext): Promise<void> {
+    console.log(`🕐 DU Ritchie cron triggered at ${new Date().toISOString()}`);
     
-    return new Response('DU Ritchie Scraper Worker - Use POST to trigger scraping', { 
-      status: 200,
-      headers: {
-        'Content-Type': 'text/plain',
-        'Access-Control-Allow-Origin': '*'
-      }
-    });
+    // Get the Durable Object and trigger scheduling
+    const id = env.DU_RITCHIE_SCHEDULER.idFromName('du-ritchie');
+    const stub = env.DU_RITCHIE_SCHEDULER.get(id);
+    
+    // Call the GET endpoint to schedule an alarm
+    await stub.fetch(new Request('https://fake.url/', { method: 'GET' }));
   }
 };
 
