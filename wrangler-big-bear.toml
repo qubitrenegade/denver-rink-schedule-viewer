@@ -21,6 +21,6 @@ SCRAPER_SPLAY_MINUTES = "360"
 
 [triggers]
 crons = [
-  "0 */12 * * *" # Every 12 hours with worker-level randomization
+  "0 */6 * * *" # Every 6 hours with worker-level randomization
 ]
 

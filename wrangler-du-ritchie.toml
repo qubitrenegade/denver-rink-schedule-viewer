@@ -21,6 +21,6 @@ SCRAPER_SPLAY_MINUTES = "360"
 
 [triggers]
 crons = [
-  "0 */12 * * *"
+  "0 */6 * * *"
 ]
 
