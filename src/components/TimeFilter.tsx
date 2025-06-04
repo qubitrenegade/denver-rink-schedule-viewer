@@ -40,8 +40,8 @@ const TimeFilter: React.FC<TimeFilterProps> = ({
               className="h-4 w-4 text-sky-500 border-slate-500 focus:ring-sky-400 bg-slate-600"
             />
             <span className="text-xs text-slate-300">
-              {mode === 'all-times' ? 'All Times' : 
-               mode === 'after-time' ? 'After Time' : 
+              {mode === 'all-times' ? 'All Times' :
+               mode === 'after-time' ? 'After Time' :
                mode === 'before-time' ? 'Before Time' :
                'Time Range'}
             </span>

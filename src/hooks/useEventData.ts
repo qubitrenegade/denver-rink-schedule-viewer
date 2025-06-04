@@ -3,7 +3,7 @@ import { useState, useCallback } from 'react';
 import { RawIceEventData, FacilityMetadata } from '../types';
 
 // Configuration for CloudFlare Worker API endpoint
-const WORKER_API_BASE = import.meta.env.WORKER_API_BASE || 
+const WORKER_API_BASE = import.meta.env.WORKER_API_BASE ||
   (import.meta.env.PROD ? 'https://api.geticeti.me' : 'https://api.geticeti.me');
 
 export function useEventData() {
@@ -38,7 +38,7 @@ export function useEventData() {
           }),
           fetch(`${WORKER_API_BASE}/api/all-metadata`, {
             headers: {
-              'Accept': 'application/json',  
+              'Accept': 'application/json',
             }
           })
         ]);
@@ -73,7 +73,7 @@ export function useEventData() {
 
       // Fallback: fetch each facility individually (maintains compatibility)
       const facilityIds = ['ice-ranch', 'big-bear', 'du-ritchie', 'foothills-edge', 'ssprd-249', 'ssprd-250'];
-      
+
       const facilityPromises = facilityIds.map(async (facilityId) => {
         try {
           const [dataResponse, metadataResponse] = await Promise.all([
@@ -133,7 +133,7 @@ export function useEventData() {
 
         } catch (err) {
           const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-          
+
           const errorMetadata: FacilityMetadata = {
             facilityId,
             facilityName: facilityId,
@@ -141,7 +141,7 @@ export function useEventData() {
             lastAttempt: new Date().toISOString(),
             status: 'error',
             eventCount: 0,
-            errorMessage: errorMessage,
+            errorMessage,
             sourceUrl: '',
             rinks: [{ rinkId: facilityId, rinkName: 'Main Rink' }]
           };
@@ -157,7 +157,7 @@ export function useEventData() {
       });
 
       const results = await Promise.all(facilityPromises);
-      
+
       const allEvents: RawIceEventData[] = [];
       const newFacilityErrors: Record<string, string> = {};
       const newFacilityMetadata: Record<string, FacilityMetadata> = {};

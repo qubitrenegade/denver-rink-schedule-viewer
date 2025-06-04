@@ -36,12 +36,12 @@ const App: React.FC = () => {
     const categories = new Set<EventCategory>();
     // Get categories from static data
     staticData.forEach((event: RawIceEventData) => categories.add(event.category));
-    
+
     // Ensure we have common categories even if not in current data
     ['Public Skate', 'Stick & Puck', 'Hockey League', 'Learn to Skate', 'Figure Skating', 'Hockey Practice', 'Drop-In Hockey', 'Special Event'].forEach(cat => {
       categories.add(cat as EventCategory);
     });
-    
+
     return Array.from(categories).sort();
   }, [staticData]);
 
@@ -91,7 +91,7 @@ const App: React.FC = () => {
   // Helper function to describe current filter state
   const getFilterDescription = () => {
     const parts: string[] = [];
-    
+
     // Date description
     if (filterSettings.dateFilterMode === 'next-days') {
       parts.push(`next ${filterSettings.numberOfDays || 4} days`);
@@ -103,7 +103,7 @@ const App: React.FC = () => {
       const endDate = new Date(filterSettings.dateRangeEnd + 'T00:00:00');
       parts.push(`${startDate.toLocaleDateString()} to ${endDate.toLocaleDateString()}`);
     }
-    
+
     // Time description
     if (filterSettings.timeFilterMode === 'after-time' && filterSettings.afterTime) {
       parts.push(`after ${filterSettings.afterTime}`);
@@ -112,7 +112,7 @@ const App: React.FC = () => {
     } else if (filterSettings.timeFilterMode === 'time-range' && filterSettings.timeRangeStart && filterSettings.timeRangeEnd) {
       parts.push(`between ${filterSettings.timeRangeStart} and ${filterSettings.timeRangeEnd}`);
     }
-    
+
     return parts.length > 0 ? `Showing events for ${parts.join(', ')}.` : 'Showing events with custom filtering.';
   };
 
@@ -127,9 +127,9 @@ const App: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-700 text-gray-100 p-4 sm:p-6 md:p-8">
       <header className="mb-6 text-center">
         <div className="max-w-6xl mx-auto mb-4">
-          <img 
+          <img
             src="/images/header.webp"
-            alt="Denver Rink Schedule" 
+            alt="Denver Rink Schedule"
             className="w-full max-h-48 object-contain rounded-lg shadow-lg"
           />
         </div>
@@ -162,7 +162,7 @@ const App: React.FC = () => {
               >
                 <AdjustmentsHorizontalIcon className="w-5 h-5 mr-2" />
                 {showFilters ? 'Hide Filters' : 'Show Filters'}
-                {((filterSettings.activeCategories.length > 0) || 
+                {((filterSettings.activeCategories.length > 0) ||
                   (filterSettings.activeRinkIds && filterSettings.activeRinkIds.length > 0) ||
                   (filterSettings.dateFilterMode !== 'next-days') ||
                   (filterSettings.numberOfDays !== 4) ||
@@ -172,7 +172,7 @@ const App: React.FC = () => {
                   </span>
                 )}
               </button>
-              
+
               <div className="flex items-center px-4 py-2 text-sm bg-green-600/20 text-green-300 rounded-md">
                 <div className="w-2 h-2 rounded-full mr-2 bg-green-300" />
                 Individual Metadata
@@ -202,14 +202,14 @@ const App: React.FC = () => {
             </div>
           )}
         </div>
-        
+
         <div className="p-6 min-h-[400px]">
           {selectedRinkTabInfo && (
             <div className="mb-6 p-4 border border-slate-700 rounded-lg bg-slate-700/50">
               <h2 className="text-2xl font-semibold text-sky-300 mb-1">
                 {/* Use display name from metadata if available */}
                 {(() => {
-                  const facilityId = selectedRinkTabInfo.memberRinkIds 
+                  const facilityId = selectedRinkTabInfo.memberRinkIds
                     ? (selectedRinkTabInfo.memberRinkIds[0].startsWith('fsc-') ? 'ssprd-249' : 'ssprd-250')
                     : selectedRinkId;
                   const metadata = facilityMetadata[facilityId];
@@ -255,7 +255,7 @@ const App: React.FC = () => {
               <p className="text-xs text-slate-500 mt-2">Data updates automatically via GitHub Actions</p>
             </div>
           )}
-          
+
           {!isLoading && !error && !hasAnyErrors && filteredEvents.length === 0 && (
             <div className="flex flex-col items-center justify-center h-64 text-slate-400">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 mb-4 text-slate-500">

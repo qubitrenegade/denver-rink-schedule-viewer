@@ -1,6 +1,6 @@
 import React from 'react';
 import { DisplayableIceEvent, EventCategory } from '../types';
-import { ClockIcon, TagIcon, InfoIcon, StarIcon, GlobeAltIcon, LinkIcon, MapPinIcon } from './icons'; 
+import { ClockIcon, TagIcon, InfoIcon, StarIcon, GlobeAltIcon, LinkIcon, MapPinIcon } from './icons';
 
 interface EventCardProps {
   event: DisplayableIceEvent;
@@ -17,7 +17,7 @@ const getCategoryColor = (category: EventCategory): string => {
     case 'Public Skate': return 'bg-blue-600 text-blue-100';
     case 'Stick & Puck': return 'bg-green-600 text-green-100';
     case 'Hockey League': return 'bg-red-600 text-red-100';
-    case 'Learn to Skate': return 'bg-yellow-500 text-yellow-900'; 
+    case 'Learn to Skate': return 'bg-yellow-500 text-yellow-900';
     case 'Figure Skating': return 'bg-purple-600 text-purple-100';
     case 'Hockey Practice': return 'bg-orange-600 text-orange-100';
     case 'Drop-In Hockey': return 'bg-teal-600 text-teal-100';
@@ -33,9 +33,9 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
   const duration = (endTimeDate.getTime() - startTimeDate.getTime()) / (1000 * 60); // Duration in minutes
 
   return (
-    <div 
+    <div
       className={`
-        bg-slate-700/70 shadow-lg rounded-lg p-4 sm:p-5 
+        bg-slate-700/70 shadow-lg rounded-lg p-4 sm:p-5
         border-l-4 transition-all hover:shadow-xl hover:scale-[1.01]
         ${event.isFeatured ? 'border-yellow-400 bg-slate-700' : 'border-sky-500'}
       `}
@@ -47,9 +47,9 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
             {event.title}
           </h4>
           {event.eventUrl && (
-            <a 
-              href={event.eventUrl} 
-              target="_blank" 
+            <a
+              href={event.eventUrl}
+              target="_blank"
               rel="noopener noreferrer"
               className="text-sky-400 hover:text-sky-300 transition-colors"
               title="View event details"

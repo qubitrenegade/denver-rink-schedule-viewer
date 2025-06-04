@@ -23,7 +23,7 @@ class ErrorBoundary extends Component<Props, State> {
     // Update state so the next render will show the fallback UI.
     // Log error for debugging
     console.log("ErrorBoundary getDerivedStateFromError, error:", error);
-    return { hasError: true, error: error, errorInfo: null };
+    return { hasError: true, error, errorInfo: null };
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {

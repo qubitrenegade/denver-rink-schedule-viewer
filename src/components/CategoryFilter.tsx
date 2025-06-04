@@ -45,13 +45,13 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
       </div>
     </div>
     <div className="flex space-x-2 mb-3">
-      <button 
+      <button
         onClick={() => onToggleAllCategories(true)}
         className="px-3 py-1 text-xs font-medium text-sky-200 bg-sky-600/50 hover:bg-sky-500/50 rounded-md transition-colors"
       >
         {getSelectAllCategoriesLabel()}
       </button>
-      <button 
+      <button
         onClick={() => onToggleAllCategories(false)}
         className="px-3 py-1 text-xs font-medium text-rose-200 bg-rose-600/50 hover:bg-rose-500/50 rounded-md transition-colors"
       >
