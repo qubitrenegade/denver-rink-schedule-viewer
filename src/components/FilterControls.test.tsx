@@ -25,7 +25,7 @@ describe('FilterControls', () => {
         selectedRinkId="all-rinks"
         allCategories={allCategories}
         currentFilterSettings={currentFilterSettings}
-        onFilterSettingsChange={() => {}}
+        onFilterSettingsChange={() => { /* no-op for test */ }}
       />
     );
     expect(screen.getByText(/filter by date/i)).toBeInTheDocument();

@@ -8,14 +8,14 @@ describe('TimeFilter', () => {
     render(
       <TimeFilter
         timeFilterMode="time-range"
-        onTimeFilterModeChange={() => {}}
+        onTimeFilterModeChange={() => { /* no-op for test */ }}
         timeRangeStart="08:00"
         timeRangeEnd="10:00"
         onTimeRangeChange={onChange}
         afterTime={undefined}
         beforeTime={undefined}
-        onAfterTimeChange={() => {}}
-        onBeforeTimeChange={() => {}}
+        onAfterTimeChange={() => { /* no-op for test */ }}
+        onBeforeTimeChange={() => { /* no-op for test */ }}
       />
     );
     const startInput = screen.getByLabelText(/start time/i);

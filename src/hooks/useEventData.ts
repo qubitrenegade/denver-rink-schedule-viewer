@@ -52,17 +52,17 @@ export function useEventData() {
           console.log(`📊 Loaded ${allEventsData.length} events, ${Object.keys(allMetadataData).length} facilities via bulk API`);
 
           // Process events data
-          const allEvents: RawIceEventData[] = allEventsData.map((event: any) => ({
+          const bulkEvents: RawIceEventData[] = allEventsData.map((event: any) => ({
             ...event,
             startTime: new Date(event.startTime),
             endTime: new Date(event.endTime),
           }));
 
-          setStaticData(allEvents);
+          setStaticData(bulkEvents);
           setFacilityMetadata(allMetadataData);
           setLastFetchTime(Date.now());
 
-          console.log(`✅ Successfully loaded ${allEvents.length} events from ${Object.keys(allMetadataData).length} facilities`);
+          console.log(`✅ Successfully loaded ${bulkEvents.length} events from ${Object.keys(allMetadataData).length} facilities`);
           return;
         } else {
           console.warn(`⚠️ Bulk API failed - Events: ${eventsResponse.status}, Metadata: ${metadataResponse.status}`);
