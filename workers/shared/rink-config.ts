@@ -182,10 +182,10 @@ export function getAllIndividualRinksForFiltering(): RinkInfo[] {
         name = `${config.displayName} - ${config.rinkName}`;
       }
     }
-    
+
     return {
       id: config.id,
-      name: name,
+      name,
       sourceUrl: config.sourceUrl
     };
   });

@@ -23,10 +23,10 @@ export interface FacilityMetadata {
   eventCount: number;
   errorMessage?: string;
   sourceUrl: string;
-  rinks: Array<{
+  rinks: {
     rinkId: string;
     rinkName: string;
-  }>;
+  }[];
   lastSuccessfulScrape?: string;
 }
 
@@ -35,11 +35,11 @@ export interface RinkConfig {
   displayName: string;
   sourceUrl: string;
   rinkName: string;
-  aggregatedRinks?: Array<{rinkId: string, rinkName: string}>;
+  aggregatedRinks?: {rinkId: string, rinkName: string}[];
 }
 
 export class ScraperHelpers {
-  
+
   /**
    * Get CORS headers for responses
    */
@@ -93,9 +93,9 @@ export class ScraperHelpers {
     const now = new Date();
     const delayMs = ScraperHelpers.getRandomDelay(splayMinutes);
     const nextTime = new Date(now.getTime() + delayMs);
-    
+
     console.log(`📅 Next scheduled time: ${nextTime.toISOString()} (splay: ${Math.floor(delayMs/60000)} minutes)`);
-    
+
     return nextTime;
   }
 
@@ -111,16 +111,10 @@ export class ScraperHelpers {
     kvNamespace: KVNamespace,
     rinkId: string,
     events: RawIceEventData[],
-    customConfig: RinkConfig
-  ): Promise<void>;
-  static async writeToKV(
-    kvNamespace: KVNamespace,
-    rinkId: string,
-    events: RawIceEventData[],
     customConfig?: RinkConfig
   ): Promise<void> {
     let config: RinkConfig;
-    
+
     if (customConfig) {
       // Use provided custom config (for aggregations)
       config = customConfig;
@@ -128,10 +122,10 @@ export class ScraperHelpers {
       // Use shared config lookup (for individual rinks)
       config = getRinkConfig(rinkId);
     }
-    
+
     // Store events data
     await kvNamespace.put(`events:${rinkId}`, JSON.stringify(events));
-    
+
     // Store metadata
     const metadata: FacilityMetadata = {
       facilityId: rinkId,
@@ -144,9 +138,9 @@ export class ScraperHelpers {
       rinks: [{ rinkId, rinkName: config.rinkName }],
       lastSuccessfulScrape: new Date().toISOString()
     };
-    
+
     await kvNamespace.put(`metadata:${rinkId}`, JSON.stringify(metadata));
-    
+
     console.log(`💾 Stored ${events.length} events and metadata for ${rinkId}`);
   }
 
@@ -156,22 +150,11 @@ export class ScraperHelpers {
   static async writeErrorMetadata(
     kvNamespace: KVNamespace,
     rinkId: string,
-    error: any
-  ): Promise<void>;
-  static async writeErrorMetadata(
-    kvNamespace: KVNamespace,
-    rinkId: string,
-    error: any,
-    customConfig: RinkConfig
-  ): Promise<void>;
-  static async writeErrorMetadata(
-    kvNamespace: KVNamespace,
-    rinkId: string,
     error: any,
     customConfig?: RinkConfig
   ): Promise<void> {
     let config: RinkConfig;
-    
+
     if (customConfig) {
       // Use provided custom config (for aggregations)
       config = customConfig;
@@ -179,7 +162,7 @@ export class ScraperHelpers {
       // Use shared config lookup (for individual rinks)
       config = getRinkConfig(rinkId);
     }
-    
+
     const errorMetadata: FacilityMetadata = {
       facilityId: rinkId,
       facilityName: config.facilityName,
@@ -191,7 +174,7 @@ export class ScraperHelpers {
       sourceUrl: config.sourceUrl,
       rinks: [{ rinkId, rinkName: config.rinkName }]
     };
-    
+
     await kvNamespace.put(`metadata:${rinkId}`, JSON.stringify(metadata));
     console.log(`💾 Stored error metadata for ${rinkId}: ${errorMetadata.errorMessage}`);
   }
@@ -207,7 +190,7 @@ export class ScraperHelpers {
     }
 
     // Try parsing as full datetime first
-    let date = new Date(timeStr);
+    const date = new Date(timeStr);
     if (!isNaN(date.getTime())) {
       // Check if timezone info is present
       const hasTimezone = /[+-]\d{2}:?\d{2}|Z|UTC|GMT|[A-Z]{3,4}T?$/i.test(timeStr);
@@ -222,13 +205,13 @@ export class ScraperHelpers {
     // Try parsing as time only (e.g., "2:30 PM")
     const timeMatch = timeStr.match(/(\d{1,2}):(\d{2})\s*([AP])\.?M\.?/i);
     if (timeMatch && baseDate) {
-      let hours = parseInt(timeMatch[1]);
-      const minutes = parseInt(timeMatch[2]);
+      let hours = parseInt(timeMatch[1], 10);
+      const minutes = parseInt(timeMatch[2], 10);
       const ampm = timeMatch[3].toLowerCase();
-      
+
       if (ampm === 'p' && hours !== 12) hours += 12;
       if (ampm === 'a' && hours === 12) hours = 0;
-      
+
       const result = new Date(baseDate);
       result.setUTCHours(hours, minutes, 0, 0);
       // Convert from Mountain Time to UTC
@@ -245,22 +228,22 @@ export class ScraperHelpers {
    */
   static cleanTitle(rawTitle: string): string {
     if (!rawTitle) return 'Untitled Event';
-    
+
     let cleanTitle = rawTitle.trim();
-    
+
     // Remove leading numbers followed by letters (e.g., "1A" -> "A")
     cleanTitle = cleanTitle.replace(/^\d{1,2}([A-Za-z])/, '$1');
-    
+
     // Remove leading dashes
     cleanTitle = cleanTitle.replace(/^-\s*/, '');
-    
+
     // Remove registration/promotional text
     cleanTitle = cleanTitle.replace(/register/gi, '');
     cleanTitle = cleanTitle.replace(/click here/gi, '');
-    
+
     // Remove leading non-word characters
     cleanTitle = cleanTitle.replace(/^\W+/, '');
-    
+
     return cleanTitle.trim() || 'Ice Event';
   }
 
@@ -269,19 +252,19 @@ export class ScraperHelpers {
    */
   static categorizeEvent(title: string): string {
     if (!title) return 'Other';
-    
+
     const titleLower = title.toLowerCase().trim();
-    
+
     // Special events
     if (titleLower.includes('closed') || titleLower.includes('holiday') || titleLower.includes('memorial')) {
       return 'Special Event';
     }
-    
+
     // Public skating
     if (titleLower.includes('public skate') || titleLower.includes('open skate')) {
       return 'Public Skate';
     }
-    
+
     // Stick & Puck
     if (titleLower.includes('stick') && titleLower.includes('puck')) {
       return 'Stick & Puck';
@@ -289,37 +272,37 @@ export class ScraperHelpers {
     if (titleLower.includes('take a shot')) {
       return 'Stick & Puck';
     }
-    
+
     // Drop-in hockey
     if (titleLower.includes('drop') || titleLower.includes('pickup')) {
       return 'Drop-In Hockey';
     }
-    
+
     // Learn to skate
     if (titleLower.includes('learn') || titleLower.includes('lesson') || titleLower.includes('lts')) {
       return 'Learn to Skate';
     }
-    
+
     // Figure skating
     if (titleLower.includes('freestyle') || titleLower.includes('free style') || titleLower.includes('figure')) {
       return 'Figure Skating';
     }
-    
+
     // Hockey practice
     if (titleLower.includes('practice') || titleLower.includes('training')) {
       return 'Hockey Practice';
     }
-    
+
     // Hockey league/games
     if (titleLower.includes('league') || titleLower.includes('game')) {
       return 'Hockey League';
     }
-    
+
     // Other special events
     if (titleLower.includes('broomball') || titleLower.includes('party')) {
       return 'Special Event';
     }
-    
+
     return 'Other';
   }
 
@@ -337,7 +320,7 @@ export class ScraperHelpers {
   static filterEventsToNext30Days(events: RawIceEventData[]): RawIceEventData[] {
     const now = new Date();
     const thirtyDaysFromNow = new Date(now.getTime() + (30 * 24 * 60 * 60 * 1000));
-    
+
     return events.filter(event => {
       const startTime = new Date(event.startTime);
       return startTime >= now && startTime <= thirtyDaysFromNow;
@@ -348,7 +331,7 @@ export class ScraperHelpers {
    * Sort events by start time
    */
   static sortEventsByTime(events: RawIceEventData[]): RawIceEventData[] {
-    return events.sort((a, b) => 
+    return events.sort((a, b) =>
       new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
     );
   }
@@ -369,7 +352,7 @@ export class ScraperHelpers {
     if (path === '/status') {
       const nextAlarm = await state.storage.getAlarm();
       const lastRun = await state.storage.get('lastRun');
-      
+
       return ScraperHelpers.jsonResponse({
         nextAlarm: nextAlarm ? new Date(nextAlarm).toISOString() : null,
         lastRun: lastRun || null,
@@ -380,7 +363,7 @@ export class ScraperHelpers {
     if (path === '/schedule' || request.method === 'GET') {
       const alarmTime = ScraperHelpers.getAlarmTime(env.SCRAPER_SPLAY_MINUTES);
       await state.storage.setAlarm(alarmTime);
-      
+
       return new Response(
         `${rinkId} Worker - Scheduling alarm for ${new Date(alarmTime).toISOString()}`,
         { headers: ScraperHelpers.corsHeaders() }
@@ -406,19 +389,19 @@ export class ScraperHelpers {
     runScraperFn: () => Promise<Response>
   ): Promise<void> {
     console.log(`⏰ ${rinkId} alarm triggered at ${new Date().toISOString()}`);
-    
+
     try {
       await runScraperFn();
-      
+
       // Schedule next alarm with configured splay
       const splayMinutes = parseInt(env.SCRAPER_SPLAY_MINUTES || '360', 10);
       const nextAlarmTime = ScraperHelpers.getNextScheduledTime(splayMinutes);
       await state.storage.setAlarm(nextAlarmTime);
       console.log(`📅 Next ${rinkId} alarm scheduled for ${nextAlarmTime.toISOString()}`);
-      
+
     } catch (error) {
       console.error(`❌ ${rinkId} alarm failed:`, error);
-      
+
       // Still schedule next alarm even if this one failed
       const splayMinutes = parseInt(env.SCRAPER_SPLAY_MINUTES || '360', 10);
       const nextAlarmTime = ScraperHelpers.getNextScheduledTime(splayMinutes);
@@ -431,27 +414,27 @@ export class ScraperHelpers {
    */
   static parseVariousMountainTimeFormats(dateStr: string, timeStr?: string): Date {
     // Try parsing as complete datetime first
-    let date = ScraperHelpers.parseMountainTime(dateStr);
-    
+    const date = ScraperHelpers.parseMountainTime(dateStr);
+
     // If we have separate time string, combine them
     if (timeStr) {
       const baseDate = new Date(dateStr);
       const timeMatch = timeStr.match(/(\d{1,2}):(\d{2})\s*([AP])\.?M\.?/i);
       if (timeMatch) {
-        let hours = parseInt(timeMatch[1]);
-        const minutes = parseInt(timeMatch[2]);
+        let hours = parseInt(timeMatch[1], 10);
+        const minutes = parseInt(timeMatch[2], 10);
         const ampm = timeMatch[3].toLowerCase();
-        
+
         if (ampm === 'p' && hours !== 12) hours += 12;
         if (ampm === 'a' && hours === 12) hours = 0;
-        
+
         baseDate.setUTCHours(hours, minutes, 0, 0);
         // Convert from Mountain Time to UTC (add 6 hours for MDT)
         baseDate.setTime(baseDate.getTime() + (6 * 60 * 60 * 1000));
         return baseDate;
       }
     }
-    
+
     return date;
   }
 }

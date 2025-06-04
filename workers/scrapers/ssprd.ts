@@ -56,7 +56,7 @@ class SSPRDScraper {
     const html = await response.text();
     // Extract _onlineScheduleList array from HTML using regex
     const match = html.match(/_onlineScheduleList\s*=\s*(\[.*?\]);/s);
-    let events: RawIceEventData[] = [];
+    const events: RawIceEventData[] = [];
     if (match && match[1]) {
       try {
         const scheduleData = JSON.parse(match[1]);
@@ -125,38 +125,38 @@ export class SSPRDScheduler {
 
   private async runScraper(): Promise<Response> {
     const startTime = Date.now();
-    
+
     try {
       console.log('🏢 Starting SSPRD scraper...');
       const scrapers = [
         new SSPRDScraper('249', 'https://ssprd.finnlyconnect.com/schedule/249'),
         new SSPRDScraper('250', 'https://ssprd.finnlyconnect.com/schedule/250')
       ];
-      
+
       let allEvents: RawIceEventData[] = [];
       for (const scraper of scrapers) {
         const events = await scraper.scrape();
         allEvents = allEvents.concat(events);
       }
-      
+
       // Group by rinkId
       const eventsByRink: Record<string, RawIceEventData[]> = {};
       for (const event of allEvents) {
         if (!eventsByRink[event.rinkId]) eventsByRink[event.rinkId] = [];
         eventsByRink[event.rinkId].push(event);
       }
-      
+
       // Write each rink's events to KV using shared config
       for (const [rinkId, events] of Object.entries(eventsByRink)) {
         await ScraperHelpers.writeToKV(this.env.RINK_DATA, rinkId, events);
       }
-      
+
       // Create facility-level aggregated data for frontend
       const fscEvents: RawIceEventData[] = [];
       const ssscEvents: RawIceEventData[] = [];
-      const fscRinks: Array<{rinkId: string, rinkName: string}> = [];
-      const ssscRinks: Array<{rinkId: string, rinkName: string}> = [];
-      
+      const fscRinks: {rinkId: string, rinkName: string}[] = [];
+      const ssscRinks: {rinkId: string, rinkName: string}[] = [];
+
       for (const [rinkId, events] of Object.entries(eventsByRink)) {
         if (rinkId.startsWith('fsc-')) {
           fscEvents.push(...events);
@@ -166,7 +166,7 @@ export class SSPRDScheduler {
           ssscRinks.push({ rinkId, rinkName: this.getRinkName(rinkId) });
         }
       }
-      
+
       // Write facility-level aggregated data with proper IDs
       if (fscEvents.length > 0) {
         await ScraperHelpers.writeToKV(
@@ -180,7 +180,7 @@ export class SSPRDScheduler {
             rinkName: 'Family Sports Center'
           }
         );
-        
+
         // Write custom aggregated metadata for FSC
         const fscMetadata: any = {
           facilityId: 'ssprd-fsc',
@@ -195,7 +195,7 @@ export class SSPRDScheduler {
         };
         await this.env.RINK_DATA.put(`metadata:ssprd-fsc`, JSON.stringify(fscMetadata));
       }
-      
+
       if (ssscEvents.length > 0) {
         await ScraperHelpers.writeToKV(
           this.env.RINK_DATA,
@@ -208,7 +208,7 @@ export class SSPRDScheduler {
             rinkName: 'South Suburban Sports Complex'
           }
         );
-        
+
         // Write custom aggregated metadata for SSSC
         const ssscMetadata: any = {
           facilityId: 'ssprd-sssc',
@@ -226,10 +226,10 @@ export class SSPRDScheduler {
 
       const duration = Date.now() - startTime;
       await this.state.storage.put('lastRun', new Date().toISOString());
-      
+
       const totalEvents = Object.values(eventsByRink).reduce((sum, events) => sum + events.length, 0);
       console.log(`✅ SSPRD: ${totalEvents} events scraped across ${Object.keys(eventsByRink).length} rinks in ${duration}ms`);
-      
+
       return new Response(JSON.stringify({
         success: true,
         message: 'Successfully scraped SSPRD events',
@@ -239,10 +239,10 @@ export class SSPRDScheduler {
       }), {
         headers: { 'Content-Type': 'application/json' }
       });
-      
+
     } catch (error) {
       console.error('❌ SSPRD scraper error:', error);
-      
+
       return new Response(JSON.stringify({
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error',

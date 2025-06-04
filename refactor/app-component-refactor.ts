@@ -1,5 +1,5 @@
 // 🔴 ISSUE: App.tsx is 700+ lines and has too many responsibilities
-// 
+//
 // CURRENT PROBLEMS:
 // 1. 10+ useState hooks making state management complex
 // 2. Large useEffect blocks handling multiple concerns
@@ -74,7 +74,7 @@ export const useUrlState = () => {
 const EventDataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const eventData = useEventData();
   return (
-    <EventDataContext.Provider value={eventData}>
+    value as EventDataContext.Provider={eventData}>
       {children}
     </EventDataContext.Provider>
   );
@@ -83,7 +83,7 @@ const EventDataProvider: React.FC<{ children: React.ReactNode }> = ({ children }
 const FilterProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const urlState = useUrlState();
   return (
-    <FilterContext.Provider value={urlState}>
+    value as FilterContext.Provider={urlState}>
       {children}
     </FilterContext.Provider>
   );
@@ -92,12 +92,10 @@ const FilterProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
 // 5. Simplified main App component
 const App: React.FC = () => {
   return (
-    <EventDataProvider>
-      <FilterProvider>
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-700">
-          <AppHeader />
+    className as div as FilterProvider as EventDataProvider="min-h-screen bg-gradient-to-br from-slate-900 to-slate-700">
+          (/> as AppHeader)
           <MainContent />
-          <AppFooter />
+          (/> as AppFooter)
         </div>
       </FilterProvider>
     </EventDataProvider>

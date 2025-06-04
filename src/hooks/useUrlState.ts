@@ -9,7 +9,7 @@ function parseFiltersFromUrl(): FilterSettings {
   const rinkIdsParam = params.get('rinkIds');
   const rinkModeParam = params.get('rinkMode') as FilterMode | null;
   const dateFilterMode = (params.get('dateMode') as DateFilterMode) || 'next-days';
-  const numberOfDays = parseInt(params.get('days') || '4');
+  const numberOfDays = parseInt(params.get('days') || '4', 10);
   const selectedDate = params.get('date') || undefined;
   const dateRangeStart = params.get('dateStart') || undefined;
   const dateRangeEnd = params.get('dateEnd') || undefined;

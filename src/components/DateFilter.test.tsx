@@ -10,10 +10,10 @@ describe('DateFilter', () => {
         dateFilterMode="specific-day"
         numberOfDays={4}
         selectedDate="2025-06-01"
-        onDateFilterModeChange={() => {}}
-        onNumberOfDaysChange={() => {}}
+        onDateFilterModeChange={() => { /* no-op for test */ }}
+        onNumberOfDaysChange={() => { /* no-op for test */ }}
         onSelectedDateChange={onSelectedDateChange}
-        onDateRangeChange={() => {}}
+        onDateRangeChange={() => { /* no-op for test */ }}
       />
     );
     const input = screen.getByLabelText(/select specific date/i);

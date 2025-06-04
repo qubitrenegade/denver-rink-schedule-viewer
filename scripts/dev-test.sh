@@ -87,7 +87,7 @@ is_port_in_use() {
 # Get PID using a port
 get_pid_using_port() {
     local port=$1
-    lsof -ti:$port 2>/dev/null || echo ""
+    lsof -ti:"$port" 2>/dev/null || echo ""
 }
 
 # Start a single worker
@@ -129,7 +129,8 @@ stop_worker() {
     local pid_file="$LOG_DIR/${name}.pid"
     
     if [[ -f "$pid_file" ]]; then
-        local pid=$(cat "$pid_file")
+        local pid
+        pid=$(cat "$pid_file")
         if kill -0 "$pid" 2>/dev/null; then
             log_info "Stopping $name (PID: $pid)..."
             kill "$pid"
@@ -141,7 +142,8 @@ stop_worker() {
         fi
     else
         # Check if something is using the port
-        local active_pid=$(get_pid_using_port "$port")
+        local active_pid
+        active_pid=$(get_pid_using_port "$port")
         if [[ -n "$active_pid" ]]; then
             log_info "Killing process using port $port (PID: $active_pid)..."
             kill "$active_pid" 2>/dev/null || true
@@ -190,7 +192,8 @@ show_status() {
         IFS=':' read -r name config port <<< "$worker_def"
         
         if is_port_in_use "$port"; then
-            local pid=$(get_pid_using_port "$port")
+            local pid
+            pid=$(get_pid_using_port "$port")
             echo -e "${GREEN}✅ $name${NC} - Port $port (PID: $pid)"
         else
             echo -e "${RED}❌ $name${NC} - Port $port (not running)"
@@ -208,8 +211,8 @@ test_worker() {
     
     # Test GET /
     echo -n "    GET / ... "
-    local response=$(curl -s -f "http://localhost:$port/" 2>/dev/null)
-    if [[ $? -eq 0 ]]; then
+    local response
+    if response=$(curl -s -f "http://localhost:$port/" 2>/dev/null); then
         echo -e "${GREEN}✅${NC}"
         if [[ "$VERBOSE" == "true" ]]; then
             echo "      Response: $response"
@@ -221,8 +224,8 @@ test_worker() {
     # Test health endpoint (different for data-api vs scrapers)
     if [[ "$name" == "data-api" ]]; then
         echo -n "    GET /api/health ... "
-        local health_response=$(curl -s -f "http://localhost:$port/api/health" 2>/dev/null)
-        if [[ $? -eq 0 ]]; then
+        local health_response
+        if health_response=$(curl -s -f "http://localhost:$port/api/health" 2>/dev/null); then
             echo -e "${GREEN}✅${NC}"
             if [[ "$VERBOSE" == "true" ]]; then
                 echo "      Response: $health_response"
@@ -232,8 +235,8 @@ test_worker() {
         fi
     else
         echo -n "    GET /status ... "
-        local status_response=$(curl -s -f "http://localhost:$port/status" 2>/dev/null)
-        if [[ $? -eq 0 ]]; then
+        local status_response
+        if status_response=$(curl -s -f "http://localhost:$port/status" 2>/dev/null); then
             echo -e "${GREEN}✅${NC}"
             if [[ "$VERBOSE" == "true" ]]; then
                 echo "      Response: $status_response"
@@ -246,8 +249,8 @@ test_worker() {
     # Test POST / (only for scrapers, not data-api)
     if [[ "$name" != "data-api" ]]; then
         echo -n "    POST / ... "
-        local post_response=$(curl -s -f -X POST "http://localhost:$port/" 2>/dev/null)
-        if [[ $? -eq 0 ]]; then
+        local post_response
+        if post_response=$(curl -s -f -X POST "http://localhost:$port/" 2>/dev/null); then
             echo -e "${GREEN}✅${NC}"
             if [[ "$VERBOSE" == "true" ]]; then
                 echo "      Response: $post_response"
@@ -271,8 +274,8 @@ test_data_api() {
     
     # Test main API endpoints
     echo -n "    GET /api/all-events ... "
-    local all_events_response=$(curl -s -f "http://localhost:$port/api/all-events" 2>/dev/null)
-    if [[ $? -eq 0 ]]; then
+    local all_events_response
+    if all_events_response=$(curl -s -f "http://localhost:$port/api/all-events" 2>/dev/null); then
         echo -e "${GREEN}✅${NC}"
         if [[ "$VERBOSE" == "true" ]]; then
             echo "      Total events: $(echo "$all_events_response" | jq 'length' 2>/dev/null || echo "unknown")"
@@ -282,8 +285,9 @@ test_data_api() {
     fi
     
     echo -n "    GET /api/all-metadata ... "
-    local all_metadata_response=$(curl -s -f "http://localhost:$port/api/all-metadata" 2>/dev/null)
-    if [[ $? -eq 0 ]]; then
+    local all_metadata_response
+    all_metadata_response=$(curl -s -f "http://localhost:$port/api/all-metadata" 2>/dev/null)
+    if [[ -n "$all_metadata_response" ]]; then
         echo -e "${GREEN}✅${NC}"
         if [[ "$VERBOSE" == "true" ]]; then
             echo "      Sample metadata:"
@@ -298,8 +302,9 @@ test_data_api() {
     
     for rink_id in "${rink_ids[@]}"; do
         echo -n "    GET /data/${rink_id}.json ... "
-        local rink_data=$(curl -s -f "http://localhost:$port/data/${rink_id}.json" 2>/dev/null)
-        if [[ $? -eq 0 ]]; then
+        local rink_data
+        rink_data=$(curl -s -f "http://localhost:$port/data/${rink_id}.json" 2>/dev/null)
+        if [[ -n "$rink_data" ]]; then
             echo -e "${GREEN}✅${NC}"
             if [[ "$VERBOSE" == "true" ]]; then
                 echo "      Events count: $(echo "$rink_data" | jq 'length' 2>/dev/null || echo "unknown")"
@@ -311,8 +316,9 @@ test_data_api() {
         fi
         
         echo -n "    GET /data/${rink_id}-metadata.json ... "
-        local metadata_response=$(curl -s -f "http://localhost:$port/data/${rink_id}-metadata.json" 2>/dev/null)
-        if [[ $? -eq 0 ]]; then
+        local metadata_response
+        metadata_response=$(curl -s -f "http://localhost:$port/data/${rink_id}-metadata.json" 2>/dev/null)
+        if [[ -n "$metadata_response" ]]; then
             echo -e "${GREEN}✅${NC}"
             if [[ "$VERBOSE" == "true" ]]; then
                 echo "      Last updated: $(echo "$metadata_response" | jq -r '.lastSuccessfulScrape // "unknown"' 2>/dev/null)"

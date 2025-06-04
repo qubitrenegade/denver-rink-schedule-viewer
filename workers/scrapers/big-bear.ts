@@ -20,12 +20,12 @@ class BigBearScraper {
 
   async scrape(): Promise<RawIceEventData[]> {
     console.log(`🧊 Scraping Big Bear events...`);
-    
+
     const url = `${this.baseUrl}/Sessions/FilterResults`;
     const formData = new URLSearchParams({
       LocationId: '13558',
       Sunday: 'true', Monday: 'true', Tuesday: 'true', Wednesday: 'true', Thursday: 'true', Friday: 'true', Saturday: 'true',
-      StartTime: '12:00 AM', 
+      StartTime: '12:00 AM',
       EndTime: '12:00 AM',
       'ReservationTypes[0].Selected': 'true', 'ReservationTypes[0].Id': '-1',
       'ReservationTypes[1].Id': '203425', 'ReservationTypes[2].Id': '208508', 'ReservationTypes[3].Id': '215333',
@@ -58,14 +58,14 @@ class BigBearScraper {
 
     const events: RawIceEventData[] = eventsJson.map((ev: any) => {
       // The API returns times in Mountain Time (MT), but Date parses as UTC. To store as UTC, add 6 hours.
-      const startTime = new Date(ev.start); 
+      const startTime = new Date(ev.start);
       startTime.setHours(startTime.getHours() + 6);
-      const endTime = new Date(ev.end); 
+      const endTime = new Date(ev.end);
       endTime.setHours(endTime.getHours() + 6);
-      
+
       // Extract rink name from resourceName or venues (for future use if needed)
       // const rawRinkName = ev.resourceName || (ev.venues && ev.venues[0]?.Name) || 'Main Rink';
-      
+
       // Clean title
       const title = ScraperHelpers.cleanTitle(ev.title || '');
       const category = ScraperHelpers.categorizeEvent(title);
@@ -73,7 +73,7 @@ class BigBearScraper {
       // Extract rink name from resourceName field
       const rawRinkName = ev.resourceName || 'Main Rink';
       let rinkId = this.rinkId;
-      
+
       // Map resourceName to specific rink IDs
       if (rawRinkName === 'North Rink') {
         rinkId = 'big-bear-north';
@@ -86,14 +86,14 @@ class BigBearScraper {
 
       if (ev.description) {
         const desc = ev.description.trim();
-        
+
         cleanedDescription = desc;
 
         // Clean up redundant information from description
         cleanedDescription = cleanedDescription
           // Remove session name if it matches or is similar to the title
           .replace(new RegExp(`^${title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*,?\\s*`, 'i'), '')
-          .replace(/^Free\s*Style\s*Session\s*,?\s*/i, '') // Handle "Free Style Session" vs "Freestyle" 
+          .replace(/^Free\s*Style\s*Session\s*,?\s*/i, '') // Handle "Free Style Session" vs "Freestyle"
           .replace(/^Freestyle\s*Session\s*,?\s*/i, '')
           .replace(/^Open\s*Sick\s*and\s*Puck\s*,?\s*/i, '')
           .replace(/^Open\s*Stick\s*and\s*Puck\s*,?\s*/i, '')
@@ -167,18 +167,18 @@ export class BigBearScheduler {
 
   private async runScraper(): Promise<Response> {
     const startTime = Date.now();
-    
+
     try {
       console.log('🔧 Big Bear scraper triggered');
       const scraper = new BigBearScraper();
       const events = await scraper.scrape();
-      
+
       // Separate events by rink for individual rink storage
       const eventsByRink: Record<string, RawIceEventData[]> = {
         'big-bear-north': [],
         'big-bear-south': []
       };
-      
+
       // Group events by rink
       events.forEach(event => {
         if (event.rinkId === 'big-bear-north') {
@@ -194,16 +194,16 @@ export class BigBearScheduler {
           await ScraperHelpers.writeToKV(this.env.RINK_DATA, rinkId, rinkEvents);
         }
       }
-      
+
       // Create facility-level aggregated data for frontend
-      const bigBearRinks: Array<{rinkId: string, rinkName: string}> = [];
+      const bigBearRinks: {rinkId: string, rinkName: string}[] = [];
       if (eventsByRink['big-bear-north'].length > 0) {
         bigBearRinks.push({ rinkId: 'big-bear-north', rinkName: 'North Rink' });
       }
       if (eventsByRink['big-bear-south'].length > 0) {
         bigBearRinks.push({ rinkId: 'big-bear-south', rinkName: 'South Rink' });
       }
-      
+
       // Write facility-level aggregated data - ALL events combined for the big-bear endpoint
       if (events.length > 0) {
         await ScraperHelpers.writeToKV(
@@ -217,7 +217,7 @@ export class BigBearScheduler {
             rinkName: 'Big Bear Ice Arena'
           }
         );
-        
+
         // Write custom aggregated metadata for Big Bear
         const bigBearMetadata: any = {
           facilityId: 'big-bear',
@@ -249,7 +249,7 @@ export class BigBearScheduler {
 
     } catch (error) {
       console.error('❌ Big Bear scraping failed:', error);
-      
+
       await ScraperHelpers.writeErrorMetadata(this.env.RINK_DATA, 'big-bear', error);
 
       return ScraperHelpers.jsonResponse({
@@ -266,17 +266,17 @@ export default {
     // Get the Durable Object instance
     const id = env.BIG_BEAR_SCHEDULER.idFromName('big-bear');
     const stub = env.BIG_BEAR_SCHEDULER.get(id);
-    
+
     return stub.fetch(request);
   },
 
   async scheduled(_event: unknown, env: Env, _ctx: unknown): Promise<void> {
     console.log(`🕐 Big Bear cron triggered at ${new Date().toISOString()}`);
-    
+
     // Get the Durable Object and trigger scheduling
     const id = env.BIG_BEAR_SCHEDULER.idFromName('big-bear');
     const stub = env.BIG_BEAR_SCHEDULER.get(id);
-    
+
     // Call the GET endpoint to schedule an alarm
     await stub.fetch(new Request('https://fake.url/', { method: 'GET' }));
   }

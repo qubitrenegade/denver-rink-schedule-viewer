@@ -10,7 +10,7 @@ interface Env {
 // Tag ID to category mapping (from ice-ranch.html UI)
 const ICE_RANCH_TAGS: Record<string, string> = {
   '1652315': 'Home',
-  '1652320': 'Calendar', 
+  '1652320': 'Calendar',
   '1718896': 'All Ages Stick & Puck',
   '1718895': 'Adult Drop In',
   '1718913': 'Teen Drop In',
@@ -33,7 +33,8 @@ class IceRanchScraper {
     const itemRegex = /<item>(.*?)<\/item>/gs;
     let match;
 
-    while ((match = itemRegex.exec(xml)) !== null) {
+    match = itemRegex.exec(xml);
+    while (match !== null) {
       const itemContent = match[1];
       const item: any = {};
 
@@ -59,6 +60,7 @@ class IceRanchScraper {
 
       console.log(`Parsed item: title="${item.title}", desc length=${item.description?.length || 0}`);
       items.push(item);
+      match = itemRegex.exec(xml);
     }
 
     console.log(`Parsed ${items.length} items from XML`);
@@ -67,7 +69,7 @@ class IceRanchScraper {
 
   async scrape(): Promise<RawIceEventData[]> {
     console.log(`🧊 Scraping Ice Ranch events from RSS feed...`);
-    
+
     const response = await fetch(ICE_RANCH_RSS_URL, {
       headers: {
         'User-Agent': ScraperHelpers.getUserAgent(),
@@ -89,10 +91,10 @@ class IceRanchScraper {
     const events: RawIceEventData[] = items.map((item: any) => {
       // Example title: "Sunday June 1, 2025: Coach's Ice"
       let title: string = item.title || 'Untitled Event';
-      
+
       // Remove date prefix if present
       title = title.replace(/^[A-Za-z]+ [A-Za-z]+ \d{1,2}, \d{4}:\s*/, '');
-      
+
       // Decode HTML entities in title
       title = title.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
       title = ScraperHelpers.cleanTitle(title);
@@ -103,15 +105,15 @@ class IceRanchScraper {
 
       // Decode HTML entities in description
       description = description.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
-      
+
       console.log(`🔍 DEBUG: Raw description before cleaning: "${description}"`);
 
       // Clean up redundant information from description
       let cleanedDescription = description;
-      
+
       // First convert <br> tags to newlines for easier processing
       cleanedDescription = cleanedDescription.replace(/<br\s*\/?\s*>/gi, '\n');
-      
+
       // Remove redundant date/time/location/tag information
       cleanedDescription = cleanedDescription
         // Remove Date: line
@@ -144,14 +146,14 @@ class IceRanchScraper {
       const timeMatch = description.match(/Time:\s*([\d:apm ]+)\s*-\s*(\d{1,2}:\d{2}[ap]m)/i);
       if (timeMatch) {
         const [, startStr, endStr] = timeMatch;
-        
+
         // Parse start time from description using Mountain Time conversion
         const startMatch = startStr.trim().match(/(\d{1,2}):(\d{2})\s*([ap]m)/i);
         if (startMatch) {
           const timeStr = `${startMatch[1]}:${startMatch[2]} ${startMatch[3]}`;
           startTime = ScraperHelpers.parseMountainTime(timeStr, startTime);
         }
-        
+
         // Parse end time using Mountain Time conversion
         const endMatch = endStr.match(/(\d{1,2}):(\d{2})([ap]m)/i);
         if (endMatch) {
@@ -245,12 +247,12 @@ export class IceRanchScheduler {
 
   private async runScraper(): Promise<Response> {
     const startTime = Date.now();
-    
+
     try {
       console.log('🔧 Ice Ranch scraper triggered');
       const scraper = new IceRanchScraper();
       const events = await scraper.scrape();
-      
+
       await ScraperHelpers.writeToKV(this.env.RINK_DATA, 'ice-ranch', events);
 
       // Update last run time
@@ -269,7 +271,7 @@ export class IceRanchScheduler {
 
     } catch (error) {
       console.error('❌ Ice Ranch scraping failed:', error);
-      
+
       await ScraperHelpers.writeErrorMetadata(this.env.RINK_DATA, 'ice-ranch', error);
 
       return ScraperHelpers.jsonResponse({
@@ -286,17 +288,17 @@ export default {
     // Get the Durable Object instance
     const id = env.ICE_RANCH_SCHEDULER.idFromName('ice-ranch');
     const stub = env.ICE_RANCH_SCHEDULER.get(id);
-    
+
     return stub.fetch(request);
   },
 
   async scheduled(_event: unknown, env: Env, _ctx: unknown): Promise<void> {
     console.log(`🕐 Ice Ranch cron triggered at ${new Date().toISOString()}`);
-    
+
     // Get the Durable Object and trigger scheduling
     const id = env.ICE_RANCH_SCHEDULER.idFromName('ice-ranch');
     const stub = env.ICE_RANCH_SCHEDULER.get(id);
-    
+
     // Call the GET endpoint to schedule an alarm
     await stub.fetch(new Request('https://fake.url/', { method: 'GET' }));
   }

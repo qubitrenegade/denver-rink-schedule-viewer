@@ -10,7 +10,7 @@
 // 1. Replace magic strings with const assertions
 export const EVENT_CATEGORIES = [
   'Public Skate',
-  'Stick & Puck', 
+  'Stick & Puck',
   'Hockey League',
   'Learn to Skate',
   'Figure Skating',
@@ -55,7 +55,7 @@ export type CategoryToggleHandler = (category: EventCategory) => void;
 export type RinkSelectHandler = (rinkId: string) => void;
 
 // 5. Discriminated union for scraper states
-export type ScraperState = 
+export type ScraperState =
   | { status: 'idle' }
   | { status: 'loading' }
   | { status: 'success'; data: RawIceEventData[]; timestamp: string }
@@ -133,8 +133,8 @@ export interface ErrorBoundaryState {
 }
 
 // 12. Utility type for component refs
-export type ComponentRef<T extends React.ComponentType<any>> = 
-  T extends React.ComponentType<infer P> 
+export type ComponentRef<T extends React.ComponentType<any>> =
+  T extends React.ComponentType<infer P>
     ? React.Ref<React.ComponentRef<T>>
     : never;
 
@@ -152,7 +152,7 @@ export const validateFilterSettings = (
       return { error: 'Date range requires both start and end dates' };
     }
   }
-  
+
   return { ...settings, _validated: true as const };
 };
 
@@ -177,9 +177,9 @@ export function useAsyncData<T>(
 
   useEffect(() => {
     let cancelled = false;
-    
+
     setState(prev => ({ ...prev, loading: true, error: null }));
-    
+
     fetcher()
       .then(data => {
         if (!cancelled) {

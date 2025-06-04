@@ -24,8 +24,8 @@ class FoothillsEdgeScraper {
   private parseFoothillsTime(timeStr: string, baseDate: Date): Date {
     const timeMatch = timeStr.match(/(\d{1,2}):(\d{2})\s*([AP])\.?M\.?/i);
     if (!timeMatch) return baseDate;
-    let hours = parseInt(timeMatch[1]);
-    const minutes = parseInt(timeMatch[2]);
+    let hours = parseInt(timeMatch[1], 10);
+    const minutes = parseInt(timeMatch[2], 10);
     const ampm = timeMatch[3].toLowerCase();
     if (ampm === 'p' && hours !== 12) hours += 12;
     if (ampm === 'a' && hours === 12) hours = 0;
@@ -75,10 +75,14 @@ class FoothillsEdgeScraper {
               description: event.Description || 'Ice activity at Foothills Edge Ice Arena',
               isFeatured: false
             });
-          } catch {}
+          } catch {
+            // Ignore individual event parsing errors
+          }
         });
       });
-    } catch {}
+    } catch {
+      // Ignore JSON parsing errors
+    }
     return events;
   }
 
@@ -133,19 +137,19 @@ export class FoothillsEdgeScheduler {
 
   private async runScraper(): Promise<Response> {
     const startTime = Date.now();
-    
+
     try {
       console.log('🏔️ Starting Foothills Edge scraper...');
       const scraper = new FoothillsEdgeScraper();
       const events = await scraper.scrape();
-      
+
       await ScraperHelpers.writeToKV(this.env.RINK_DATA, 'foothills-edge', events);
 
       const duration = Date.now() - startTime;
       await this.state.storage.put('lastRun', new Date().toISOString());
-      
+
       console.log(`✅ Foothills Edge: ${events.length} events scraped in ${duration}ms`);
-      
+
       return new Response(JSON.stringify({
         success: true,
         eventCount: events.length,
@@ -155,10 +159,10 @@ export class FoothillsEdgeScheduler {
       }), {
         headers: { 'Content-Type': 'application/json' }
       });
-      
+
     } catch (error) {
       console.error('❌ Foothills Edge scraper error:', error);
-      
+
       return new Response(JSON.stringify({
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error',
