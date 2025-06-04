@@ -19,12 +19,29 @@ export const RINK_CONFIGURATIONS: Record<string, RinkConfiguration> = {
     sourceUrl: 'https://www.theiceranch.com/page/show/1652320-calendar',
     rinkName: 'Main Rink'
   },
+  'big-bear-north': {
+    id: 'big-bear-north',
+    facilityName: 'Big Bear Ice Arena',
+    displayName: 'Big Bear Ice Arena (Lowry)',
+    sourceUrl: 'https://bigbearicearena.ezfacility.com/Sessions',
+    rinkName: 'North Rink',
+    shortRinkName: 'North Rink'
+  },
+  'big-bear-south': {
+    id: 'big-bear-south',
+    facilityName: 'Big Bear Ice Arena',
+    displayName: 'Big Bear Ice Arena (Lowry)',
+    sourceUrl: 'https://bigbearicearena.ezfacility.com/Sessions',
+    rinkName: 'South Rink',
+    shortRinkName: 'South Rink'
+  },
   'big-bear': {
     id: 'big-bear',
     facilityName: 'Big Bear Ice Arena',
     displayName: 'Big Bear Ice Arena (Lowry)',
     sourceUrl: 'https://bigbearicearena.ezfacility.com/Sessions',
-    rinkName: 'Main Rink'
+    rinkName: 'Big Bear Ice Arena',
+    memberRinkIds: ['big-bear-north', 'big-bear-south']
   },
   'du-ritchie': {
     id: 'du-ritchie',

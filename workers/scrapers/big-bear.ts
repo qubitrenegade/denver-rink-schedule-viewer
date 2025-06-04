@@ -63,17 +63,64 @@ class BigBearScraper {
       const endTime = new Date(ev.end); 
       endTime.setHours(endTime.getHours() + 6);
       
-      const rinkName = ev.resourceName || (ev.venues && ev.venues[0]?.Name) || 'Main Rink';
+      // Extract rink name from resourceName or venues (for future use if needed)
+      // const rawRinkName = ev.resourceName || (ev.venues && ev.venues[0]?.Name) || 'Main Rink';
+      
+      // Clean title
       const title = ScraperHelpers.cleanTitle(ev.title || '');
       const category = ScraperHelpers.categorizeEvent(title);
 
+      // Extract rink name from resourceName field
+      const rawRinkName = ev.resourceName || 'Main Rink';
+      let rinkId = this.rinkId;
+      
+      // Map resourceName to specific rink IDs
+      if (rawRinkName === 'North Rink') {
+        rinkId = 'big-bear-north';
+      } else if (rawRinkName === 'South Rink') {
+        rinkId = 'big-bear-south';
+      }
+
+      // Parse and clean description
+      let cleanedDescription = '';
+
+      if (ev.description) {
+        const desc = ev.description.trim();
+        
+        cleanedDescription = desc;
+
+        // Clean up redundant information from description
+        cleanedDescription = cleanedDescription
+          // Remove session name if it matches or is similar to the title
+          .replace(new RegExp(`^${title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*,?\\s*`, 'i'), '')
+          .replace(/^Free\s*Style\s*Session\s*,?\s*/i, '') // Handle "Free Style Session" vs "Freestyle" 
+          .replace(/^Freestyle\s*Session\s*,?\s*/i, '')
+          .replace(/^Open\s*Sick\s*and\s*Puck\s*,?\s*/i, '')
+          .replace(/^Open\s*Stick\s*and\s*Puck\s*,?\s*/i, '')
+          .replace(/^Public\s*Skate\s*,?\s*/i, '')
+          .replace(/^Drop-?In\s*Hockey\s*,?\s*/i, '')
+          // Remove duration information since it's in the time field
+          .replace(/,?\s*\d+\s*Minutes?\s*long\s*,?\s*/i, '')
+          .replace(/,?\s*\(\d+\s*min\)\s*,?\s*/i, '')
+          // Clean up extra commas and whitespace
+          .replace(/^,\s*/, '')
+          .replace(/,\s*,/g, ',')
+          .replace(/\s+/g, ' ')
+          .trim();
+
+        // If description is now empty or just punctuation, set to empty
+        if (!cleanedDescription || /^[,.\s]*$/.test(cleanedDescription)) {
+          cleanedDescription = '';
+        }
+      }
+
       return {
-        id: `big-bear-${ev.id}`,
-        rinkId: this.rinkId,
+        id: `${rinkId}-${ev.id}`,
+        rinkId,
         title,
         startTime: startTime.toISOString(),
         endTime: endTime.toISOString(),
-        description: `${rinkName}${ev.description ? ' - ' + ev.description : ''}`,
+        description: cleanedDescription,
         category,
         isFeatured: false,
         eventUrl: undefined
@@ -126,20 +173,78 @@ export class BigBearScheduler {
       const scraper = new BigBearScraper();
       const events = await scraper.scrape();
       
-      await ScraperHelpers.writeToKV(this.env.RINK_DATA, 'big-bear', events);
+      // Separate events by rink for individual rink storage
+      const eventsByRink: Record<string, RawIceEventData[]> = {
+        'big-bear-north': [],
+        'big-bear-south': []
+      };
+      
+      // Group events by rink
+      events.forEach(event => {
+        if (event.rinkId === 'big-bear-north') {
+          eventsByRink['big-bear-north'].push(event);
+        } else if (event.rinkId === 'big-bear-south') {
+          eventsByRink['big-bear-south'].push(event);
+        }
+      });
+
+      // Write each individual rink's events to KV using shared config
+      for (const [rinkId, rinkEvents] of Object.entries(eventsByRink)) {
+        if (rinkEvents.length > 0) {
+          await ScraperHelpers.writeToKV(this.env.RINK_DATA, rinkId, rinkEvents);
+        }
+      }
+      
+      // Create facility-level aggregated data for frontend
+      const bigBearRinks: Array<{rinkId: string, rinkName: string}> = [];
+      if (eventsByRink['big-bear-north'].length > 0) {
+        bigBearRinks.push({ rinkId: 'big-bear-north', rinkName: 'North Rink' });
+      }
+      if (eventsByRink['big-bear-south'].length > 0) {
+        bigBearRinks.push({ rinkId: 'big-bear-south', rinkName: 'South Rink' });
+      }
+      
+      // Write facility-level aggregated data - ALL events combined for the big-bear endpoint
+      if (events.length > 0) {
+        await ScraperHelpers.writeToKV(
+          this.env.RINK_DATA,
+          'big-bear',
+          events,
+          {
+            facilityName: 'Big Bear Ice Arena',
+            displayName: 'Big Bear Ice Arena (Lowry)',
+            sourceUrl: 'https://bigbearicearena.ezfacility.com/Sessions',
+            rinkName: 'Big Bear Ice Arena'
+          }
+        );
+        
+        // Write custom aggregated metadata for Big Bear
+        const bigBearMetadata: any = {
+          facilityId: 'big-bear',
+          facilityName: 'Big Bear Ice Arena',
+          displayName: 'Big Bear Ice Arena (Lowry)',
+          lastAttempt: new Date().toISOString(),
+          status: 'success',
+          eventCount: events.length,
+          sourceUrl: 'https://bigbearicearena.ezfacility.com/Sessions',
+          rinks: bigBearRinks,
+          lastSuccessfulScrape: new Date().toISOString()
+        };
+        await this.env.RINK_DATA.put(`metadata:big-bear`, JSON.stringify(bigBearMetadata));
+      }
 
       // Update last run time
       await this.state.storage.put('lastRun', new Date().toISOString());
 
       const duration = Date.now() - startTime;
-      console.log(`✅ Big Bear scraping completed in ${duration}ms`);
+      console.log(`✅ Big Bear scraping completed in ${duration}ms - ${events.length} total events across ${bigBearRinks.length} rinks`);
 
       return ScraperHelpers.jsonResponse({
         success: true,
         eventCount: events.length,
         timestamp: new Date().toISOString(),
         duration: `${duration}ms`,
-        message: `Successfully scraped ${events.length} events`
+        message: `Successfully scraped ${events.length} events across ${bigBearRinks.length} rinks`
       });
 
     } catch (error) {

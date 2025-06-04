@@ -301,7 +301,7 @@ export class ScraperHelpers {
     }
     
     // Figure skating
-    if (titleLower.includes('freestyle') || titleLower.includes('figure')) {
+    if (titleLower.includes('freestyle') || titleLower.includes('free style') || titleLower.includes('figure')) {
       return 'Figure Skating';
     }
     
