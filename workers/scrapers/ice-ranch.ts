@@ -103,6 +103,38 @@ class IceRanchScraper {
 
       // Decode HTML entities in description
       description = description.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+      
+      console.log(`🔍 DEBUG: Raw description before cleaning: "${description}"`);
+
+      // Clean up redundant information from description
+      let cleanedDescription = description;
+      
+      // First convert <br> tags to newlines for easier processing
+      cleanedDescription = cleanedDescription.replace(/<br\s*\/?\s*>/gi, '\n');
+      
+      // Remove redundant date/time/location/tag information
+      cleanedDescription = cleanedDescription
+        // Remove Date: line
+        .replace(/Date:\s*[^\n]*\n?/gi, '')
+        // Remove Time: line
+        .replace(/Time:\s*[^\n]*\n?/gi, '')
+        // Remove Location: line
+        .replace(/Location:\s*[^\n]*\n?/gi, '')
+        // Remove Tag(s): line
+        .replace(/Tag\(s\):\s*[^\n]*\n?/gi, '')
+        // Clean up extra newlines
+        .replace(/\n\s*\n/g, '\n')
+        .replace(/^\n+|\n+$/g, '')
+        .trim();
+
+      console.log(`🔍 DEBUG: Cleaned description: "${cleanedDescription}"`);
+
+      // If description is now empty or just whitespace, set to empty
+      if (!cleanedDescription || /^[\s\n]*$/.test(cleanedDescription)) {
+        cleanedDescription = '';
+      }
+
+      description = cleanedDescription;
 
       // Parse start time from pubDate - this is the event's actual datetime
       let startTime = pubDate ? new Date(pubDate) : new Date();
