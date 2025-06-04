@@ -17,7 +17,7 @@ tag = "v1"
 new_sqlite_classes = [ "SSPRDScheduler" ]
 
 [vars]
-SCRAPER_SPLAY_MINUTES = "360"
+SCRAPER_SPLAY_MINUTES = "350"
 
 [triggers]
 crons = [
