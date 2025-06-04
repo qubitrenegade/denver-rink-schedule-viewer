@@ -50,10 +50,11 @@ USAGE:
 OPTIONS:
     --dry-run     Show what would be deployed without actually deploying
     --config FILE Deploy only specific config file
+    --no-scrape   Skip triggering scrapers after deployment
     --help        Show this help message
 
 EXAMPLES:
-    # Deploy all workers
+    # Deploy all workers and trigger scrapers
     ./scripts/deploy.sh
 
     # Dry run to see what would be deployed
@@ -64,6 +65,9 @@ EXAMPLES:
 
     # Deploy only Ice Ranch scraper
     ./scripts/deploy.sh --config wrangler-ice-ranch.toml
+
+    # Deploy all workers but skip scraper triggering
+    ./scripts/deploy.sh --no-scrape
 
 EOF
 }
@@ -115,9 +119,69 @@ deploy_worker() {
     echo ""
 }
 
+# Trigger all scrapers after deployment
+trigger_scrapers() {
+    local dry_run=${1:-false}
+    
+    if [[ "$dry_run" == "true" ]]; then
+        log_info "Would trigger all scrapers to refresh data"
+        return 0
+    fi
+    
+    log_info "Triggering scrapers to refresh data..."
+    echo ""
+    
+    # Scraper endpoints
+    local scrapers=(
+        "ssprd:https://rink-scraper-ssprd.qbrd.workers.dev"
+        "foothills-edge:https://rink-scraper-foothills-edge.qbrd.workers.dev"
+        "ice-ranch:https://rink-scraper-ice-ranch.qbrd.workers.dev"
+        "big-bear:https://rink-scraper-big-bear.qbrd.workers.dev"
+        "du-ritchie:https://rink-scraper-du-ritchie.qbrd.workers.dev"
+    )
+    
+    local failed_scrapers=()
+    local successful_scrapers=()
+    
+    for scraper_def in "${scrapers[@]}"; do
+        IFS=':' read -r name url <<< "$scraper_def"
+        
+        echo -n "  Triggering $name scraper... "
+        
+        if response=$(curl -s -X POST "$url" --max-time 30 2>/dev/null); then
+            if echo "$response" | jq -e '.success' >/dev/null 2>&1; then
+                event_count=$(echo "$response" | jq -r '.eventCount // "N/A"')
+                echo -e "${GREEN}✅ Success${NC} ($event_count events)"
+                successful_scrapers+=("$name")
+            else
+                echo -e "${RED}❌ Failed${NC} (scraper returned error)"
+                failed_scrapers+=("$name")
+            fi
+        else
+            echo -e "${RED}❌ Failed${NC} (connection error)"
+            failed_scrapers+=("$name")
+        fi
+    done
+    
+    echo ""
+    
+    # Summary
+    if [[ ${#successful_scrapers[@]} -gt 0 ]]; then
+        log_success "Successfully triggered ${#successful_scrapers[@]} scrapers"
+    fi
+    
+    if [[ ${#failed_scrapers[@]} -gt 0 ]]; then
+        log_warning "Failed to trigger ${#failed_scrapers[@]} scrapers: ${failed_scrapers[*]}"
+        echo "  You may need to trigger these manually or check their status"
+    fi
+    
+    echo ""
+}
+
 # Deploy all workers
 deploy_all() {
     local dry_run=${1:-false}
+    local skip_scrape=${2:-false}
     
     if [[ "$dry_run" == "true" ]]; then
         log_info "DRY RUN - No actual deployments will occur"
@@ -163,12 +227,22 @@ deploy_all() {
         echo ""
         echo "🌐 Your workers are now live on Cloudflare Edge!"
         echo "   Check your Cloudflare dashboard for URLs and status."
+        echo ""
+        
+        # Trigger scrapers unless explicitly skipped
+        if [[ "$skip_scrape" != "true" ]]; then
+            trigger_scrapers "$dry_run"
+        else
+            log_info "Skipping scraper triggering (--no-scrape flag used)"
+            echo ""
+        fi
     fi
 }
 
 # Parse command line arguments
 DRY_RUN=false
 SINGLE_CONFIG=""
+SKIP_SCRAPE=false
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -179,6 +253,10 @@ while [[ $# -gt 0 ]]; do
         --config)
             SINGLE_CONFIG="$2"
             shift 2
+            ;;
+        --no-scrape)
+            SKIP_SCRAPE=true
+            shift
             ;;
         --help|-h)
             show_usage
