@@ -7,7 +7,7 @@ interface Env {
 
 const FACILITY_IDS = [
   'ice-ranch',
-  'big-bear', 
+  'big-bear',
   'du-ritchie',
   'foothills-edge',
   'ssprd-fsc',
@@ -33,7 +33,7 @@ function handleCORS(request: Request): Response | null {
 }
 
 async function handleDataRequest(
-  request: Request, 
+  request: Request,
   env: Env
 ): Promise<Response> {
   const url = new URL(request.url);
@@ -49,7 +49,7 @@ async function handleDataRequest(
       console.log(`📋 Fetching metadata for facility: ${facilityId}`);
       const metadataData = await env.RINK_DATA.get(`metadata:${facilityId}`);
       console.log(`Metadata request for ${facilityId}, found: ${!!metadataData}, value:`, metadataData);
-      
+
       if (!metadataData || metadataData.trim() === '[]') {
         console.log(`⚠️ No metadata found for ${facilityId} (empty or []), returning default`);
         // Return default metadata if not found or if value is []
@@ -91,7 +91,7 @@ async function handleDataRequest(
       const facilityId = eventMatch[1];
       console.log(`📊 Fetching events for facility: ${facilityId}`);
       const eventsData = await env.RINK_DATA.get(`events:${facilityId}`);
-      
+
       if (!eventsData) {
         console.log(`⚠️ No events data found for ${facilityId}`);
         return new Response(JSON.stringify([]), {
@@ -119,7 +119,7 @@ async function handleDataRequest(
     if (path === '/api/all-events') {
       console.log(`📊 Fetching all events`);
       const allEvents = [];
-      
+
       for (const facilityId of FACILITY_IDS) {
         try {
           const eventsData = await env.RINK_DATA.get(`events:${facilityId}`);
@@ -150,7 +150,7 @@ async function handleDataRequest(
     if (path === '/api/all-metadata') {
       console.log(`📋 Fetching all metadata`);
       const allMetadata: Record<string, any> = {};
-      
+
       for (const facilityId of FACILITY_IDS) {
         try {
           const metadataData = await env.RINK_DATA.get(`metadata:${facilityId}`);
@@ -189,7 +189,7 @@ async function handleDataRequest(
         try {
           const metadataData = await env.RINK_DATA.get(`metadata:${facilityId}`);
           const eventsData = await env.RINK_DATA.get(`events:${facilityId}`);
-          
+
           healthData.facilities[facilityId] = {
             hasMetadata: !!metadataData,
             hasEvents: !!eventsData,
@@ -222,7 +222,7 @@ async function handleDataRequest(
         version: '1.0.0',
         endpoints: [
           '/api/health',
-          '/api/all-events', 
+          '/api/all-events',
           '/api/all-metadata',
           '/data/{facilityId}.json',
           '/data/{facilityId}-metadata.json'
@@ -239,12 +239,12 @@ async function handleDataRequest(
 
     // 404 for unknown paths
     console.log(`❌ Unknown path: ${path}`);
-    return new Response(JSON.stringify({ 
+    return new Response(JSON.stringify({
       error: 'Not found',
-      path: path,
+      path,
       availableEndpoints: [
         '/api/health',
-        '/api/all-events', 
+        '/api/all-events',
         '/api/all-metadata',
         '/data/{facilityId}.json',
         '/data/{facilityId}-metadata.json'
@@ -259,11 +259,11 @@ async function handleDataRequest(
 
   } catch (error) {
     console.error('❌ Error handling request:', error);
-    
+
     return new Response(JSON.stringify({
       error: 'Internal server error',
       message: error instanceof Error ? error.message : 'Unknown error',
-      path: path
+      path
     }), {
       status: 500,
       headers: {
