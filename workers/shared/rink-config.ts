@@ -143,6 +143,7 @@ export function getFrontendRinkConfig(): RinkInfo[] {
       id: 'big-bear',
       name: getRinkConfig('big-bear').displayName,
       sourceUrl: getRinkConfig('big-bear').sourceUrl,
+      memberRinkIds: ['big-bear-north', 'big-bear-south'],
     },
     {
       id: 'du-ritchie',
