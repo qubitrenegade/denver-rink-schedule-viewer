@@ -6,6 +6,7 @@ export interface RinkConfiguration {
   displayName: string;
   sourceUrl: string;
   rinkName: string;
+  shortRinkName?: string; // For compact display on event cards
   memberRinkIds?: string[];
 }
 
@@ -44,35 +45,56 @@ export const RINK_CONFIGURATIONS: Record<string, RinkConfiguration> = {
     facilityName: 'Family Sports Center',
     displayName: 'Family Sports Center (Englewood)',
     sourceUrl: 'https://ssprd.finnlyconnect.com/schedule/249',
-    rinkName: 'Avalanche Rink'
+    rinkName: 'Avalanche Rink',
+    shortRinkName: 'FSC Avalanche'
   },
   'fsc-fixit': {
     id: 'fsc-fixit',
     facilityName: 'Family Sports Center',
     displayName: 'Family Sports Center (Englewood)',
     sourceUrl: 'https://ssprd.finnlyconnect.com/schedule/249',
-    rinkName: 'Fix-it 24/7 Rink'
+    rinkName: 'Fix-it 24/7 Rink',
+    shortRinkName: 'FSC FixIt 24/7'
   },
   'sssc-rink1': {
     id: 'sssc-rink1',
     facilityName: 'South Suburban Sports Complex',
     displayName: 'South Suburban Sports Complex (Highlands Ranch)',
     sourceUrl: 'https://ssprd.finnlyconnect.com/schedule/250',
-    rinkName: 'Rink 1'
+    rinkName: 'Rink 1',
+    shortRinkName: 'SSSC 1'
   },
   'sssc-rink2': {
     id: 'sssc-rink2',
     facilityName: 'South Suburban Sports Complex',
     displayName: 'South Suburban Sports Complex (Highlands Ranch)',
     sourceUrl: 'https://ssprd.finnlyconnect.com/schedule/250',
-    rinkName: 'Rink 2'
+    rinkName: 'Rink 2',
+    shortRinkName: 'SSSC 2'
   },
   'sssc-rink3': {
     id: 'sssc-rink3',
     facilityName: 'South Suburban Sports Complex',
     displayName: 'South Suburban Sports Complex (Highlands Ranch)',
     sourceUrl: 'https://ssprd.finnlyconnect.com/schedule/250',
-    rinkName: 'Rink 3'
+    rinkName: 'Rink 3',
+    shortRinkName: 'SSSC 3'
+  },
+  'ssprd-fsc': {
+    id: 'ssprd-fsc',
+    facilityName: 'Family Sports Center',
+    displayName: 'Family Sports Center (Englewood)',
+    sourceUrl: 'https://ssprd.finnlyconnect.com/schedule/249',
+    rinkName: 'Family Sports Center',
+    memberRinkIds: ['fsc-avalanche', 'fsc-fixit']
+  },
+  'ssprd-sssc': {
+    id: 'ssprd-sssc',
+    facilityName: 'South Suburban Sports Complex',
+    displayName: 'South Suburban Sports Complex (Highlands Ranch)',
+    sourceUrl: 'https://ssprd.finnlyconnect.com/schedule/250',
+    rinkName: 'South Suburban Sports Complex',
+    memberRinkIds: ['sssc-rink1', 'sssc-rink2', 'sssc-rink3']
   }
 };
 
@@ -116,24 +138,37 @@ export function getFrontendRinkConfig(): RinkInfo[] {
       sourceUrl: getRinkConfig('foothills-edge').sourceUrl,
     },
     {
-      id: 'ssprd-family-sports',
+      id: 'ssprd-fsc',
       name: 'Family Sports Center (Englewood)',
-      sourceUrl: getRinkConfig('fsc-avalanche').sourceUrl,
+      sourceUrl: getRinkConfig('ssprd-fsc').sourceUrl,
       memberRinkIds: ['fsc-avalanche', 'fsc-fixit'],
     },
     {
-      id: 'ssprd-sports-complex',
+      id: 'ssprd-sssc',
       name: 'South Suburban Sports Complex (Highlands Ranch)',
-      sourceUrl: getRinkConfig('sssc-rink1').sourceUrl,
+      sourceUrl: getRinkConfig('ssprd-sssc').sourceUrl,
       memberRinkIds: ['sssc-rink1', 'sssc-rink2', 'sssc-rink3'],
     },
   ];
 }
 
 export function getAllIndividualRinksForFiltering(): RinkInfo[] {
-  return Object.values(RINK_CONFIGURATIONS).map(config => ({
-    id: config.id,
-    name: config.displayName,
-    sourceUrl: config.sourceUrl
-  }));
+  return Object.values(RINK_CONFIGURATIONS).map(config => {
+    // For individual rinks that are part of a multi-rink facility, include the specific rink name
+    // For filtering purposes, use full descriptive names
+    let name = config.displayName;
+    if (config.rinkName && config.rinkName !== 'Main Rink' && config.rinkName !== config.facilityName) {
+      if (config.shortRinkName) {
+        name = `${config.displayName} - ${config.shortRinkName}`;
+      } else {
+        name = `${config.displayName} - ${config.rinkName}`;
+      }
+    }
+    
+    return {
+      id: config.id,
+      name: name,
+      sourceUrl: config.sourceUrl
+    };
+  });
 }

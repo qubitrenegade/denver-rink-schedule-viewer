@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import { RawIceEventData, FilterSettings, DisplayableIceEvent } from '../types';
-import { RINKS_CONFIG, ALL_INDIVIDUAL_RINKS_FOR_FILTERING } from '../rinkConfig';
+import { RINKS_CONFIG } from '../rinkConfig';
 import { ALL_RINKS_TAB_ID } from '../App';
+import { getRinkConfig } from '../../workers/shared/rink-config';
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
@@ -118,11 +119,18 @@ export function useEventFiltering(
       });
     }
 
-    // 5. Prepare for display (add rinkName)
-    const rawEventsWithDates: Array<RawIceEventData & { rinkName?: string }> = processedData.map(e => ({
-      ...e,
-      rinkName: ALL_INDIVIDUAL_RINKS_FOR_FILTERING.find(r => r.id === e.rinkId)?.name || e.rinkId
-    }));
+    // 5. Prepare for display (add facilityName and rinkName)
+    const rawEventsWithDates: Array<RawIceEventData & { rinkName?: string; facilityName?: string }> = processedData.map(e => {
+      const rinkConfig = getRinkConfig(e.rinkId);
+      const facilityName = rinkConfig.displayName;
+      const rinkName = rinkConfig.rinkName === 'Main Rink' ? undefined : rinkConfig.shortRinkName || rinkConfig.rinkName;
+      
+      return {
+        ...e,
+        facilityName,
+        rinkName
+      };
+    });
 
     // 6. Category Filter
     const processedEvents: DisplayableIceEvent[] = rawEventsWithDates.map(event => ({

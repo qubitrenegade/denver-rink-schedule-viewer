@@ -35,6 +35,7 @@ export interface RinkConfig {
   displayName: string;
   sourceUrl: string;
   rinkName: string;
+  aggregatedRinks?: Array<{rinkId: string, rinkName: string}>;
 }
 
 export class ScraperHelpers {

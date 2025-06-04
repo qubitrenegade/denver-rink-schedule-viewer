@@ -146,48 +146,83 @@ export class SSPRDScheduler {
         eventsByRink[event.rinkId].push(event);
       }
       
-      // Write each rink's events to KV
-      const facilityEvents: Record<string, RawIceEventData[]> = {
-        'ssprd-249': [],
-        'ssprd-250': []
-      };
+      // Write each rink's events to KV using shared config
+      for (const [rinkId, events] of Object.entries(eventsByRink)) {
+        await ScraperHelpers.writeToKV(this.env.RINK_DATA, rinkId, events);
+      }
+      
+      // Create facility-level aggregated data for frontend
+      const fscEvents: RawIceEventData[] = [];
+      const ssscEvents: RawIceEventData[] = [];
+      const fscRinks: Array<{rinkId: string, rinkName: string}> = [];
+      const ssscRinks: Array<{rinkId: string, rinkName: string}> = [];
       
       for (const [rinkId, events] of Object.entries(eventsByRink)) {
-        // Write individual rink data using shared config
-        await ScraperHelpers.writeToKV(this.env.RINK_DATA, rinkId, events);
-        
-        // Also aggregate into facility-level collections
         if (rinkId.startsWith('fsc-')) {
-          facilityEvents['ssprd-249'] = facilityEvents['ssprd-249'].concat(events);
+          fscEvents.push(...events);
+          fscRinks.push({ rinkId, rinkName: this.getRinkName(rinkId) });
         } else if (rinkId.startsWith('sssc-')) {
-          facilityEvents['ssprd-250'] = facilityEvents['ssprd-250'].concat(events);
+          ssscEvents.push(...events);
+          ssscRinks.push({ rinkId, rinkName: this.getRinkName(rinkId) });
         }
       }
       
-      // Write facility-level aggregated data (these don't use shared config as they're aggregations)
-      await ScraperHelpers.writeToKV(
-        this.env.RINK_DATA,
-        'ssprd-249',
-        facilityEvents['ssprd-249'],
-        {
+      // Write facility-level aggregated data with proper IDs
+      if (fscEvents.length > 0) {
+        await ScraperHelpers.writeToKV(
+          this.env.RINK_DATA,
+          'ssprd-fsc',
+          fscEvents,
+          {
+            facilityName: 'Family Sports Center',
+            displayName: 'Family Sports Center (Englewood)',
+            sourceUrl: 'https://ssprd.finnlyconnect.com/schedule/249',
+            rinkName: 'Family Sports Center'
+          }
+        );
+        
+        // Write custom aggregated metadata for FSC
+        const fscMetadata: any = {
+          facilityId: 'ssprd-fsc',
           facilityName: 'Family Sports Center',
           displayName: 'Family Sports Center (Englewood)',
+          lastAttempt: new Date().toISOString(),
+          status: 'success',
+          eventCount: fscEvents.length,
           sourceUrl: 'https://ssprd.finnlyconnect.com/schedule/249',
-          rinkName: 'Family Sports Center'
-        }
-      );
+          rinks: fscRinks,
+          lastSuccessfulScrape: new Date().toISOString()
+        };
+        await this.env.RINK_DATA.put(`metadata:ssprd-fsc`, JSON.stringify(fscMetadata));
+      }
       
-      await ScraperHelpers.writeToKV(
-        this.env.RINK_DATA,
-        'ssprd-250',
-        facilityEvents['ssprd-250'],
-        {
+      if (ssscEvents.length > 0) {
+        await ScraperHelpers.writeToKV(
+          this.env.RINK_DATA,
+          'ssprd-sssc',
+          ssscEvents,
+          {
+            facilityName: 'South Suburban Sports Complex',
+            displayName: 'South Suburban Sports Complex (Highlands Ranch)',
+            sourceUrl: 'https://ssprd.finnlyconnect.com/schedule/250',
+            rinkName: 'South Suburban Sports Complex'
+          }
+        );
+        
+        // Write custom aggregated metadata for SSSC
+        const ssscMetadata: any = {
+          facilityId: 'ssprd-sssc',
           facilityName: 'South Suburban Sports Complex',
           displayName: 'South Suburban Sports Complex (Highlands Ranch)',
+          lastAttempt: new Date().toISOString(),
+          status: 'success',
+          eventCount: ssscEvents.length,
           sourceUrl: 'https://ssprd.finnlyconnect.com/schedule/250',
-          rinkName: 'South Suburban Sports Complex'
-        }
-      );
+          rinks: ssscRinks,
+          lastSuccessfulScrape: new Date().toISOString()
+        };
+        await this.env.RINK_DATA.put(`metadata:ssprd-sssc`, JSON.stringify(ssscMetadata));
+      }
 
       const duration = Date.now() - startTime;
       await this.state.storage.put('lastRun', new Date().toISOString());

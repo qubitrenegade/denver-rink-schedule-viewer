@@ -31,9 +31,10 @@ export interface IceEvent {
   eventUrl?: string;
 }
 
-// Event as displayed (may include rinkName)
+// Event as displayed (may include rinkName and facilityName)
 export interface DisplayableIceEvent extends IceEvent {
   rinkName?: string;
+  facilityName?: string;
 }
 
 export type FilterMode = 'include' | 'exclude';

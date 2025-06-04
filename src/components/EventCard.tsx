@@ -1,6 +1,6 @@
 import React from 'react';
 import { DisplayableIceEvent, EventCategory } from '../types';
-import { ClockIcon, TagIcon, InfoIcon, StarIcon, GlobeAltIcon, LinkIcon } from './icons'; 
+import { ClockIcon, TagIcon, InfoIcon, StarIcon, GlobeAltIcon, LinkIcon, MapPinIcon } from './icons'; 
 
 interface EventCardProps {
   event: DisplayableIceEvent;
@@ -77,10 +77,20 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
             {event.category}
           </span>
         </div>
-        {event.rinkName && (
-          <div className="flex items-center md:col-span-2" title="Rink">
+        {event.facilityName && (
+          <div className="flex items-center" title="Facility">
             <GlobeAltIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-sky-400 shrink-0" />
-            <span>{event.rinkName}</span>
+            <span className="text-sm text-slate-300">
+              {event.facilityName}
+            </span>
+          </div>
+        )}
+        {event.rinkName && event.rinkName !== 'Main Rink' && (
+          <div className="flex items-center" title="Rink">
+            <MapPinIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-sky-400 shrink-0" />
+            <span className="px-2 py-0.5 text-xs font-semibold rounded-full bg-slate-600 text-slate-200">
+              {event.rinkName}
+            </span>
           </div>
         )}
       </div>

@@ -10,8 +10,8 @@ const FACILITY_IDS = [
   'big-bear', 
   'du-ritchie',
   'foothills-edge',
-  'ssprd-249',
-  'ssprd-250'
+  'ssprd-fsc',
+  'ssprd-sssc'
 ];
 
 // CORS headers
