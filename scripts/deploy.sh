@@ -295,5 +295,5 @@ if [[ -n "$SINGLE_CONFIG" ]]; then
     deploy_worker "$SINGLE_CONFIG" "$description" "$DRY_RUN"
 else
     # Deploy all
-    deploy_all "$DRY_RUN"
+    deploy_all "$DRY_RUN" "$SKIP_SCRAPE"
 fi

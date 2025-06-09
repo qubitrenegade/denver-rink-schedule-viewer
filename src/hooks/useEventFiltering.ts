@@ -99,7 +99,7 @@ export function useEventFiltering(
     if (selectedRinkId !== ALL_RINKS_TAB_ID) {
       if (selectedTabConfig?.memberRinkIds) {
         // Group tab - filter to member rinks
-        processedData = processedData.filter(event => 
+        processedData = processedData.filter(event =>
           selectedTabConfig.memberRinkIds!.includes(event.rinkId)
         );
       } else {
@@ -120,11 +120,11 @@ export function useEventFiltering(
     }
 
     // 5. Prepare for display (add facilityName and rinkName)
-    const rawEventsWithDates: Array<RawIceEventData & { rinkName?: string; facilityName?: string }> = processedData.map(e => {
+    const rawEventsWithDates: (RawIceEventData & { rinkName?: string; facilityName?: string })[] = processedData.map(e => {
       const rinkConfig = getRinkConfig(e.rinkId);
       const facilityName = rinkConfig.displayName;
       const rinkName = rinkConfig.rinkName === 'Main Rink' ? undefined : rinkConfig.shortRinkName || rinkConfig.rinkName;
-      
+
       return {
         ...e,
         facilityName,
@@ -140,7 +140,7 @@ export function useEventFiltering(
     })).filter(event => {
       if (filterSettings.filterMode === 'include') {
         return filterSettings.activeCategories.length === 0 ? false : filterSettings.activeCategories.includes(event.category);
-      } else { 
+      } else {
         return !filterSettings.activeCategories.includes(event.category);
       }
     });

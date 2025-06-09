@@ -83,7 +83,6 @@ mkdir -p "$LOG_DIR"
 # Array to store process info
 declare -A worker_pids
 declare -A worker_ports
-declare -A worker_names
 declare -A worker_types
 declare -A worker_rink_ids
 
@@ -99,14 +98,16 @@ get_available_port() {
 # Function to extract worker name from config file
 get_worker_name() {
   local config_file="$1"
-  local name=$(grep "^name = " "$config_file" 2>/dev/null | sed 's/name = "\(.*\)"/\1/')
+  local name
+  name=$(grep "^name = " "$config_file" 2>/dev/null | sed 's/name = "\(.*\)"/\1/')
   echo "${name:-$(basename "$config_file" .toml)}"
 }
 
 # Function to determine worker type and extract rink ID
 get_worker_info() {
   local config_file="$1"
-  local name=$(basename "$config_file" .toml)
+  local name
+  name=$(basename "$config_file" .toml)
   
   if [[ "$name" == "wrangler" ]]; then
     echo "data-api:"
@@ -237,7 +238,8 @@ run_tests() {
   for port_worker in "${scraper_ports[@]}"; do
     local port="${port_worker%%:*}"
     local worker="${port_worker##*:}"
-    local emoji=$(get_worker_emoji "$worker")
+    local emoji
+    emoji=$(get_worker_emoji "$worker")
     
     echo -n "  $emoji $worker (port $port) POST / ... "
     if response=$(curl -s -X POST "http://localhost:$port" 2>/dev/null); then
@@ -265,7 +267,8 @@ run_tests() {
   for port_worker in "${scraper_ports[@]}"; do
     local port="${port_worker%%:*}"
     local worker="${port_worker##*:}"
-    local emoji=$(get_worker_emoji "$worker")
+    local emoji
+    emoji=$(get_worker_emoji "$worker")
     echo "  curl -X POST http://localhost:$port  # $emoji Trigger $worker"
   done
 }
@@ -277,7 +280,8 @@ cleanup() {
   for worker_name in "${!worker_pids[@]}"; do
     local pid=${worker_pids[$worker_name]}
     local port=${worker_ports[$worker_name]}
-    local emoji=$(get_worker_emoji "$worker_name")
+    local emoji
+    emoji=$(get_worker_emoji "$worker_name")
     echo "  $emoji Stopping $worker_name (PID: $pid, Port: $port)"
     kill "$pid" 2>/dev/null || true
   done
@@ -336,7 +340,7 @@ for config in "${config_files[@]}"; do
   worker_emoji=$(get_worker_emoji "$worker_name")
   
   # Get available port
-  available_port=$(get_available_port $current_port)
+  available_port=$(get_available_port "$current_port")
   
   # Create log file
   log_file="$LOG_DIR/${worker_name}.log"
@@ -355,7 +359,6 @@ for config in "${config_files[@]}"; do
   # Store worker info
   worker_pids["$worker_name"]=$worker_pid
   worker_ports["$worker_name"]=$available_port
-  worker_names["$worker_name"]=$worker_name
   worker_types["$worker_name"]=$worker_type
   worker_rink_ids["$worker_name"]=$worker_rink_id
   
@@ -372,9 +375,9 @@ echo "================"
 
 # Show data API first
 for worker_name in "${!worker_ports[@]}"; do
-  local port=${worker_ports[$worker_name]}
-  local type=${worker_types[$worker_name]}
-  local emoji=$(get_worker_emoji "$worker_name")
+  port=${worker_ports[$worker_name]}
+  type=${worker_types[$worker_name]}
+  emoji=$(get_worker_emoji "$worker_name")
   
   if [[ "$type" == "data-api" ]]; then
     echo "  $emoji $worker_name: http://localhost:$port"
@@ -383,9 +386,9 @@ done
 
 # Then show scrapers
 for worker_name in "${!worker_ports[@]}"; do
-  local port=${worker_ports[$worker_name]}
-  local type=${worker_types[$worker_name]}
-  local emoji=$(get_worker_emoji "$worker_name")
+  port=${worker_ports[$worker_name]}
+  type=${worker_types[$worker_name]}
+  emoji=$(get_worker_emoji "$worker_name")
   
   if [[ "$type" == "scraper" ]]; then
     echo "  $emoji $worker_name: http://localhost:$port"

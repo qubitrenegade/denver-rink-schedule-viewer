@@ -15,7 +15,7 @@ export abstract class BaseScraper {
   // 🆕 SHARED TIMEZONE UTILITIES
   protected parseMountainTime(dateStr: string, timeStr?: string): Date {
     let date: Date;
-    
+
     if (timeStr) {
       // Handle separate date and time strings
       date = new Date(`${dateStr}T${this.normalizeTimeString(timeStr)}`);
@@ -23,25 +23,25 @@ export abstract class BaseScraper {
       // Handle combined datetime string
       date = new Date(dateStr);
     }
-    
+
     // Convert Mountain Time to UTC consistently
     if (!this.hasTimezoneInfo(dateStr)) {
       return this.mountainToUtc(date);
     }
-    
+
     return date;
   }
 
   private normalizeTimeString(timeStr: string): string {
     const match = timeStr.match(/(\d{1,2}):(\d{2})\s*([ap]m)/i);
     if (!match) return '12:00:00';
-    
-    let [, hours, minutes, ampm] = match;
-    let hour24 = parseInt(hours);
-    
+
+    const [, hours, minutes, ampm] = match;
+    let hour24 = parseInt(hours, 10);
+
     if (ampm.toLowerCase() === 'pm' && hour24 !== 12) hour24 += 12;
     if (ampm.toLowerCase() === 'am' && hour24 === 12) hour24 = 0;
-    
+
     return `${hour24.toString().padStart(2, '0')}:${minutes}:00`;
   }
 
@@ -58,9 +58,9 @@ export abstract class BaseScraper {
   // 🆕 ENHANCED EVENT CATEGORIZATION
   protected categorizeEvent(title: string, description?: string): EventCategory {
     const combined = `${title} ${description || ''}`.toLowerCase();
-    
+
     // Use a mapping approach for better maintainability
-    const categoryMap: Array<[RegExp[], EventCategory]> = [
+    const categoryMap: [RegExp[], EventCategory][] = [
       [[/closed|holiday|memorial|maintenance/], 'Special Event'],
       [[/public\s+skate|open\s+skate/], 'Public Skate'],
       [[/stick.*puck|take\s+a\s+shot/], 'Stick & Puck'],
@@ -102,19 +102,19 @@ export abstract class BaseScraper {
 
   // 🆕 STANDARDIZED FETCH WITH RETRIES
   protected async fetchWithRetry(
-    url: string, 
+    url: string,
     options: RequestInit = {},
     maxRetries = 2
   ): Promise<string> {
     let lastError: Error;
-    
+
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
       try {
         if (attempt > 0) {
           this.log('info', `Retry attempt ${attempt} for ${url}`);
           await this.delay(1000 * attempt); // Progressive delay
         }
-        
+
         const response = await fetch(url, {
           ...options,
           headers: {
@@ -123,18 +123,18 @@ export abstract class BaseScraper {
             ...options.headers
           }
         });
-        
+
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
-        
+
         return await response.text();
       } catch (error) {
         lastError = error;
         if (attempt === maxRetries) break;
       }
     }
-    
+
     throw lastError;
   }
 
@@ -146,17 +146,17 @@ export abstract class BaseScraper {
   protected validateEvent(event: Partial<RawIceEventData>): boolean {
     const required = ['title', 'startTime', 'endTime', 'category'];
     const missing = required.filter(field => !event[field]);
-    
+
     if (missing.length > 0) {
       this.log('warn', `Skipping invalid event, missing: ${missing.join(', ')}`, event);
       return false;
     }
-    
+
     if (event.startTime >= event.endTime) {
       this.log('warn', 'Skipping event with invalid time range', event);
       return false;
     }
-    
+
     return true;
   }
 }
@@ -168,17 +168,17 @@ export class ImprovedIceRanchScraper extends BaseScraper {
 
   async scrape(): Promise<RawIceEventData[]> {
     this.log('info', 'Starting scrape...');
-    
+
     const html = await this.safeApiCall(
       () => this.fetchWithRetry('https://www.theiceranch.com/page/show/1652320-calendar'),
       'fetching calendar HTML'
     );
-    
+
     if (!html) return [];
-    
+
     const events = this.parseEvents(html);
     const validEvents = events.filter(e => this.validateEvent(e));
-    
+
     this.log('info', `Found ${validEvents.length} valid events (${events.length} total)`);
     return validEvents;
   }

@@ -66,7 +66,7 @@ const DateFilter: React.FC<DateFilterProps> = ({
             min="1"
             max="14"
             value={numberOfDays}
-            onChange={e => onNumberOfDaysChange(parseInt(e.target.value))}
+            onChange={e => onNumberOfDaysChange(parseInt(e.target.value, 10))}
             className="flex-1 h-2 bg-slate-600 rounded-lg appearance-none cursor-pointer slider"
           />
           <span className="text-sky-300 font-medium min-w-[3rem] text-center">

@@ -18,7 +18,7 @@ export default defineConfig(({ mode }) => {
       },
       // Set base path for GitHub Pages
       base: mode === 'production' ? './' : '/',
-      
+
       // Serve data files during development
       server: {
         fs: {
