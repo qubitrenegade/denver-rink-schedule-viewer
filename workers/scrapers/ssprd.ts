@@ -267,17 +267,12 @@ export class SSPRDScheduler {
 }
 
 export default {
-  async scheduled(_event: unknown, env: Env, _ctx: unknown): Promise<void> {
-    // Cron trigger - wake up a random Durable Object instance
-    const id = env.SSPRD_SCHEDULER.idFromName('scheduler');
-    const obj = env.SSPRD_SCHEDULER.get(id);
-    await obj.fetch('https://dummy-url/', { method: 'GET' });
-  },
-
   async fetch(request: Request, env: Env): Promise<Response> {
     // Route requests to the Durable Object
     const id = env.SSPRD_SCHEDULER.idFromName('scheduler');
     const obj = env.SSPRD_SCHEDULER.get(id);
     return obj.fetch(request);
   }
+  
+  // Cron scheduling removed - now managed by centralized scheduler
 };

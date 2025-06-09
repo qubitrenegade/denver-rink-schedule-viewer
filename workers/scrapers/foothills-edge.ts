@@ -176,17 +176,12 @@ export class FoothillsEdgeScheduler {
 }
 
 export default {
-  async scheduled(_event: unknown, env: Env, _ctx: unknown): Promise<void> {
-    // Cron trigger - wake up a random Durable Object instance
-    const id = env.FOOTHILLS_EDGE_SCHEDULER.idFromName('scheduler');
-    const obj = env.FOOTHILLS_EDGE_SCHEDULER.get(id);
-    await obj.fetch('https://dummy-url/', { method: 'GET' });
-  },
-
   async fetch(request: Request, env: Env): Promise<Response> {
     // Route requests to the Durable Object
     const id = env.FOOTHILLS_EDGE_SCHEDULER.idFromName('scheduler');
     const obj = env.FOOTHILLS_EDGE_SCHEDULER.get(id);
     return obj.fetch(request);
   }
+  
+  // Cron scheduling removed - now managed by centralized scheduler
 };
