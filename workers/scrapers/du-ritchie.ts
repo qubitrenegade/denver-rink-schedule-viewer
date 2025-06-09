@@ -329,17 +329,8 @@ export default {
     const stub = env.DU_RITCHIE_SCHEDULER.get(id);
 
     return stub.fetch(request);
-  },
-
-  async scheduled(_event: unknown, env: Env, _ctx: unknown): Promise<void> {
-    console.log(`🕐 DU Ritchie cron triggered at ${new Date().toISOString()}`);
-
-    // Get the Durable Object and trigger scheduling
-    const id = env.DU_RITCHIE_SCHEDULER.idFromName('du-ritchie');
-    const stub = env.DU_RITCHIE_SCHEDULER.get(id);
-
-    // Call the GET endpoint to schedule an alarm
-    await stub.fetch(new Request('https://fake.url/', { method: 'GET' }));
   }
+  
+  // Cron scheduling removed - now managed by centralized scheduler
 };
 

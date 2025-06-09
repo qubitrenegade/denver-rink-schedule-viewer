@@ -19,6 +19,7 @@ A modern, scalable web app and data pipeline for viewing and filtering public ic
 - Modular component architecture with TypeScript
 
 ### Backend (Cloudflare Workers)
+- **Centralized Scheduler** (`workers/scheduler.ts`) - Single cron trigger manages all scraper scheduling
 - **Data API Worker** (`workers/data-api.ts`) - Serves aggregated data from KV storage
 - **Scraper Workers** - Individual workers for each rink with Durable Object scheduling
 - **ScraperHelpers** (`workers/helpers/scraper-helpers.ts`) - Shared utilities and patterns
@@ -73,10 +74,13 @@ The frontend automatically deploys to GitHub Pages when changes are pushed to th
 
 ### Worker Deployment
 ```bash
+# Deploy centralized scheduler (single cron trigger for all scrapers)
+wrangler deploy --config wrangler-scheduler.toml
+
 # Deploy data API
 wrangler deploy --config wrangler.toml
 
-# Deploy individual scrapers
+# Deploy individual scrapers (no cron triggers - managed by scheduler)
 wrangler deploy --config wrangler-ice-ranch.toml
 wrangler deploy --config wrangler-big-bear.toml
 wrangler deploy --config wrangler-du-ritchie.toml
@@ -102,6 +106,7 @@ wrangler deploy --config wrangler-ssprd.toml
 - `types.ts` — Shared TypeScript definitions
 
 ### Backend (`workers/`)
+- `scheduler.ts` — Centralized scheduler with single cron trigger for all scrapers
 - `data-api.ts` — Main API worker for serving aggregated data
 - `helpers/scraper-helpers.ts` — Shared utilities and Durable Object patterns
 - `scrapers/` — Individual scraper workers
@@ -112,11 +117,21 @@ wrangler deploy --config wrangler-ssprd.toml
   - `ssprd.ts` — HTML scraper with Durable Object scheduling
 
 ### Configuration
-- `wrangler*.toml` — Cloudflare Worker configurations for each service
+- `wrangler-scheduler.toml` — Centralized scheduler configuration with cron trigger
+- `wrangler*.toml` — Individual worker configurations (no cron triggers)
 - `scripts/dev-workers.sh` — Development script for running all workers locally
 - `refactor/` — Technical documentation and improvement plans
 
 ## Key Technical Features
+
+### Centralized Scheduling Architecture
+The project uses a centralized scheduler to overcome Cloudflare's 5-cron trigger limit and enable unlimited rink additions:
+
+- **Single Cron Trigger** - Only the scheduler worker has a cron trigger (`0 */6 * * *`)
+- **Dynamic Worker Communication** - Scheduler calls scrapers via HTTP with `global_fetch_strictly_public` flag
+- **Environment-Based Configuration** - Add new rinks by updating `SCRAPER_ENDPOINTS` in `wrangler-scheduler.toml`
+- **No Hardcoded Dependencies** - Scheduler dynamically generates URLs from template patterns
+- **Scalable Architecture** - Support for unlimited rinks without hitting Cloudflare limits
 
 ### Durable Objects Pattern
 All scrapers use a consistent Durable Object pattern abstracted into `ScraperHelpers`:
@@ -168,21 +183,84 @@ curl -X POST http://localhost:8788  # Trigger scraper
 
 ## Adding New Rinks
 
+The centralized scheduler architecture makes adding new rinks incredibly simple:
+
+### Quick Setup (4 steps)
 1. **Create scraper worker** in `workers/scrapers/new-rink.ts`
-2. **Use ScraperHelpers pattern**:
+2. **Create wrangler config** `wrangler-new-rink.toml` (without cron triggers)
+3. **Add to scheduler** - Update `SCRAPER_ENDPOINTS` in `wrangler-scheduler.toml`:
+   ```toml
+   SCRAPER_ENDPOINTS = "ice-ranch,big-bear,du-ritchie,foothills-edge,ssprd,new-rink"
+   ```
+4. **Add to frontend** `rinkConfig.ts`
+
+### Detailed Implementation
+
+1. **Scraper Worker** (`workers/scrapers/new-rink.ts`):
    ```typescript
    export class NewRinkScheduler {
      async fetch(request: Request): Promise<Response> {
-       return ScraperHelpers.handleSchedulerFetch(/*...*/);
+       return ScraperHelpers.handleSchedulerFetch(
+         request, this.state, this.env, 'new-rink', 
+         () => this.runScraper()
+       );
      }
      async alarm(): Promise<void> {
-       return ScraperHelpers.handleSchedulerAlarm(/*...*/);
+       return ScraperHelpers.handleSchedulerAlarm(
+         this.state, this.env, 'new-rink',
+         () => this.runScraper()
+       );
      }
    }
    ```
-3. **Create wrangler config** `wrangler-new-rink.toml`
-4. **Add to frontend** `rinkConfig.ts`
-5. **Update dev script** (automatic detection)
+
+2. **Wrangler Configuration** (`wrangler-new-rink.toml`):
+   ```toml
+   name = "rink-scraper-new-rink"
+   main = "workers/scrapers/new-rink.ts"
+   compatibility_date = "2024-10-21"
+   
+   [[kv_namespaces]]
+   binding = "RINK_DATA"
+   id = "a38bbfdc3fe74d69a0ef39550960eca3"
+   
+   [[durable_objects.bindings]]
+   name = "NEW_RINK_SCHEDULER"
+   class_name = "NewRinkScheduler"
+   
+   [vars]
+   SCRAPER_SPLAY_MINUTES = "350"
+   
+   # No cron triggers - managed by centralized scheduler
+   ```
+
+3. **Deploy Everything**:
+   ```bash
+   # Deploy new scraper
+   wrangler deploy --config wrangler-new-rink.toml
+   
+   # Redeploy scheduler with updated SCRAPER_ENDPOINTS
+   wrangler deploy --config wrangler-scheduler.toml
+   ```
+
+### Benefits of Centralized Architecture
+- ✅ **No Cron Limit** - Add unlimited rinks without hitting Cloudflare's 5-cron limit
+- ✅ **Simple Configuration** - Just update one environment variable
+- ✅ **Automatic Scheduling** - New scrapers immediately get scheduled
+- ✅ **No Code Changes** - Scheduler dynamically discovers new scrapers
+- ✅ **Consistent Monitoring** - All scrapers visible in scheduler status endpoint
+
+### Testing New Scrapers
+```bash
+# Test scraper directly
+curl https://rink-scraper-new-rink.qbrd.workers.dev/
+
+# Check scheduler status
+curl https://rink-scheduler.qbrd.workers.dev/status
+
+# Manually trigger all scrapers
+curl https://rink-scheduler.qbrd.workers.dev/trigger
+```
 
 ## Performance & Reliability
 

@@ -1,0 +1,26 @@
+# wrangler-scheduler.toml - Centralized scheduler for all rink scrapers
+name = "rink-scheduler"
+main = "workers/scheduler.ts"
+compatibility_date = "2024-10-21"
+compatibility_flags = ["global_fetch_strictly_public"]
+
+# KV namespace for storing scheduler metadata (same as data API and scrapers)
+[[kv_namespaces]]
+binding = "RINK_DATA"
+id = "a38bbfdc3fe74d69a0ef39550960eca3"
+preview_id = "81d647252e8e4e4caa0047a42ae2bd29"
+
+# Environment variables for scraper configuration
+[vars]
+SCRAPER_ENDPOINTS = "ice-ranch,big-bear,du-ritchie,foothills-edge,ssprd"
+SCRAPER_ENDPOINT_TEMPLATE = "https://rink-scraper-${rink-name}.qbrd.workers.dev"
+
+# Single cron trigger - replaces all individual scraper crons
+[triggers]
+crons = [
+  "0 */6 * * *"  # Every 6 hours - schedules all scrapers with their individual splay delays
+]
+
+# Enable logging for monitoring
+[observability.logs]
+enabled = true

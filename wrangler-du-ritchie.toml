@@ -19,8 +19,6 @@ new_sqlite_classes = [ "DURitchieScheduler" ]
 [vars]
 SCRAPER_SPLAY_MINUTES = "350"
 
-[triggers]
-crons = [
-  "0 */6 * * *"
-]
+# Cron triggers removed - now managed by centralized scheduler
+# The scheduler will trigger this worker via GET /schedule
 

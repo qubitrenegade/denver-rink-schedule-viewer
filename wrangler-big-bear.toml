@@ -19,8 +19,6 @@ new_sqlite_classes = ["BigBearScheduler"]
 [vars]
 SCRAPER_SPLAY_MINUTES = "350"
 
-[triggers]
-crons = [
-  "0 */6 * * *" # Every 6 hours with worker-level randomization
-]
+# Cron triggers removed - now managed by centralized scheduler
+# The scheduler will trigger this worker via GET /schedule
 
