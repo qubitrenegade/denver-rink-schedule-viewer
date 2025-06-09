@@ -21,8 +21,5 @@ new_sqlite_classes = [ "IceRanchScheduler" ]
 [vars]
 SCRAPER_SPLAY_MINUTES = "350"
 
-# Cron triggers to wake up and schedule alarms
-[triggers]
-crons = [
-  "0 */6 * * *" # Every 12 hours - worker will schedule alarm with splay
-]
+# Cron triggers removed - now managed by centralized scheduler
+# The scheduler will trigger this worker via GET /schedule
