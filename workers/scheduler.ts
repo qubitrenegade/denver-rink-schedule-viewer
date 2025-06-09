@@ -13,8 +13,19 @@ interface ScraperResult {
   error?: string;
 }
 
-export default {
-  async scheduled(event: ScheduledEvent, env: Env): Promise<void> {
+// Robust URL templating function for future extensibility
+function buildScraperUrl(template: string, variables: Record<string, string>): string {
+  return template.replace(/\$\{([^}]+)\}/g, (match, key) => {
+    if (key in variables) {
+      return variables[key];
+    }
+    console.warn(`Template variable '${key}' not found in variables:`, variables);
+    return match; // Return original if not found
+  });
+}
+
+// Define the scheduled function outside the export to avoid 'this' context issues
+async function scheduledHandler(event: ScheduledEvent, env: Env): Promise<void> {
     console.log('🕒 Centralized scheduler triggered at', new Date().toISOString());
     
     // Parse scraper endpoints from environment
@@ -27,9 +38,14 @@ export default {
     
     console.log(`📋 Scheduling ${scraperNames.length} scrapers: ${scraperNames.join(', ')}`);
     
-    // Generate URLs dynamically from template (no hardcoding needed!)
+    // Generate URLs dynamically using robust templating (supports future variables)
     const scraperUrls = scraperNames.map(name => {
-      const url = env.SCRAPER_ENDPOINT_TEMPLATE.replace('${rink-name}', name);
+      const url = buildScraperUrl(env.SCRAPER_ENDPOINT_TEMPLATE, {
+        'rink-name': name,
+        // Easy to add more variables in the future:
+        // 'environment': env.ENVIRONMENT || 'production',
+        // 'region': env.REGION || 'us-east-1'
+      });
       return { name, url };
     });
     
@@ -99,9 +115,9 @@ export default {
     
     await env.RINK_DATA.put('scheduler-metadata', JSON.stringify(schedulingMetadata));
     console.log('💾 Stored scheduling metadata');
-  },
+}
 
-  async fetch(request: Request, env: Env): Promise<Response> {
+async function fetchHandler(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
     
     if (url.pathname === '/status') {
@@ -129,7 +145,7 @@ export default {
       // Manual trigger endpoint for testing
       try {
         const event = { scheduledTime: Date.now() } as ScheduledEvent;
-        await this.scheduled(event, env);
+        await scheduledHandler(event, env);
         return new Response('Scheduler manually triggered', {
           headers: { 'Content-Type': 'text/plain' }
         });
@@ -152,5 +168,10 @@ Endpoint template: ${env.SCRAPER_ENDPOINT_TEMPLATE || 'None'}
 Communication method: HTTP with global_fetch_strictly_public`, {
       headers: { 'Content-Type': 'text/plain' }
     });
-  }
+}
+
+// Export object that references the standalone functions to avoid 'this' context issues
+export default {
+  scheduled: scheduledHandler,
+  fetch: fetchHandler
 };
