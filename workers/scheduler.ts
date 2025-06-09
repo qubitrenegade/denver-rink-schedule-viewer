@@ -30,7 +30,7 @@ export default {
     // Generate URLs using template
     const scraperUrls = scraperNames.map(name => {
       const url = env.SCRAPER_ENDPOINT_TEMPLATE.replace('${rink-name}', name);
-      return { name, url: `${url}/schedule` };
+      return { name, url }; // GET / schedules the worker
     });
     
     // Schedule all scrapers in parallel

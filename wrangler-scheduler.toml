@@ -12,7 +12,7 @@ preview_id = "81d647252e8e4e4caa0047a42ae2bd29"
 # Environment variables for scraper configuration
 [vars]
 SCRAPER_ENDPOINTS = "ice-ranch,big-bear,du-ritchie,foothills-edge,ssprd"
-SCRAPER_ENDPOINT_TEMPLATE = "https://rink-scraper-${rink-name}.workers.dev"
+SCRAPER_ENDPOINT_TEMPLATE = "https://rink-scraper-${rink-name}.qbrd.workers.dev"
 
 # Single cron trigger - replaces all individual scraper crons
 [triggers]
