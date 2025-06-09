@@ -27,23 +27,29 @@ export default {
     
     console.log(`📋 Scheduling ${scraperNames.length} scrapers: ${scraperNames.join(', ')}`);
     
-    // Generate URLs using template
+    // Generate URLs dynamically from template (no hardcoding needed!)
     const scraperUrls = scraperNames.map(name => {
       const url = env.SCRAPER_ENDPOINT_TEMPLATE.replace('${rink-name}', name);
-      return { name, url }; // GET / schedules the worker
+      return { name, url };
     });
     
-    // Schedule all scrapers in parallel
+    // Schedule all scrapers in parallel using HTTP with global_fetch_strictly_public
     const results: ScraperResult[] = [];
     const promises = scraperUrls.map(async (scraper) => {
       try {
         console.log(`📞 Scheduling ${scraper.name} at ${scraper.url}`);
+        
+        // Use HTTP fetch with global_fetch_strictly_public flag
         const response = await fetch(scraper.url, {
-          method: 'GET',
-          headers: {
-            'User-Agent': 'DenverRinkScheduler-Centralized/1.0'
-          }
+          method: 'GET'
         });
+        
+        console.log(`📊 Response for ${scraper.name}: status=${response.status}, ok=${response.ok}`);
+        
+        if (!response.ok) {
+          const responseText = await response.text();
+          console.log(`❌ ${scraper.name} error response: ${responseText}`);
+        }
         
         const success = response.ok;
         results.push({
@@ -142,7 +148,8 @@ Available endpoints:
 - GET /trigger - Manually trigger scheduling (for testing)
     
 Configured scrapers: ${env.SCRAPER_ENDPOINTS || 'None'}
-Endpoint template: ${env.SCRAPER_ENDPOINT_TEMPLATE || 'None'}`, {
+Endpoint template: ${env.SCRAPER_ENDPOINT_TEMPLATE || 'None'}
+Communication method: HTTP with global_fetch_strictly_public`, {
       headers: { 'Content-Type': 'text/plain' }
     });
   }

@@ -2,6 +2,7 @@
 name = "rink-scheduler"
 main = "workers/scheduler.ts"
 compatibility_date = "2024-10-21"
+compatibility_flags = ["global_fetch_strictly_public"]
 
 # KV namespace for storing scheduler metadata (same as data API and scrapers)
 [[kv_namespaces]]
