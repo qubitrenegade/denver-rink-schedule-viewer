@@ -129,6 +129,7 @@ get_worker_emoji() {
     *"du-ritchie"*) echo "🏫" ;;
     *"foothills"*) echo "⛸️" ;;
     *"ssprd"*) echo "🏢" ;;
+    *"apex-ice"*) echo "🏔️" ;;
     *) echo "🔧" ;;
   esac
 }

@@ -1,0 +1,29 @@
+# Cloudflare Workers configuration for Apex Ice Arena scraper
+name = "rink-scraper-apex-ice"
+main = "workers/scrapers/apex-ice.ts"
+compatibility_date = "2024-10-21"
+
+# Compatibility flags for worker-to-worker communication
+compatibility_flags = ["global_fetch_strictly_public"]
+
+# KV namespace for storing event data (shared across all scrapers)
+[[kv_namespaces]]
+binding = "RINK_DATA"
+id = "a38bbfdc3fe74d69a0ef39550960eca3"
+
+# Durable Object for scheduling this scraper
+[[durable_objects.bindings]]
+name = "APEX_ICE_SCHEDULER"
+class_name = "ApexIceScheduler"
+
+# Durable Object migrations
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["ApexIceScheduler"]
+
+# Environment variables
+[vars]
+SCRAPER_SPLAY_MINUTES = "360"
+
+# No cron triggers - scheduling is managed by centralized scheduler (workers/scheduler.ts)
+# The centralized scheduler will call this worker via HTTP to trigger scraping

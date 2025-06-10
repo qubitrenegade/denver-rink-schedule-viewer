@@ -16,6 +16,7 @@ WORKERS=(
     "du-ritchie:wrangler-du-ritchie.toml:8790"
     "foothills-edge:wrangler-foothills-edge.toml:8791"
     "ssprd:wrangler-ssprd.toml:8792"
+    "apex-ice:wrangler-apex-ice.toml:8793"
 )
 
 # Colors for output
@@ -51,6 +52,7 @@ PORTS:
     8790 - DU Ritchie scraper
     8791 - Foothills Edge scraper
     8792 - SSPRD scraper
+    8793 - Apex scraper
 
 EXAMPLES:
     ./scripts/dev-test.sh start
