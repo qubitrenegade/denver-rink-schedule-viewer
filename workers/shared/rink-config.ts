@@ -112,6 +112,30 @@ export const RINK_CONFIGURATIONS: Record<string, RinkConfiguration> = {
     sourceUrl: 'https://ssprd.finnlyconnect.com/schedule/250',
     rinkName: 'South Suburban Sports Complex',
     memberRinkIds: ['sssc-rink1', 'sssc-rink2', 'sssc-rink3']
+  },
+  'apex-ice-east': {
+    id: 'apex-ice-east',
+    facilityName: 'Apex Ice Arena',
+    displayName: 'Apex Ice Arena (Arvada)',
+    sourceUrl: 'https://anc.apm.activecommunities.com/apexprd/calendars',
+    rinkName: 'East Rink',
+    shortRinkName: 'East Rink'
+  },
+  'apex-ice-west': {
+    id: 'apex-ice-west',
+    facilityName: 'Apex Ice Arena',
+    displayName: 'Apex Ice Arena (Arvada)',
+    sourceUrl: 'https://anc.apm.activecommunities.com/apexprd/calendars',
+    rinkName: 'West Rink',
+    shortRinkName: 'West Rink'
+  },
+  'apex-ice': {
+    id: 'apex-ice',
+    facilityName: 'Apex Ice Arena',
+    displayName: 'Apex Ice Arena (Arvada)',
+    sourceUrl: 'https://anc.apm.activecommunities.com/apexprd/calendars',
+    rinkName: 'Apex Ice Arena',
+    memberRinkIds: ['apex-ice-east', 'apex-ice-west']
   }
 };
 
@@ -166,6 +190,12 @@ export function getFrontendRinkConfig(): RinkInfo[] {
       name: 'South Suburban Sports Complex (Highlands Ranch)',
       sourceUrl: getRinkConfig('ssprd-sssc').sourceUrl,
       memberRinkIds: ['sssc-rink1', 'sssc-rink2', 'sssc-rink3'],
+    },
+    {
+      id: 'apex-ice',
+      name: getRinkConfig('apex-ice').displayName,
+      sourceUrl: getRinkConfig('apex-ice').sourceUrl,
+      memberRinkIds: ['apex-ice-east', 'apex-ice-west'],
     },
   ];
 }

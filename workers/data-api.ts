@@ -11,7 +11,8 @@ const FACILITY_IDS = [
   'du-ritchie',
   'foothills-edge',
   'ssprd-fsc',
-  'ssprd-sssc'
+  'ssprd-sssc',
+  'apex-ice'
 ];
 
 // CORS headers
