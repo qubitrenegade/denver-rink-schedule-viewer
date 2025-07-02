@@ -1,33 +1,17 @@
 // CloudFlare Worker: Data API (Fixed)
 // This worker serves rink data from KV to the frontend
 
+import { FACILITY_IDS, CORS_HEADERS, HTTP_STATUS, CACHE_DURATIONS } from './shared/constants';
+
 interface Env {
   RINK_DATA: KVNamespace;
 }
-
-const FACILITY_IDS = [
-  'ice-ranch',
-  'big-bear',
-  'du-ritchie',
-  'foothills-edge',
-  'ssprd-fsc',
-  'ssprd-sssc',
-  'apex-ice'
-];
-
-// CORS headers
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
-  'Access-Control-Max-Age': '86400', // 24 hours
-};
 
 function handleCORS(request: Request): Response | null {
   if (request.method === 'OPTIONS') {
     return new Response(null, {
       status: 204,
-      headers: corsHeaders
+      headers: CORS_HEADERS
     });
   }
   return null;
@@ -70,7 +54,7 @@ async function handleDataRequest(
           headers: {
             'Content-Type': 'application/json',
             'Cache-Control': 'public, max-age=60', // 1 minute for error cases
-            ...corsHeaders
+            ...CORS_HEADERS
           }
         });
       }
@@ -81,7 +65,7 @@ async function handleDataRequest(
         headers: {
           'Content-Type': 'application/json',
           'Cache-Control': 'public, max-age=300', // 5 minutes
-          ...corsHeaders
+          ...CORS_HEADERS
         }
       });
     }
@@ -99,8 +83,8 @@ async function handleDataRequest(
           status: 200,
           headers: {
             'Content-Type': 'application/json',
-            'Cache-Control': 'public, max-age=300', // 5 minutes
-            ...corsHeaders
+            'Cache-Control': `public, max-age=${CACHE_DURATIONS.EVENTS}`,
+            ...CORS_HEADERS
           }
         });
       }
@@ -111,7 +95,7 @@ async function handleDataRequest(
         headers: {
           'Content-Type': 'application/json',
           'Cache-Control': 'public, max-age=300', // 5 minutes
-          ...corsHeaders
+          ...CORS_HEADERS
         }
       });
     }
@@ -151,7 +135,7 @@ async function handleDataRequest(
         headers: {
           'Content-Type': 'application/json',
           'Cache-Control': 'public, max-age=300', // 5 minutes
-          ...corsHeaders
+          ...CORS_HEADERS
         }
       });
     }
@@ -187,7 +171,7 @@ async function handleDataRequest(
         headers: {
           'Content-Type': 'application/json',
           'Cache-Control': 'public, max-age=300', // 5 minutes
-          ...corsHeaders
+          ...CORS_HEADERS
         }
       });
     }
@@ -226,7 +210,7 @@ async function handleDataRequest(
         headers: {
           'Content-Type': 'application/json',
           'Cache-Control': 'public, max-age=60', // 1 minute
-          ...corsHeaders
+          ...CORS_HEADERS
         }
       });
     }
@@ -248,7 +232,7 @@ async function handleDataRequest(
         status: 200,
         headers: {
           'Content-Type': 'application/json',
-          ...corsHeaders
+          ...CORS_HEADERS
         }
       });
     }
@@ -269,7 +253,7 @@ async function handleDataRequest(
       status: 404,
       headers: {
         'Content-Type': 'application/json',
-        ...corsHeaders
+        ...CORS_HEADERS
       }
     });
 
@@ -284,7 +268,7 @@ async function handleDataRequest(
       status: 500,
       headers: {
         'Content-Type': 'application/json',
-        ...corsHeaders
+        ...CORS_HEADERS
       }
     });
   }

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Icon Generator</title>
+</head>
+<body>
+    <h2>PWA Icon Generator</h2>
+    <canvas id="canvas192" width="192" height="192" style="border: 1px solid #ccc; margin: 10px;"></canvas>
+    <canvas id="canvas512" width="512" height="512" style="border: 1px solid #ccc; margin: 10px;"></canvas>
+    <br>
+    <button onclick="downloadIcons()">Download Icons</button>
+    
+    <script>
+        function createIcon(canvas, size) {
+            const ctx = canvas.getContext('2d');
+            
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#2563eb');
+            gradient.addColorStop(1, '#0ea5e9');
+            
+            // Draw background with rounded corners
+            ctx.fillStyle = gradient;
+            const radius = size * 0.15;
+            ctx.beginPath();
+            ctx.roundRect(0, 0, size, size, radius);
+            ctx.fill();
+            
+            // Draw hockey stick (simplified)
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = size * 0.08;
+            ctx.lineCap = 'round';
+            
+            ctx.beginPath();
+            ctx.moveTo(size * 0.3, size * 0.2);
+            ctx.lineTo(size * 0.3, size * 0.7);
+            ctx.lineTo(size * 0.45, size * 0.8);
+            ctx.stroke();
+            
+            // Draw puck
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.ellipse(size * 0.65, size * 0.6, size * 0.08, size * 0.05, 0, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Draw text
+            ctx.fillStyle = 'white';
+            ctx.font = `bold ${size * 0.12}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.fillText('RINK', size * 0.5, size * 0.4);
+            
+            ctx.font = `${size * 0.08}px Arial`;
+            ctx.fillText('SCHEDULE', size * 0.5, size * 0.9);
+        }
+        
+        // Create icons
+        const canvas192 = document.getElementById('canvas192');
+        const canvas512 = document.getElementById('canvas512');
+        
+        createIcon(canvas192, 192);
+        createIcon(canvas512, 512);
+        
+        function downloadIcons() {
+            // Download 192x192
+            const link192 = document.createElement('a');
+            link192.download = 'icon-192x192.png';
+            link192.href = canvas192.toDataURL();
+            link192.click();
+            
+            // Download 512x512
+            const link512 = document.createElement('a');
+            link512.download = 'icon-512x512.png';
+            link512.href = canvas512.toDataURL();
+            link512.click();
+        }
+    </script>
+</body>
+</html>

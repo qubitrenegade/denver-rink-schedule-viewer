@@ -2,6 +2,7 @@
 
 import { getRinkConfig } from '../shared/rink-config';
 import { TIME_PATTERNS, HTML_PATTERNS, VALIDATION_PATTERNS, RegexHelpers } from '../shared/regex-patterns';
+import { CORS_HEADERS, DEFAULT_CONFIG } from '../shared/constants';
 
 export interface RawIceEventData {
   id: string;
@@ -45,12 +46,7 @@ export class ScraperHelpers {
    * Get CORS headers for responses
    */
   static corsHeaders(): Record<string, string> {
-    return {
-      'Content-Type': 'text/plain',
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-    };
+    return CORS_HEADERS;
   }
 
   /**
@@ -82,7 +78,7 @@ export class ScraperHelpers {
    * Get alarm time with random splay delay
    */
   static getAlarmTime(splayMinutesEnvVar?: string): number {
-    const splayMinutes = parseInt(splayMinutesEnvVar || '360', 10);
+    const splayMinutes = parseInt(splayMinutesEnvVar || DEFAULT_CONFIG.SCRAPER_SPLAY_MINUTES.toString(), 10);
     const delay = ScraperHelpers.getRandomDelay(splayMinutes);
     return Date.now() + delay;
   }
@@ -90,7 +86,7 @@ export class ScraperHelpers {
   /**
    * Get the next scheduled time for scraping with random splay
    */
-  static getNextScheduledTime(splayMinutes: number = 360): Date {
+  static getNextScheduledTime(splayMinutes: number = DEFAULT_CONFIG.SCRAPER_SPLAY_MINUTES): Date {
     const now = new Date();
     const delayMs = ScraperHelpers.getRandomDelay(splayMinutes);
     const nextTime = new Date(now.getTime() + delayMs);
@@ -406,7 +402,7 @@ export class ScraperHelpers {
       await runScraperFn();
 
       // Schedule next alarm with configured splay
-      const splayMinutes = parseInt(env.SCRAPER_SPLAY_MINUTES || '360', 10);
+      const splayMinutes = parseInt(env.SCRAPER_SPLAY_MINUTES || DEFAULT_CONFIG.SCRAPER_SPLAY_MINUTES.toString(), 10);
       const nextAlarmTime = ScraperHelpers.getNextScheduledTime(splayMinutes);
       await state.storage.setAlarm(nextAlarmTime);
       console.log(`📅 Next ${rinkId} alarm scheduled for ${nextAlarmTime.toISOString()}`);
@@ -415,7 +411,7 @@ export class ScraperHelpers {
       console.error(`❌ ${rinkId} alarm failed:`, error);
 
       // Still schedule next alarm even if this one failed
-      const splayMinutes = parseInt(env.SCRAPER_SPLAY_MINUTES || '360', 10);
+      const splayMinutes = parseInt(env.SCRAPER_SPLAY_MINUTES || DEFAULT_CONFIG.SCRAPER_SPLAY_MINUTES.toString(), 10);
       const nextAlarmTime = ScraperHelpers.getNextScheduledTime(splayMinutes);
       await state.storage.setAlarm(nextAlarmTime);
     }

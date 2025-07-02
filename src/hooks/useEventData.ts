@@ -1,6 +1,7 @@
 // Updated useEventData hook to fetch from CloudFlare Workers instead of static files
 import { useState, useCallback } from 'react';
 import { RawIceEventData, FacilityMetadata } from '../types';
+import { FACILITY_IDS, CACHE_DURATIONS, API_ENDPOINTS } from '../utils/constants';
 
 // Configuration for CloudFlare Worker API endpoint
 const WORKER_API_BASE = import.meta.env.WORKER_API_BASE ||
@@ -16,7 +17,7 @@ export function useEventData() {
 
   const fetchData = useCallback(async (forceRefresh = false) => {
     // Use cache for 5 minutes unless force refresh
-    if (staticData.length > 0 && !forceRefresh && Date.now() - lastFetchTime < 5 * 60 * 1000) {
+    if (staticData.length > 0 && !forceRefresh && Date.now() - lastFetchTime < CACHE_DURATIONS.API_CACHE) {
       console.log(`📋 Using cached data`);
       return;
     }
@@ -80,7 +81,7 @@ export function useEventData() {
       }
 
       // Fallback: fetch each facility individually (maintains compatibility)
-      const facilityIds = ['ice-ranch', 'big-bear', 'du-ritchie', 'foothills-edge', 'ssprd-fsc', 'ssprd-sssc', 'apex-ice'];
+      const facilityIds = FACILITY_IDS;
 
       const facilityPromises = facilityIds.map(async (facilityId) => {
         try {
