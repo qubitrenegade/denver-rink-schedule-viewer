@@ -124,10 +124,19 @@ async function handleDataRequest(
       for (const facilityId of FACILITY_IDS) {
         try {
           const eventsData = await env.RINK_DATA.get(`events:${facilityId}`);
-          if (eventsData) {
-            const events = JSON.parse(eventsData);
-            allEvents.push(...events);
-            console.log(`✅ Loaded ${events.length} events from ${facilityId}`);
+          if (eventsData && eventsData.trim() !== '') {
+            try {
+              const events = JSON.parse(eventsData);
+              if (Array.isArray(events)) {
+                allEvents.push(...events);
+                console.log(`✅ Loaded ${events.length} events from ${facilityId}`);
+              } else {
+                console.warn(`⚠️ Events data for ${facilityId} is not an array`);
+              }
+            } catch (parseError) {
+              console.warn(`❌ Failed to parse JSON for ${facilityId}:`, parseError);
+              console.warn(`❌ Raw data:`, eventsData);
+            }
           } else {
             console.log(`⚠️ No events data for ${facilityId}`);
           }
@@ -155,9 +164,15 @@ async function handleDataRequest(
       for (const facilityId of FACILITY_IDS) {
         try {
           const metadataData = await env.RINK_DATA.get(`metadata:${facilityId}`);
-          if (metadataData) {
-            allMetadata[facilityId] = JSON.parse(metadataData);
-            console.log(`✅ Loaded metadata for ${facilityId}`);
+          if (metadataData && metadataData.trim() !== '') {
+            try {
+              const metadata = JSON.parse(metadataData);
+              allMetadata[facilityId] = metadata;
+              console.log(`✅ Loaded metadata for ${facilityId}`);
+            } catch (parseError) {
+              console.warn(`❌ Failed to parse JSON metadata for ${facilityId}:`, parseError);
+              console.warn(`❌ Raw metadata:`, metadataData);
+            }
           } else {
             console.log(`⚠️ No metadata for ${facilityId}`);
           }

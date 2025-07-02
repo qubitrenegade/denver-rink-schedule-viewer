@@ -1,5 +1,6 @@
 // workers/scrapers/ice-ranch.ts - Ice Ranch scraper with Durable Objects scheduling
 import { ScraperHelpers, RawIceEventData } from '../helpers/scraper-helpers';
+import { TIME_PATTERNS, HTML_PATTERNS, RegexHelpers } from '../shared/regex-patterns';
 
 interface Env {
   RINK_DATA: KVNamespace;
@@ -96,7 +97,7 @@ class IceRanchScraper {
       title = title.replace(/^[A-Za-z]+ [A-Za-z]+ \d{1,2}, \d{4}:\s*/, '');
 
       // Decode HTML entities in title
-      title = title.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+      title = RegexHelpers.cleanHtmlEntities(title);
       title = ScraperHelpers.cleanTitle(title);
 
       let description: string = item.description || '';
@@ -104,7 +105,7 @@ class IceRanchScraper {
       const pubDate: string = item.pubDate || '';
 
       // Decode HTML entities in description
-      description = description.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+      description = RegexHelpers.cleanHtmlEntities(description);
 
       console.log(`🔍 DEBUG: Raw description before cleaning: "${description}"`);
 
@@ -143,12 +144,12 @@ class IceRanchScraper {
 
       // Try to extract more precise times from description
       let endTime: Date = new Date(startTime);
-      const timeMatch = description.match(/Time:\s*([\d:apm ]+)\s*-\s*(\d{1,2}:\d{2}[ap]m)/i);
+      const timeMatch = description.match(TIME_PATTERNS.TIME_RANGE);
       if (timeMatch) {
         const [, startStr, endStr] = timeMatch;
 
         // Parse start time from description using Mountain Time conversion
-        const startMatch = startStr.trim().match(/(\d{1,2}):(\d{2})\s*([ap]m)/i);
+        const startMatch = startStr.trim().match(TIME_PATTERNS.TIME_12_HOUR);
         if (startMatch) {
           const timeStr = `${startMatch[1]}:${startMatch[2]} ${startMatch[3]}`;
           startTime = ScraperHelpers.parseMountainTime(timeStr, startTime);
@@ -253,7 +254,10 @@ export class IceRanchScheduler {
       const scraper = new IceRanchScraper();
       const events = await scraper.scrape();
 
-      await ScraperHelpers.writeToKV(this.env.RINK_DATA, 'ice-ranch', events);
+      await ScraperHelpers.writeToKV(this.env.RINK_DATA, 'ice-ranch', events, undefined, { 
+        mode: 'merge', 
+        maxAgeDays: 30 
+      });
 
       // Update last run time
       await this.state.storage.put('lastRun', new Date().toISOString());

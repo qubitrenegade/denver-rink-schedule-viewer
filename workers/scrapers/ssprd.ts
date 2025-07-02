@@ -1,5 +1,6 @@
 // workers/scrapers/ssprd.ts - SSPRD scraper with Durable Objects scheduling
 import { ScraperHelpers, RawIceEventData } from '../helpers/scraper-helpers';
+import { CONTENT_EXTRACTION, VALIDATION_PATTERNS, RegexHelpers } from '../shared/regex-patterns';
 
 interface Env {
   RINK_DATA: KVNamespace;
@@ -25,7 +26,7 @@ class SSPRDScraper {
   private parseSSPRDDateTime(dateTimeStr: string): Date {
     const date = new Date(dateTimeStr);
     if (isNaN(date.getTime())) return new Date();
-    const hasTimezone = /[+-]\d{2}:?\d{2}|Z|UTC|GMT|[A-Z]{3,4}T?$/i.test(dateTimeStr);
+    const hasTimezone = VALIDATION_PATTERNS.TIMEZONE_INFO.test(dateTimeStr);
     if (!hasTimezone) {
       const year = date.getFullYear();
       const month = date.getMonth();
@@ -55,7 +56,7 @@ class SSPRDScraper {
     if (!response.ok) throw new Error(`Failed to fetch SSPRD schedule: ${response.status} ${response.statusText}`);
     const html = await response.text();
     // Extract _onlineScheduleList array from HTML using regex
-    const match = html.match(/_onlineScheduleList\s*=\s*(\[.*?\]);/s);
+    const match = html.match(CONTENT_EXTRACTION.ONLINE_SCHEDULE_LIST);
     const events: RawIceEventData[] = [];
     if (match && match[1]) {
       try {
@@ -64,7 +65,7 @@ class SSPRDScraper {
           scheduleData.forEach((item: any, index: number) => {
             const specificRinkId = facilityIdToRinkIdMap[item.FacilityId];
             if (!specificRinkId) return;
-            const title = item.AccountName ? String(item.AccountName).trim() : 'Unnamed Event';
+            const title = item.AccountName ? RegexHelpers.cleanHtmlEntities(String(item.AccountName).trim()) : 'Unnamed Event';
             let category = this.categorizeEvent(item.EventTypeName || title);
             if (category === 'Other' && item.EventTypeName !== title) {
               category = this.categorizeEvent(title);
@@ -80,7 +81,7 @@ class SSPRDScraper {
               startTime: startTime.toISOString(),
               endTime: endTime.toISOString(),
               category,
-              description: item.Description ? String(item.Description).trim() : undefined,
+              description: item.Description ? RegexHelpers.cleanHtmlEntities(String(item.Description).trim()) : undefined,
               isFeatured: item.isFeatured || false,
               eventUrl: undefined
             });

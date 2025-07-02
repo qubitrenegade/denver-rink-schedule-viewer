@@ -108,7 +108,16 @@ export function useEventFiltering(
       }
     }
 
-    // 4. Rink Filter (only for 'All Rinks' view, based on individual rinks)
+    // 4. Global Deduplication (remove events with same title and startTime)
+    // This prevents duplicates that might occur across different scrapers or data sources
+    processedData = processedData.filter((event, index, self) =>
+      index === self.findIndex((e) =>
+        e.title === event.title &&
+        e.startTime.getTime() === event.startTime.getTime()
+      )
+    );
+
+    // 5. Rink Filter (only for 'All Rinks' view, based on individual rinks)
     if (selectedRinkId === ALL_RINKS_TAB_ID && filterSettings.activeRinkIds && filterSettings.activeRinkIds.length > 0) {
       processedData = processedData.filter(event => {
         if (filterSettings.rinkFilterMode === 'include') {
@@ -119,7 +128,7 @@ export function useEventFiltering(
       });
     }
 
-    // 5. Prepare for display (add facilityName and rinkName)
+    // 6. Prepare for display (add facilityName and rinkName)
     const rawEventsWithDates: (RawIceEventData & { rinkName?: string; facilityName?: string })[] = processedData.map(e => {
       const rinkConfig = getRinkConfig(e.rinkId);
       const facilityName = rinkConfig.displayName;
@@ -132,7 +141,7 @@ export function useEventFiltering(
       };
     });
 
-    // 6. Category Filter
+    // 7. Category Filter
     const processedEvents: DisplayableIceEvent[] = rawEventsWithDates.map(event => ({
       ...event,
       startTime: event.startTime.toISOString(),

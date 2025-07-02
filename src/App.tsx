@@ -5,6 +5,7 @@ import RinkTabs from './components/RinkTabs';
 import EventList from './components/EventList';
 import FilterControls from './components/FilterControls';
 import { LoadingIcon, CalendarIcon, AdjustmentsHorizontalIcon } from './components/icons';
+import About from './About';
 import { useEventData } from './hooks/useEventData';
 import { useEventFiltering } from './hooks/useEventFiltering';
 import { useUrlState } from './hooks/useUrlState';
@@ -31,6 +32,7 @@ const App: React.FC = () => {
   } = useUrlState();
 
   const [showFilters, setShowFilters] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
 
   const allPossibleCategories = useMemo((): EventCategory[] => {
     const categories = new Set<EventCategory>();
@@ -133,11 +135,17 @@ const App: React.FC = () => {
             className="w-full max-h-48 object-contain rounded-lg shadow-lg"
           />
         </div>
-        <div className="flex items-center justify-center mb-2">
+        <div className="flex items-center justify-center mb-2 relative">
           <CalendarIcon className="w-10 h-10 mr-3 text-sky-400" />
           <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-cyan-300">
             Denver Rink Schedule
           </h1>
+          <button 
+            onClick={() => setShowAbout(true)}
+            className="absolute right-0 top-0 text-sky-400 hover:text-sky-300 underline transition-colors text-sm"
+          >
+            About
+          </button>
         </div>
         <p className="text-sm text-slate-400 italic max-w-2xl mx-auto">
           {getFilterDescription()} Data is automatically updated twice daily via GitHub Actions.
@@ -279,6 +287,24 @@ const App: React.FC = () => {
           Last data update: {getLastUpdateInfo()}
         </p>
       </footer>
+
+      {/* About Modal */}
+      {showAbout && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-slate-800 rounded-lg p-6 max-w-md w-full max-h-96 overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold text-sky-300">About</h2>
+              <button 
+                onClick={() => setShowAbout(false)}
+                className="text-slate-400 hover:text-slate-200 text-2xl"
+              >
+                ×
+              </button>
+            </div>
+            <About />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
