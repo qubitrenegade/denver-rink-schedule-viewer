@@ -56,7 +56,7 @@ jobs:
       run: |
         echo "Checking for timezone conversion issues..."
         # This test ensures our fix prevents midnight display times
-        if bun test workers/scrapers/apex-ice.test.ts --reporter=verbose | grep -q "prevents midnight time display bug.*pass"; then
+        if bun test workers/scrapers/apex-ice.test.ts | grep -q "prevents midnight time display bug.*pass"; then
           echo "✅ Midnight time bug prevention test passed"
         else
           echo "❌ Midnight time bug prevention test failed"
