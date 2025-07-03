@@ -50,8 +50,8 @@ const StatusIndicator: React.FC<StatusIndicatorProps> = ({
 
   if (hasMetadata) {
     const lastUpdated = Object.values(facilityMetadata)
-      .filter(meta => meta?.lastUpdated)
-      .map(meta => new Date(meta.lastUpdated!))
+      .filter(meta => meta?.lastSuccessfulScrape)
+      .map(meta => new Date(meta.lastSuccessfulScrape!))
       .sort((a, b) => b.getTime() - a.getTime())[0];
 
     return (
