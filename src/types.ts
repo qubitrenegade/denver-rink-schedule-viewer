@@ -73,4 +73,21 @@ export interface RawIceEventData {
   eventUrl?: string;
 }
 
+// Facility metadata from scrapers
+export interface FacilityMetadata {
+  facilityId: string;
+  facilityName: string;
+  displayName: string;
+  lastAttempt: string;
+  status: 'success' | 'error';
+  eventCount: number;
+  errorMessage?: string;
+  sourceUrl: string;
+  rinks: {
+    rinkId: string;
+    rinkName: string;
+  }[];
+  lastSuccessfulScrape?: string;
+}
+
 // Only necessary types/interfaces are exported. Comments clarified.

@@ -1,5 +1,6 @@
 // workers/scrapers/apex-ice.ts - Apex Ice Arena scraper with Durable Objects scheduling
 import { ScraperHelpers, RawIceEventData } from '../helpers/scraper-helpers';
+import { ColoradoTimezone } from '../shared/timezone-utils';
 
 interface Env {
   RINK_DATA: KVNamespace;
@@ -153,13 +154,24 @@ class ApexIceScraper {
         }
       }
 
-      // Parse datetime (API returns in format "2025-06-10 11:00:00")
-      const startDate = new Date(event.start_time + ' MST'); // Apex is in Mountain Time
+      // Parse datetime (API returns in format "2025-06-10 11:00:00" in Mountain Time)
+      // Treat the time as local Mountain Time and convert to UTC
+      const startDate = new Date(event.start_time + ' MST');
       const endDate = new Date(event.end_time + ' MST');
       
-      // Convert to UTC
-      const startUtc = new Date(startDate.getTime() + (startDate.getTimezoneOffset() * 60000) + (6 * 60 * 60 * 1000));
-      const endUtc = new Date(endDate.getTime() + (endDate.getTimezoneOffset() * 60000) + (6 * 60 * 60 * 1000));
+      // If MST parsing fails, add 7 hours (MDT) or 6 hours (MST) offset
+      let startUtc: Date, endUtc: Date;
+      if (isNaN(startDate.getTime())) {
+        // Fallback: parse as ISO and add offset
+        const tempStart = new Date(event.start_time);
+        const tempEnd = new Date(event.end_time);
+        // Add 7 hours for MDT (daylight time, March-November)
+        startUtc = new Date(tempStart.getTime() + 7 * 60 * 60 * 1000);
+        endUtc = new Date(tempEnd.getTime() + 7 * 60 * 60 * 1000);
+      } else {
+        startUtc = startDate;
+        endUtc = endDate;
+      }
 
       const eventId = `${rinkId}-${event.event_item_id || Date.now()}`;
 
@@ -279,24 +291,21 @@ class ApexIceScraper {
         rinkId = 'apex-ice-east';
       }
 
-      // Parse dates - try multiple formats
+      // Parse dates - API times are already in Mountain Time
       let startDate: Date;
       let endDate: Date;
 
       if (startTime && endTime) {
-        startDate = new Date(startTime);
-        endDate = new Date(endTime);
+        // Convert from Mountain Time to UTC
+        const tempStart = new Date(String(startTime));
+        const tempEnd = new Date(String(endTime));
+        startDate = ColoradoTimezone.mountainTimeToUTC(tempStart);
+        endDate = ColoradoTimezone.mountainTimeToUTC(tempEnd);
       } else {
         // Fallback to current date if no specific date found
         const now = new Date();
         startDate = new Date(now);
         endDate = new Date(now.getTime() + 2 * 60 * 60 * 1000); // 2 hour default
-      }
-
-      // Convert from Mountain Time to UTC if needed
-      if (startDate.getTimezoneOffset() === 0) {
-        startDate.setTime(startDate.getTime() + (6 * 60 * 60 * 1000));
-        endDate.setTime(endDate.getTime() + (6 * 60 * 60 * 1000));
       }
 
       // Generate unique ID

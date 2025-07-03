@@ -20,6 +20,7 @@ CONFIGS=(
     "wrangler-du-ritchie.toml:DU Ritchie Scraper"
     "wrangler-foothills-edge.toml:Foothills Edge Scraper"
     "wrangler-ssprd.toml:SSPRD Scraper"
+    "wrangler-apex-ice.toml:Apex Ice Scraper"
 )
 
 # Logging functions
@@ -138,6 +139,7 @@ trigger_scrapers() {
         "ice-ranch:https://rink-scraper-ice-ranch.qbrd.workers.dev"
         "big-bear:https://rink-scraper-big-bear.qbrd.workers.dev"
         "du-ritchie:https://rink-scraper-du-ritchie.qbrd.workers.dev"
+        "apex-ice:https://rink-scraper-apex-ice.qbrd.workers.dev"
     )
     
     local failed_scrapers=()

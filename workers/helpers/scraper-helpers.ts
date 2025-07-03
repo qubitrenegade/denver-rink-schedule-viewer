@@ -3,6 +3,7 @@
 import { getRinkConfig } from '../shared/rink-config';
 import { TIME_PATTERNS, HTML_PATTERNS, VALIDATION_PATTERNS, RegexHelpers } from '../shared/regex-patterns';
 import { CORS_HEADERS, DEFAULT_CONFIG } from '../shared/constants';
+import { ColoradoTimezone } from '../shared/timezone-utils';
 
 export interface RawIceEventData {
   id: string;
@@ -210,42 +211,11 @@ export class ScraperHelpers {
 
   /**
    * Parse time strings in various formats to Date objects
-   * Handles timezone conversion from Mountain Time to UTC
+   * Handles timezone conversion from Mountain Time to UTC with proper DST awareness
    */
   static parseMountainTime(timeStr: string, baseDate?: Date): Date {
-    // If no base date provided, use current date
-    if (!baseDate) {
-      baseDate = new Date();
-    }
-
-    // Try parsing as full datetime first
-    const date = new Date(timeStr);
-    if (!isNaN(date.getTime())) {
-      // Check if timezone info is present
-      const hasTimezone = VALIDATION_PATTERNS.TIMEZONE_INFO.test(timeStr);
-      if (!hasTimezone) {
-        // Assume Mountain Time and convert to UTC (add 6 hours for MDT, 7 for MST)
-        // For simplicity, always add 6 hours (MDT)
-        date.setTime(date.getTime() + (6 * 60 * 60 * 1000));
-      }
-      return date;
-    }
-
-    // Try parsing as time only (e.g., "2:30 PM")
-    const timeMatch = timeStr.match(TIME_PATTERNS.TIME_12_HOUR);
-    if (timeMatch && baseDate) {
-      const parsedTime = RegexHelpers.parse12HourTime(timeStr);
-      if (parsedTime) {
-        const result = new Date(baseDate);
-        result.setUTCHours(parsedTime.hours, parsedTime.minutes, 0, 0);
-        // Convert from Mountain Time to UTC
-        result.setTime(result.getTime() + (6 * 60 * 60 * 1000));
-        return result;
-      }
-    }
-
-    // Fallback: return baseDate or current time
-    return baseDate || new Date();
+    // Use the new DST-aware timezone utility for accurate timezone conversion
+    return ColoradoTimezone.parseMountainTime(timeStr, baseDate);
   }
 
   /**
@@ -436,10 +406,9 @@ export class ScraperHelpers {
         if (ampm === 'p' && hours !== 12) hours += 12;
         if (ampm === 'a' && hours === 12) hours = 0;
 
-        baseDate.setUTCHours(hours, minutes, 0, 0);
-        // Convert from Mountain Time to UTC (add 6 hours for MDT)
-        baseDate.setTime(baseDate.getTime() + (6 * 60 * 60 * 1000));
-        return baseDate;
+        baseDate.setHours(hours, minutes, 0, 0);
+        // Use DST-aware timezone conversion instead of hardcoded +6 hours
+        return ColoradoTimezone.mountainTimeToUTC(baseDate);
       }
     }
 

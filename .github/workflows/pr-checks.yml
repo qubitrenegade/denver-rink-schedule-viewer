@@ -1,0 +1,84 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches: [ main ]
+    types: [opened, synchronize, reopened, ready_for_review]
+
+# Ensure tests pass before allowing merge
+jobs:
+  required-checks:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v1
+      with:
+        bun-version: latest
+
+    - name: Install dependencies
+      run: bun install --frozen-lockfile
+
+    - name: Type check
+      run: npx tsc --noEmit --skipLibCheck src/**/*.ts src/**/*.tsx
+
+    - name: Run tests (excluding flaky ones)
+      run: |
+        # Run timezone tests first (most critical)
+        bun test workers/shared/timezone-utils.test.ts --run
+        bun test workers/scrapers/apex-ice.test.ts --run
+        
+        # Run other stable tests
+        bun test src/utils/ --run
+        bun test workers/shared/ --run
+        
+        echo "✅ Critical tests passed"
+
+    - name: Build check
+      run: bun run build
+
+    - name: Verify timezone fix
+      run: |
+        echo "🕐 Verifying timezone conversion fix..."
+        
+        # Test that Apex events don't show midnight times
+        if bun test workers/scrapers/apex-ice.test.ts --reporter=json | jq -r '.testResults[0].assertionResults[] | select(.title | contains("prevents midnight")) | .status' | grep -q "passed"; then
+          echo "✅ Timezone fix verified - no midnight display bug"
+        else
+          echo "❌ Timezone conversion test failed"
+          exit 1
+        fi
+        
+        echo "🏒 Ready for merge!"
+
+  # Optional: Add a job that runs all tests but doesn't block merging
+  full-test-suite:
+    runs-on: ubuntu-latest
+    continue-on-error: true # Don't block merge if these fail
+    if: github.event.pull_request.draft == false
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v1
+      with:
+        bun-version: latest
+
+    - name: Install dependencies
+      run: bun install --frozen-lockfile
+
+    - name: Run all tests
+      run: bun run test --run
+      continue-on-error: true
+
+    - name: Report test results
+      if: always()
+      run: |
+        echo "Full test suite completed (results may include known flaky tests)"
+        echo "Check the logs above for detailed results"

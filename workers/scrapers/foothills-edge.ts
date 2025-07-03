@@ -1,6 +1,7 @@
 // workers/scrapers/foothills-edge.ts - Foothills Edge scraper with Durable Objects scheduling
 import { ScraperHelpers, RawIceEventData } from '../helpers/scraper-helpers';
 import { CONTENT_EXTRACTION, TIME_PATTERNS, RegexHelpers } from '../shared/regex-patterns';
+import { ColoradoTimezone } from '../shared/timezone-utils';
 
 interface Env {
   RINK_DATA: KVNamespace;
@@ -27,9 +28,9 @@ class FoothillsEdgeScraper {
     if (!parsedTime) return baseDate;
     
     const result = new Date(baseDate);
-    result.setUTCHours(parsedTime.hours, parsedTime.minutes, 0, 0);
-    result.setTime(result.getTime() + (6 * 60 * 60 * 1000));
-    return result;
+    result.setHours(parsedTime.hours, parsedTime.minutes, 0, 0);
+    // Use DST-aware timezone conversion instead of hardcoded +6 hours
+    return ColoradoTimezone.mountainTimeToUTC(result);
   }
 
   private extractEventsFromJavaScript(html: string): RawIceEventData[] {
