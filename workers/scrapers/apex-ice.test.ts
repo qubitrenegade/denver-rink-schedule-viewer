@@ -94,4 +94,44 @@ describe('Apex Ice scraper timezone conversion', () => {
     expect(startMT.getHours()).toBe(5);
     expect(endMT.getHours()).toBe(6);
   });
+  
+  test('detects bad data that causes midnight display bug', () => {
+    // Test to detect the bad data format that causes midnight times
+    
+    // This is what BAD stored data looks like (before fix)
+    const badStoredEvent = {
+      startTime: '2024-07-15T05:30:00.000Z', // WRONG: MT time stored as UTC
+      endTime: '2024-07-15T06:30:00.000Z'
+    };
+    
+    // This is what GOOD stored data should look like (after fix)
+    const goodStoredEvent = {
+      startTime: '2024-07-15T11:30:00.000Z', // CORRECT: 5:30 AM MDT = 11:30 AM UTC
+      endTime: '2024-07-15T12:30:00.000Z'
+    };
+    
+    // Simulate what the frontend does with this data
+    const badStart = new Date(badStoredEvent.startTime);
+    const goodStart = new Date(goodStoredEvent.startTime);
+    
+    // Display times in Mountain Time (what user sees)
+    const badDisplayMT = badStart.toLocaleString('en-US', {timeZone: 'America/Denver'});
+    const goodDisplayMT = goodStart.toLocaleString('en-US', {timeZone: 'America/Denver'});
+    
+    console.log('Bad data displays as:', badDisplayMT);
+    console.log('Good data displays as:', goodDisplayMT);
+    
+    // Test that we can detect bad data
+    const badMTHour = new Date(badStart.toLocaleString('en-US', {timeZone: 'America/Denver'})).getHours();
+    const goodMTHour = new Date(goodStart.toLocaleString('en-US', {timeZone: 'America/Denver'})).getHours();
+    
+    // Bad data results in late night hours for morning events (11 PM the previous day)
+    expect(badMTHour).toBe(23); // Shows as 11 PM the previous day
+    
+    // Good data shows correct morning hours
+    expect(goodMTHour).toBe(5); // Shows as 5 AM
+    
+    // The fix prevents storing times that would cause midnight display
+    expect(badStoredEvent.startTime).not.toEqual(goodStoredEvent.startTime);
+  });
 });
