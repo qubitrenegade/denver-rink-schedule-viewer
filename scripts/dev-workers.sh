@@ -12,6 +12,7 @@ INCLUDE_PATTERNS=()
 LOCAL_FLAG="--local"
 LOG_DIR="./logs"
 RUN_TESTS=false
+AUTO_SCRAPE=false
 VERBOSE=false
 
 # Colors for output
@@ -33,6 +34,7 @@ COMMANDS:
     start     Start all workers in development mode (default)
     stop      Stop all running workers
     test      Test all worker endpoints
+    scrape    Trigger scraping on all running scraper workers and exit
     restart   Stop and start all workers
     status    Show status of all workers
     help      Show this help message
@@ -43,6 +45,7 @@ OPTIONS:
     --include PATTERN    Only include configs matching pattern (can be used multiple times)
     --remote             Run against remote Cloudflare (no --local)
     --test               Run tests after startup (only with start command)
+    --auto-scrape        Automatically trigger scraping after startup (only with start command)
     -v, --verbose        Show detailed response data from endpoints
 
 PORTS:
@@ -53,9 +56,11 @@ PORTS:
 EXAMPLES:
     ./scripts/dev-workers.sh start
     ./scripts/dev-workers.sh start --test
+    ./scripts/dev-workers.sh start --auto-scrape
     ./scripts/dev-workers.sh start --exclude "big-bear"
     ./scripts/dev-workers.sh start --port-start 9000
     ./scripts/dev-workers.sh test --verbose
+    ./scripts/dev-workers.sh scrape
     ./scripts/dev-workers.sh stop
     ./scripts/dev-workers.sh restart
 
@@ -86,11 +91,15 @@ while [[ $# -gt 0 ]]; do
       RUN_TESTS=true
       shift
       ;;
+    --auto-scrape)
+      AUTO_SCRAPE=true
+      shift
+      ;;
     -v|--verbose)
       VERBOSE=true
       shift
       ;;
-    start|stop|test|restart|status|help|--help|-h)
+    start|stop|test|scrape|restart|status|help|--help|-h)
       COMMAND="$1"
       shift
       ;;
@@ -134,7 +143,7 @@ get_available_port() {
 get_worker_name() {
   local config_file="$1"
   local name
-  name=$(grep "^name = " "$config_file" 2>/dev/null | sed 's/name = "\(.*\)"/\1/')
+  name=$(grep "^name = " "$config_file" 2>/dev/null | head -1 | sed 's/name = "\(.*\)"/\1/')
   echo "${name:-$(basename "$config_file" .toml)}"
 }
 
@@ -438,6 +447,106 @@ stop_all_workers() {
   fi
 }
 
+# Function to trigger scraping on all running scrapers
+run_scrapers() {
+  log_info "Triggering scraping on all running scrapers..."
+  echo "================================"
+  
+  local scraped_any=false
+  local failed_scrapers=()
+  
+  # Find running scrapers by checking PID files and ports
+  for config in wrangler*.toml; do
+    if [[ -f "$config" ]] && should_include_config "$config"; then
+      local worker_name
+      worker_name=$(get_worker_name "$config")
+      local worker_info
+      worker_info=$(get_worker_info "$config")
+      local worker_type="${worker_info%%:*}"
+      
+      # Only scrape scraper workers, not data-api
+      if [[ "$worker_type" == "scraper" ]]; then
+        local pid_file="$LOG_DIR/${worker_name}.pid"
+        local port=""
+        
+        # Check if worker is running and get its port
+        if [[ -f "$pid_file" ]]; then
+          local pid
+          pid=$(cat "$pid_file")
+          if kill -0 "$pid" 2>/dev/null; then
+            # Try to find port from worker arrays or scan
+            port=${worker_ports[$worker_name]:-""}
+            
+            # If port not in array, try to find it by scanning
+            if [[ -z "$port" ]]; then
+              # Look for port in log file
+              if [[ -f "$LOG_DIR/${worker_name}.log" ]]; then
+                port=$(grep -o "localhost:[0-9]*" "$LOG_DIR/${worker_name}.log" | head -1 | cut -d: -f2)
+              fi
+            fi
+            
+            if [[ -n "$port" ]] && nc -z localhost "$port" 2>/dev/null; then
+              local emoji
+              emoji=$(get_worker_emoji "$worker_name")
+              echo -n "  $emoji Triggering $worker_name (port $port) ... "
+              
+              local response
+              if response=$(curl -s -f -X POST "http://localhost:$port/" 2>/dev/null); then
+                echo -e "${GREEN}✅${NC}"
+                if [[ "$VERBOSE" == "true" ]]; then
+                  echo "    Response: $response"
+                fi
+                scraped_any=true
+              else
+                echo -e "${RED}❌${NC}"
+                failed_scrapers+=("$worker_name")
+              fi
+            else
+              log_warning "$worker_name: Could not determine port or not responding"
+              failed_scrapers+=("$worker_name")
+            fi
+          else
+            log_warning "$worker_name: PID file exists but process not running"
+            failed_scrapers+=("$worker_name")
+          fi
+        else
+          log_warning "$worker_name: Not running (no PID file)"
+          failed_scrapers+=("$worker_name")
+        fi
+      fi
+    fi
+  done
+  
+  echo ""
+  if [[ "$scraped_any" == "true" ]]; then
+    log_success "Scraping triggered successfully"
+    if [[ ${#failed_scrapers[@]} -gt 0 ]]; then
+      log_warning "Failed scrapers: ${failed_scrapers[*]}"
+    fi
+  else
+    log_error "No scrapers were triggered successfully"
+    if [[ ${#failed_scrapers[@]} -gt 0 ]]; then
+      log_error "Failed scrapers: ${failed_scrapers[*]}"
+    fi
+  fi
+  
+  echo ""
+  log_info "💡 Check individual scraper logs for detailed results:"
+  for config in wrangler*.toml; do
+    if [[ -f "$config" ]] && should_include_config "$config"; then
+      local worker_name
+      worker_name=$(get_worker_name "$config")
+      local worker_info
+      worker_info=$(get_worker_info "$config")
+      local worker_type="${worker_info%%:*}"
+      
+      if [[ "$worker_type" == "scraper" ]]; then
+        echo "  tail -f $LOG_DIR/${worker_name}.log"
+      fi
+    fi
+  done
+}
+
 # Function to run tests
 run_tests() {
   echo ""
@@ -561,8 +670,10 @@ cleanup() {
   exit 0
 }
 
-# Set up trap for cleanup
-trap cleanup EXIT INT TERM
+# Set up trap for cleanup (only for start command)
+setup_cleanup_trap() {
+  trap cleanup EXIT INT TERM
+}
 
 # Start all workers
 start_all_workers() {
@@ -593,9 +704,29 @@ start_all_workers() {
   fi
   echo ""
 
-  # Start workers
+  # Start workers - prioritize data API to get PORT_START
   current_port=$PORT_START
+  
+  # Sort configs to ensure data API (wrangler.toml) gets first port
+  sorted_configs=()
+  data_api_config=""
+  other_configs=()
+  
   for config in "${config_files[@]}"; do
+    if [[ "$(basename "$config")" == "wrangler.toml" ]]; then
+      data_api_config="$config"
+    else
+      other_configs+=("$config")
+    fi
+  done
+  
+  # Add data API first, then others
+  if [[ -n "$data_api_config" ]]; then
+    sorted_configs+=("$data_api_config")
+  fi
+  sorted_configs+=("${other_configs[@]}")
+  
+  for config in "${sorted_configs[@]}"; do
     worker_name=$(get_worker_name "$config")
     worker_info=$(get_worker_info "$config")
     worker_type="${worker_info%%:*}"
@@ -672,7 +803,12 @@ start_all_workers() {
     run_tests
   fi
 
+  if [[ "$AUTO_SCRAPE" == "true" ]]; then
+    run_scrapers
+  fi
+
   log_info "💡 Use --test flag to run endpoint tests automatically"
+  log_info "💡 Use --auto-scrape flag to trigger scraping after startup"
   log_info "🛑 Press Ctrl+C to stop all workers"
   echo ""
 
@@ -683,6 +819,7 @@ start_all_workers() {
 # Main command handling
 case "$COMMAND" in
   start)
+    setup_cleanup_trap
     start_all_workers
     ;;
   stop)
@@ -691,7 +828,11 @@ case "$COMMAND" in
   test)
     run_tests
     ;;
+  scrape)
+    run_scrapers
+    ;;
   restart)
+    setup_cleanup_trap
     stop_all_workers
     sleep 2
     start_all_workers

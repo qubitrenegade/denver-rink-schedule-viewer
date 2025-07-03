@@ -1,10 +1,11 @@
 // Updated useEventData hook to fetch from CloudFlare Workers instead of static files
 import { useState, useCallback } from 'react';
 import { RawIceEventData, FacilityMetadata } from '../types';
+import { FACILITY_IDS, CACHE_DURATIONS, API_ENDPOINTS } from '../utils/constants';
 
 // Configuration for CloudFlare Worker API endpoint
 const WORKER_API_BASE = import.meta.env.WORKER_API_BASE ||
-  (import.meta.env.PROD ? 'https://api.geticeti.me' : 'https://api.geticeti.me');
+  (import.meta.env.PROD ? 'https://api.geticeti.me' : 'http://localhost:8794');
 
 export function useEventData() {
   const [staticData, setStaticData] = useState<RawIceEventData[]>([]);
@@ -16,7 +17,7 @@ export function useEventData() {
 
   const fetchData = useCallback(async (forceRefresh = false) => {
     // Use cache for 5 minutes unless force refresh
-    if (staticData.length > 0 && !forceRefresh && Date.now() - lastFetchTime < 5 * 60 * 1000) {
+    if (staticData.length > 0 && !forceRefresh && Date.now() - lastFetchTime < CACHE_DURATIONS.API_CACHE) {
       console.log(`📋 Using cached data`);
       return;
     }
@@ -43,10 +44,13 @@ export function useEventData() {
           })
         ]);
 
-        console.log(`📊 Events response: ${eventsResponse.status}, Metadata response: ${metadataResponse.status}`);
+        console.log(`📊 Events response: ${eventsResponse.status} (${eventsResponse.statusText}), Metadata response: ${metadataResponse.status} (${metadataResponse.statusText})`);
+        console.log(`📊 Events content-type: ${eventsResponse.headers.get('content-type')}, Metadata content-type: ${metadataResponse.headers.get('content-type')}`);
 
         if (eventsResponse.ok && metadataResponse.ok) {
+          console.log(`📡 Parsing events response...`);
           const allEventsData = await eventsResponse.json();
+          console.log(`📡 Parsing metadata response...`);
           const allMetadataData = await metadataResponse.json();
 
           console.log(`📊 Loaded ${allEventsData.length} events, ${Object.keys(allMetadataData).length} facilities via bulk API`);
@@ -69,10 +73,15 @@ export function useEventData() {
         }
       } catch (bulkError) {
         console.warn('⚠️ Bulk API failed, falling back to individual requests:', bulkError);
+        console.warn('⚠️ Error details:', {
+          name: bulkError?.name,
+          message: bulkError?.message,
+          stack: bulkError?.stack
+        });
       }
 
       // Fallback: fetch each facility individually (maintains compatibility)
-      const facilityIds = ['ice-ranch', 'big-bear', 'du-ritchie', 'foothills-edge', 'ssprd-249', 'ssprd-250'];
+      const facilityIds = FACILITY_IDS;
 
       const facilityPromises = facilityIds.map(async (facilityId) => {
         try {

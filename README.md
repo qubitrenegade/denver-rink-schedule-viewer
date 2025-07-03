@@ -4,12 +4,56 @@ A modern, scalable web app and data pipeline for viewing and filtering public ic
 
 ## Features
 - **Fast, filterable schedule viewer** for multiple rinks with real-time data
+- **Progressive Web App (PWA)** with offline support and installable app experience
 - **Modular React frontend** with custom hooks, filter components, and URL state management
 - **Robust Cloudflare Workers backend** with automated scraping and edge caching
 - **Durable Objects scheduling** for reliable, distributed scraper orchestration
 - **KV storage** for fast, globally distributed data access
-- **Mobile-friendly, accessible UI** with modern design
+- **Mobile-friendly, accessible UI** with modern design and smart install detection
 - **Automated data freshness** with configurable splay timing to avoid rate limiting
+- **Service worker caching** with stale-while-revalidate strategy for optimal performance
+
+## Progressive Web App (PWA)
+
+This application is a fully-featured Progressive Web App that works offline and can be installed on mobile devices and desktop computers.
+
+### PWA Features
+- **📱 Installable App**: Install directly from browser on iOS, Android, and desktop
+- **🔄 Offline Support**: View cached schedule data when internet is unavailable
+- **⚡ Fast Loading**: Service worker caching for instant startup and navigation
+- **🚀 App-like Experience**: Runs in standalone mode without browser UI
+- **🔔 Fresh Data Notifications**: Background updates with stale-while-revalidate strategy
+
+### Installation
+
+#### Mobile (iOS/Android)
+1. Open the site in Chrome or Safari
+2. Tap the "📱 Install App" button when available
+3. Or use browser's "Add to Home Screen" option
+4. App icon will appear on your home screen
+
+#### Desktop (Chrome/Edge)
+1. Look for install icon in browser address bar
+2. Click "💻 Install" button on the site
+3. App will open in its own window
+4. Pin to taskbar for easy access
+
+#### Browser Compatibility
+- ✅ **Chrome/Edge**: Full PWA support with install prompts
+- ✅ **Safari**: Add to home screen functionality
+- ❌ **Firefox**: Limited PWA support (no install button shown)
+
+### Offline Functionality
+- **Schedule Data**: Last loaded events remain available offline
+- **Filtering**: All filter options work with cached data
+- **Navigation**: Full app navigation works without internet
+- **Auto-Update**: Fresh data loads automatically when connection returns
+
+### Technical Implementation
+- **Service Worker**: Custom caching strategy in `public/sw.js`
+- **Web App Manifest**: PWA configuration in `public/manifest.json`
+- **Smart Install Detection**: Cross-browser compatibility in `HeaderActions.tsx`
+- **Cache Strategy**: Stale-while-revalidate for optimal performance
 
 ## Architecture
 

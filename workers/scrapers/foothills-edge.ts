@@ -1,5 +1,6 @@
 // workers/scrapers/foothills-edge.ts - Foothills Edge scraper with Durable Objects scheduling
 import { ScraperHelpers, RawIceEventData } from '../helpers/scraper-helpers';
+import { CONTENT_EXTRACTION, TIME_PATTERNS, RegexHelpers } from '../shared/regex-patterns';
 
 interface Env {
   RINK_DATA: KVNamespace;
@@ -22,22 +23,18 @@ class FoothillsEdgeScraper {
 
   // Parse time and handle Mountain Time zone
   private parseFoothillsTime(timeStr: string, baseDate: Date): Date {
-    const timeMatch = timeStr.match(/(\d{1,2}):(\d{2})\s*([AP])\.?M\.?/i);
-    if (!timeMatch) return baseDate;
-    let hours = parseInt(timeMatch[1], 10);
-    const minutes = parseInt(timeMatch[2], 10);
-    const ampm = timeMatch[3].toLowerCase();
-    if (ampm === 'p' && hours !== 12) hours += 12;
-    if (ampm === 'a' && hours === 12) hours = 0;
+    const parsedTime = RegexHelpers.parse12HourTime(timeStr);
+    if (!parsedTime) return baseDate;
+    
     const result = new Date(baseDate);
-    result.setUTCHours(hours, minutes, 0, 0);
+    result.setUTCHours(parsedTime.hours, parsedTime.minutes, 0, 0);
     result.setTime(result.getTime() + (6 * 60 * 60 * 1000));
     return result;
   }
 
   private extractEventsFromJavaScript(html: string): RawIceEventData[] {
     const events: RawIceEventData[] = [];
-    const eventsStartMatch = html.match(/events\s*=\s*\{"[0-9]{4}-[0-9]{2}-[0-9]{2}"/);
+    const eventsStartMatch = html.match(CONTENT_EXTRACTION.EVENTS_OBJECT);
     if (!eventsStartMatch) return events;
     try {
       const startIndex = eventsStartMatch.index! + eventsStartMatch[0].indexOf('{');

@@ -4,10 +4,15 @@ import { RINKS_CONFIG, ALL_INDIVIDUAL_RINKS_FOR_FILTERING } from './rinkConfig';
 import RinkTabs from './components/RinkTabs';
 import EventList from './components/EventList';
 import FilterControls from './components/FilterControls';
+import AppHeader from './components/AppHeader';
+import StatusIndicator from './components/StatusIndicator';
+import HeaderActions from './components/HeaderActions';
 import { LoadingIcon, CalendarIcon, AdjustmentsHorizontalIcon } from './components/icons';
+import About from './About';
 import { useEventData } from './hooks/useEventData';
 import { useEventFiltering } from './hooks/useEventFiltering';
 import { useUrlState } from './hooks/useUrlState';
+import { hasActiveFilters, getFilterDescription, getDisplayMetadata, getLastUpdateInfo } from './utils/filterUtils';
 
 export const ALL_RINKS_TAB_ID = 'all-rinks';
 
@@ -31,6 +36,7 @@ const App: React.FC = () => {
   } = useUrlState();
 
   const [showFilters, setShowFilters] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
 
   const allPossibleCategories = useMemo((): EventCategory[] => {
     const categories = new Set<EventCategory>();
@@ -59,62 +65,9 @@ const App: React.FC = () => {
 
   const selectedRinkTabInfo = selectedRinkId !== ALL_RINKS_TAB_ID ? RINKS_CONFIG.find(rink => rink.id === selectedRinkId) : null;
 
-  const getLastUpdateInfo = () => {
-    if (selectedRinkId === ALL_RINKS_TAB_ID) {
-      let latestUpdate = '';
-      RINKS_CONFIG.forEach(tab => {
-        if (tab.memberRinkIds) {
-          tab.memberRinkIds.forEach(rinkId => {
-            const meta = facilityMetadata[rinkId] as { lastSuccessfulScrape?: string } | undefined;
-            if (meta?.lastSuccessfulScrape) {
-              if (!latestUpdate || meta.lastSuccessfulScrape > latestUpdate) {
-                latestUpdate = meta.lastSuccessfulScrape;
-              }
-            }
-          });
-        } else {
-          const meta = facilityMetadata[tab.id] as { lastSuccessfulScrape?: string } | undefined;
-          if (meta?.lastSuccessfulScrape) {
-            if (!latestUpdate || meta.lastSuccessfulScrape > latestUpdate) {
-              latestUpdate = meta.lastSuccessfulScrape;
-            }
-          }
-        }
-      });
-      return latestUpdate ? new Date(latestUpdate).toLocaleString() : 'Unknown';
-    } else {
-      const meta = facilityMetadata[selectedRinkId] as { lastSuccessfulScrape?: string } | undefined;
-      return meta?.lastSuccessfulScrape ? new Date(meta.lastSuccessfulScrape).toLocaleString() : 'Unknown';
-    }
-  };
-
-  // Helper function to describe current filter state
-  const getFilterDescription = () => {
-    const parts: string[] = [];
-
-    // Date description
-    if (filterSettings.dateFilterMode === 'next-days') {
-      parts.push(`next ${filterSettings.numberOfDays || 4} days`);
-    } else if (filterSettings.dateFilterMode === 'specific-day' && filterSettings.selectedDate) {
-      const date = new Date(filterSettings.selectedDate + 'T00:00:00');
-      parts.push(`${date.toLocaleDateString()}`);
-    } else if (filterSettings.dateFilterMode === 'date-range' && filterSettings.dateRangeStart && filterSettings.dateRangeEnd) {
-      const startDate = new Date(filterSettings.dateRangeStart + 'T00:00:00');
-      const endDate = new Date(filterSettings.dateRangeEnd + 'T00:00:00');
-      parts.push(`${startDate.toLocaleDateString()} to ${endDate.toLocaleDateString()}`);
-    }
-
-    // Time description
-    if (filterSettings.timeFilterMode === 'after-time' && filterSettings.afterTime) {
-      parts.push(`after ${filterSettings.afterTime}`);
-    } else if (filterSettings.timeFilterMode === 'before-time' && filterSettings.beforeTime) {
-      parts.push(`before ${filterSettings.beforeTime}`);
-    } else if (filterSettings.timeFilterMode === 'time-range' && filterSettings.timeRangeStart && filterSettings.timeRangeEnd) {
-      parts.push(`between ${filterSettings.timeRangeStart} and ${filterSettings.timeRangeEnd}`);
-    }
-
-    return parts.length > 0 ? `Showing events for ${parts.join(', ')}.` : 'Showing events with custom filtering.';
-  };
+  // Computed values using utility functions
+  const filtersActive = hasActiveFilters(filterSettings);
+  const displayMetadata = getDisplayMetadata(filteredEvents.length, facilityMetadata, facilityErrors);
 
   // Get error message if there are any facility errors
   const hasAnyErrors = Object.keys(facilityErrors).length > 0;
@@ -140,8 +93,9 @@ const App: React.FC = () => {
           </h1>
         </div>
         <p className="text-sm text-slate-400 italic max-w-2xl mx-auto">
-          {getFilterDescription()} Data is automatically updated twice daily via GitHub Actions.
+          {getFilterDescription(filterSettings)} Data is refreshed regularly by our automated backend.
         </p>
+        <HeaderActions onShowAbout={() => setShowAbout(true)} />
       </header>
 
       <div className="max-w-6xl mx-auto bg-slate-800 shadow-2xl rounded-lg overflow-hidden">
@@ -177,7 +131,7 @@ const App: React.FC = () => {
                 <div className="w-2 h-2 rounded-full mr-2 bg-green-300" />
                 Individual Metadata
                 <span className="ml-2 text-xs opacity-75">
-                  (Updated: {getLastUpdateInfo()})
+                  (Updated: {getLastUpdateInfo(selectedRinkId, facilityMetadata, RINKS_CONFIG, ALL_RINKS_TAB_ID)})
                 </span>
               </div>
 
@@ -276,9 +230,27 @@ const App: React.FC = () => {
       <footer className="text-center mt-8 text-sm text-slate-500">
         <p>&copy; {new Date().getFullYear()} Denver Rink Schedule. Data updated automatically via GitHub Actions.</p>
         <p className="mt-1">
-          Last data update: {getLastUpdateInfo()}
+          Last data update: {getLastUpdateInfo(selectedRinkId, facilityMetadata, RINKS_CONFIG, ALL_RINKS_TAB_ID)}
         </p>
       </footer>
+
+      {/* About Modal */}
+      {showAbout && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-slate-800 rounded-lg p-6 max-w-md w-full max-h-96 overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold text-sky-300">About</h2>
+              <button 
+                onClick={() => setShowAbout(false)}
+                className="text-slate-400 hover:text-slate-200 text-2xl"
+              >
+                ×
+              </button>
+            </div>
+            <About />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

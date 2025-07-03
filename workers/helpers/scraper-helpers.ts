@@ -1,6 +1,8 @@
 // workers/helpers/scraper-helpers.ts - Common functions for all scrapers
 
 import { getRinkConfig } from '../shared/rink-config';
+import { TIME_PATTERNS, HTML_PATTERNS, VALIDATION_PATTERNS, RegexHelpers } from '../shared/regex-patterns';
+import { CORS_HEADERS, DEFAULT_CONFIG } from '../shared/constants';
 
 export interface RawIceEventData {
   id: string;
@@ -44,12 +46,7 @@ export class ScraperHelpers {
    * Get CORS headers for responses
    */
   static corsHeaders(): Record<string, string> {
-    return {
-      'Content-Type': 'text/plain',
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-    };
+    return CORS_HEADERS;
   }
 
   /**
@@ -81,7 +78,7 @@ export class ScraperHelpers {
    * Get alarm time with random splay delay
    */
   static getAlarmTime(splayMinutesEnvVar?: string): number {
-    const splayMinutes = parseInt(splayMinutesEnvVar || '360', 10);
+    const splayMinutes = parseInt(splayMinutesEnvVar || DEFAULT_CONFIG.SCRAPER_SPLAY_MINUTES.toString(), 10);
     const delay = ScraperHelpers.getRandomDelay(splayMinutes);
     return Date.now() + delay;
   }
@@ -89,7 +86,7 @@ export class ScraperHelpers {
   /**
    * Get the next scheduled time for scraping with random splay
    */
-  static getNextScheduledTime(splayMinutes: number = 360): Date {
+  static getNextScheduledTime(splayMinutes: number = DEFAULT_CONFIG.SCRAPER_SPLAY_MINUTES): Date {
     const now = new Date();
     const delayMs = ScraperHelpers.getRandomDelay(splayMinutes);
     const nextTime = new Date(now.getTime() + delayMs);
@@ -111,9 +108,11 @@ export class ScraperHelpers {
     kvNamespace: KVNamespace,
     rinkId: string,
     events: RawIceEventData[],
-    customConfig?: RinkConfig
+    customConfig?: RinkConfig,
+    options?: { mode: 'overwrite' | 'merge'; maxAgeDays?: number }
   ): Promise<void> {
     let config: RinkConfig;
+    const { mode = 'merge', maxAgeDays = 30 } = options || {};
 
     if (customConfig) {
       // Use provided custom config (for aggregations)
@@ -123,8 +122,38 @@ export class ScraperHelpers {
       config = getRinkConfig(rinkId);
     }
 
+    let finalEvents = events;
+
+    if (mode === 'merge') {
+      // Read existing events from KV
+      const existingData = await kvNamespace.get(`events:${rinkId}`);
+      const existingEvents: RawIceEventData[] = existingData ? JSON.parse(existingData) : [];
+
+      // Merge new events with existing
+      const allEvents = [...existingEvents, ...events];
+
+      // Deduplicate based on title and startTime
+      const uniqueEvents = allEvents.filter((event, index, self) =>
+        index === self.findIndex((e) =>
+          e.title === event.title &&
+          e.startTime === event.startTime
+        )
+      );
+
+      // Filter out events older than maxAgeDays
+      const cutoffDate = new Date();
+      cutoffDate.setDate(cutoffDate.getDate() - maxAgeDays);
+      
+      finalEvents = uniqueEvents.filter(event => {
+        const eventDate = new Date(event.startTime);
+        return eventDate >= cutoffDate;
+      });
+
+      console.log(`📊 ${rinkId}: ${existingEvents.length} existing + ${events.length} new = ${allEvents.length} total → ${finalEvents.length} after dedup & cleanup`);
+    }
+
     // Store events data
-    await kvNamespace.put(`events:${rinkId}`, JSON.stringify(events));
+    await kvNamespace.put(`events:${rinkId}`, JSON.stringify(finalEvents));
 
     // Store metadata
     const metadata: FacilityMetadata = {
@@ -133,7 +162,7 @@ export class ScraperHelpers {
       displayName: config.displayName,
       lastAttempt: new Date().toISOString(),
       status: 'success',
-      eventCount: events.length,
+      eventCount: finalEvents.length,
       sourceUrl: config.sourceUrl,
       rinks: [{ rinkId, rinkName: config.rinkName }],
       lastSuccessfulScrape: new Date().toISOString()
@@ -141,7 +170,7 @@ export class ScraperHelpers {
 
     await kvNamespace.put(`metadata:${rinkId}`, JSON.stringify(metadata));
 
-    console.log(`💾 Stored ${events.length} events and metadata for ${rinkId}`);
+    console.log(`💾 Stored ${finalEvents.length} events and metadata for ${rinkId}`);
   }
 
   /**
@@ -175,7 +204,7 @@ export class ScraperHelpers {
       rinks: [{ rinkId, rinkName: config.rinkName }]
     };
 
-    await kvNamespace.put(`metadata:${rinkId}`, JSON.stringify(metadata));
+    await kvNamespace.put(`metadata:${rinkId}`, JSON.stringify(errorMetadata));
     console.log(`💾 Stored error metadata for ${rinkId}: ${errorMetadata.errorMessage}`);
   }
 
@@ -193,7 +222,7 @@ export class ScraperHelpers {
     const date = new Date(timeStr);
     if (!isNaN(date.getTime())) {
       // Check if timezone info is present
-      const hasTimezone = /[+-]\d{2}:?\d{2}|Z|UTC|GMT|[A-Z]{3,4}T?$/i.test(timeStr);
+      const hasTimezone = VALIDATION_PATTERNS.TIMEZONE_INFO.test(timeStr);
       if (!hasTimezone) {
         // Assume Mountain Time and convert to UTC (add 6 hours for MDT, 7 for MST)
         // For simplicity, always add 6 hours (MDT)
@@ -203,20 +232,16 @@ export class ScraperHelpers {
     }
 
     // Try parsing as time only (e.g., "2:30 PM")
-    const timeMatch = timeStr.match(/(\d{1,2}):(\d{2})\s*([AP])\.?M\.?/i);
+    const timeMatch = timeStr.match(TIME_PATTERNS.TIME_12_HOUR);
     if (timeMatch && baseDate) {
-      let hours = parseInt(timeMatch[1], 10);
-      const minutes = parseInt(timeMatch[2], 10);
-      const ampm = timeMatch[3].toLowerCase();
-
-      if (ampm === 'p' && hours !== 12) hours += 12;
-      if (ampm === 'a' && hours === 12) hours = 0;
-
-      const result = new Date(baseDate);
-      result.setUTCHours(hours, minutes, 0, 0);
-      // Convert from Mountain Time to UTC
-      result.setTime(result.getTime() + (6 * 60 * 60 * 1000));
-      return result;
+      const parsedTime = RegexHelpers.parse12HourTime(timeStr);
+      if (parsedTime) {
+        const result = new Date(baseDate);
+        result.setUTCHours(parsedTime.hours, parsedTime.minutes, 0, 0);
+        // Convert from Mountain Time to UTC
+        result.setTime(result.getTime() + (6 * 60 * 60 * 1000));
+        return result;
+      }
     }
 
     // Fallback: return baseDate or current time
@@ -227,24 +252,7 @@ export class ScraperHelpers {
    * Clean and normalize event titles
    */
   static cleanTitle(rawTitle: string): string {
-    if (!rawTitle) return 'Untitled Event';
-
-    let cleanTitle = rawTitle.trim();
-
-    // Remove leading numbers followed by letters (e.g., "1A" -> "A")
-    cleanTitle = cleanTitle.replace(/^\d{1,2}([A-Za-z])/, '$1');
-
-    // Remove leading dashes
-    cleanTitle = cleanTitle.replace(/^-\s*/, '');
-
-    // Remove registration/promotional text
-    cleanTitle = cleanTitle.replace(/register/gi, '');
-    cleanTitle = cleanTitle.replace(/click here/gi, '');
-
-    // Remove leading non-word characters
-    cleanTitle = cleanTitle.replace(/^\W+/, '');
-
-    return cleanTitle.trim() || 'Ice Event';
+    return RegexHelpers.cleanTitle(rawTitle);
   }
 
   /**
@@ -394,7 +402,7 @@ export class ScraperHelpers {
       await runScraperFn();
 
       // Schedule next alarm with configured splay
-      const splayMinutes = parseInt(env.SCRAPER_SPLAY_MINUTES || '360', 10);
+      const splayMinutes = parseInt(env.SCRAPER_SPLAY_MINUTES || DEFAULT_CONFIG.SCRAPER_SPLAY_MINUTES.toString(), 10);
       const nextAlarmTime = ScraperHelpers.getNextScheduledTime(splayMinutes);
       await state.storage.setAlarm(nextAlarmTime);
       console.log(`📅 Next ${rinkId} alarm scheduled for ${nextAlarmTime.toISOString()}`);
@@ -403,7 +411,7 @@ export class ScraperHelpers {
       console.error(`❌ ${rinkId} alarm failed:`, error);
 
       // Still schedule next alarm even if this one failed
-      const splayMinutes = parseInt(env.SCRAPER_SPLAY_MINUTES || '360', 10);
+      const splayMinutes = parseInt(env.SCRAPER_SPLAY_MINUTES || DEFAULT_CONFIG.SCRAPER_SPLAY_MINUTES.toString(), 10);
       const nextAlarmTime = ScraperHelpers.getNextScheduledTime(splayMinutes);
       await state.storage.setAlarm(nextAlarmTime);
     }
