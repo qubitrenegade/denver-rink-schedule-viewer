@@ -222,8 +222,7 @@ async function handleDataRequest(
       }), {
         status: 200,
         headers: {
-          ...getCacheHeaders(3600), // Cache API info for 1 hour
-          'Cache-Control': 'public, max-age=3600, immutable' // API info doesn't change often
+          ...getCacheHeaders(3600, false, true) // Cache API info for 1 hour, immutable
         }
       });
     }
