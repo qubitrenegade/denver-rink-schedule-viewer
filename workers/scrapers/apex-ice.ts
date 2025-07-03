@@ -1,5 +1,6 @@
 // workers/scrapers/apex-ice.ts - Apex Ice Arena scraper with Durable Objects scheduling
 import { ScraperHelpers, RawIceEventData } from '../helpers/scraper-helpers';
+import { ColoradoTimezone } from '../shared/timezone-utils';
 
 interface Env {
   RINK_DATA: KVNamespace;
@@ -154,12 +155,9 @@ class ApexIceScraper {
       }
 
       // Parse datetime (API returns in format "2025-06-10 11:00:00")
-      const startDate = new Date(event.start_time + ' MST'); // Apex is in Mountain Time
-      const endDate = new Date(event.end_time + ' MST');
-      
-      // Convert to UTC
-      const startUtc = new Date(startDate.getTime() + (startDate.getTimezoneOffset() * 60000) + (6 * 60 * 60 * 1000));
-      const endUtc = new Date(endDate.getTime() + (endDate.getTimezoneOffset() * 60000) + (6 * 60 * 60 * 1000));
+      // Use the timezone-aware parser instead of assuming local time
+      const startUtc = ColoradoTimezone.parseMountainTime(event.start_time);
+      const endUtc = ColoradoTimezone.parseMountainTime(event.end_time);
 
       const eventId = `${rinkId}-${event.event_item_id || Date.now()}`;
 

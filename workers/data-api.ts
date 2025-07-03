@@ -3,6 +3,24 @@
 
 import { FACILITY_IDS, CORS_HEADERS, HTTP_STATUS, CACHE_DURATIONS } from './shared/constants';
 
+// Enhanced cache headers utility
+function getCacheHeaders(maxAge: number, isStale: boolean = false): Record<string, string> {
+  const baseHeaders = {
+    'Content-Type': 'application/json',
+    'Cache-Control': `public, max-age=${maxAge}, stale-while-revalidate=${maxAge * 2}`,
+    'ETag': `"${Date.now()}"`, // Simple ETag based on request time
+    ...CORS_HEADERS
+  };
+
+  if (isStale) {
+    // Add stale indicators
+    baseHeaders['Cache-Control'] += ', must-revalidate';
+    baseHeaders['Warning'] = '110 - "Response is stale"';
+  }
+
+  return baseHeaders;
+}
+
 interface Env {
   RINK_DATA: KVNamespace;
 }
@@ -51,22 +69,14 @@ async function handleDataRequest(
         };
         return new Response(JSON.stringify(defaultMetadata), {
           status: 200,
-          headers: {
-            'Content-Type': 'application/json',
-            'Cache-Control': 'public, max-age=60', // 1 minute for error cases
-            ...CORS_HEADERS
-          }
+          headers: getCacheHeaders(CACHE_DURATIONS.ERRORS, true)
         });
       }
 
       console.log(`✅ Found metadata for ${facilityId}`);
       return new Response(metadataData, {
         status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-          'Cache-Control': 'public, max-age=300', // 5 minutes
-          ...CORS_HEADERS
-        }
+        headers: getCacheHeaders(CACHE_DURATIONS.METADATA)
       });
     }
 
@@ -81,22 +91,14 @@ async function handleDataRequest(
         console.log(`⚠️ No events data found for ${facilityId}`);
         return new Response(JSON.stringify([]), {
           status: 200,
-          headers: {
-            'Content-Type': 'application/json',
-            'Cache-Control': `public, max-age=${CACHE_DURATIONS.EVENTS}`,
-            ...CORS_HEADERS
-          }
+          headers: getCacheHeaders(CACHE_DURATIONS.ERRORS, true)
         });
       }
 
       console.log(`✅ Found events data for ${facilityId}`);
       return new Response(eventsData, {
         status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-          'Cache-Control': 'public, max-age=300', // 5 minutes
-          ...CORS_HEADERS
-        }
+        headers: getCacheHeaders(CACHE_DURATIONS.EVENTS)
       });
     }
 
@@ -132,11 +134,7 @@ async function handleDataRequest(
       console.log(`📊 Total events loaded: ${allEvents.length}`);
       return new Response(JSON.stringify(allEvents), {
         status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-          'Cache-Control': 'public, max-age=300', // 5 minutes
-          ...CORS_HEADERS
-        }
+        headers: getCacheHeaders(CACHE_DURATIONS.EVENTS)
       });
     }
 
@@ -168,11 +166,7 @@ async function handleDataRequest(
       console.log(`📋 Total metadata loaded for ${Object.keys(allMetadata).length} facilities`);
       return new Response(JSON.stringify(allMetadata), {
         status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-          'Cache-Control': 'public, max-age=300', // 5 minutes
-          ...CORS_HEADERS
-        }
+        headers: getCacheHeaders(CACHE_DURATIONS.METADATA)
       });
     }
 
@@ -207,11 +201,7 @@ async function handleDataRequest(
 
       return new Response(JSON.stringify(healthData), {
         status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-          'Cache-Control': 'public, max-age=60', // 1 minute
-          ...CORS_HEADERS
-        }
+        headers: getCacheHeaders(CACHE_DURATIONS.ERRORS) // Short cache for health checks
       });
     }
 
@@ -231,8 +221,8 @@ async function handleDataRequest(
       }), {
         status: 200,
         headers: {
-          'Content-Type': 'application/json',
-          ...CORS_HEADERS
+          ...getCacheHeaders(3600), // Cache API info for 1 hour
+          'Cache-Control': 'public, max-age=3600, immutable' // API info doesn't change often
         }
       });
     }
@@ -252,8 +242,8 @@ async function handleDataRequest(
     }), {
       status: 404,
       headers: {
-        'Content-Type': 'application/json',
-        ...CORS_HEADERS
+        ...getCacheHeaders(CACHE_DURATIONS.ERRORS),
+        'Cache-Control': 'public, max-age=60, no-cache' // Short cache for 404s
       }
     });
 
@@ -267,8 +257,8 @@ async function handleDataRequest(
     }), {
       status: 500,
       headers: {
-        'Content-Type': 'application/json',
-        ...CORS_HEADERS
+        ...getCacheHeaders(30), // Very short cache for server errors
+        'Cache-Control': 'no-cache, no-store, must-revalidate' // Don't cache server errors
       }
     });
   }

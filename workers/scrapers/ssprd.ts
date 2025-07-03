@@ -1,6 +1,7 @@
 // workers/scrapers/ssprd.ts - SSPRD scraper with Durable Objects scheduling
 import { ScraperHelpers, RawIceEventData } from '../helpers/scraper-helpers';
 import { CONTENT_EXTRACTION, VALIDATION_PATTERNS, RegexHelpers } from '../shared/regex-patterns';
+import { ColoradoTimezone } from '../shared/timezone-utils';
 
 interface Env {
   RINK_DATA: KVNamespace;
@@ -28,16 +29,8 @@ class SSPRDScraper {
     if (isNaN(date.getTime())) return new Date();
     const hasTimezone = VALIDATION_PATTERNS.TIMEZONE_INFO.test(dateTimeStr);
     if (!hasTimezone) {
-      const year = date.getFullYear();
-      const month = date.getMonth();
-      const day = date.getDate();
-      const hours = date.getHours();
-      const minutes = date.getMinutes();
-      const seconds = date.getSeconds();
-      const milliseconds = date.getMilliseconds();
-      const utcDate = new Date(Date.UTC(year, month, day, hours, minutes, seconds, milliseconds));
-      utcDate.setTime(utcDate.getTime() + (6 * 60 * 60 * 1000)); // Add 6 hours for MDT->UTC
-      return utcDate;
+      // Use DST-aware timezone conversion instead of hardcoded +6 hours
+      return ColoradoTimezone.mountainTimeToUTC(date);
     } else {
       return date;
     }
