@@ -56,7 +56,8 @@ describe('ColoradoTimezone', () => {
     expect(result1.getUTCMinutes()).toBe(30);
     
     // Test full datetime without timezone (should assume Mountain Time)
-    const result2 = ColoradoTimezone.parseMountainTime('2024-07-15T14:30:00');
+    const result2 = ColoradoTimezone.parseMountainTime('2024-07-15 14:30:00');
+    console.log('Result2 debug:', result2.toISOString());
     expect(result2.getUTCHours()).toBe(20); // 2:30 PM MDT = 8:30 PM UTC
   });
 });

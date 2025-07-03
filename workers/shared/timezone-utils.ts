@@ -87,17 +87,39 @@ export class ColoradoTimezone {
       return baseDate || new Date();
     }
     
-    // Try parsing as full datetime first
+    // Check if timezone info is already present
+    const hasTimezone = TIMEZONE_INFO.test(timeStr);
+    if (hasTimezone) {
+      // Already has timezone info - parse and return as is
+      return new Date(timeStr);
+    }
+    
+    // No timezone specified - treat as Mountain Time
+    // Parse the datetime components manually to avoid timezone interpretation issues
+    const dateMatch = timeStr.match(/^(\d{4})-(\d{2})-(\d{2})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
+    if (dateMatch) {
+      const year = parseInt(dateMatch[1]);
+      const month = parseInt(dateMatch[2]) - 1; // JS months are 0-based
+      const day = parseInt(dateMatch[3]);
+      const hour = parseInt(dateMatch[4] || '0');
+      const minute = parseInt(dateMatch[5] || '0');
+      const second = parseInt(dateMatch[6] || '0');
+      
+      // Create date in Mountain Time and determine offset
+      const mtDate = new Date(year, month, day, hour, minute, second);
+      const offset = this.getUTCOffset(mtDate);
+      
+      // Convert to UTC: MT + (-offset) = UTC
+      // For MDT (UTC-6): 14:30 MT + (-(-6)) = 14:30 + 6 = 20:30 UTC
+      // For MST (UTC-7): 14:30 MT + (-(-7)) = 14:30 + 7 = 21:30 UTC
+      const utcDate = new Date(mtDate.getTime() + (-offset * 60 * 60 * 1000));
+      return utcDate;
+    }
+    
+    // Fallback: try the old method
     const date = new Date(timeStr);
     if (!isNaN(date.getTime())) {
-      // Check if timezone info is present
-      const hasTimezone = TIMEZONE_INFO.test(timeStr);
-      if (!hasTimezone) {
-        // No timezone specified - assume Mountain Time and convert to UTC
-        return this.mountainTimeToUTC(date);
-      }
-      // Already has timezone info - return as is
-      return date;
+      return this.mountainTimeToUTC(date);
     }
     
     // Try parsing as time only (e.g., "2:30 PM")
