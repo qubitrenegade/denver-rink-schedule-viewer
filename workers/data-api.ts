@@ -2,14 +2,13 @@
 // This worker serves rink data from KV to the frontend
 
 import { FACILITY_IDS, CORS_HEADERS, HTTP_STATUS, CACHE_DURATIONS } from './shared/constants';
-import * as crypto from 'crypto';
 
 // Enhanced cache headers utility
-function getCacheHeaders(maxAge: number, isStale: boolean = false): Record<string, string> {
+function getCacheHeaders(maxAge: number, isStale: boolean = false, resourceContent?: string): Record<string, string> {
   const baseHeaders = {
     'Content-Type': 'application/json',
     'Cache-Control': `public, max-age=${maxAge}, stale-while-revalidate=${maxAge * 2}`,
-    'ETag': `"${crypto.createHash('sha256').update(resourceContent).digest('hex')}"`, // ETag based on content hash
+    'ETag': `"${Date.now()}-${Math.random().toString(36)}"`, // Simple ETag based on timestamp and random
     ...CORS_HEADERS
   };
 
@@ -221,9 +220,7 @@ async function handleDataRequest(
         availableFacilities: FACILITY_IDS
       }), {
         status: 200,
-        headers: {
-          ...getCacheHeaders(3600, false, true) // Cache API info for 1 hour, immutable
-        }
+        headers: getCacheHeaders(3600) // Cache API info for 1 hour
       });
     }
 
