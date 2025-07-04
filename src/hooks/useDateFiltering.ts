@@ -52,7 +52,14 @@ export function useDateFiltering(
 
     return events.filter(event => {
       const eventDate = new Date(event.startTime);
-      return eventDate >= startDate && eventDate <= endDate;
+      // Convert to local date for comparison (same timezone as filter dates)
+      const eventLocalDate = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate(), 
+                                     eventDate.getHours(), eventDate.getMinutes(), eventDate.getSeconds());
+      const eventLocalDateOnly = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate());
+      const startDateOnly = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+      const endDateOnly = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+      
+      return eventLocalDateOnly >= startDateOnly && eventLocalDateOnly <= endDateOnly;
     });
   }, [events, filterSettings.dateFilterMode, filterSettings.numberOfDays, filterSettings.selectedDate, filterSettings.dateRangeStart, filterSettings.dateRangeEnd]);
 }
