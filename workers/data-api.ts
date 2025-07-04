@@ -2,14 +2,31 @@
 // This worker serves rink data from KV to the frontend
 
 import { FACILITY_IDS, CORS_HEADERS, HTTP_STATUS, CACHE_DURATIONS } from './shared/constants';
-import * as crypto from 'crypto';
 
 // Enhanced cache headers utility
-function getCacheHeaders(maxAge: number, isStale: boolean = false): Record<string, string> {
+async function getCacheHeaders(maxAge: number, isStale: boolean = false, resourceContent?: string): Promise<Record<string, string>> {
+  let etag = `"no-content-${maxAge}"`; // Stable fallback based on cache duration
+  
+  // Always generate content-based ETag if content is provided
+  if (resourceContent) {
+    try {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(resourceContent);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      etag = `"${hashHex.substring(0, 16)}"`;  // Use first 16 chars for shorter ETag
+    } catch (error) {
+      console.warn('Failed to generate content-based ETag:', error);
+      // Use stable fallback that won't change unnecessarily
+      etag = `"error-${maxAge}-${resourceContent?.length || 0}"`;
+    }
+  }
+
   const baseHeaders = {
     'Content-Type': 'application/json',
     'Cache-Control': `public, max-age=${maxAge}, stale-while-revalidate=${maxAge * 2}`,
-    'ETag': `"${crypto.createHash('sha256').update(resourceContent).digest('hex')}"`, // ETag based on content hash
+    'ETag': etag,
     ...CORS_HEADERS
   };
 
@@ -68,16 +85,17 @@ async function handleDataRequest(
           sourceUrl: '',
           rinks: [{ rinkId: facilityId, rinkName: 'Main Rink' }]
         };
-        return new Response(JSON.stringify(defaultMetadata), {
+        const defaultMetadataJson = JSON.stringify(defaultMetadata);
+        return new Response(defaultMetadataJson, {
           status: 200,
-          headers: getCacheHeaders(CACHE_DURATIONS.ERRORS, true)
+          headers: await getCacheHeaders(CACHE_DURATIONS.ERRORS, true, defaultMetadataJson)
         });
       }
 
       console.log(`✅ Found metadata for ${facilityId}`);
       return new Response(metadataData, {
         status: 200,
-        headers: getCacheHeaders(CACHE_DURATIONS.METADATA)
+        headers: await getCacheHeaders(CACHE_DURATIONS.METADATA, false, metadataData)
       });
     }
 
@@ -90,16 +108,17 @@ async function handleDataRequest(
 
       if (!eventsData) {
         console.log(`⚠️ No events data found for ${facilityId}`);
-        return new Response(JSON.stringify([]), {
+        const emptyEventsJson = JSON.stringify([]);
+        return new Response(emptyEventsJson, {
           status: 200,
-          headers: getCacheHeaders(CACHE_DURATIONS.ERRORS, true)
+          headers: await getCacheHeaders(CACHE_DURATIONS.ERRORS, true, emptyEventsJson)
         });
       }
 
       console.log(`✅ Found events data for ${facilityId}`);
       return new Response(eventsData, {
         status: 200,
-        headers: getCacheHeaders(CACHE_DURATIONS.EVENTS)
+        headers: await getCacheHeaders(CACHE_DURATIONS.EVENTS, false, eventsData)
       });
     }
 
@@ -133,9 +152,10 @@ async function handleDataRequest(
       }
 
       console.log(`📊 Total events loaded: ${allEvents.length}`);
-      return new Response(JSON.stringify(allEvents), {
+      const allEventsJson = JSON.stringify(allEvents);
+      return new Response(allEventsJson, {
         status: 200,
-        headers: getCacheHeaders(CACHE_DURATIONS.EVENTS)
+        headers: await getCacheHeaders(CACHE_DURATIONS.EVENTS, false, allEventsJson)
       });
     }
 
@@ -165,9 +185,10 @@ async function handleDataRequest(
       }
 
       console.log(`📋 Total metadata loaded for ${Object.keys(allMetadata).length} facilities`);
-      return new Response(JSON.stringify(allMetadata), {
+      const allMetadataJson = JSON.stringify(allMetadata);
+      return new Response(allMetadataJson, {
         status: 200,
-        headers: getCacheHeaders(CACHE_DURATIONS.METADATA)
+        headers: await getCacheHeaders(CACHE_DURATIONS.METADATA, false, allMetadataJson)
       });
     }
 
@@ -200,15 +221,16 @@ async function handleDataRequest(
         }
       }
 
-      return new Response(JSON.stringify(healthData), {
+      const healthDataJson = JSON.stringify(healthData);
+      return new Response(healthDataJson, {
         status: 200,
-        headers: getCacheHeaders(CACHE_DURATIONS.ERRORS) // Short cache for health checks
+        headers: await getCacheHeaders(CACHE_DURATIONS.ERRORS, false, healthDataJson) // Short cache for health checks
       });
     }
 
     // GET / or /api - Root endpoint with basic info
     if (path === '/' || path === '/api') {
-      return new Response(JSON.stringify({
+      const apiInfoJson = JSON.stringify({
         service: 'Denver Rink Schedule Data API',
         version: '1.0.0',
         endpoints: [
@@ -219,17 +241,16 @@ async function handleDataRequest(
           '/data/{facilityId}-metadata.json'
         ],
         availableFacilities: FACILITY_IDS
-      }), {
+      });
+      return new Response(apiInfoJson, {
         status: 200,
-        headers: {
-          ...getCacheHeaders(3600, false, true) // Cache API info for 1 hour, immutable
-        }
+        headers: await getCacheHeaders(3600, false, apiInfoJson) // Cache API info for 1 hour
       });
     }
 
     // 404 for unknown paths
     console.log(`❌ Unknown path: ${path}`);
-    return new Response(JSON.stringify({
+    const notFoundJson = JSON.stringify({
       error: 'Not found',
       path,
       availableEndpoints: [
@@ -239,10 +260,11 @@ async function handleDataRequest(
         '/data/{facilityId}.json',
         '/data/{facilityId}-metadata.json'
       ]
-    }), {
+    });
+    return new Response(notFoundJson, {
       status: 404,
       headers: {
-        ...getCacheHeaders(CACHE_DURATIONS.ERRORS),
+        ...(await getCacheHeaders(CACHE_DURATIONS.ERRORS, false, notFoundJson)),
         'Cache-Control': 'public, max-age=60, no-cache' // Short cache for 404s
       }
     });
@@ -250,14 +272,15 @@ async function handleDataRequest(
   } catch (error) {
     console.error('❌ Error handling request:', error);
 
-    return new Response(JSON.stringify({
+    const errorJson = JSON.stringify({
       error: 'Internal server error',
       message: error instanceof Error ? error.message : 'Unknown error',
       path
-    }), {
+    });
+    return new Response(errorJson, {
       status: 500,
       headers: {
-        ...getCacheHeaders(30), // Very short cache for server errors
+        ...(await getCacheHeaders(30, false, errorJson)), // Very short cache for server errors
         'Cache-Control': 'no-cache, no-store, must-revalidate' // Don't cache server errors
       }
     });

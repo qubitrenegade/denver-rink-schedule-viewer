@@ -97,7 +97,7 @@ const DateFilter: React.FC<DateFilterProps> = ({
           <input
             type="date"
             value={dateRangeStart || getTodayString()}
-            onChange={e => onDateRangeChange(e.target.value, undefined)}
+            onChange={e => onDateRangeChange(e.target.value, dateRangeEnd)}
             className="w-full px-3 py-2 bg-slate-600 border border-slate-500 text-slate-200 rounded-md focus:ring-2 focus:ring-sky-400 focus:border-sky-400"
           />
         </div>
@@ -106,7 +106,7 @@ const DateFilter: React.FC<DateFilterProps> = ({
           <input
             type="date"
             value={dateRangeEnd || getDateXDaysFromNow(7)}
-            onChange={e => onDateRangeChange(undefined, e.target.value)}
+            onChange={e => onDateRangeChange(dateRangeStart, e.target.value)}
             className="w-full px-3 py-2 bg-slate-600 border border-slate-500 text-slate-200 rounded-md focus:ring-2 focus:ring-sky-400 focus:border-sky-400"
           />
         </div>

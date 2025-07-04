@@ -2,19 +2,20 @@
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import ErrorBoundary from './components/ErrorBoundary';
+import { logger } from './utils/logger';
 
 // Register service worker for PWA functionality
-console.log('Checking ServiceWorker support:', 'serviceWorker' in navigator);
+logger.log('Checking ServiceWorker support:', 'serviceWorker' in navigator);
 if ('serviceWorker' in navigator) {
-  console.log('ServiceWorker is supported, setting up registration...');
+  logger.log('ServiceWorker is supported, setting up registration...');
   
   const registerSW = () => {
-    console.log('Attempting to register service worker at /sw.js');
+    logger.log('Attempting to register service worker at /sw.js');
     navigator.serviceWorker.register('/sw.js')
       .then((registration) => {
-        console.log('✅ SW registered successfully: ', registration);
-        console.log('SW scope:', registration.scope);
-        console.log('SW state:', registration.installing?.state || registration.waiting?.state || registration.active?.state);
+        logger.log('✅ SW registered successfully: ', registration);
+        logger.log('SW scope:', registration.scope);
+        logger.log('SW state:', registration.installing?.state || registration.waiting?.state || registration.active?.state);
         
         // Listen for updates
         registration.addEventListener('updatefound', () => {
@@ -33,9 +34,9 @@ if ('serviceWorker' in navigator) {
         });
       })
       .catch((registrationError) => {
-        console.error('❌ SW registration failed: ', registrationError);
-        console.error('Error details:', registrationError.message);
-        console.error('Error stack:', registrationError.stack);
+        logger.error('❌ SW registration failed: ', registrationError);
+        logger.error('Error details:', registrationError.message);
+        logger.error('Error stack:', registrationError.stack);
       });
   };
 

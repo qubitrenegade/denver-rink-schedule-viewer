@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FilterSettings, FilterMode, DateFilterMode, TimeFilterMode, UrlViewType, EventCategory } from '../types';
 import { ALL_RINKS_TAB_ID } from '../App';
+import { logger } from '../utils/logger';
 
 function parseFiltersFromUrl(): FilterSettings {
   const params = new URLSearchParams(window.location.search);
@@ -92,7 +93,7 @@ function updateUrlFromState(selectedRinkId: string, filterSettings: FilterSettin
       try {
         window.history.replaceState(null, '', newUrlTarget);
       } catch (e: any) {
-        console.error('Error updating URL:', e);
+        logger.error('Error updating URL:', e);
       }
     }, 300);
     return () => clearTimeout(timeoutId);

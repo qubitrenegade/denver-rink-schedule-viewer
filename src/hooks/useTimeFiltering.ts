@@ -20,19 +20,23 @@ export function useTimeFiltering(
     }
 
     return events.filter(event => {
-      const eventDate = new Date(event.startTime);
-      const eventMinutes = getMinutesFromMidnight(eventDate);
+      const eventStartDate = new Date(event.startTime);
+      const eventEndDate = new Date(event.endTime);
+      const eventStartMinutes = getMinutesFromMidnight(eventStartDate);
+      const eventEndMinutes = getMinutesFromMidnight(eventEndDate);
 
       if (filterSettings.timeFilterMode === 'after-time' && filterSettings.afterTime) {
         const { hours, minutes } = parseTime(filterSettings.afterTime);
         const afterMinutes = hours * 60 + minutes;
-        return eventMinutes >= afterMinutes;
+        // Show events that END after the selected time (strict inequality)
+        return eventEndMinutes > afterMinutes;
       }
 
       if (filterSettings.timeFilterMode === 'before-time' && filterSettings.beforeTime) {
         const { hours, minutes } = parseTime(filterSettings.beforeTime);
         const beforeMinutes = hours * 60 + minutes;
-        return eventMinutes <= beforeMinutes;
+        // Show events that BEGIN before the selected time (strict inequality)
+        return eventStartMinutes < beforeMinutes;
       }
 
       if (filterSettings.timeFilterMode === 'time-range' && filterSettings.timeRangeStart && filterSettings.timeRangeEnd) {
@@ -41,7 +45,8 @@ export function useTimeFiltering(
         const startRangeMinutes = startHours * 60 + startMinutes;
         const endRangeMinutes = endHours * 60 + endMinutes;
         
-        return eventMinutes >= startRangeMinutes && eventMinutes <= endRangeMinutes;
+        // Show events that END after range start AND BEGIN before range end
+        return eventEndMinutes >= startRangeMinutes && eventStartMinutes <= endRangeMinutes;
       }
 
       return true;

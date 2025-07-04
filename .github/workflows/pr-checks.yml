@@ -24,7 +24,7 @@ jobs:
       run: bun install --frozen-lockfile
 
     - name: Type check
-      run: npx tsc --noEmit --skipLibCheck src/**/*.ts src/**/*.tsx
+      run: npx tsc --noEmit --skipLibCheck src/**/*.ts src/**/*.tsx --jsx preserve
 
     - name: Run tests (excluding flaky ones)
       run: |
@@ -44,15 +44,8 @@ jobs:
     - name: Verify timezone fix
       run: |
         echo "🕐 Verifying timezone conversion fix..."
-        
-        # Test that Apex events don't show midnight times
-        if bun test workers/scrapers/apex-ice.test.ts --reporter=json | jq -r '.testResults[0].assertionResults[] | select(.title | contains("prevents midnight")) | .status' | grep -q "passed"; then
-          echo "✅ Timezone fix verified - no midnight display bug"
-        else
-          echo "❌ Timezone conversion test failed"
-          exit 1
-        fi
-        
+        bun test workers/scrapers/apex-ice.test.ts
+                
         echo "🏒 Ready for merge!"
 
   # Optional: Add a job that runs all tests but doesn't block merging

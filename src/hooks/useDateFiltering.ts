@@ -15,24 +15,28 @@ export function useDateFiltering(
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       startDate = today;
-      endDate = new Date(today.getTime() + (filterSettings.numberOfDays || 4) * MS_PER_DAY);
+      // For X days, we want today + (X-1) more days, so today through day X
+      endDate = new Date(today.getTime() + ((filterSettings.numberOfDays || 4) - 1) * MS_PER_DAY);
       endDate.setHours(23, 59, 59, 999);
     } else if (filterSettings.dateFilterMode === 'specific-day') {
       if (filterSettings.selectedDate) {
-        startDate = new Date(filterSettings.selectedDate + 'T00:00:00');
-        endDate = new Date(filterSettings.selectedDate + 'T23:59:59');
+        // Create local dates to avoid timezone issues
+        const [year, month, day] = filterSettings.selectedDate.split('-').map(Number);
+        startDate = new Date(year, month - 1, day, 0, 0, 0, 0);
+        endDate = new Date(year, month - 1, day, 23, 59, 59, 999);
       } else {
         // Default to today if no date selected
         const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        startDate = today;
-        endDate = new Date(today.getTime() + MS_PER_DAY);
-        endDate.setHours(23, 59, 59, 999);
+        startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
+        endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
       }
     } else if (filterSettings.dateFilterMode === 'date-range') {
       if (filterSettings.dateRangeStart && filterSettings.dateRangeEnd) {
-        startDate = new Date(filterSettings.dateRangeStart + 'T00:00:00');
-        endDate = new Date(filterSettings.dateRangeEnd + 'T23:59:59');
+        // Create local dates to avoid timezone issues
+        const [startYear, startMonth, startDay] = filterSettings.dateRangeStart.split('-').map(Number);
+        const [endYear, endMonth, endDay] = filterSettings.dateRangeEnd.split('-').map(Number);
+        startDate = new Date(startYear, startMonth - 1, startDay, 0, 0, 0, 0);
+        endDate = new Date(endYear, endMonth - 1, endDay, 23, 59, 59, 999);
       } else {
         // Default to next 7 days if no range specified
         const today = new Date();
@@ -46,13 +50,20 @@ export function useDateFiltering(
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       startDate = today;
-      endDate = new Date(today.getTime() + 4 * MS_PER_DAY);
+      endDate = new Date(today.getTime() + (4 - 1) * MS_PER_DAY);
       endDate.setHours(23, 59, 59, 999);
     }
 
-    return events.filter(event => {
+    const filteredEvents = events.filter(event => {
       const eventDate = new Date(event.startTime);
-      return eventDate >= startDate && eventDate <= endDate;
+      // Convert to local date for comparison (same timezone as filter dates)
+      const eventLocalDateOnly = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate());
+      const startDateOnly = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+      const endDateOnly = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+      
+      return eventLocalDateOnly >= startDateOnly && eventLocalDateOnly <= endDateOnly;
     });
+
+    return filteredEvents;
   }, [events, filterSettings.dateFilterMode, filterSettings.numberOfDays, filterSettings.selectedDate, filterSettings.dateRangeStart, filterSettings.dateRangeEnd]);
 }

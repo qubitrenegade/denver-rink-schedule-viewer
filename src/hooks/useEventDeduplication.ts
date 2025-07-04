@@ -12,6 +12,8 @@ export function useEventDeduplication(events: RawIceEventData[]): DisplayableIce
       
       return {
         ...event,
+        startTime: event.startTime.toISOString(), // Convert Date to string
+        endTime: event.endTime.toISOString(), // Convert Date to string
         displayDate: new Date(event.startTime).toLocaleDateString(),
         displayTime: new Date(event.startTime).toLocaleTimeString([], { 
           hour: '2-digit', 

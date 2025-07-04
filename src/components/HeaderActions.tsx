@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { logger } from '../utils/logger';
 
 interface HeaderActionsProps {
   onShowAbout: () => void;
@@ -49,7 +50,7 @@ const HeaderActions: React.FC<HeaderActionsProps> = ({ onShowAbout }) => {
     const isInAppBrowser = window.navigator.standalone; // iOS Safari
     const isRunningInPWA = !!(isStandalone || isInAppBrowser);
     
-    console.log('PWA detection:', { isStandalone, isInAppBrowser, isRunningInPWA });
+    logger.log('PWA detection:', { isStandalone, isInAppBrowser, isRunningInPWA });
     
     // Try to detect if app is installed (different from running in PWA)
     // This is tricky - we'll use the presence of beforeinstallprompt as a signal
