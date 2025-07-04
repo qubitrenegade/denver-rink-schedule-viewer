@@ -35,62 +35,70 @@ const EnhancedTimeInput: React.FC<EnhancedTimeInputProps> = ({
       step="900"
       value={value}
       onChange={e => onChange(e.target.value)}
-      onInput={(e) => {
-        // Help with typing shortcuts like "0900" or "2100"
+      onBlur={(e) => {
+        // Help with typing shortcuts like "0900" or "2100" when user finishes typing
         const input = e.currentTarget;
         const inputValue = input.value;
         
-        // If user typed a 4-digit time, try to format it
-        if (inputValue.match(/^\d{4}$/)) {
-          const hours = inputValue.slice(0, 2);
-          const minutes = inputValue.slice(2);
+        console.log('Blur event, input value:', inputValue);
+        
+        // If it looks like they typed a 4-digit time without colon
+        if (inputValue.match(/^\d{3,4}$/)) {
+          let hours, minutes;
+          if (inputValue.length === 3) {
+            // "900" -> "09:00"
+            hours = inputValue.slice(0, 1).padStart(2, '0');
+            minutes = inputValue.slice(1);
+          } else {
+            // "0900" -> "09:00"
+            hours = inputValue.slice(0, 2);
+            minutes = inputValue.slice(2);
+          }
+          
           const formattedTime = `${hours}:${minutes}`;
+          console.log('Trying to format:', inputValue, '->', formattedTime);
           
           // Validate and set if it's a valid time
           const [h, m] = [parseInt(hours), parseInt(minutes)];
           if (h >= 0 && h <= 23 && m >= 0 && m <= 59) {
+            console.log('Valid time, setting:', formattedTime);
             onChange(formattedTime);
-            // Clear the input to prevent weird states
-            setTimeout(() => {
-              input.value = formattedTime;
-            }, 0);
           }
         }
       }}
       onWheel={(e) => {
-        // Only intercept wheel events when the entire input is selected
-        // or when we can't determine cursor position (let native handle hour/AM-PM scrolling)
+        // Let me add some debugging and simplify the logic
         const input = e.currentTarget;
         const selectionStart = input.selectionStart;
-        const selectionEnd = input.selectionEnd;
         
-        // If entire input is selected or we're in the minutes part, use 15-min increments
-        const isEntirelySelected = selectionStart === 0 && selectionEnd === input.value.length;
-        const isInMinutes = selectionStart !== null && selectionStart >= 3; // After "HH:"
+        console.log('Wheel event - cursor position:', selectionStart, 'value:', input.value);
         
-        if (isEntirelySelected || isInMinutes) {
+        // Only intercept when cursor is in minutes (position 3-5 for "HH:MM")
+        if (selectionStart !== null && selectionStart >= 3) {
+          console.log('Intercepting wheel for minutes');
           e.preventDefault();
           const newTime = handle15MinuteIncrement(e.currentTarget.value, e.deltaY > 0);
           onChange(newTime);
+        } else {
+          console.log('Letting native handle wheel for hours/AM-PM');
         }
-        // Otherwise, let native behavior handle hours/AM-PM scrolling
       }}
       onKeyDown={(e) => {
-        // Only intercept arrow keys when in minutes section or entire input selected
         if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
           const input = e.currentTarget;
           const selectionStart = input.selectionStart;
-          const selectionEnd = input.selectionEnd;
           
-          const isEntirelySelected = selectionStart === 0 && selectionEnd === input.value.length;
-          const isInMinutes = selectionStart !== null && selectionStart >= 3; // After "HH:"
+          console.log('Arrow key - cursor position:', selectionStart, 'value:', input.value);
           
-          if (isEntirelySelected || isInMinutes) {
+          // Only intercept when cursor is in minutes
+          if (selectionStart !== null && selectionStart >= 3) {
+            console.log('Intercepting arrow for minutes');
             e.preventDefault();
             const newTime = handle15MinuteIncrement(e.currentTarget.value, e.key === 'ArrowUp');
             onChange(newTime);
+          } else {
+            console.log('Letting native handle arrow for hours/AM-PM');
           }
-          // Otherwise, let native behavior handle hours/AM-PM
         }
       }}
       className={className}
