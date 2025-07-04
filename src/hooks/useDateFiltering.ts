@@ -27,8 +27,10 @@ export function useDateFiltering(
       endDate.setHours(23, 59, 59, 999);
     } else if (filterSettings.dateFilterMode === 'specific-day') {
       if (filterSettings.selectedDate) {
-        startDate = new Date(filterSettings.selectedDate + 'T00:00:00');
-        endDate = new Date(filterSettings.selectedDate + 'T23:59:59');
+        // Create local dates to avoid timezone issues
+        const [year, month, day] = filterSettings.selectedDate.split('-').map(Number);
+        startDate = new Date(year, month - 1, day, 0, 0, 0, 0);
+        endDate = new Date(year, month - 1, day, 23, 59, 59, 999);
       } else {
         // Default to today if no date selected
         const today = new Date();
@@ -39,8 +41,11 @@ export function useDateFiltering(
       }
     } else if (filterSettings.dateFilterMode === 'date-range') {
       if (filterSettings.dateRangeStart && filterSettings.dateRangeEnd) {
-        startDate = new Date(filterSettings.dateRangeStart + 'T00:00:00');
-        endDate = new Date(filterSettings.dateRangeEnd + 'T23:59:59');
+        // Create local dates to avoid timezone issues
+        const [startYear, startMonth, startDay] = filterSettings.dateRangeStart.split('-').map(Number);
+        const [endYear, endMonth, endDay] = filterSettings.dateRangeEnd.split('-').map(Number);
+        startDate = new Date(startYear, startMonth - 1, startDay, 0, 0, 0, 0);
+        endDate = new Date(endYear, endMonth - 1, endDay, 23, 59, 59, 999);
       } else {
         // Default to next 7 days if no range specified
         const today = new Date();
