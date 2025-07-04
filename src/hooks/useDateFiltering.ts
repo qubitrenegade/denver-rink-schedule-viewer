@@ -22,7 +22,8 @@ export function useDateFiltering(
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       startDate = today;
-      endDate = new Date(today.getTime() + (filterSettings.numberOfDays || 4) * MS_PER_DAY);
+      // For X days, we want today + (X-1) more days, so today through day X
+      endDate = new Date(today.getTime() + ((filterSettings.numberOfDays || 4) - 1) * MS_PER_DAY);
       endDate.setHours(23, 59, 59, 999);
     } else if (filterSettings.dateFilterMode === 'specific-day') {
       if (filterSettings.selectedDate) {
@@ -53,7 +54,7 @@ export function useDateFiltering(
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       startDate = today;
-      endDate = new Date(today.getTime() + 4 * MS_PER_DAY);
+      endDate = new Date(today.getTime() + (4 - 1) * MS_PER_DAY);
       endDate.setHours(23, 59, 59, 999);
     }
 
@@ -66,13 +67,7 @@ export function useDateFiltering(
       const startDateOnly = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
       const endDateOnly = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
       
-      const isInRange = eventLocalDateOnly >= startDateOnly && eventLocalDateOnly <= endDateOnly;
-      
-      if (!isInRange) {
-        console.log('📅 Event filtered out:', event.title, 'date:', eventLocalDateOnly.toISOString().split('T')[0], 'range:', startDateOnly.toISOString().split('T')[0], '-', endDateOnly.toISOString().split('T')[0]);
-      }
-      
-      return isInRange;
+      return eventLocalDateOnly >= startDateOnly && eventLocalDateOnly <= endDateOnly;
     });
 
     console.log('📊 Date filtering: input', events.length, 'events, output', filteredEvents.length, 'events');
