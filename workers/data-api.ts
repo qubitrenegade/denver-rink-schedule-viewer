@@ -5,9 +5,9 @@ import { FACILITY_IDS, CORS_HEADERS, HTTP_STATUS, CACHE_DURATIONS } from './shar
 
 // Enhanced cache headers utility
 async function getCacheHeaders(maxAge: number, isStale: boolean = false, resourceContent?: string): Promise<Record<string, string>> {
-  let etag = `"${Date.now()}-${Math.random().toString(36)}"`; // Fallback
+  let etag = `"no-content-${maxAge}"`; // Stable fallback based on cache duration
   
-  // Generate content-based ETag if content is provided
+  // Always generate content-based ETag if content is provided
   if (resourceContent) {
     try {
       const encoder = new TextEncoder();
@@ -18,7 +18,8 @@ async function getCacheHeaders(maxAge: number, isStale: boolean = false, resourc
       etag = `"${hashHex.substring(0, 16)}"`;  // Use first 16 chars for shorter ETag
     } catch (error) {
       console.warn('Failed to generate content-based ETag:', error);
-      // Keep fallback ETag
+      // Use stable fallback that won't change unnecessarily
+      etag = `"error-${maxAge}-${resourceContent?.length || 0}"`;
     }
   }
 
