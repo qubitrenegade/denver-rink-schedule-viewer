@@ -28,15 +28,15 @@ export function useTimeFiltering(
       if (filterSettings.timeFilterMode === 'after-time' && filterSettings.afterTime) {
         const { hours, minutes } = parseTime(filterSettings.afterTime);
         const afterMinutes = hours * 60 + minutes;
-        // Show events that END after the selected time
-        return eventEndMinutes >= afterMinutes;
+        // Show events that END after the selected time (strict inequality)
+        return eventEndMinutes > afterMinutes;
       }
 
       if (filterSettings.timeFilterMode === 'before-time' && filterSettings.beforeTime) {
         const { hours, minutes } = parseTime(filterSettings.beforeTime);
         const beforeMinutes = hours * 60 + minutes;
-        // Show events that BEGIN before the selected time
-        return eventStartMinutes <= beforeMinutes;
+        // Show events that BEGIN before the selected time (strict inequality)
+        return eventStartMinutes < beforeMinutes;
       }
 
       if (filterSettings.timeFilterMode === 'time-range' && filterSettings.timeRangeStart && filterSettings.timeRangeEnd) {

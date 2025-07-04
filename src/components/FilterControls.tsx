@@ -62,7 +62,23 @@ const FilterControls: React.FC<FilterControlsProps> = ({
 
   // --- Time filter handlers ---
   const handleTimeFilterModeChange = (newMode: TimeFilterMode) => {
-    onFilterSettingsChange({ ...currentFilterSettings, timeFilterMode: newMode });
+    const newSettings = { ...currentFilterSettings, timeFilterMode: newMode };
+    
+    // Set default times when switching to time-based modes
+    if (newMode === 'after-time' && !currentFilterSettings.afterTime) {
+      newSettings.afterTime = '18:00'; // Default to 6 PM
+    } else if (newMode === 'before-time' && !currentFilterSettings.beforeTime) {
+      newSettings.beforeTime = '12:00'; // Default to noon
+    } else if (newMode === 'time-range') {
+      if (!currentFilterSettings.timeRangeStart) {
+        newSettings.timeRangeStart = '09:00'; // Default start: 9 AM
+      }
+      if (!currentFilterSettings.timeRangeEnd) {
+        newSettings.timeRangeEnd = '21:00'; // Default end: 9 PM
+      }
+    }
+    
+    onFilterSettingsChange(newSettings);
   };
   const handleAfterTimeChange = (time: string) => {
     onFilterSettingsChange({ ...currentFilterSettings, afterTime: time });
