@@ -1,5 +1,6 @@
 import React from 'react';
 import { TimeFilterMode } from '../types';
+import EnhancedTimeInput from './EnhancedTimeInput';
 
 interface TimeFilterProps {
   timeFilterMode: TimeFilterMode;
@@ -52,11 +53,9 @@ const TimeFilter: React.FC<TimeFilterProps> = ({
     {timeFilterMode === 'after-time' && (
       <div className="bg-slate-800 p-4 rounded-md">
         <label className="block text-sm text-slate-300 mb-2">Show events ending after:</label>
-        <input
-          type="time"
-          step="900"
+        <EnhancedTimeInput
           value={afterTime || '18:00'}
-          onChange={e => onAfterTimeChange(e.target.value)}
+          onChange={onAfterTimeChange}
           className="w-full px-3 py-2 bg-slate-600 border border-slate-500 text-slate-200 rounded-md focus:ring-2 focus:ring-sky-400 focus:border-sky-400"
           placeholder="Type time like 1830 for 6:30 PM"
         />
@@ -68,11 +67,9 @@ const TimeFilter: React.FC<TimeFilterProps> = ({
     {timeFilterMode === 'before-time' && (
       <div className="bg-slate-800 p-4 rounded-md">
         <label className="block text-sm text-slate-300 mb-2">Show events starting before:</label>
-        <input
-          type="time"
-          step="900"
+        <EnhancedTimeInput
           value={beforeTime || '12:00'}
-          onChange={e => onBeforeTimeChange(e.target.value)}
+          onChange={onBeforeTimeChange}
           className="w-full px-3 py-2 bg-slate-600 border border-slate-500 text-slate-200 rounded-md focus:ring-2 focus:ring-sky-400 focus:border-sky-400"
           placeholder="Type time like 1200 for 12:00 PM"
         />
@@ -85,21 +82,17 @@ const TimeFilter: React.FC<TimeFilterProps> = ({
       <div className="bg-slate-800 p-4 rounded-md space-y-3">
         <div>
           <label className="block text-sm text-slate-300 mb-2">Start time:</label>
-          <input
-            type="time"
-            step="900"
+          <EnhancedTimeInput
             value={timeRangeStart || '09:00'}
-            onChange={e => onTimeRangeChange(e.target.value, timeRangeEnd)}
+            onChange={value => onTimeRangeChange(value, timeRangeEnd)}
             className="w-full px-3 py-2 bg-slate-600 border border-slate-500 text-slate-200 rounded-md focus:ring-2 focus:ring-sky-400 focus:border-sky-400"
           />
         </div>
         <div>
           <label className="block text-sm text-slate-300 mb-2">End time:</label>
-          <input
-            type="time"
-            step="900"
+          <EnhancedTimeInput
             value={timeRangeEnd || '21:00'}
-            onChange={e => onTimeRangeChange(timeRangeStart, e.target.value)}
+            onChange={value => onTimeRangeChange(timeRangeStart, value)}
             className="w-full px-3 py-2 bg-slate-600 border border-slate-500 text-slate-200 rounded-md focus:ring-2 focus:ring-sky-400 focus:border-sky-400"
           />
         </div>
