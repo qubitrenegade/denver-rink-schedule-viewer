@@ -8,6 +8,13 @@ export function useDateFiltering(
   filterSettings: FilterSettings
 ): RawIceEventData[] {
   return useMemo(() => {
+    console.log('🔍 Date filtering - mode:', filterSettings.dateFilterMode, 'settings:', {
+      numberOfDays: filterSettings.numberOfDays,
+      selectedDate: filterSettings.selectedDate,
+      dateRangeStart: filterSettings.dateRangeStart,
+      dateRangeEnd: filterSettings.dateRangeEnd
+    });
+
     let startDate: Date;
     let endDate: Date;
 
@@ -50,16 +57,25 @@ export function useDateFiltering(
       endDate.setHours(23, 59, 59, 999);
     }
 
-    return events.filter(event => {
+    console.log('📅 Date filter range:', startDate.toISOString(), 'to', endDate.toISOString());
+
+    const filteredEvents = events.filter(event => {
       const eventDate = new Date(event.startTime);
       // Convert to local date for comparison (same timezone as filter dates)
-      const eventLocalDate = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate(), 
-                                     eventDate.getHours(), eventDate.getMinutes(), eventDate.getSeconds());
       const eventLocalDateOnly = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate());
       const startDateOnly = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
       const endDateOnly = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
       
-      return eventLocalDateOnly >= startDateOnly && eventLocalDateOnly <= endDateOnly;
+      const isInRange = eventLocalDateOnly >= startDateOnly && eventLocalDateOnly <= endDateOnly;
+      
+      if (!isInRange) {
+        console.log('📅 Event filtered out:', event.title, 'date:', eventLocalDateOnly.toISOString().split('T')[0], 'range:', startDateOnly.toISOString().split('T')[0], '-', endDateOnly.toISOString().split('T')[0]);
+      }
+      
+      return isInRange;
     });
+
+    console.log('📊 Date filtering: input', events.length, 'events, output', filteredEvents.length, 'events');
+    return filteredEvents;
   }, [events, filterSettings.dateFilterMode, filterSettings.numberOfDays, filterSettings.selectedDate, filterSettings.dateRangeStart, filterSettings.dateRangeEnd]);
 }
