@@ -10,8 +10,20 @@ export function useCategoryFiltering(
       return events;
     }
 
-    return events.filter(event =>
-      filterSettings.activeCategories.includes(event.category)
-    );
-  }, [events, filterSettings.activeCategories]);
+    const { activeCategories, filterMode = 'include' } = filterSettings;
+
+    if (filterMode === 'include') {
+      // Include only events from selected categories
+      return events.filter(event =>
+        activeCategories.includes(event.category)
+      );
+    } else if (filterMode === 'exclude') {
+      // Exclude events from selected categories
+      return events.filter(event =>
+        !activeCategories.includes(event.category)
+      );
+    }
+
+    return events;
+  }, [events, filterSettings.activeCategories, filterSettings.filterMode]);
 }

@@ -27,11 +27,21 @@ export function useRinkFiltering(
 
     // Then apply additional rink filters if any
     if (filterSettings.activeRinkIds && filterSettings.activeRinkIds.length > 0) {
-      filteredEvents = filteredEvents.filter(event =>
-        filterSettings.activeRinkIds!.includes(event.rinkId)
-      );
+      const { activeRinkIds, rinkFilterMode = 'include' } = filterSettings;
+      
+      if (rinkFilterMode === 'include') {
+        // Include only events from selected rinks
+        filteredEvents = filteredEvents.filter(event =>
+          activeRinkIds!.includes(event.rinkId)
+        );
+      } else if (rinkFilterMode === 'exclude') {
+        // Exclude events from selected rinks
+        filteredEvents = filteredEvents.filter(event =>
+          !activeRinkIds!.includes(event.rinkId)
+        );
+      }
     }
 
     return filteredEvents;
-  }, [events, selectedRinkId, filterSettings.activeRinkIds]);
+  }, [events, selectedRinkId, filterSettings.activeRinkIds, filterSettings.rinkFilterMode]);
 }
