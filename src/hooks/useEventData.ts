@@ -2,6 +2,7 @@
 import { useState, useCallback } from 'react';
 import { RawIceEventData, FacilityMetadata } from '../types';
 import { FACILITY_IDS, CACHE_DURATIONS } from '../utils/constants';
+import { logger } from '../utils/logger';
 
 // Retry utility with exponential backoff
 async function withRetry<T>(
@@ -23,7 +24,7 @@ async function withRetry<T>(
       
       // Exponential backoff: 1s, 2s, 4s...
       const delay = baseDelay * Math.pow(2, attempt - 1);
-      console.warn(`⚠️ Attempt ${attempt} failed, retrying in ${delay}ms:`, lastError.message);
+      logger.warn(`⚠️ Attempt ${attempt} failed, retrying in ${delay}ms:`, lastError.message);
       await new Promise(resolve => setTimeout(resolve, delay));
     }
   }
@@ -46,7 +47,7 @@ export function useEventData() {
   const fetchData = useCallback(async (forceRefresh = false) => {
     // Use cache for 5 minutes unless force refresh
     if (staticData.length > 0 && !forceRefresh && Date.now() - lastFetchTime < CACHE_DURATIONS.API_CACHE) {
-      console.log(`📋 Using cached data`);
+      logger.log(`📋 Using cached data`);
       return;
     }
 
@@ -55,7 +56,7 @@ export function useEventData() {
     setFacilityErrors({});
 
     try {
-      console.log(`📡 Fetching data from API`);
+      logger.log(`📡 Fetching data from API`);
 
       // Try to fetch from the new /api/all-events and /api/all-metadata endpoints first with retry logic
       try {
@@ -83,15 +84,15 @@ export function useEventData() {
           return responses;
         }, 3, 1000);
 
-        console.log(`📊 Events response: ${eventsResponse.status} (${eventsResponse.statusText}), Metadata response: ${metadataResponse.status} (${metadataResponse.statusText})`);
-        console.log(`📊 Events content-type: ${eventsResponse.headers.get('content-type')}, Metadata content-type: ${metadataResponse.headers.get('content-type')}`);
+        logger.log(`📊 Events response: ${eventsResponse.status} (${eventsResponse.statusText}), Metadata response: ${metadataResponse.status} (${metadataResponse.statusText})`);
+        logger.log(`📊 Events content-type: ${eventsResponse.headers.get('content-type')}, Metadata content-type: ${metadataResponse.headers.get('content-type')}`);
 
-        console.log(`📡 Parsing events response...`);
+        logger.log(`📡 Parsing events response...`);
         const allEventsData = await eventsResponse.json();
-        console.log(`📡 Parsing metadata response...`);
+        logger.log(`📡 Parsing metadata response...`);
         const allMetadataData = await metadataResponse.json();
 
-        console.log(`📊 Loaded ${allEventsData.length} events, ${Object.keys(allMetadataData).length} facilities via bulk API`);
+        logger.log(`📊 Loaded ${allEventsData.length} events, ${Object.keys(allMetadataData).length} facilities via bulk API`);
 
         // Process events data with validation
         const bulkEvents: RawIceEventData[] = allEventsData
@@ -107,11 +108,11 @@ export function useEventData() {
         setFacilityMetadata(allMetadataData);
         setLastFetchTime(Date.now());
 
-        console.log(`✅ Successfully loaded ${bulkEvents.length} events from ${Object.keys(allMetadataData).length} facilities`);
+        logger.log(`✅ Successfully loaded ${bulkEvents.length} events from ${Object.keys(allMetadataData).length} facilities`);
         return;
       } catch (bulkError) {
-        console.warn('⚠️ Bulk API failed after retries, falling back to individual requests:', bulkError);
-        console.warn('⚠️ Error details:', {
+        logger.warn('⚠️ Bulk API failed after retries, falling back to individual requests:', bulkError);
+        logger.warn('⚠️ Error details:', {
           name: bulkError instanceof Error ? bulkError.name : 'Unknown',
           message: bulkError instanceof Error ? bulkError.message : String(bulkError),
           stack: bulkError instanceof Error ? bulkError.stack : undefined
@@ -173,7 +174,7 @@ export function useEventData() {
           const parsedEvents: RawIceEventData[] = eventsData
             .filter((event: any) => {
               if (!event || !event.startTime || !event.endTime) {
-                console.warn(`⚠️ Skipping invalid event from ${facilityId}:`, event);
+                logger.warn(`⚠️ Skipping invalid event from ${facilityId}:`, event);
                 return false;
               }
               return true;
@@ -186,7 +187,7 @@ export function useEventData() {
             .filter((event: RawIceEventData) => {
               const validDates = !isNaN(event.startTime.getTime()) && !isNaN(event.endTime.getTime());
               if (!validDates) {
-                console.warn(`⚠️ Skipping event with invalid dates from ${facilityId}:`, event);
+                logger.warn(`⚠️ Skipping event with invalid dates from ${facilityId}:`, event);
               }
               return validDates;
             });
@@ -252,7 +253,7 @@ export function useEventData() {
       const successCount = results.filter(r => r.success).length;
       const errorCount = results.filter(r => !r.success).length;
 
-      console.log(`✅ Loaded ${allEvents.length} events from ${successCount}/${facilityIds.length} facilities`);
+      logger.log(`✅ Loaded ${allEvents.length} events from ${successCount}/${facilityIds.length} facilities`);
 
       // Enhanced error reporting
       if (errorCount > 0 && successCount === 0) {
@@ -266,13 +267,13 @@ export function useEventData() {
           setError('All schedule sources are currently unavailable. Please try again in a few minutes.');
         }
       } else if (errorCount > 0) {
-        console.warn(`⚠️ ${errorCount} out of ${facilityIds.length} facilities failed to load`);
+        logger.warn(`⚠️ ${errorCount} out of ${facilityIds.length} facilities failed to load`);
         // Don't set a global error if some facilities succeeded
       }
 
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-      console.error('Failed to fetch data:', errorMessage);
+      logger.error('Failed to fetch data:', errorMessage);
       
       // Categorize error types for better user messaging
       if (errorMessage.includes('fetch') || errorMessage.includes('NetworkError')) {

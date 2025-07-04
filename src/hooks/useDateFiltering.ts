@@ -8,13 +8,6 @@ export function useDateFiltering(
   filterSettings: FilterSettings
 ): RawIceEventData[] {
   return useMemo(() => {
-    console.log('🔍 Date filtering - mode:', filterSettings.dateFilterMode, 'settings:', {
-      numberOfDays: filterSettings.numberOfDays,
-      selectedDate: filterSettings.selectedDate,
-      dateRangeStart: filterSettings.dateRangeStart,
-      dateRangeEnd: filterSettings.dateRangeEnd
-    });
-
     let startDate: Date;
     let endDate: Date;
 
@@ -61,8 +54,6 @@ export function useDateFiltering(
       endDate.setHours(23, 59, 59, 999);
     }
 
-    console.log('📅 Date filter range:', startDate.toISOString(), 'to', endDate.toISOString());
-
     const filteredEvents = events.filter(event => {
       const eventDate = new Date(event.startTime);
       // Convert to local date for comparison (same timezone as filter dates)
@@ -73,7 +64,6 @@ export function useDateFiltering(
       return eventLocalDateOnly >= startDateOnly && eventLocalDateOnly <= endDateOnly;
     });
 
-    console.log('📊 Date filtering: input', events.length, 'events, output', filteredEvents.length, 'events');
     return filteredEvents;
   }, [events, filterSettings.dateFilterMode, filterSettings.numberOfDays, filterSettings.selectedDate, filterSettings.dateRangeStart, filterSettings.dateRangeEnd]);
 }
