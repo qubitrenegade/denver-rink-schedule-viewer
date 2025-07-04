@@ -1,6 +1,5 @@
 import React from 'react';
 import { TimeFilterMode } from '../types';
-import TimeInput from './TimeInput';
 
 interface TimeFilterProps {
   timeFilterMode: TimeFilterMode;
@@ -53,26 +52,32 @@ const TimeFilter: React.FC<TimeFilterProps> = ({
     {timeFilterMode === 'after-time' && (
       <div className="bg-slate-800 p-4 rounded-md">
         <label className="block text-sm text-slate-300 mb-2">Show events ending after:</label>
-        <TimeInput
+        <input
+          type="time"
+          step="900"
           value={afterTime || '18:00'}
-          onChange={onAfterTimeChange}
-          className="w-full"
+          onChange={e => onAfterTimeChange(e.target.value)}
+          className="w-full px-3 py-2 bg-slate-600 border border-slate-500 text-slate-200 rounded-md focus:ring-2 focus:ring-sky-400 focus:border-sky-400"
+          placeholder="Type time like 1830 for 6:30 PM"
         />
         <p className="text-xs text-slate-500 mt-2">
-          Only events ending after {afterTime || '18:00'} will be shown
+          Only events ending after {afterTime || '18:00'} will be shown. Tip: You can type times like "1830" for 6:30 PM
         </p>
       </div>
     )}
     {timeFilterMode === 'before-time' && (
       <div className="bg-slate-800 p-4 rounded-md">
         <label className="block text-sm text-slate-300 mb-2">Show events starting before:</label>
-        <TimeInput
+        <input
+          type="time"
+          step="900"
           value={beforeTime || '12:00'}
-          onChange={onBeforeTimeChange}
-          className="w-full"
+          onChange={e => onBeforeTimeChange(e.target.value)}
+          className="w-full px-3 py-2 bg-slate-600 border border-slate-500 text-slate-200 rounded-md focus:ring-2 focus:ring-sky-400 focus:border-sky-400"
+          placeholder="Type time like 1200 for 12:00 PM"
         />
         <p className="text-xs text-slate-500 mt-2">
-          Only events starting before {beforeTime || '12:00'} will be shown
+          Only events starting before {beforeTime || '12:00'} will be shown. Tip: You can type times like "1200" for noon
         </p>
       </div>
     )}
@@ -80,22 +85,26 @@ const TimeFilter: React.FC<TimeFilterProps> = ({
       <div className="bg-slate-800 p-4 rounded-md space-y-3">
         <div>
           <label className="block text-sm text-slate-300 mb-2">Start time:</label>
-          <TimeInput
+          <input
+            type="time"
+            step="900"
             value={timeRangeStart || '09:00'}
-            onChange={value => onTimeRangeChange(value, timeRangeEnd)}
-            className="w-full"
+            onChange={e => onTimeRangeChange(e.target.value, timeRangeEnd)}
+            className="w-full px-3 py-2 bg-slate-600 border border-slate-500 text-slate-200 rounded-md focus:ring-2 focus:ring-sky-400 focus:border-sky-400"
           />
         </div>
         <div>
           <label className="block text-sm text-slate-300 mb-2">End time:</label>
-          <TimeInput
+          <input
+            type="time"
+            step="900"
             value={timeRangeEnd || '21:00'}
-            onChange={value => onTimeRangeChange(timeRangeStart, value)}
-            className="w-full"
+            onChange={e => onTimeRangeChange(timeRangeStart, e.target.value)}
+            className="w-full px-3 py-2 bg-slate-600 border border-slate-500 text-slate-200 rounded-md focus:ring-2 focus:ring-sky-400 focus:border-sky-400"
           />
         </div>
         <p className="text-xs text-slate-500">
-          Only events with overlap between {timeRangeStart || '09:00'} and {timeRangeEnd || '21:00'} will be shown
+          Events with overlap between {timeRangeStart || '09:00'} and {timeRangeEnd || '21:00'}. Tip: Type times like "0900" or "2100"
         </p>
       </div>
     )}
