@@ -34,10 +34,8 @@ export function useDateFiltering(
       } else {
         // Default to today if no date selected
         const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        startDate = today;
-        endDate = new Date(today.getTime() + MS_PER_DAY);
-        endDate.setHours(23, 59, 59, 999);
+        startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
+        endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
       }
     } else if (filterSettings.dateFilterMode === 'date-range') {
       if (filterSettings.dateRangeStart && filterSettings.dateRangeEnd) {
