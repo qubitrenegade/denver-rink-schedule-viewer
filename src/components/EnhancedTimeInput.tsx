@@ -5,13 +5,15 @@ interface EnhancedTimeInputProps {
   onChange: (value: string) => void;
   className?: string;
   placeholder?: string;
+  id?: string;
 }
 
 const EnhancedTimeInput: React.FC<EnhancedTimeInputProps> = ({ 
   value, 
   onChange, 
   className = '', 
-  placeholder 
+  placeholder,
+  id
 }) => {
   const handle15MinuteIncrement = (currentTime: string, increment: boolean) => {
     const [hours, minutes] = currentTime.split(':').map(Number);
@@ -31,6 +33,7 @@ const EnhancedTimeInput: React.FC<EnhancedTimeInputProps> = ({
 
   return (
     <input
+      id={id}
       type="time"
       step="900"
       value={value}

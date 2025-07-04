@@ -81,16 +81,18 @@ const TimeFilter: React.FC<TimeFilterProps> = ({
     {timeFilterMode === 'time-range' && (
       <div className="bg-slate-800 p-4 rounded-md space-y-3">
         <div>
-          <label className="block text-sm text-slate-300 mb-2">Start time:</label>
+          <label htmlFor="time-range-start" className="block text-sm text-slate-300 mb-2">Start time:</label>
           <EnhancedTimeInput
+            id="time-range-start"
             value={timeRangeStart || '09:00'}
             onChange={value => onTimeRangeChange(value, timeRangeEnd)}
             className="w-full px-3 py-2 bg-slate-600 border border-slate-500 text-slate-200 rounded-md focus:ring-2 focus:ring-sky-400 focus:border-sky-400"
           />
         </div>
         <div>
-          <label className="block text-sm text-slate-300 mb-2">End time:</label>
+          <label htmlFor="time-range-end" className="block text-sm text-slate-300 mb-2">End time:</label>
           <EnhancedTimeInput
+            id="time-range-end"
             value={timeRangeEnd || '21:00'}
             onChange={value => onTimeRangeChange(timeRangeStart, value)}
             className="w-full px-3 py-2 bg-slate-600 border border-slate-500 text-slate-200 rounded-md focus:ring-2 focus:ring-sky-400 focus:border-sky-400"
