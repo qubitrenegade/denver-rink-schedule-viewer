@@ -5,6 +5,7 @@ A modern, scalable web app and data pipeline for viewing and filtering public ic
 ## Features
 - **Fast, filterable schedule viewer** for multiple rinks with real-time data
 - **Progressive Web App (PWA)** with offline support and installable app experience
+- **Native Android App** available for Google Play Store distribution
 - **Modular React frontend** with custom hooks, filter components, and URL state management
 - **Robust Cloudflare Workers backend** with automated scraping and edge caching
 - **Durable Objects scheduling** for reliable, distributed scraper orchestration
@@ -12,6 +13,25 @@ A modern, scalable web app and data pipeline for viewing and filtering public ic
 - **Mobile-friendly, accessible UI** with modern design and smart install detection
 - **Automated data freshness** with configurable splay timing to avoid rate limiting
 - **Service worker caching** with stale-while-revalidate strategy for optimal performance
+
+## Android App
+
+The Denver Rink Schedule Viewer is available as a native Android app built with Capacitor, providing a native app experience while leveraging the existing PWA infrastructure.
+
+### Android Features
+- **📱 Native Android App**: Full native app experience with Play Store distribution
+- **🔄 All PWA Features**: Offline support, caching, and background sync
+- **⚡ Native Performance**: Optimized for Android with native UI elements
+- **🚀 Automatic Updates**: Seamless updates through the web layer
+- **🔔 Native Integration**: Android-specific features and optimizations
+
+### Development & Build
+- **Capacitor Integration**: Wraps the existing PWA in a native Android container
+- **Automated CI/CD**: GitHub Actions for building and deploying to Play Store
+- **Multiple Build Variants**: Debug, release, and development builds
+- **Comprehensive Testing**: Automated testing pipeline for Android builds
+
+See [Android Development Guide](docs/android-development.md) for detailed setup and development instructions.
 
 ## Progressive Web App (PWA)
 
@@ -78,14 +98,29 @@ This application is a fully-featured Progressive Web App that works offline and 
 ## Installation
 
 ```bash
-bun install
+# Install dependencies
+npm install
+
+# For Android development, also install Android SDK and Java 17
 ```
 
 ## Development
 
 ### Frontend Development
 ```bash
-bun run dev  # Start Vite dev server on http://localhost:5173
+npm run dev  # Start Vite dev server on http://localhost:5173
+```
+
+### Android Development
+```bash
+# Build web app and sync to Android
+npm run cap:build
+
+# Run Android app in development
+npm run cap:android
+
+# Build Android APK
+cd android && ./gradlew assembleDebug
 ```
 
 ### Worker Development  

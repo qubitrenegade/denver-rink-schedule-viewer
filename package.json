@@ -28,9 +28,17 @@
     "lint": "eslint --no-error-on-unmatched-pattern src/**/*.{ts,tsx} workers/**/*.ts",
     "lint:fix": "eslint --no-error-on-unmatched-pattern --fix src/**/*.{ts,tsx} workers/**/*.ts",
     "bench": "vitest bench",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "cap:sync": "npx cap sync",
+    "cap:build": "npm run build && npx cap sync",
+    "cap:android": "npx cap run android",
+    "cap:android:build": "npm run cap:build && npx cap build android",
+    "cap:android:release": "npm run cap:build && npx cap build android --prod"
   },
   "dependencies": {
+    "@capacitor/android": "^7.4.1",
+    "@capacitor/cli": "^7.4.1",
+    "@capacitor/core": "^7.4.1",
     "react": "18",
     "react-dom": "18",
     "vite": "^7.0.2",
@@ -38,6 +46,7 @@
     "xml2js": "^0.6.2"
   },
   "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
     "@cloudflare/workers-types": "^4.20250603.0",
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^16.3.0",
