@@ -7,7 +7,12 @@
 bun run test
 ```
 
-### Critical Tests Only (recommended for CI)
+### CI-Optimized Tests (recommended for CI/CD)
+```bash
+bun run test:ci
+```
+
+### Critical Tests Only (recommended for PR checks)
 ```bash
 bun run test:critical
 ```
@@ -20,6 +25,11 @@ bun run test:timezone
 ### Watch Mode (for development)
 ```bash
 bun run test:watch
+```
+
+### Parallel Test Safety Check
+```bash
+./scripts/test-parallel.sh
 ```
 
 ## Test Categories
@@ -59,6 +69,16 @@ To require tests before merging, add branch protection rules in GitHub:
 
 ## Common Issues
 
+### ❌ Test Cancellation Issues
+**Problem**: Tests appear to be "failing" because they're being canceled for no apparent reason
+**Root Cause**: GitHub Actions workflow with `cancel-in-progress: true` and overlapping test runs
+**Solution**: 
+- Disabled cancellation in PR workflow: `cancel-in-progress: false`
+- Added dedicated `test:ci` command with CI-optimized Vitest configuration
+- Eliminated overlapping test runs in the same workflow
+- Added proper test isolation with `fileParallelism: false` and retry logic
+**Test**: `./scripts/test-parallel.sh` should show parallel tests don't interfere
+
 ### ❌ "Midnight Time Bug"
 **Problem**: Events showing at 12:45 AM instead of 5:30 AM
 **Solution**: Use `ColoradoTimezone.parseMountainTime()` instead of `new Date()` + manual offset
@@ -66,11 +86,14 @@ To require tests before merging, add branch protection rules in GitHub:
 
 ### ❌ Test Environment Issues
 **Problem**: `document is not defined` or similar
-**Solution**: Tests run in jsdom environment - check `vitest.config.ts`
+**Solution**: Tests run in happy-dom environment - check `vitest.config.ts`
 
 ### ❌ Flaky Component Tests
-**Problem**: React component tests timing out
-**Solution**: These are known issues, critical tests still pass
+**Problem**: React component tests timing out or failing intermittently
+**Solution**: 
+- Use `test:ci` command for CI environments (single-threaded, longer timeouts)
+- Tests have retry logic built-in
+- Sequential file execution prevents resource conflicts
 
 ## Writing New Tests
 
