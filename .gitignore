@@ -24,3 +24,17 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# iOS
+ios/App/App/public
+ios/App/App/capacitor.config.json
+ios/App/Pods/
+ios/App/App.xcworkspace/xcshareddata/
+ios/App/App.xcworkspace/xcuserdata/
+ios/App/App.xcodeproj/xcuserdata/
+ios/App/App.xcodeproj/project.xcworkspace/xcuserdata/
+ios/App/*.xcarchive
+ios/App/export/
+ios/App/ExportOptions.plist
+*.ipa
+*.dSYM.zip

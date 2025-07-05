@@ -13,6 +13,7 @@ import { useEventData } from './hooks/useEventData';
 import { useEventFiltering } from './hooks/useEventFiltering';
 import { useUrlState } from './hooks/useUrlState';
 import { hasActiveFilters, getFilterDescription, getDisplayMetadata, getLastUpdateInfo } from './utils/filterUtils';
+import { capacitorManager } from './capacitor';
 
 export const ALL_RINKS_TAB_ID = 'all-rinks';
 
@@ -75,6 +76,11 @@ const App: React.FC = () => {
   React.useEffect(() => {
     refetch();
   }, [refetch]);
+
+  // Initialize Capacitor when the app starts
+  React.useEffect(() => {
+    capacitorManager.initialize().catch(console.error);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-700 text-gray-100 p-4 sm:p-6 md:p-8">

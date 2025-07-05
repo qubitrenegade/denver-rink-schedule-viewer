@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { logger } from '../utils/logger';
+import { capacitorManager } from '../capacitor';
 
 interface HeaderActionsProps {
   onShowAbout: () => void;
@@ -122,6 +123,18 @@ const HeaderActions: React.FC<HeaderActionsProps> = ({ onShowAbout }) => {
     setDeferredPrompt(null);
   };
 
+  const handleShareClick = async () => {
+    try {
+      await capacitorManager.shareSchedule(
+        'Denver Rink Schedule',
+        'Check out the Denver ice rink schedules!',
+        window.location.href
+      );
+    } catch (error) {
+      console.error('Error sharing:', error);
+    }
+  };
+
   return (
     <div className="flex items-center justify-center gap-4 mt-3">
       <button
@@ -129,6 +142,13 @@ const HeaderActions: React.FC<HeaderActionsProps> = ({ onShowAbout }) => {
         className="text-sky-400 hover:text-sky-300 underline transition-colors text-sm flex items-center gap-1"
       >
         ℹ️ About
+      </button>
+      
+      <button
+        onClick={handleShareClick}
+        className="text-sky-400 hover:text-sky-300 underline transition-colors text-sm flex items-center gap-1"
+      >
+        📤 Share
       </button>
       
       

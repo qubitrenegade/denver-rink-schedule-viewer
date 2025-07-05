@@ -55,6 +55,38 @@ This application is a fully-featured Progressive Web App that works offline and 
 - **Smart Install Detection**: Cross-browser compatibility in `HeaderActions.tsx`
 - **Cache Strategy**: Stale-while-revalidate for optimal performance
 
+## iOS App
+
+The Denver Rink Schedule Viewer is also available as a native iOS app, built using Capacitor to wrap the existing React PWA.
+
+### iOS App Features
+- **📱 Native iOS App**: Available on the App Store
+- **⚡ Native Performance**: Hardware-accelerated rendering and smooth animations
+- **🔄 Background Updates**: Automatic data refresh when app becomes active
+- **📤 Native Sharing**: iOS share sheet integration for sharing schedules
+- **📳 Haptic Feedback**: Touch feedback for enhanced user experience
+- **🔗 Deep Links**: Direct links to specific rinks or dates
+- **🎨 iOS Design**: Follows iOS Human Interface Guidelines
+- **🔒 App Store Quality**: Meets Apple's strict quality and security standards
+
+### iOS Development
+The iOS app is built using [Capacitor](https://capacitorjs.com/), which provides:
+- Native iOS container for the React app
+- Access to iOS-specific APIs and features
+- Automated build and deployment pipeline
+- Consistent experience across web and mobile
+
+For developers interested in the iOS app:
+- **Development Guide**: See [docs/ios-development.md](docs/ios-development.md)
+- **Requirements**: macOS with Xcode and iOS Developer account
+- **Build Commands**: `npm run ios:build` and `npm run ios:open`
+- **CI/CD**: GitHub Actions workflow for automated builds and App Store deployment
+
+### Getting the iOS App
+1. **App Store**: Search for "Denver Rink Schedule" (when available)
+2. **TestFlight**: Beta testing available through TestFlight
+3. **Build Yourself**: Clone the repository and build locally with Xcode
+
 ## Architecture
 
 ### Frontend (React + Vite)
