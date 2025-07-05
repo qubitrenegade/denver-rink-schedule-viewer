@@ -9,3 +9,8 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv
 }
+
+// PWA/Safari specific Navigator extension
+interface Navigator {
+  standalone?: boolean;
+}

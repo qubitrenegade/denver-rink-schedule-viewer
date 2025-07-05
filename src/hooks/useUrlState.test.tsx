@@ -8,8 +8,8 @@ describe('useUrlState', () => {
     const { result } = renderHook(() => useUrlState());
     expect(result.current.filterSettings).toBeDefined();
     act(() => {
-      result.current.setFilterSettings({ ...result.current.filterSettings, foo: 'baz' });
+      result.current.setFilterSettings({ ...result.current.filterSettings, startDate: 'baz' });
     });
-    expect(result.current.filterSettings.foo).toBe('baz');
+    expect(result.current.filterSettings.startDate).toBe('baz');
   });
 });

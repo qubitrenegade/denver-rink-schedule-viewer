@@ -1,5 +1,10 @@
 // Simple conditional logger for development vs production
-const isDev = import.meta.env.DEV;
+let isDev: boolean;
+try {
+  isDev = (import.meta.env as any)?.DEV;
+} catch {
+  isDev = false;
+}
 
 export const logger = {
   log: (...args: any[]) => {

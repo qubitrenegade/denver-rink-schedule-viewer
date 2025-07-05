@@ -38,8 +38,8 @@ export interface DisplayableIceEvent extends IceEvent {
 }
 
 export type FilterMode = 'include' | 'exclude';
-export type DateFilterMode = 'next-days' | 'specific-day' | 'date-range';
-export type TimeFilterMode = 'all-times' | 'after-time' | 'before-time' | 'time-range';
+export type DateFilterMode = 'next-days' | 'specific-day' | 'date-range' | 'today' | 'this-week';
+export type TimeFilterMode = 'all-times' | 'after-time' | 'before-time' | 'time-range' | 'morning' | 'afternoon' | 'evening' | 'custom-time';
 
 export interface FilterSettings {
   activeCategories: EventCategory[];
@@ -56,6 +56,10 @@ export interface FilterSettings {
   beforeTime?: string;
   timeRangeStart?: string;
   timeRangeEnd?: string;
+  startDate?: string;
+  endDate?: string;
+  startTime?: string;
+  endTime?: string;
 }
 
 export type UrlViewType = string;

@@ -47,7 +47,7 @@ const HeaderActions: React.FC<HeaderActionsProps> = ({ onShowAbout }) => {
     
     // Check if currently running as installed PWA
     const isStandalone = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
-    const isInAppBrowser = window.navigator.standalone; // iOS Safari
+    const isInAppBrowser = (window.navigator as any).standalone; // iOS Safari
     const isRunningInPWA = !!(isStandalone || isInAppBrowser);
     
     logger.log('PWA detection:', { isStandalone, isInAppBrowser, isRunningInPWA });

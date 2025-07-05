@@ -33,8 +33,13 @@ async function withRetry<T>(
 }
 
 // Configuration for CloudFlare Worker API endpoint
-const WORKER_API_BASE = (import.meta.env as any).WORKER_API_BASE ||
-  ((import.meta.env as any).PROD ? 'https://api.geticeti.me' : 'http://localhost:8794');
+let WORKER_API_BASE: string;
+try {
+  WORKER_API_BASE = (import.meta.env as any)?.WORKER_API_BASE ||
+    ((import.meta.env as any)?.PROD ? 'https://api.geticeti.me' : 'http://localhost:8794');
+} catch {
+  WORKER_API_BASE = 'http://localhost:8794';
+}
 
 export function useEventData() {
   const [staticData, setStaticData] = useState<RawIceEventData[]>([]);

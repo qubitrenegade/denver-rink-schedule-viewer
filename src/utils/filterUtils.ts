@@ -25,6 +25,7 @@ export function resetFilters(): FilterSettings {
   return {
     activeCategories: [],
     activeRinkIds: [],
+    filterMode: 'include',
     dateFilterMode: FILTER_DEFAULTS.DATE_FILTER_MODE,
     numberOfDays: FILTER_DEFAULTS.NUMBER_OF_DAYS,
     timeFilterMode: FILTER_DEFAULTS.TIME_FILTER_MODE,
