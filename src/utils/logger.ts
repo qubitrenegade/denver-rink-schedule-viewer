@@ -1,7 +1,8 @@
 // Simple conditional logger for development vs production
 let isDev: boolean;
 try {
-  isDev = (import.meta.env as any)?.DEV;
+  // @ts-ignore - import.meta may not be available in CLI context
+  isDev = import.meta?.env?.DEV;
 } catch {
   isDev = false;
 }

@@ -35,8 +35,10 @@ async function withRetry<T>(
 // Configuration for CloudFlare Worker API endpoint
 let WORKER_API_BASE: string;
 try {
-  WORKER_API_BASE = (import.meta.env as any)?.WORKER_API_BASE ||
-    ((import.meta.env as any)?.PROD ? 'https://api.geticeti.me' : 'http://localhost:8794');
+  // @ts-ignore - import.meta may not be available in CLI context
+  WORKER_API_BASE = import.meta?.env?.WORKER_API_BASE ||
+    // @ts-ignore - import.meta may not be available in CLI context  
+    (import.meta?.env?.PROD ? 'https://api.geticeti.me' : 'http://localhost:8794');
 } catch {
   WORKER_API_BASE = 'http://localhost:8794';
 }
