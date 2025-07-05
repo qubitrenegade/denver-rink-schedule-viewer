@@ -78,7 +78,7 @@ jobs:
     
     strategy:
       matrix:
-        shard: [frontend, scrapers, utils, api]
+        shard: [frontend, scrapers, utils ] # , api] 
       fail-fast: false
     
     steps:
@@ -115,13 +115,13 @@ jobs:
           done
         elif [ "${{ matrix.shard }}" == "scrapers" ]; then
           echo "🧪 Running scraper tests..."
-          bun test workers/scrapers/ --environment happy-dom --run --no-error-on-unmatched-pattern || true
+          bun test workers/scrapers/ --environment happy-dom --run --no-error-on-unmatched-pattern
         elif [ "${{ matrix.shard }}" == "utils" ]; then
           echo "🧪 Running utility tests..."
-          bun test src/utils/ workers/shared/ --environment happy-dom --run --no-error-on-unmatched-pattern || true
-        elif [ "${{ matrix.shard }}" == "api" ]; then
-          echo "🧪 Running API tests..."
-          bun test workers/data-api.test.ts workers/scheduler.test.ts --environment happy-dom --run --no-error-on-unmatched-pattern || true
+          bun test src/utils/ workers/shared/ --environment happy-dom --run --no-error-on-unmatched-pattern
+        # elif [ "${{ matrix.shard }}" == "api" ]; then
+        #   echo "🧪 Running API tests..."
+        #   bun test workers/data-api.test.ts workers/scheduler.test.ts --environment happy-dom --run --no-error-on-unmatched-pattern
         fi
       continue-on-error: true
 

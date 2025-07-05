@@ -15,31 +15,23 @@ This document outlines the migration from TSLint to ESLint that has now been com
 bun add -d eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin
 ```
 
-2. ✅ Created a basic `.eslintrc.js` configuration:
-```javascript
-module.exports = {
-  root: true,
-  parser: '@typescript-eslint/parser',
-  plugins: [
-    '@typescript-eslint',
-    'react',
-    'react-hooks',
-  ],
-  extends: [
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:react/recommended',
-    'plugin:react-hooks/recommended',
-  ],
-  rules: {
-    // Custom rules added
+2. ✅ Created a basic `.eslintrc.json` configuration:
+```json
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
   },
-  settings: {
-    react: {
-      version: 'detect',
-    },
-  },
-};
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended"
+  ],
+  "parser": "@typescript-eslint/parser"
+}
 ```
 
 3. ✅ Updated `package.json` scripts:
