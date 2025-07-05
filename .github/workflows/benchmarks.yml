@@ -1,0 +1,81 @@
+name: Performance Benchmarks
+
+on:
+  push:
+    branches: [main]  # Run on main branch to track performance over time
+  pull_request:       # Run on PRs to detect performance regressions
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v1
+      with:
+        bun-version: latest
+
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          **/node_modules
+          ~/.bun/install/cache
+        key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-bun-
+
+    - name: Install dependencies
+      run: bun install --frozen-lockfile
+
+    - name: Run benchmarks
+      id: run-bench
+      run: |
+        echo "🔍 Running performance benchmarks..."
+        bun run bench | tee benchmark-results.txt
+
+    - name: Store benchmark results
+      uses: actions/upload-artifact@v4
+      with:
+        name: benchmark-results
+        path: benchmark-results.txt
+        retention-days: 90
+        
+    - name: Comment PR with benchmark results
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const fs = require('fs');
+          let benchmarkResults;
+          try {
+            benchmarkResults = fs.readFileSync('benchmark-results.txt', 'utf8');
+            // Extract just the summary part
+            const summaryMatch = benchmarkResults.match(/BENCH SUMMARY[\s\S]*$/);
+            benchmarkResults = summaryMatch ? summaryMatch[0] : benchmarkResults;
+          } catch (error) {
+            benchmarkResults = "Error reading benchmark results: " + error.message;
+          }
+          
+          const comment = `## Performance Benchmark Results
+
+          \`\`\`
+          ${benchmarkResults}
+          \`\`\`
+
+          [Full Benchmark Report](${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID})
+          `;
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });

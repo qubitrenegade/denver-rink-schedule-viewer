@@ -1,0 +1,55 @@
+version: 2
+updates:
+  # Keep npm dependencies up to date
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 10
+    # Labels to apply to PRs
+    labels:
+      - "dependencies"
+      - "automated"
+    # Group all updates together
+    groups:
+      dev-dependencies:
+        patterns:
+          - "*eslint*"
+          - "*typescript*"
+          - "*testing-library*"
+          - "vitest"
+        update-types:
+          - "minor"
+          - "patch"
+      production-dependencies:
+        patterns:
+          - "*react*"
+          - "vite"
+        update-types:
+          - "minor"
+          - "patch"
+    # Target branches
+    target-branch: "main"
+    # Configure reviewers
+    reviewers:
+      - "owner"
+    # Configure the commit message
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+      
+  # Keep GitHub Actions up to date
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "github-actions"
+      - "automated"
+    commit-message:
+      prefix: "ci"
+      include: "scope"

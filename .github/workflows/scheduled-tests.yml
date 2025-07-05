@@ -1,0 +1,75 @@
+name: Scheduled Tests
+
+on:
+  schedule:
+    # Run daily at 0:00 AM UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  scraper-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v1
+      with:
+        bun-version: latest
+
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          **/node_modules
+          ~/.bun/install/cache
+        key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-bun-
+
+    - name: Install dependencies
+      run: bun install --frozen-lockfile
+
+    - name: Test scrapers
+      run: |
+        echo "🔍 Testing all scrapers to detect website changes..."
+        
+        # Test each scraper individually
+        bun test workers/scrapers/apex-ice.test.ts --run
+        bun test workers/scrapers/big-bear.test.ts --run || true
+        bun test workers/scrapers/du-ritchie.test.ts --run || true
+        bun test workers/scrapers/foothills-edge.test.ts --run || true
+        bun test workers/scrapers/ice-ranch.test.ts --run || true
+        bun test workers/scrapers/ssprd.test.ts --run || true
+        
+        echo "✅ Scraper tests completed"
+
+    - name: Notify if tests failed
+      if: failure()
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          const issueTitle = 'Scheduled Scraper Tests Failed';
+          const issueBody = 'The daily scraper tests have failed. This may indicate that one or more rink websites have changed their structure.\n\nSee the workflow run for details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}';
+          
+          // Check if issue already exists
+          const issues = await github.rest.issues.listForRepo({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            state: 'open',
+            labels: ['scraper-failure']
+          });
+          
+          // Only create a new issue if one doesn't already exist
+          if (issues.data.length === 0) {
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: issueTitle,
+              body: issueBody,
+              labels: ['scraper-failure', 'automated']
+            });
+          }
