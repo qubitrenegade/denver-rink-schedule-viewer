@@ -1,4 +1,4 @@
-package com.getcapacitor.myapp;
+package com.geticeti.rinkschedule;
 
 import static org.junit.Assert.*;
 
