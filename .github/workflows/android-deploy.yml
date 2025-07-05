@@ -67,7 +67,7 @@ jobs:
       with:
         serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
         packageName: com.geticeti.rinkschedule
-        releaseFiles: android/app/build/outputs/bundle/release/app-release.aab
+        releaseFiles: android/app/build/outputs/bundle/prod/release/app-prod-release.aab
         track: internal
         status: completed
         
@@ -75,4 +75,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: signed-app-bundle
-        path: android/app/build/outputs/bundle/release/app-release.aab
+        path: android/app/build/outputs/bundle/prod/release/app-prod-release.aab
