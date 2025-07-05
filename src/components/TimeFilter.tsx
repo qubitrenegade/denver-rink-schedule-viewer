@@ -60,7 +60,7 @@ const TimeFilter: React.FC<TimeFilterProps> = ({
           placeholder="Type time like 1830 for 6:30 PM"
         />
         <p className="text-xs text-slate-500 mt-2">
-          Only events ending after {afterTime || '18:00'} will be shown. Tip: You can type times like "1830" for 6:30 PM
+          Only events ending after {afterTime || '18:00'} will be shown. Tip: You can type times like `1830` for 6:30 PM
         </p>
       </div>
     )}
@@ -74,7 +74,7 @@ const TimeFilter: React.FC<TimeFilterProps> = ({
           placeholder="Type time like 1200 for 12:00 PM"
         />
         <p className="text-xs text-slate-500 mt-2">
-          Only events starting before {beforeTime || '12:00'} will be shown. Tip: You can type times like "1200" for noon
+          Only events starting before {beforeTime || '12:00'} will be shown. Tip: You can type times like `1200` for noon
         </p>
       </div>
     )}
@@ -99,7 +99,7 @@ const TimeFilter: React.FC<TimeFilterProps> = ({
           />
         </div>
         <p className="text-xs text-slate-500">
-          Events with overlap between {timeRangeStart || '09:00'} and {timeRangeEnd || '21:00'}. Tip: Type times like "0900" or "2100"
+          Events with overlap between {timeRangeStart || '09:00'} and {timeRangeEnd || '21:00'}. Tip: Type times like `0900` or `2100`
         </p>
       </div>
     )}
