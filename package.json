@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "test": "vitest --environment happy-dom",
     "test:watch": "vitest --watch --environment happy-dom",
+    "test:ci": "vitest run --config ./vitest.ci.config.ts",
     "test:timezone": "vitest run --environment happy-dom workers/shared/timezone-utils.test.ts workers/scrapers/apex-ice.test.ts",
     "test:critical": "vitest run --environment happy-dom workers/shared/ src/utils/",
     "fix:apex-timezone": "node scripts/clear-apex-data.js",
