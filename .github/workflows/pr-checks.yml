@@ -1,9 +1,16 @@
 name: PR Checks
 
 on:
-  pull_request:
-    branches: [ main ]
+  push:                       # run on every branch push
+    branches: ['**']          # «**» = any branch pattern
+  pull_request:               # run when a PR is opened/updated
     types: [opened, synchronize, reopened, ready_for_review]
+
+# Deduplicate runs
+concurrency:
+  # Use the PR head ref if it exists, otherwise the branch name.
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true     # newer run replaces any in-flight one
 
 # Ensure tests pass before allowing merge
 jobs:
@@ -20,39 +27,53 @@ jobs:
       with:
         bun-version: latest
 
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          **/node_modules
+          ~/.bun/install/cache
+        key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-bun-
+
     - name: Install dependencies
       run: bun install --frozen-lockfile
 
     - name: Type check
       run: npx tsc --noEmit --skipLibCheck src/**/*.ts src/**/*.tsx --jsx preserve
 
+    - name: Lint check
+      run: npx tslint -c tslint.json 'src/**/*.{ts,tsx}'
+
     - name: Run tests (excluding flaky ones)
+      id: critical-tests
       run: |
         # Run timezone tests first (most critical)
-        bun test workers/shared/timezone-utils.test.ts --run
-        bun test workers/scrapers/apex-ice.test.ts --run
+        bun run test:timezone
         
-        # Run other stable tests
-        bun test src/utils/ --run
-        bun test workers/shared/ --run
+        # Run other critical tests
+        bun run test:critical
         
         echo "✅ Critical tests passed"
+
+    - name: Run coverage report
+      run: bun run test --coverage
+      continue-on-error: true
 
     - name: Build check
       run: bun run build
 
-    - name: Verify timezone fix
-      run: |
-        echo "🕐 Verifying timezone conversion fix..."
-        bun test workers/scrapers/apex-ice.test.ts
-                
-        echo "🏒 Ready for merge!"
+    - name: Check for previous step failures
+      if: success()
+      run: echo "🏒 All checks passed! Ready for merge!"
 
   # Optional: Add a job that runs all tests but doesn't block merging
   full-test-suite:
     runs-on: ubuntu-latest
     continue-on-error: true # Don't block merge if these fail
     if: github.event.pull_request.draft == false
+    needs: required-checks
     
     steps:
     - name: Checkout
@@ -63,15 +84,59 @@ jobs:
       with:
         bun-version: latest
 
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          **/node_modules
+          ~/.bun/install/cache
+        key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-bun-
+
     - name: Install dependencies
       run: bun install --frozen-lockfile
 
     - name: Run all tests
+      id: full-tests
       run: bun run test --run
       continue-on-error: true
 
     - name: Report test results
       if: always()
       run: |
-        echo "Full test suite completed (results may include known flaky tests)"
+        if [ "${{ steps.full-tests.outcome }}" == "success" ]; then
+          echo "✅ Full test suite completed successfully"
+        else
+          echo "⚠️ Full test suite completed with some failures (may include known flaky tests)"
+        fi
         echo "Check the logs above for detailed results"
+    
+    - name: Comment PR with test results
+      if: github.event_name == 'pull_request' && always()
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          const criticalTestsJob = '${{ needs.required-checks.result || 'unknown' }}';
+          const fullTestsStatus = '${{ steps.full-tests.outcome }}';
+          
+          let statusEmoji = criticalTestsJob === 'success' ? '✅' : '❌';
+          let fullTestsEmoji = fullTestsStatus === 'success' ? '✅' : '⚠️';
+          
+          const comment = `## Test Results
+
+          ### Required Checks: ${statusEmoji}
+          Required checks ${criticalTestsJob === 'success' ? 'passed' : 'failed'}. See [workflow run](${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}) for details.
+
+          ### Full Test Suite: ${fullTestsEmoji}
+          Full test suite completed with ${fullTestsStatus === 'success' ? 'all tests passing' : 'some failures (may include known flaky tests)'}.
+          
+          _Workflow run on: ${new Date().toISOString()}_`;
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });
