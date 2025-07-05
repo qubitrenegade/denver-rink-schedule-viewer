@@ -321,6 +321,14 @@ Contributions welcome! The codebase is designed for maintainability:
 
 - **Modular architecture** with clear separation of concerns
 - **Shared patterns** via ScraperHelpers reduce code duplication
+- **Branch protection rules** ensure code quality - see [BRANCH_PROTECTION.md](./BRANCH_PROTECTION.md) for setup
+- **Comprehensive testing** with timezone-aware tests and CI/CD integration
+
+### Pull Request Guidelines
+1. All changes must go through pull requests (direct pushes to main are protected)
+2. PRs require at least one review and all status checks must pass
+3. Critical tests (timezone, utilities, shared modules) must pass before merging
+4. See [TESTING.md](./TESTING.md) for running tests locally
 
 ## Web Scraping Lessons Learned
 

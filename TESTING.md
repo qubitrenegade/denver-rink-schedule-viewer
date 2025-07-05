@@ -57,6 +57,17 @@ To require tests before merging, add branch protection rules in GitHub:
 3. Enable "Require status checks to pass before merging"
 4. Select "required-checks" from PR Checks workflow
 
+**For complete setup instructions, see [BRANCH_PROTECTION.md](./BRANCH_PROTECTION.md)**
+
+#### Quick Setup Checklist:
+- ✅ Require pull request before merging (1 approval minimum)
+- ✅ Require status checks: `required-checks` job must pass
+- ✅ Require branches to be up to date before merging
+- ✅ Require conversation resolution before merging
+- ✅ Do not allow bypassing the above settings (recommended)
+
+This ensures that all PRs must pass the critical tests defined in `.github/workflows/pr-checks.yml` before merging.
+
 ## Common Issues
 
 ### ❌ "Midnight Time Bug"
