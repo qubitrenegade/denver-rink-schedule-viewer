@@ -160,12 +160,12 @@ Key Android settings in `android/app/build.gradle`:
 
 ```bash
 # Debug builds
-./gradlew assembleDebug
-./gradlew installDebug
+./gradlew assembleProdDebug
+./gradlew installProdDebug
 
 # Release builds
-./gradlew assembleRelease
-./gradlew bundleRelease
+./gradlew assembleProdRelease
+./gradlew bundleProdRelease
 
 # Testing
 ./gradlew test
@@ -180,7 +180,7 @@ Key Android settings in `android/app/build.gradle`:
    ```bash
    npm run cap:build
    cd android
-   ./gradlew bundleRelease
+   ./gradlew bundleProdRelease
    ```
 
 2. **Sign the app** (see [Android Signing Guide](android-signing.md))

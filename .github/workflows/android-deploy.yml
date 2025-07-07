@@ -56,7 +56,7 @@ jobs:
         KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       run: |
         cd android
-        ./gradlew bundleRelease \
+        ./gradlew bundleProdRelease \
           -Pandroid.injected.signing.store.file=app/keystore.jks \
           -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD \
           -Pandroid.injected.signing.key.alias=$KEY_ALIAS \

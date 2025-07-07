@@ -48,17 +48,17 @@ For local development and testing:
 # Debug build
 npm run cap:build
 cd android
-./gradlew assembleDebug
+./gradlew assembleProdDebug
 
 # Release build (unsigned)
 npm run cap:build
 cd android
-./gradlew assembleRelease
+./gradlew assembleProdRelease
 
 # Signed release build
 npm run cap:build
 cd android
-./gradlew bundleRelease \
+./gradlew bundleProdRelease \
   -Pandroid.injected.signing.store.file=app/keystore.jks \
   -Pandroid.injected.signing.store.password=YOUR_KEYSTORE_PASSWORD \
   -Pandroid.injected.signing.key.alias=YOUR_KEY_ALIAS \
