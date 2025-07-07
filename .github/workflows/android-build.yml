@@ -70,36 +70,93 @@ jobs:
     - name: Build Android Debug APK
       run: |
         cd android
-        ./gradlew assembleDebug
+        ./gradlew assembleProdDebug
         
     - name: Upload Debug APK
       uses: actions/upload-artifact@v4
       with:
         name: debug-apk
-        path: android/app/build/outputs/apk/*/debug/app-*-debug.apk
+        path: android/app/build/outputs/apk/prod/debug/app-prod-debug.apk
         
     - name: Build Android Release APK (if main branch)
       if: github.ref == 'refs/heads/main'
       run: |
         cd android
-        ./gradlew assembleRelease
+        ./gradlew assembleProdRelease
         
     - name: Upload Release APK
       if: github.ref == 'refs/heads/main'
       uses: actions/upload-artifact@v4
       with:
         name: release-apk
-        path: android/app/build/outputs/apk/*/release/app-*-release-unsigned.apk
+        path: android/app/build/outputs/apk/prod/release/app-prod-release-unsigned.apk
         
     - name: Build Android App Bundle (if main branch)
       if: github.ref == 'refs/heads/main'
       run: |
         cd android
-        ./gradlew bundleRelease
+        ./gradlew bundleProdRelease
         
     - name: Upload App Bundle
       if: github.ref == 'refs/heads/main'
       uses: actions/upload-artifact@v4
       with:
         name: app-bundle
-        path: android/app/build/outputs/bundle/*/release/app-*-release.aab
+        path: android/app/build/outputs/bundle/prod/release/app-prod-release.aab
+
+  release:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    permissions:
+      contents: write
+    
+    steps:
+    - name: Download Release APK
+      uses: actions/download-artifact@v4
+      with:
+        name: release-apk
+        path: ./artifacts/
+        
+    - name: Download Debug APK
+      uses: actions/download-artifact@v4
+      with:
+        name: debug-apk
+        path: ./artifacts/
+        
+    - name: Download App Bundle
+      uses: actions/download-artifact@v4
+      with:
+        name: app-bundle
+        path: ./artifacts/
+        
+    - name: Generate release tag
+      id: tag
+      run: |
+        TAG="android-build-$(date +%Y%m%d-%H%M%S)"
+        echo "tag=$TAG" >> $GITHUB_OUTPUT
+        echo "Generated tag: $TAG"
+        
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ steps.tag.outputs.tag }}
+        name: "Android Build ${{ steps.tag.outputs.tag }}"
+        body: |
+          Android build artifacts from commit ${{ github.sha }}
+          
+          **Files included:**
+          - `app-prod-release-unsigned.apk` - Production release APK (unsigned)
+          - `app-prod-debug.apk` - Production debug APK 
+          - `app-prod-release.aab` - Production release App Bundle
+          
+          **Installation:**
+          - Download the APK file
+          - Enable "Install from unknown sources" in Android settings
+          - Install the APK file
+        files: |
+          ./artifacts/app-prod-release-unsigned.apk
+          ./artifacts/app-prod-debug.apk
+          ./artifacts/app-prod-release.aab
+        prerelease: true
+        generate_release_notes: true
