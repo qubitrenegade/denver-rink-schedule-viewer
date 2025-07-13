@@ -14,35 +14,26 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Setup Bun
-      uses: oven-sh/setup-bun@v2
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
       with:
-        bun-version: latest
-
-    - name: Cache dependencies
-      uses: actions/cache@v4
-      with:
-        path: |
-          **/node_modules
-          ~/.bun/install/cache
-        key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-bun-
+        node-version: '20'
+        cache: 'npm'
 
     - name: Install dependencies
-      run: bun install --frozen-lockfile
+      run: npm install --frozen-lockfile
 
     - name: Test scrapers
       run: |
         echo "🔍 Testing all scrapers to detect website changes..."
         
-        # Test each scraper individually
-        bun test workers/scrapers/apex-ice.test.ts --run
-        bun test workers/scrapers/big-bear.test.ts --run || true
-        bun test workers/scrapers/du-ritchie.test.ts --run || true
-        bun test workers/scrapers/foothills-edge.test.ts --run || true
-        bun test workers/scrapers/ice-ranch.test.ts --run || true
-        bun test workers/scrapers/ssprd.test.ts --run || true
+        # Test each scraper individually (only if test file exists)
+        [ -f workers/scrapers/apex-ice.test.ts ] && npx vitest run workers/scrapers/apex-ice.test.ts
+        [ -f workers/scrapers/big-bear.test.ts ] && npx vitest run workers/scrapers/big-bear.test.ts || true
+        [ -f workers/scrapers/du-ritchie.test.ts ] && npx vitest run workers/scrapers/du-ritchie.test.ts || true
+        [ -f workers/scrapers/foothills-edge.test.ts ] && npx vitest run workers/scrapers/foothills-edge.test.ts || true
+        [ -f workers/scrapers/ice-ranch.test.ts ] && npx vitest run workers/scrapers/ice-ranch.test.ts || true
+        [ -f workers/scrapers/ssprd.test.ts ] && npx vitest run workers/scrapers/ssprd.test.ts || true
         
         echo "✅ Scraper tests completed"
 
