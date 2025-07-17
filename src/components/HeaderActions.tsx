@@ -21,7 +21,7 @@ const HeaderActions: React.FC<HeaderActionsProps> = ({ onShowAbout }) => {
     
     const checkFirefox = () => {
       const isFF = /Firefox/i.test(navigator.userAgent);
-      console.log('Firefox detection:', isFF, navigator.userAgent);
+      logger.log('Firefox detection:', isFF, navigator.userAgent);
       setIsFirefox(isFF);
     };
     
@@ -31,7 +31,7 @@ const HeaderActions: React.FC<HeaderActionsProps> = ({ onShowAbout }) => {
     
     // Listen for PWA install prompt
     const handleBeforeInstallPrompt = (e: any) => {
-      console.log('PWA install prompt detected!', e);
+      logger.log('PWA install prompt detected!', e);
       e.preventDefault();
       setDeferredPrompt(e);
       setShowInstallButton(true); // Always set to true, we'll filter later
@@ -48,7 +48,7 @@ const HeaderActions: React.FC<HeaderActionsProps> = ({ onShowAbout }) => {
     
     // Check if currently running as installed PWA
     const isStandalone = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
-    const isInAppBrowser = window.navigator.standalone; // iOS Safari
+    const isInAppBrowser = (window.navigator as any).standalone; // iOS Safari - type cast for iOS-specific property
     const isRunningInPWA = !!(isStandalone || isInAppBrowser);
     
     logger.log('PWA detection:', { isStandalone, isInAppBrowser, isRunningInPWA });
@@ -66,7 +66,7 @@ const HeaderActions: React.FC<HeaderActionsProps> = ({ onShowAbout }) => {
     // Debug: Log service worker registration status
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.getRegistrations().then(registrations => {
-        console.log('Service Worker registrations:', registrations.length);
+        logger.log('Service Worker registrations:', registrations.length);
       });
     }
 
@@ -76,7 +76,7 @@ const HeaderActions: React.FC<HeaderActionsProps> = ({ onShowAbout }) => {
                            'serviceWorker' in navigator &&
                            manifestLink !== null;
     
-    console.log('PWA Debug Info:', {
+    logger.log('PWA Debug Info:', {
       isHttps: location.protocol === 'https:' || location.hostname === 'localhost',
       hasServiceWorker: 'serviceWorker' in navigator,
       hasManifest: manifestLink !== null,
@@ -90,11 +90,11 @@ const HeaderActions: React.FC<HeaderActionsProps> = ({ onShowAbout }) => {
     // Simple logic: Only show install button when we actually have an install prompt
     // This means the app is installable but not yet installed
     if (showInstallButton && (isFirefox || isRunningInPWA || !deferredPrompt)) {
-      console.log('Hiding button because:', { isFirefox, isRunningInPWA, noDeferredPrompt: !deferredPrompt });
+      logger.log('Hiding button because:', { isFirefox, isRunningInPWA, noDeferredPrompt: !deferredPrompt });
       setShowInstallButton(false);
     }
     
-    console.log('Final button state:', { 
+    logger.log('Final button state:', { 
       showInstallButton,
       isFirefox, 
       isRunningInPWA,
@@ -111,12 +111,12 @@ const HeaderActions: React.FC<HeaderActionsProps> = ({ onShowAbout }) => {
   const handleInstallClick = async () => {
     if (!deferredPrompt) return;
 
-    console.log('Installing app using deferred prompt');
+    logger.log('Installing app using deferred prompt');
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
     
     if (outcome === 'accepted') {
-      console.log('User accepted install');
+      logger.log('User accepted install');
       setShowInstallButton(false); // Hide button after successful install
     }
     

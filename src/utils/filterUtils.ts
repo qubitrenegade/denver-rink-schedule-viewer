@@ -1,4 +1,4 @@
-import { FilterSettings } from '../types';
+import { FilterSettings, FilterMode, RinkFilterType, DateFilterMode, TimeFilterMode } from '../types';
 import { FILTER_DEFAULTS } from './constants';
 
 /**
@@ -24,14 +24,13 @@ export function hasActiveFilters(filterSettings?: FilterSettings): boolean {
 export function resetFilters(): FilterSettings {
   return {
     activeCategories: [],
+    filterMode: 'exclude' as FilterMode,
     activeRinkIds: [],
-    dateFilterMode: FILTER_DEFAULTS.DATE_FILTER_MODE,
-    numberOfDays: FILTER_DEFAULTS.NUMBER_OF_DAYS,
-    timeFilterMode: FILTER_DEFAULTS.TIME_FILTER_MODE,
-    startDate: '',
-    endDate: '',
-    startTime: '',
-    endTime: ''
+    rinkFilterMode: 'exclude' as FilterMode,
+    rinkFilterType: 'facilities' as RinkFilterType,
+    dateFilterMode: 'next-days' as DateFilterMode,
+    numberOfDays: 4,
+    timeFilterMode: 'all-times' as TimeFilterMode
   };
 }
 
