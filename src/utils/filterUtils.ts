@@ -73,21 +73,17 @@ export function getFilterDescription(filterSettings?: FilterSettings): string {
     description = `Showing events for the next ${numberOfDays} days`;
   } else if (dateFilterMode === 'date-range') {
     description = 'Showing events for selected date range';
-  } else if (dateFilterMode === 'today') {
-    description = "Showing today's events";
-  } else if (dateFilterMode === 'this-week') {
-    description = "Showing this week's events";
+  } else if (dateFilterMode === 'specific-day') {
+    description = 'Showing events for selected date';
   }
   
   // Time filter description
-  if (timeFilterMode === 'morning') {
-    description += ' (morning hours)';
-  } else if (timeFilterMode === 'afternoon') {
-    description += ' (afternoon hours)';
-  } else if (timeFilterMode === 'evening') {
-    description += ' (evening hours)';
-  } else if (timeFilterMode === 'custom-time') {
-    description += ' (custom time range)';
+  if (timeFilterMode === 'after-time') {
+    description += ' (after specified time)';
+  } else if (timeFilterMode === 'before-time') {
+    description += ' (before specified time)';
+  } else if (timeFilterMode === 'time-range') {
+    description += ' (within time range)';
   }
   
   return description + '.';
