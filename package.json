@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@capacitor/android": "^7.4.2",
-    "@capacitor/cli": "^7.4.1",
+    "@capacitor/cli": "^7.4.2",
     "@capacitor/core": "^7.4.2",
     "react": "19",
     "react-dom": "19",
