@@ -1,6 +1,7 @@
 import React from 'react';
-import { EventCategory, FilterSettings, RinkInfo, TimeFilterMode, DateFilterMode } from '../types';
+import { EventCategory, FilterSettings, RinkInfo, TimeFilterMode, DateFilterMode, RinkFilterType } from '../types';
 import { ALL_RINKS_TAB_ID } from '../App';
+import { RINKS_CONFIG } from '../rinkConfig';
 import DateFilter from './DateFilter';
 import TimeFilter from './TimeFilter';
 import RinkFilter from './RinkFilter';
@@ -28,6 +29,7 @@ const FilterControls: React.FC<FilterControlsProps> = ({
     filterMode,
     activeRinkIds = [],
     rinkFilterMode = 'exclude',
+    rinkFilterType = 'facilities',
     dateFilterMode,
     numberOfDays = 4,
     selectedDate,
@@ -40,6 +42,9 @@ const FilterControls: React.FC<FilterControlsProps> = ({
     timeRangeEnd
   } = currentFilterSettings;
 
+  // Get facilities-only rinks list (no individual rinks)
+  const facilitiesRinks = RINKS_CONFIG;
+
   // --- Rink filter handlers ---
   const handleRinkToggle = (rinkIdToToggle: string) => {
     // Toggle rink selection
@@ -51,10 +56,19 @@ const FilterControls: React.FC<FilterControlsProps> = ({
   const handleRinkFilterModeChange = (newMode: 'include' | 'exclude') => {
     onFilterSettingsChange({ ...currentFilterSettings, rinkFilterMode: newMode });
   };
+  const handleRinkFilterTypeChange = (newType: RinkFilterType) => {
+    // When switching filter types, clear current selections to avoid confusion
+    onFilterSettingsChange({ 
+      ...currentFilterSettings, 
+      rinkFilterType: newType,
+      activeRinkIds: [] 
+    });
+  };
   const handleToggleAllRinks = (selectAll: boolean) => {
+    const rinksToUse = rinkFilterType === 'facilities' ? facilitiesRinks : allRinks;
     onFilterSettingsChange({
       ...currentFilterSettings,
-      activeRinkIds: selectAll ? allRinks.map(r => r.id) : []
+      activeRinkIds: selectAll ? rinksToUse.map(r => r.id) : []
     });
   };
   const getSelectAllRinksLabel = () => rinkFilterMode === 'include' ? 'Include All Rinks' : 'Exclude No Rinks (Show All)';
@@ -162,10 +176,13 @@ const FilterControls: React.FC<FilterControlsProps> = ({
       {selectedRinkId === ALL_RINKS_TAB_ID && (
         <RinkFilter
           allRinks={allRinks}
+          facilitiesRinks={facilitiesRinks}
           activeRinkIds={activeRinkIds}
           rinkFilterMode={rinkFilterMode}
+          rinkFilterType={rinkFilterType}
           onRinkToggle={handleRinkToggle}
           onRinkFilterModeChange={handleRinkFilterModeChange}
+          onRinkFilterTypeChange={handleRinkFilterTypeChange}
           onToggleAllRinks={handleToggleAllRinks}
           getSelectAllRinksLabel={getSelectAllRinksLabel}
           getDeselectAllRinksLabel={getDeselectAllRinksLabel}
