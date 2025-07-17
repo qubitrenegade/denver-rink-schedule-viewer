@@ -55,6 +55,9 @@ function updateUrlFromState(selectedRinkId: string, filterSettings: FilterSettin
   if (filterSettings.activeRinkIds && filterSettings.activeRinkIds.length > 0) {
     params.set('rinkIds', filterSettings.activeRinkIds.join(','));
   }
+  if (filterSettings.rinkFilterType !== 'facilities') {
+    params.set('rinkType', filterSettings.rinkFilterType || 'facilities');
+  }
 
   // Date filtering URL params
   if (filterSettings.dateFilterMode !== 'next-days') {

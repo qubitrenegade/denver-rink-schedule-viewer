@@ -25,8 +25,11 @@ const EventList: React.FC<EventListProps> = ({ events }) => {
             {new Date(dateKey).toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })}
           </h3>
           <div className="space-y-4">
-            {dailyEvents.map((event) => (
-              <EventCard key={event.id + (event.rinkName || '')} event={event} />
+            {dailyEvents.map((event, index) => (
+              <EventCard 
+                key={`${event.id}-${event.rinkId}-${event.startTime}-${index}`} 
+                event={event} 
+              />
             ))}
           </div>
         </div>

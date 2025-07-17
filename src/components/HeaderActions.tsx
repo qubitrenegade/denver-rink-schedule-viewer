@@ -11,6 +11,7 @@ const HeaderActions: React.FC<HeaderActionsProps> = ({ onShowAbout }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [isFirefox, setIsFirefox] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
+  const [showCopiedMessage, setShowCopiedMessage] = useState(false);
 
   useEffect(() => {
     // Check if device is mobile and browser type
@@ -122,6 +123,36 @@ const HeaderActions: React.FC<HeaderActionsProps> = ({ onShowAbout }) => {
     setDeferredPrompt(null);
   };
 
+  const handleShareLink = async () => {
+    const currentUrl = window.location.href;
+    
+    try {
+      if (navigator.share && isMobile) {
+        // Use native share API on mobile if available
+        await navigator.share({
+          title: 'Denver Rink Schedule',
+          text: 'Check out this ice rink schedule!',
+          url: currentUrl,
+        });
+      } else {
+        // Fallback to clipboard API
+        await navigator.clipboard.writeText(currentUrl);
+        setShowCopiedMessage(true);
+        setTimeout(() => setShowCopiedMessage(false), 2000);
+      }
+    } catch (err) {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = currentUrl;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setShowCopiedMessage(true);
+      setTimeout(() => setShowCopiedMessage(false), 2000);
+    }
+  };
+
   return (
     <div className="flex items-center justify-center gap-4 mt-3">
       <button
@@ -149,6 +180,13 @@ const HeaderActions: React.FC<HeaderActionsProps> = ({ onShowAbout }) => {
           💻 Install
         </button>
       )}
+
+      <button
+        onClick={handleShareLink}
+        className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm transition-colors"
+      >
+        {showCopiedMessage ? '✅ Link Copied!' : '📤 Share Link'}
+      </button>
     </div>
   );
 };

@@ -201,22 +201,24 @@ export function getFrontendRinkConfig(): RinkInfo[] {
 }
 
 export function getAllIndividualRinksForFiltering(): RinkInfo[] {
-  return Object.values(RINK_CONFIGURATIONS).map(config => {
-    // For individual rinks that are part of a multi-rink facility, include the specific rink name
-    // For filtering purposes, use full descriptive names
-    let name = config.displayName;
-    if (config.rinkName && config.rinkName !== 'Main Rink' && config.rinkName !== config.facilityName) {
-      if (config.shortRinkName) {
-        name = `${config.displayName} - ${config.shortRinkName}`;
-      } else {
-        name = `${config.displayName} - ${config.rinkName}`;
+  return Object.values(RINK_CONFIGURATIONS)
+    .filter(config => !config.memberRinkIds) // Only include individual rinks, not facility groupings
+    .map(config => {
+      // For individual rinks that are part of a multi-rink facility, include the specific rink name
+      // For filtering purposes, use full descriptive names
+      let name = config.displayName;
+      if (config.rinkName && config.rinkName !== 'Main Rink' && config.rinkName !== config.facilityName) {
+        if (config.shortRinkName) {
+          name = `${config.displayName} - ${config.shortRinkName}`;
+        } else {
+          name = `${config.displayName} - ${config.rinkName}`;
+        }
       }
-    }
 
-    return {
-      id: config.id,
-      name,
-      sourceUrl: config.sourceUrl
-    };
-  });
+      return {
+        id: config.id,
+        name,
+        sourceUrl: config.sourceUrl
+      };
+    });
 }
