@@ -40,12 +40,14 @@ export interface DisplayableIceEvent extends IceEvent {
 export type FilterMode = 'include' | 'exclude';
 export type DateFilterMode = 'next-days' | 'specific-day' | 'date-range';
 export type TimeFilterMode = 'all-times' | 'after-time' | 'before-time' | 'time-range';
+export type RinkFilterType = 'facilities' | 'individual-rinks';
 
 export interface FilterSettings {
   activeCategories: EventCategory[];
   filterMode: FilterMode;
   activeRinkIds?: string[];
   rinkFilterMode?: FilterMode;
+  rinkFilterType?: RinkFilterType;
   dateFilterMode: DateFilterMode;
   numberOfDays?: number;
   selectedDate?: string;

@@ -11,6 +11,7 @@ const HeaderActions: React.FC<HeaderActionsProps> = ({ onShowAbout }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [isFirefox, setIsFirefox] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
+  const [showCopiedMessage, setShowCopiedMessage] = useState(false);
 
   useEffect(() => {
     // Check if device is mobile and browser type
@@ -20,7 +21,7 @@ const HeaderActions: React.FC<HeaderActionsProps> = ({ onShowAbout }) => {
     
     const checkFirefox = () => {
       const isFF = /Firefox/i.test(navigator.userAgent);
-      console.log('Firefox detection:', isFF, navigator.userAgent);
+      logger.log('Firefox detection:', isFF, navigator.userAgent);
       setIsFirefox(isFF);
     };
     
@@ -30,7 +31,7 @@ const HeaderActions: React.FC<HeaderActionsProps> = ({ onShowAbout }) => {
     
     // Listen for PWA install prompt
     const handleBeforeInstallPrompt = (e: any) => {
-      console.log('PWA install prompt detected!', e);
+      logger.log('PWA install prompt detected!', e);
       e.preventDefault();
       setDeferredPrompt(e);
       setShowInstallButton(true); // Always set to true, we'll filter later
@@ -47,7 +48,7 @@ const HeaderActions: React.FC<HeaderActionsProps> = ({ onShowAbout }) => {
     
     // Check if currently running as installed PWA
     const isStandalone = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
-    const isInAppBrowser = window.navigator.standalone; // iOS Safari
+    const isInAppBrowser = (window.navigator as any).standalone; // iOS Safari - type cast for iOS-specific property
     const isRunningInPWA = !!(isStandalone || isInAppBrowser);
     
     logger.log('PWA detection:', { isStandalone, isInAppBrowser, isRunningInPWA });
@@ -65,7 +66,7 @@ const HeaderActions: React.FC<HeaderActionsProps> = ({ onShowAbout }) => {
     // Debug: Log service worker registration status
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.getRegistrations().then(registrations => {
-        console.log('Service Worker registrations:', registrations.length);
+        logger.log('Service Worker registrations:', registrations.length);
       });
     }
 
@@ -75,7 +76,7 @@ const HeaderActions: React.FC<HeaderActionsProps> = ({ onShowAbout }) => {
                            'serviceWorker' in navigator &&
                            manifestLink !== null;
     
-    console.log('PWA Debug Info:', {
+    logger.log('PWA Debug Info:', {
       isHttps: location.protocol === 'https:' || location.hostname === 'localhost',
       hasServiceWorker: 'serviceWorker' in navigator,
       hasManifest: manifestLink !== null,
@@ -89,11 +90,11 @@ const HeaderActions: React.FC<HeaderActionsProps> = ({ onShowAbout }) => {
     // Simple logic: Only show install button when we actually have an install prompt
     // This means the app is installable but not yet installed
     if (showInstallButton && (isFirefox || isRunningInPWA || !deferredPrompt)) {
-      console.log('Hiding button because:', { isFirefox, isRunningInPWA, noDeferredPrompt: !deferredPrompt });
+      logger.log('Hiding button because:', { isFirefox, isRunningInPWA, noDeferredPrompt: !deferredPrompt });
       setShowInstallButton(false);
     }
     
-    console.log('Final button state:', { 
+    logger.log('Final button state:', { 
       showInstallButton,
       isFirefox, 
       isRunningInPWA,
@@ -110,16 +111,46 @@ const HeaderActions: React.FC<HeaderActionsProps> = ({ onShowAbout }) => {
   const handleInstallClick = async () => {
     if (!deferredPrompt) return;
 
-    console.log('Installing app using deferred prompt');
+    logger.log('Installing app using deferred prompt');
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
     
     if (outcome === 'accepted') {
-      console.log('User accepted install');
+      logger.log('User accepted install');
       setShowInstallButton(false); // Hide button after successful install
     }
     
     setDeferredPrompt(null);
+  };
+
+  const handleShareLink = async () => {
+    const currentUrl = window.location.href;
+    
+    try {
+      if (navigator.share && isMobile) {
+        // Use native share API on mobile if available
+        await navigator.share({
+          title: 'Denver Rink Schedule',
+          text: 'Check out this ice rink schedule!',
+          url: currentUrl,
+        });
+      } else {
+        // Fallback to clipboard API
+        await navigator.clipboard.writeText(currentUrl);
+        setShowCopiedMessage(true);
+        setTimeout(() => setShowCopiedMessage(false), 2000);
+      }
+    } catch (err) {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = currentUrl;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setShowCopiedMessage(true);
+      setTimeout(() => setShowCopiedMessage(false), 2000);
+    }
   };
 
   return (
@@ -149,6 +180,13 @@ const HeaderActions: React.FC<HeaderActionsProps> = ({ onShowAbout }) => {
           💻 Install
         </button>
       )}
+
+      <button
+        onClick={handleShareLink}
+        className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm transition-colors"
+      >
+        {showCopiedMessage ? '✅ Link Copied!' : '📤 Share Link'}
+      </button>
     </div>
   );
 };

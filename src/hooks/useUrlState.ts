@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FilterSettings, FilterMode, DateFilterMode, TimeFilterMode, UrlViewType, EventCategory } from '../types';
+import { FilterSettings, FilterMode, DateFilterMode, TimeFilterMode, UrlViewType, EventCategory, RinkFilterType } from '../types';
 import { ALL_RINKS_TAB_ID } from '../App';
 import { logger } from '../utils/logger';
 
@@ -9,6 +9,7 @@ function parseFiltersFromUrl(): FilterSettings {
   const categories = params.get('categories');
   const rinkIdsParam = params.get('rinkIds');
   const rinkModeParam = params.get('rinkMode') as FilterMode | null;
+  const rinkTypeParam = params.get('rinkType') as RinkFilterType | null;
   const dateFilterMode = (params.get('dateMode') as DateFilterMode) || 'next-days';
   const numberOfDays = parseInt(params.get('days') || '4', 10);
   const selectedDate = params.get('date') || undefined;
@@ -24,6 +25,7 @@ function parseFiltersFromUrl(): FilterSettings {
     filterMode: mode || 'exclude',
     activeRinkIds: rinkIdsParam ? rinkIdsParam.split(',') : [],
     rinkFilterMode: rinkModeParam || 'exclude',
+    rinkFilterType: rinkTypeParam || 'facilities',
     dateFilterMode,
     numberOfDays,
     selectedDate,
@@ -52,6 +54,9 @@ function updateUrlFromState(selectedRinkId: string, filterSettings: FilterSettin
   }
   if (filterSettings.activeRinkIds && filterSettings.activeRinkIds.length > 0) {
     params.set('rinkIds', filterSettings.activeRinkIds.join(','));
+  }
+  if (filterSettings.rinkFilterType !== 'facilities') {
+    params.set('rinkType', filterSettings.rinkFilterType || 'facilities');
   }
 
   // Date filtering URL params
