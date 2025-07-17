@@ -2,6 +2,7 @@ import React from 'react';
 import { EventCategory, FilterSettings, RinkInfo, TimeFilterMode, DateFilterMode, RinkFilterType } from '../types';
 import { ALL_RINKS_TAB_ID } from '../App';
 import { RINKS_CONFIG } from '../rinkConfig';
+import { resetFilters } from '../utils/filterUtils';
 import DateFilter from './DateFilter';
 import TimeFilter from './TimeFilter';
 import RinkFilter from './RinkFilter';
@@ -146,8 +147,34 @@ const FilterControls: React.FC<FilterControlsProps> = ({
   const getSelectAllCategoriesLabel = () => filterMode === 'include' ? 'Include All Categories' : 'Exclude No Categories (Show All)';
   const getDeselectAllCategoriesLabel = () => filterMode === 'include' ? 'Include No Categories' : 'Exclude All Categories';
 
+  // --- Reset filters handler ---
+  const handleResetFilters = () => {
+    onFilterSettingsChange(resetFilters());
+  };
+
+  // Check if any filters are active
+  const hasActiveFilters = (
+    (activeCategories.length > 0) ||
+    (activeRinkIds.length > 0) ||
+    (dateFilterMode !== 'next-days') ||
+    (numberOfDays !== 4) ||
+    (timeFilterMode !== 'all-times')
+  );
+
   return (
     <div className="space-y-6">
+      {/* Reset Filters Button - only show if filters are active */}
+      {hasActiveFilters && (
+        <div className="flex justify-center">
+          <button
+            onClick={handleResetFilters}
+            className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md transition-colors flex items-center gap-2"
+          >
+            🔄 Reset All Filters
+          </button>
+        </div>
+      )}
+      
       {/* Date Filter Section */}
       <DateFilter
         dateFilterMode={dateFilterMode}
