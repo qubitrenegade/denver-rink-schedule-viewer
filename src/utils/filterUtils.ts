@@ -1,4 +1,4 @@
-import { FilterSettings, FilterMode, RinkFilterType, DateFilterMode, TimeFilterMode } from '../types';
+import { FilterSettings, FilterMode, RinkFilterType, DateFilterMode, TimeFilterMode, RinkInfo } from '../types';
 import { FILTER_DEFAULTS } from './constants';
 
 /**
@@ -94,39 +94,45 @@ export function getFilterDescription(filterSettings?: FilterSettings): string {
  */
 export function getLastUpdateInfo(
   selectedRinkId?: string,
-  facilityMetadata?: Record<string, any>,
-  rinksConfig?: any[],
+  facilityMetadata?: Record<string, { lastSuccessfulScrape?: string }>,
+  rinksConfig?: RinkInfo[],
   allRinksTabId: string = 'all-rinks'
 ): string {
-  // Handle undefined parameters
   if (!selectedRinkId || !facilityMetadata || !rinksConfig) {
     return 'Loading...';
   }
 
+  let rinkIdsToFindUpdateFor: string[] = [];
+
   if (selectedRinkId === allRinksTabId) {
-    let latestUpdate = '';
-    rinksConfig.forEach(tab => {
-      if (tab.memberRinkIds) {
-        tab.memberRinkIds.forEach((rinkId: string) => {
-          const meta = facilityMetadata[rinkId] as { lastSuccessfulScrape?: string } | undefined;
-          if (meta?.lastSuccessfulScrape) {
-            if (!latestUpdate || meta.lastSuccessfulScrape > latestUpdate) {
-              latestUpdate = meta.lastSuccessfulScrape;
-            }
-          }
-        });
-      } else {
-        const meta = facilityMetadata[tab.id] as { lastSuccessfulScrape?: string } | undefined;
-        if (meta?.lastSuccessfulScrape) {
-          if (!latestUpdate || meta.lastSuccessfulScrape > latestUpdate) {
-            latestUpdate = meta.lastSuccessfulScrape;
-          }
-        }
-      }
-    });
-    return latestUpdate ? new Date(latestUpdate).toLocaleString() : 'Unknown';
+    // For "All Rinks", we check all available metadata.
+    rinkIdsToFindUpdateFor = Object.keys(facilityMetadata);
   } else {
-    const meta = facilityMetadata[selectedRinkId] as { lastSuccessfulScrape?: string } | undefined;
-    return meta?.lastSuccessfulScrape ? new Date(meta.lastSuccessfulScrape).toLocaleString() : 'Unknown';
+    const selectedRinkInfo = rinksConfig.find(rink => rink.id === selectedRinkId);
+    
+    if (selectedRinkInfo) {
+      // If it's a facility with members, use them. Otherwise, use the rink's own ID.
+      rinkIdsToFindUpdateFor = selectedRinkInfo.memberRinkIds || [selectedRinkInfo.id];
+    } else {
+      // This case should ideally not be hit if the UI is driven by rinksConfig.
+      // But as a fallback, we can check if metadata exists for the given ID.
+      if (facilityMetadata[selectedRinkId]) {
+        rinkIdsToFindUpdateFor = [selectedRinkId];
+      } else {
+        return 'Unknown';
+      }
+    }
   }
+
+  if (rinkIdsToFindUpdateFor.length === 0) {
+    return 'Unknown';
+  }
+
+  const latestUpdate = rinkIdsToFindUpdateFor
+    .map(id => facilityMetadata[id]?.lastSuccessfulScrape)
+    .filter((d): d is string => !!d)
+    .sort()
+    .pop();
+
+  return latestUpdate ? new Date(latestUpdate).toLocaleString() : 'Unknown';
 }

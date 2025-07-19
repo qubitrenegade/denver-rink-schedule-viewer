@@ -1,55 +1,32 @@
 import React from 'react';
-import { CalendarIcon, AdjustmentsHorizontalIcon } from './icons';
+import { CalendarIcon } from './icons';
+import HeaderActions from './HeaderActions';
 
 interface AppHeaderProps {
-  showFilters: boolean;
-  onToggleFilters: () => void;
-  onToggleAbout: () => void;
-  hasActiveFilters: boolean;
+  filterDescription: string;
+  onShowAbout: () => void;
 }
 
-const AppHeader: React.FC<AppHeaderProps> = ({
-  showFilters,
-  onToggleFilters,
-  onToggleAbout,
-  hasActiveFilters
-}) => {
+const AppHeader: React.FC<AppHeaderProps> = ({ filterDescription, onShowAbout }) => {
   return (
-    <header className="bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-lg">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-6">
-          <div className="flex items-center">
-            <CalendarIcon className="h-8 w-8 mr-3" />
-            <h1 className="text-2xl font-bold">Denver Rink Schedule Viewer</h1>
-          </div>
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={onToggleFilters}
-              className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
-                showFilters
-                  ? 'bg-blue-700 text-white'
-                  : hasActiveFilters
-                  ? 'bg-yellow-500 text-white hover:bg-yellow-600'
-                  : 'bg-blue-500 text-white hover:bg-blue-600'
-              }`}
-            >
-              <AdjustmentsHorizontalIcon className="h-5 w-5 mr-2" />
-              Filters
-              {hasActiveFilters && !showFilters && (
-                <span className="ml-2 px-2 py-1 text-xs bg-white text-yellow-600 rounded-full">
-                  Active
-                </span>
-              )}
-            </button>
-            <button
-              onClick={onToggleAbout}
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-            >
-              About
-            </button>
-          </div>
-        </div>
+    <header className="mb-6 text-center">
+      <div className="max-w-6xl mx-auto mb-4">
+        <img
+          src="/images/header.webp"
+          alt="Denver Rink Schedule"
+          className="w-full max-h-48 object-contain rounded-lg shadow-lg"
+        />
       </div>
+      <div className="flex items-center justify-center mb-2">
+        <CalendarIcon className="w-10 h-10 mr-3 text-sky-400" />
+        <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-cyan-300">
+          Denver Rink Schedule
+        </h1>
+      </div>
+      <p className="text-sm text-slate-400 italic max-w-2xl mx-auto">
+        {filterDescription} Data is refreshed regularly by our automated backend.
+      </p>
+      <HeaderActions onShowAbout={onShowAbout} />
     </header>
   );
 };
