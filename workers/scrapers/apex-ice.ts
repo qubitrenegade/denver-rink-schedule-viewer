@@ -146,7 +146,7 @@ class ApexIceScraper {
 
   // Process individual event from the API response
   private processApiEvent(event: unknown, calendarType: string): RawIceEventData | null {
-    if (!event || typeof event !== 'object') return null;
+    if (!isNonNullObject(event)) return null;
     const e = event as Record<string, unknown>;
     if (!e.title || !e.start_time || !e.end_time) return null;
 
