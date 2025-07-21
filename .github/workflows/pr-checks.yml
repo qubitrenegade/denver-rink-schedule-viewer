@@ -1,10 +1,10 @@
 name: PR Checks
 
 on:
-  push:                       # run on every branch push
-    branches: ['**']          # «**» = any branch pattern
-  pull_request:               # run when a PR is opened/updated
+  pull_request:
+    branches: ['**']  # PRs targeting any branch
     types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:  # Allow manual trigger
 
 # Deduplicate runs
 concurrency:
