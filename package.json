@@ -42,7 +42,7 @@
     "react": "19",
     "react-dom": "19",
     "vite": "^7.0.4",
-    "wrangler": "^4.24.4"
+    "wrangler": "^4.25.0"
   },
   "devDependencies": {
     "@capacitor/assets": "^3.0.5",
