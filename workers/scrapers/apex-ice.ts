@@ -315,7 +315,7 @@ class ApexIceScraper {
       }
 
       // Generate unique ID
-      const eventId = `${calendarType}-${startTime}-${title.replace(/\s+/g, '-').toLowerCase()}`;
+      const eventId = `${calendarType}-${startDate.toISOString()}-${title.replace(/\s+/g, '-').toLowerCase()}`;
 
       return {
         id: eventId,
