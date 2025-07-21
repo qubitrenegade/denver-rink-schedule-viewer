@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { RawIceEventData, FilterSettings, RinkFilterType } from '../types';
+import { RawIceEventData, FilterSettings } from '../types';
 import { RINKS_CONFIG } from '../rinkConfig';
 import { ALL_RINKS_TAB_ID } from '../App';
 

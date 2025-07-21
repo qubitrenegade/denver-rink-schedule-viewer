@@ -10,7 +10,6 @@ const HeaderActions: React.FC<HeaderActionsProps> = ({ onShowAbout }) => {
   const [showInstallButton, setShowInstallButton] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isFirefox, setIsFirefox] = useState(false);
-  const [isInstalled, setIsInstalled] = useState(false);
   const [showCopiedMessage, setShowCopiedMessage] = useState(false);
 
   useEffect(() => {
@@ -61,8 +60,6 @@ const HeaderActions: React.FC<HeaderActionsProps> = ({ onShowAbout }) => {
       isAppInstalled = true;
     }
     
-    setIsInstalled(isAppInstalled);
-
     // Debug: Log service worker registration status
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.getRegistrations().then(registrations => {

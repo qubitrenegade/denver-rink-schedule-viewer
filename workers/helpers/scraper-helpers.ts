@@ -1,7 +1,7 @@
 // workers/helpers/scraper-helpers.ts - Common functions for all scrapers
 
 import { getRinkConfig } from '../shared/rink-config';
-import { TIME_PATTERNS, HTML_PATTERNS, VALIDATION_PATTERNS, RegexHelpers } from '../shared/regex-patterns';
+import { RegexHelpers } from '../shared/regex-patterns';
 import { CORS_HEADERS, DEFAULT_CONFIG } from '../shared/constants';
 import { ColoradoTimezone } from '../shared/timezone-utils';
 

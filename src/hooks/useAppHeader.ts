@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import { FilterSettings, RawIceEventData, EventCategory } from '../types';
 import { useEventData } from './useEventData';
 import { useUrlState } from './useUrlState';
 import { getFilterDescription, getLastUpdateInfo } from '../utils/filterUtils';
