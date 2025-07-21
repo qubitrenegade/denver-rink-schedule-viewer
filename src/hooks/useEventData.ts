@@ -33,15 +33,15 @@ async function withRetry<T>(
 }
 
 // Configuration for CloudFlare Worker API endpoint
-const WORKER_API_BASE = (import.meta.env as any).WORKER_API_BASE ||
-  ((import.meta.env as any).PROD ? 'https://api.geticeti.me' : 'http://localhost:8794');
+const WORKER_API_BASE = (import.meta.env as Record<string, unknown>).WORKER_API_BASE ||
+  ((import.meta.env as Record<string, unknown>).PROD ? 'https://api.geticeti.me' : 'http://localhost:8794');
 
 export function useEventData() {
   const [staticData, setStaticData] = useState<RawIceEventData[]>([]);
   const [facilityMetadata, setFacilityMetadata] = useState<Record<string, FacilityMetadata>>({});
   const [facilityErrors, setFacilityErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<unknown>(null);
   const [lastFetchTime, setLastFetchTime] = useState<number>(0);
 
   const fetchData = useCallback(async (forceRefresh = false) => {
@@ -96,11 +96,11 @@ export function useEventData() {
 
         // Process events data with validation
         const bulkEvents: RawIceEventData[] = allEventsData
-          .filter((event: any) => event && event.startTime && event.endTime) // Filter out invalid events
-          .map((event: any) => ({
+          .filter((event: Partial<RawIceEventData>) => event && event.startTime && event.endTime)
+          .map((event: Partial<RawIceEventData>) => ({
             ...event,
-            startTime: new Date(event.startTime),
-            endTime: new Date(event.endTime),
+            startTime: new Date(event.startTime!),
+            endTime: new Date(event.endTime!),
           }))
           .filter((event: RawIceEventData) => !isNaN(event.startTime.getTime()) && !isNaN(event.endTime.getTime())); // Filter out invalid dates
 
@@ -172,17 +172,17 @@ export function useEventData() {
 
           // Validate and parse events data
           const parsedEvents: RawIceEventData[] = eventsData
-            .filter((event: any) => {
+            .filter((event: Partial<RawIceEventData>) => {
               if (!event || !event.startTime || !event.endTime) {
                 logger.warn(`⚠️ Skipping invalid event from ${facilityId}:`, event);
                 return false;
               }
               return true;
             })
-            .map((event: any) => ({
+            .map((event: Partial<RawIceEventData>) => ({
               ...event,
-              startTime: new Date(event.startTime),
-              endTime: new Date(event.endTime),
+              startTime: new Date(event.startTime!),
+              endTime: new Date(event.endTime!),
             }))
             .filter((event: RawIceEventData) => {
               const validDates = !isNaN(event.startTime.getTime()) && !isNaN(event.endTime.getTime());

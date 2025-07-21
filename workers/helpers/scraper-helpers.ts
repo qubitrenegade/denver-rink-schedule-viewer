@@ -4,6 +4,7 @@ import { getRinkConfig } from '../shared/rink-config';
 import { RegexHelpers } from '../shared/regex-patterns';
 import { CORS_HEADERS, DEFAULT_CONFIG } from '../shared/constants';
 import { ColoradoTimezone } from '../shared/timezone-utils';
+import type { DurableObjectState, KVNamespace } from '@cloudflare/workers-types';
 
 export interface RawIceEventData {
   id: string;
@@ -53,7 +54,7 @@ export class ScraperHelpers {
   /**
    * Create a JSON response with CORS headers
    */
-  static jsonResponse(data: any, status: number = 200): Response {
+  static jsonResponse(data: Record<string, unknown> | unknown[], status: number = 200): Response {
     return new Response(JSON.stringify(data), {
       status,
       headers: {
@@ -180,7 +181,7 @@ export class ScraperHelpers {
   static async writeErrorMetadata(
     kvNamespace: KVNamespace,
     rinkId: string,
-    error: any,
+    error: unknown,
     customConfig?: RinkConfig
   ): Promise<void> {
     let config: RinkConfig;
@@ -319,8 +320,8 @@ export class ScraperHelpers {
    */
   static async handleSchedulerFetch(
     request: Request,
-    state: any,
-    env: any,
+    state: DurableObjectState,
+    env: Record<string, unknown>,
     rinkId: string,
     runScraperFn: () => Promise<Response>
   ): Promise<Response> {
@@ -339,7 +340,8 @@ export class ScraperHelpers {
     }
 
     if (path === '/schedule' || request.method === 'GET') {
-      const alarmTime = ScraperHelpers.getAlarmTime(env.SCRAPER_SPLAY_MINUTES);
+      const splayMinutes = parseInt((env.SCRAPER_SPLAY_MINUTES as string) || DEFAULT_CONFIG.SCRAPER_SPLAY_MINUTES.toString(), 10);
+      const alarmTime = ScraperHelpers.getAlarmTime(splayMinutes.toString());
       await state.storage.setAlarm(alarmTime);
 
       return new Response(
@@ -361,8 +363,8 @@ export class ScraperHelpers {
    * Common Durable Object alarm handler with automatic rescheduling
    */
   static async handleSchedulerAlarm(
-    state: any,
-    env: any,
+    state: DurableObjectState,
+    env: Record<string, unknown>,
     rinkId: string,
     runScraperFn: () => Promise<Response>
   ): Promise<void> {
@@ -370,9 +372,8 @@ export class ScraperHelpers {
 
     try {
       await runScraperFn();
-
       // Schedule next alarm with configured splay
-      const splayMinutes = parseInt(env.SCRAPER_SPLAY_MINUTES || DEFAULT_CONFIG.SCRAPER_SPLAY_MINUTES.toString(), 10);
+      const splayMinutes = parseInt((env.SCRAPER_SPLAY_MINUTES as string) || DEFAULT_CONFIG.SCRAPER_SPLAY_MINUTES.toString(), 10);
       const nextAlarmTime = ScraperHelpers.getNextScheduledTime(splayMinutes);
       await state.storage.setAlarm(nextAlarmTime);
       console.log(`📅 Next ${rinkId} alarm scheduled for ${nextAlarmTime.toISOString()}`);
@@ -381,7 +382,7 @@ export class ScraperHelpers {
       console.error(`❌ ${rinkId} alarm failed:`, error);
 
       // Still schedule next alarm even if this one failed
-      const splayMinutes = parseInt(env.SCRAPER_SPLAY_MINUTES || DEFAULT_CONFIG.SCRAPER_SPLAY_MINUTES.toString(), 10);
+      const splayMinutes = parseInt((env.SCRAPER_SPLAY_MINUTES as string) || DEFAULT_CONFIG.SCRAPER_SPLAY_MINUTES.toString(), 10);
       const nextAlarmTime = ScraperHelpers.getNextScheduledTime(splayMinutes);
       await state.storage.setAlarm(nextAlarmTime);
     }

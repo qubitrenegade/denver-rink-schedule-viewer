@@ -1,6 +1,7 @@
 // workers/scrapers/ice-ranch.ts - Ice Ranch scraper with Durable Objects scheduling
 import { ScraperHelpers, RawIceEventData } from '../helpers/scraper-helpers';
-import { TIME_PATTERNS, HTML_PATTERNS, RegexHelpers } from '../shared/regex-patterns';
+// import { TIME_PATTERNS, HTML_PATTERNS, RegexHelpers } from '../shared/regex-patterns';
+import { TIME_PATTERNS, RegexHelpers } from '../shared/regex-patterns';
 
 interface Env {
   RINK_DATA: KVNamespace;
@@ -29,15 +30,15 @@ class IceRanchScraper {
   private readonly rinkName = 'Ice Ranch';
 
   // Parse XML using basic string parsing (no xml2js in workers)
-  private parseBasicXML(xml: string): any[] {
-    const items: any[] = [];
+  private parseBasicXML(xml: string): Record<string, unknown>[] {
+    const items: Record<string, unknown>[] = [];
     const itemRegex = /<item>(.*?)<\/item>/gs;
     let match;
 
     match = itemRegex.exec(xml);
     while (match !== null) {
       const itemContent = match[1];
-      const item: any = {};
+      const item: Record<string, unknown> = {};
 
       // Extract fields - try multiple patterns for titles
       let titleMatch = itemContent.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/s);
@@ -89,7 +90,7 @@ class IceRanchScraper {
       return [];
     }
 
-    const events: RawIceEventData[] = items.map((item: any) => {
+    const events: RawIceEventData[] = items.map((item: Record<string, unknown>) => {
       // Example title: "Sunday June 1, 2025: Coach's Ice"
       let title: string = item.title || 'Untitled Event';
 

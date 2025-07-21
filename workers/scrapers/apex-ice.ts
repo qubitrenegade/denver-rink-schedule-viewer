@@ -1,3 +1,4 @@
+import { DurableObjectState, KVNamespace, DurableObjectNamespace } from '@cloudflare/workers-types';
 // workers/scrapers/apex-ice.ts - Apex Ice Arena scraper with Durable Objects scheduling
 import { ScraperHelpers, RawIceEventData } from '../helpers/scraper-helpers';
 import { ColoradoTimezone } from '../shared/timezone-utils';
@@ -5,7 +6,7 @@ import { ColoradoTimezone } from '../shared/timezone-utils';
 interface Env {
   RINK_DATA: KVNamespace;
   APEX_ICE_SCHEDULER: DurableObjectNamespace;
-  SCRAPER_SPLAY_MINUTES: string;
+  [key: string]: unknown;
 }
 
 // Calendar configurations for different event types
@@ -108,14 +109,26 @@ class ApexIceScraper {
   }
 
   // Parse the API response from the REST endpoint
-  private parseApiResponse(data: any, calendarType: string): RawIceEventData[] {
+  private parseApiResponse(data: unknown, calendarType: string): RawIceEventData[] {
     const events: RawIceEventData[] = [];
-    
     try {
-      if (data.body && data.body.center_events && Array.isArray(data.body.center_events)) {
-        for (const centerData of data.body.center_events) {
-          if (centerData.events && Array.isArray(centerData.events)) {
-            for (const event of centerData.events) {
+      if (
+        typeof data === 'object' &&
+        data !== null &&
+        'body' in data &&
+        typeof (data as { body: unknown }).body === 'object' &&
+        (data as { body: { center_events?: unknown } }).body !== null &&
+        'center_events' in (data as { body: { center_events?: unknown } }).body &&
+        Array.isArray((data as { body: { center_events: unknown[] } }).body.center_events)
+      ) {
+        for (const centerData of (data as { body: { center_events: unknown[] } }).body.center_events) {
+          if (
+            centerData &&
+            typeof centerData === 'object' &&
+            'events' in centerData &&
+            Array.isArray((centerData as { events: unknown[] }).events)
+          ) {
+            for (const event of (centerData as { events: unknown[] }).events) {
               const processed = this.processApiEvent(event, calendarType);
               if (processed) {
                 events.push(processed);
@@ -127,68 +140,62 @@ class ApexIceScraper {
     } catch (error) {
       console.warn(`⚠️ Error parsing API response for ${calendarType}:`, error);
     }
-
     console.log(`📅 Parsed ${events.length} events from ${calendarType} API response`);
     return events;
   }
 
   // Process individual event from the API response
-  private processApiEvent(event: any, calendarType: string): RawIceEventData | null {
-    try {
-      if (!event.title || !event.start_time || !event.end_time) {
-        return null;
+  private processApiEvent(event: unknown, calendarType: string): RawIceEventData | null {
+    if (!event || typeof event !== 'object') return null;
+    const e = event as Record<string, unknown>;
+    if (!e.title || !e.start_time || !e.end_time) return null;
+
+    // Determine rink (East vs West) from facility info
+    let rinkId = 'apex-ice-east'; // Default to East
+    let rinkName = 'East Rink';
+    
+    if (e.facilities && Array.isArray(e.facilities) && e.facilities.length > 0) {
+      const facility = e.facilities[0];
+      if (facility.facility_name && facility.facility_name.includes('West')) {
+        rinkId = 'apex-ice-west';
+        rinkName = 'West Rink';
+      } else if (facility.facility_name && facility.facility_name.includes('East')) {
+        rinkId = 'apex-ice-east';
+        rinkName = 'East Rink';
       }
-
-      // Determine rink (East vs West) from facility info
-      let rinkId = 'apex-ice-east'; // Default to East
-      let rinkName = 'East Rink';
-      
-      if (event.facilities && event.facilities.length > 0) {
-        const facility = event.facilities[0];
-        if (facility.facility_name && facility.facility_name.includes('West')) {
-          rinkId = 'apex-ice-west';
-          rinkName = 'West Rink';
-        } else if (facility.facility_name && facility.facility_name.includes('East')) {
-          rinkId = 'apex-ice-east';
-          rinkName = 'East Rink';
-        }
-      }
-
-      // Parse datetime (API returns in format "2025-06-10 11:00:00" in Mountain Time)
-      // Treat the time as local Mountain Time and convert to UTC
-      const startDate = new Date(event.start_time + ' MST');
-      const endDate = new Date(event.end_time + ' MST');
-      
-      // If MST parsing fails, add 7 hours (MDT) or 6 hours (MST) offset
-      let startUtc: Date, endUtc: Date;
-      if (isNaN(startDate.getTime())) {
-        // Fallback: parse as ISO and add offset
-        const tempStart = new Date(event.start_time);
-        const tempEnd = new Date(event.end_time);
-        // Add 7 hours for MDT (daylight time, March-November)
-        startUtc = new Date(tempStart.getTime() + 7 * 60 * 60 * 1000);
-        endUtc = new Date(tempEnd.getTime() + 7 * 60 * 60 * 1000);
-      } else {
-        startUtc = startDate;
-        endUtc = endDate;
-      }
-
-      const eventId = `${rinkId}-${event.event_item_id || Date.now()}`;
-
-      return {
-        id: eventId,
-        rinkId,
-        title: ScraperHelpers.cleanTitle(event.title),
-        startTime: startUtc.toISOString(),
-        endTime: endUtc.toISOString(),
-        description: event.description || `${calendarType} at ${rinkName}`,
-        category: ScraperHelpers.categorizeEvent(event.title + ' ' + calendarType),
-        eventUrl: `${APEX_BASE_URL}/ActiveNet_Calendar`
-      };
-    } catch (error) {
-      console.warn(`⚠️ Failed to process API event:`, error);
-      return null;
     }
+
+    // Parse datetime (API returns in format "2025-06-10 11:00:00" in Mountain Time)
+    // Treat the time as local Mountain Time and convert to UTC
+    const startDate = new Date((e.start_time as string) + ' MST');
+    const endDate = new Date((e.end_time as string) + ' MST');
+    
+    // If MST parsing fails, add 7 hours (MDT) or 6 hours (MST) offset
+    let startUtc: Date, endUtc: Date;
+    if (isNaN(startDate.getTime())) {
+      // Fallback: parse as ISO and add offset
+      const tempStart = new Date(e.start_time as string);
+      const tempEnd = new Date(e.end_time as string);
+      // Add 7 hours for MDT (daylight time, March-November)
+      startUtc = new Date(tempStart.getTime() + 7 * 60 * 60 * 1000);
+      endUtc = new Date(tempEnd.getTime() + 7 * 60 * 60 * 1000);
+    } else {
+      startUtc = startDate;
+      endUtc = endDate;
+    }
+
+    const eventId = `${rinkId}-${e.event_item_id || Date.now()}`;
+
+    return {
+      id: eventId,
+      rinkId,
+      title: ScraperHelpers.cleanTitle(e.title as string),
+      startTime: startUtc.toISOString(),
+      endTime: endUtc.toISOString(),
+      description: typeof e.description === 'string' ? (e.description as string).substring(0, 500) : `${calendarType} at ${rinkName}`,
+      category: ScraperHelpers.categorizeEvent((e.title as string) + ' ' + calendarType),
+      eventUrl: `${APEX_BASE_URL}/ActiveNet_Calendar`
+    };
   }
 
   private parseHtmlCalendarData(html: string, calendarType: string): RawIceEventData[] {
@@ -272,14 +279,13 @@ class ApexIceScraper {
     return events;
   }
 
-  private processCalendarEvent(eventData: any, calendarType: string): RawIceEventData | null {
+  private processCalendarEvent(eventData: Record<string, unknown>, calendarType: string): RawIceEventData | null {
     try {
       // Extract basic event information
-      const title = eventData.title || eventData.name || eventData.summary || calendarType;
+      const title = typeof eventData.title === 'string' ? eventData.title : (typeof eventData.name === 'string' ? eventData.name : (typeof eventData.summary === 'string' ? eventData.summary : calendarType));
       const startTime = eventData.start || eventData.startTime || eventData.start_time;
       const endTime = eventData.end || eventData.endTime || eventData.end_time;
-      const description = eventData.description || eventData.details || '';
-      const location = eventData.location || eventData.venue || '';
+      if (!title || !startTime || !endTime) return null;
 
       // Determine which rink (East vs West)
       let rinkId = 'apex-ice-east'; // Default to East
@@ -309,7 +315,7 @@ class ApexIceScraper {
       }
 
       // Generate unique ID
-      const eventId = `${rinkId}-${startDate.getTime()}-${title.replace(/\s+/g, '-').toLowerCase()}`;
+      const eventId = `${calendarType}-${startTime}-${title.replace(/\s+/g, '-').toLowerCase()}`;
 
       return {
         id: eventId,
@@ -317,7 +323,7 @@ class ApexIceScraper {
         title: ScraperHelpers.cleanTitle(title),
         startTime: startDate.toISOString(),
         endTime: endDate.toISOString(),
-        description: description.substring(0, 500), // Limit description length
+        description: typeof eventData.description === 'string' ? eventData.description.substring(0, 500) : '',
         category: ScraperHelpers.categorizeEvent(title + ' ' + calendarType),
         eventUrl: `https://anc.apm.activecommunities.com/apexprd/calendars`
       };

@@ -39,7 +39,7 @@ export function resetFilters(): FilterSettings {
  */
 export function getDisplayMetadata(
   eventCount: number,
-  facilityMetadata: Record<string, any>,
+  facilityMetadata: Record<string, { lastSuccessfulScrape?: string }>,
   facilityErrors: Record<string, string>
 ): { eventCount: number; lastUpdated: Date | null; errorCount: number } {
   const lastUpdated = Object.values(facilityMetadata)
