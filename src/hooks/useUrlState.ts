@@ -97,8 +97,8 @@ function updateUrlFromState(selectedRinkId: string, filterSettings: FilterSettin
     const timeoutId = setTimeout(() => {
       try {
         window.history.replaceState(null, '', newUrlTarget);
-      } catch (e: any) {
-        logger.error('Error updating URL:', e);
+      } catch (e: unknown) {
+        logger.error('Error updating URL:', e instanceof Error ? e : String(e));
       }
     }, 300);
     return () => clearTimeout(timeoutId);

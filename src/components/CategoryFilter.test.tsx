@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import CategoryFilter from './CategoryFilter';
-import { EventCategory, FilterMode } from '../types';
+import { EventCategory } from '../types';
 
 describe('CategoryFilter', () => {
   it('calls onCategoryToggle when a category is selected', () => {

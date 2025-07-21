@@ -1,9 +1,8 @@
 name: Performance Benchmarks
 
 on:
-  push:
-    branches: [main]  # Run on main branch to track performance over time
-  pull_request:       # Run on PRs to detect performance regressions
+  pull_request:
+    branches: ['**']  # PRs targeting any branch
     types: [opened, synchronize, reopened, ready_for_review]
   workflow_dispatch:  # Allow manual trigger
 

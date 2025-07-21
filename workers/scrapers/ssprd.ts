@@ -55,16 +55,16 @@ class SSPRDScraper {
       try {
         const scheduleData = JSON.parse(match[1]);
         if (Array.isArray(scheduleData)) {
-          scheduleData.forEach((item: any, index: number) => {
-            const specificRinkId = facilityIdToRinkIdMap[item.FacilityId];
+          scheduleData.forEach((item: Record<string, unknown>, index: number) => {
+            const specificRinkId = facilityIdToRinkIdMap[item.FacilityId as number];
             if (!specificRinkId) return;
             const title = item.AccountName ? RegexHelpers.cleanHtmlEntities(String(item.AccountName).trim()) : 'Unnamed Event';
-            let category = this.categorizeEvent(item.EventTypeName || title);
+            let category = this.categorizeEvent(item.EventTypeName as string || title);
             if (category === 'Other' && item.EventTypeName !== title) {
               category = this.categorizeEvent(title);
             }
-            const startTime = this.parseSSPRDDateTime(item.EventStartTime);
-            const endTime = this.parseSSPRDDateTime(item.EventEndTime);
+            const startTime = this.parseSSPRDDateTime(item.EventStartTime as string);
+            const endTime = this.parseSSPRDDateTime(item.EventEndTime as string);
             if (isNaN(startTime.getTime()) || isNaN(endTime.getTime())) return;
             const isClosed = item.Closed === true || title.toLowerCase().includes('closed');
             events.push({
@@ -176,7 +176,7 @@ export class SSPRDScheduler {
         );
 
         // Write custom aggregated metadata for FSC
-        const fscMetadata: any = {
+        const fscMetadata: Record<string, unknown> = {
           facilityId: 'ssprd-fsc',
           facilityName: 'Family Sports Center',
           displayName: 'Family Sports Center (Englewood)',
@@ -204,7 +204,7 @@ export class SSPRDScheduler {
         );
 
         // Write custom aggregated metadata for SSSC
-        const ssscMetadata: any = {
+        const ssscMetadata: Record<string, unknown> = {
           facilityId: 'ssprd-sssc',
           facilityName: 'South Suburban Sports Complex',
           displayName: 'South Suburban Sports Complex (Highlands Ranch)',

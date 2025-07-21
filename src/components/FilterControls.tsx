@@ -1,8 +1,8 @@
 import React from 'react';
-import { EventCategory, FilterSettings, RinkInfo, TimeFilterMode, DateFilterMode, RinkFilterType } from '../types';
+import { EventCategory, FilterSettings, RinkInfo, TimeFilterMode, DateFilterMode, RinkFilterType, FilterMode } from '../types';
 import { ALL_RINKS_TAB_ID } from '../App';
 import { RINKS_CONFIG } from '../rinkConfig';
-import { resetFilters } from '../utils/filterUtils';
+import { resetFilters, hasActiveFilters } from '../utils/filterUtils';
 import DateFilter from './DateFilter';
 import TimeFilter from './TimeFilter';
 import RinkFilter from './RinkFilter';
@@ -46,85 +46,61 @@ const FilterControls: React.FC<FilterControlsProps> = ({
   // Get facilities-only rinks list (no individual rinks)
   const facilitiesRinks = RINKS_CONFIG;
 
+  const handlePartialFilterChange = (updates: Partial<FilterSettings>) => {
+    onFilterSettingsChange({ ...currentFilterSettings, ...updates });
+  };
+
   // --- Rink filter handlers ---
   const handleRinkToggle = (rinkIdToToggle: string) => {
     // Toggle rink selection
     const newActiveRinkIds = activeRinkIds.includes(rinkIdToToggle)
       ? activeRinkIds.filter(id => id !== rinkIdToToggle)
       : [...activeRinkIds, rinkIdToToggle];
-    onFilterSettingsChange({ ...currentFilterSettings, activeRinkIds: newActiveRinkIds });
+    handlePartialFilterChange({ activeRinkIds: newActiveRinkIds });
   };
-  const handleRinkFilterModeChange = (newMode: 'include' | 'exclude') => {
-    onFilterSettingsChange({ ...currentFilterSettings, rinkFilterMode: newMode });
+  const handleRinkFilterModeChange = (newMode: FilterMode) => {
+    handlePartialFilterChange({ rinkFilterMode: newMode });
   };
   const handleRinkFilterTypeChange = (newType: RinkFilterType) => {
     // When switching filter types, clear current selections to avoid confusion
-    onFilterSettingsChange({ 
-      ...currentFilterSettings, 
+    handlePartialFilterChange({ 
       rinkFilterType: newType,
       activeRinkIds: [] 
     });
   };
   const handleToggleAllRinks = (selectAll: boolean) => {
     const rinksToUse = rinkFilterType === 'facilities' ? facilitiesRinks : allRinks;
-    onFilterSettingsChange({
-      ...currentFilterSettings,
-      activeRinkIds: selectAll ? rinksToUse.map(r => r.id) : []
-    });
+    handlePartialFilterChange({ activeRinkIds: selectAll ? rinksToUse.map(r => r.id) : [] });
   };
   const getSelectAllRinksLabel = () => rinkFilterMode === 'include' ? 'Include All Rinks' : 'Exclude No Rinks (Show All)';
   const getDeselectAllRinksLabel = () => rinkFilterMode === 'include' ? 'Include No Rinks' : 'Exclude All Rinks';
 
   // --- Time filter handlers ---
   const handleTimeFilterModeChange = (newMode: TimeFilterMode) => {
-    const newSettings = { ...currentFilterSettings, timeFilterMode: newMode };
+    const newSettings: Partial<FilterSettings> = { timeFilterMode: newMode };
     
     // Set default times when switching to time-based modes
-    if (newMode === 'after-time' && !currentFilterSettings.afterTime) {
-      newSettings.afterTime = '18:00'; // Default to 6 PM
-    } else if (newMode === 'before-time' && !currentFilterSettings.beforeTime) {
-      newSettings.beforeTime = '12:00'; // Default to noon
-    } else if (newMode === 'time-range') {
-      if (!currentFilterSettings.timeRangeStart) {
-        newSettings.timeRangeStart = '09:00'; // Default start: 9 AM
-      }
-      if (!currentFilterSettings.timeRangeEnd) {
-        newSettings.timeRangeEnd = '21:00'; // Default end: 9 PM
-      }
+    if (newMode === 'after-time' && !afterTime) newSettings.afterTime = '18:00'; // Default to 6 PM
+    if (newMode === 'before-time' && !beforeTime) newSettings.beforeTime = '12:00'; // Default to noon
+    if (newMode === 'time-range') {
+      if (!timeRangeStart) newSettings.timeRangeStart = '09:00'; // Default start: 9 AM
+      if (!timeRangeEnd) newSettings.timeRangeEnd = '21:00'; // Default end: 9 PM
     }
     
-    onFilterSettingsChange(newSettings);
+    handlePartialFilterChange(newSettings);
   };
-  const handleAfterTimeChange = (time: string) => {
-    onFilterSettingsChange({ ...currentFilterSettings, afterTime: time });
-  };
-  const handleBeforeTimeChange = (time: string) => {
-    onFilterSettingsChange({ ...currentFilterSettings, beforeTime: time });
-  };
+  const handleAfterTimeChange = (time: string) => handlePartialFilterChange({ afterTime: time });
+  const handleBeforeTimeChange = (time: string) => handlePartialFilterChange({ beforeTime: time });
   const handleTimeRangeChange = (start?: string, end?: string) => {
-    onFilterSettingsChange({
-      ...currentFilterSettings,
-      timeRangeStart: start ?? timeRangeStart,
-      timeRangeEnd: end ?? timeRangeEnd
-    });
+    handlePartialFilterChange({ timeRangeStart: start ?? timeRangeStart, timeRangeEnd: end ?? timeRangeEnd });
   };
 
   // --- Date filter handlers ---
-  const handleDateFilterModeChange = (newMode: DateFilterMode) => {
-    onFilterSettingsChange({ ...currentFilterSettings, dateFilterMode: newMode });
-  };
-  const handleNumberOfDaysChange = (days: number) => {
-    onFilterSettingsChange({ ...currentFilterSettings, numberOfDays: days });
-  };
-  const handleSelectedDateChange = (date: string) => {
-    onFilterSettingsChange({ ...currentFilterSettings, selectedDate: date });
-  };
+  const handleDateFilterModeChange = (newMode: DateFilterMode) => handlePartialFilterChange({ dateFilterMode: newMode });
+  const handleNumberOfDaysChange = (days: number) => handlePartialFilterChange({ numberOfDays: days });
+  const handleSelectedDateChange = (date: string) => handlePartialFilterChange({ selectedDate: date });
   const handleDateRangeChange = (start?: string, end?: string) => {
-    onFilterSettingsChange({
-      ...currentFilterSettings,
-      dateRangeStart: start ?? dateRangeStart,
-      dateRangeEnd: end ?? dateRangeEnd
-    });
+    handlePartialFilterChange({ dateRangeStart: start ?? dateRangeStart, dateRangeEnd: end ?? dateRangeEnd });
   };
 
   // --- Category filter handlers ---
@@ -133,16 +109,11 @@ const FilterControls: React.FC<FilterControlsProps> = ({
     const newActiveCategories = activeCategories.includes(category)
       ? activeCategories.filter(c => c !== category)
       : [...activeCategories, category];
-    onFilterSettingsChange({ ...currentFilterSettings, activeCategories: newActiveCategories });
+    handlePartialFilterChange({ activeCategories: newActiveCategories });
   };
-  const handleCategoryModeChange = (newMode: 'include' | 'exclude') => {
-    onFilterSettingsChange({ ...currentFilterSettings, filterMode: newMode });
-  };
+  const handleCategoryModeChange = (newMode: FilterMode) => handlePartialFilterChange({ filterMode: newMode });
   const handleToggleAllCategories = (selectAll: boolean) => {
-    onFilterSettingsChange({
-      ...currentFilterSettings,
-      activeCategories: selectAll ? [...allCategories] : []
-    });
+    handlePartialFilterChange({ activeCategories: selectAll ? [...allCategories] : [] });
   };
   const getSelectAllCategoriesLabel = () => filterMode === 'include' ? 'Include All Categories' : 'Exclude No Categories (Show All)';
   const getDeselectAllCategoriesLabel = () => filterMode === 'include' ? 'Include No Categories' : 'Exclude All Categories';
@@ -152,19 +123,10 @@ const FilterControls: React.FC<FilterControlsProps> = ({
     onFilterSettingsChange(resetFilters());
   };
 
-  // Check if any filters are active
-  const hasActiveFilters = (
-    (activeCategories.length > 0) ||
-    (activeRinkIds.length > 0) ||
-    (dateFilterMode !== 'next-days') ||
-    (numberOfDays !== 4) ||
-    (timeFilterMode !== 'all-times')
-  );
-
   return (
     <div className="space-y-6">
       {/* Reset Filters Button - only show if filters are active */}
-      {hasActiveFilters && (
+      {hasActiveFilters(currentFilterSettings) && (
         <div className="flex justify-center">
           <button
             onClick={handleResetFilters}

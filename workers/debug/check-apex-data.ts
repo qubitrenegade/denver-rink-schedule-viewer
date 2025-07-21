@@ -1,7 +1,6 @@
 /**
  * Debug script to check what's actually stored in KV for Apex events
  */
-import { ColoradoTimezone } from '../shared/timezone-utils';
 
 // Mock what the current data might look like in KV
 const mockStoredApexEvent = {

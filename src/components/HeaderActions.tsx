@@ -5,12 +5,17 @@ interface HeaderActionsProps {
   onShowAbout: () => void;
 }
 
+// Type for the beforeinstallprompt event (not in standard DOM lib)
+type BeforeInstallPromptEvent = Event & {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
+};
+
 const HeaderActions: React.FC<HeaderActionsProps> = ({ onShowAbout }) => {
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallButton, setShowInstallButton] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isFirefox, setIsFirefox] = useState(false);
-  const [isInstalled, setIsInstalled] = useState(false);
   const [showCopiedMessage, setShowCopiedMessage] = useState(false);
 
   useEffect(() => {
@@ -30,10 +35,11 @@ const HeaderActions: React.FC<HeaderActionsProps> = ({ onShowAbout }) => {
     window.addEventListener('resize', checkMobile);
     
     // Listen for PWA install prompt
-    const handleBeforeInstallPrompt = (e: any) => {
-      logger.log('PWA install prompt detected!', e);
-      e.preventDefault();
-      setDeferredPrompt(e);
+    const handleBeforeInstallPrompt = (e: Event) => {
+      const bipEvent = e as BeforeInstallPromptEvent;
+      logger.log('PWA install prompt detected!', bipEvent);
+      bipEvent.preventDefault();
+      setDeferredPrompt(bipEvent);
       setShowInstallButton(true); // Always set to true, we'll filter later
     };
 
@@ -48,21 +54,11 @@ const HeaderActions: React.FC<HeaderActionsProps> = ({ onShowAbout }) => {
     
     // Check if currently running as installed PWA
     const isStandalone = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
-    const isInAppBrowser = (window.navigator as any).standalone; // iOS Safari - type cast for iOS-specific property
+    const isInAppBrowser = (window.navigator as { standalone?: boolean }).standalone; // iOS Safari - type cast for iOS-specific property
     const isRunningInPWA = !!(isStandalone || isInAppBrowser);
     
     logger.log('PWA detection:', { isStandalone, isInAppBrowser, isRunningInPWA });
     
-    // Try to detect if app is installed (different from running in PWA)
-    // This is tricky - we'll use the presence of beforeinstallprompt as a signal
-    let isAppInstalled = false;
-    if (isRunningInPWA) {
-      // If we're in PWA mode, the app is definitely installed
-      isAppInstalled = true;
-    }
-    
-    setIsInstalled(isAppInstalled);
-
     // Debug: Log service worker registration status
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.getRegistrations().then(registrations => {
@@ -140,7 +136,7 @@ const HeaderActions: React.FC<HeaderActionsProps> = ({ onShowAbout }) => {
         setShowCopiedMessage(true);
         setTimeout(() => setShowCopiedMessage(false), 2000);
       }
-    } catch (err) {
+    } catch {
       // Fallback for older browsers
       const textArea = document.createElement('textarea');
       textArea.value = currentUrl;

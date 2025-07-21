@@ -2,18 +2,22 @@ import React from 'react';
 
 interface EnhancedTimeInputProps {
   value: string;
-  onChange: (value: string) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  type?: 'time' | 'date';
   className?: string;
   placeholder?: string;
   id?: string;
+  'aria-label'?: string;
 }
 
 const EnhancedTimeInput: React.FC<EnhancedTimeInputProps> = ({ 
   value, 
   onChange, 
+  type = 'time',
   className = '', 
   placeholder,
-  id
+  id,
+  'aria-label': ariaLabel
 }) => {
   const handle15MinuteIncrement = (currentTime: string, increment: boolean) => {
     const [hours, minutes] = currentTime.split(':').map(Number);
@@ -34,11 +38,12 @@ const EnhancedTimeInput: React.FC<EnhancedTimeInputProps> = ({
   return (
     <input
       id={id}
-      type="time"
-      step="900"
+      type={type}
+      step={type === 'time' ? "900" : undefined}
       value={value}
-      onChange={e => onChange(e.target.value)}
+      onChange={onChange}
       onBlur={(e) => {
+        if (type !== 'time') return;
         // Help with typing shortcuts like "0900" or "2100" when user finishes typing
         const input = e.currentTarget;
         const inputValue = input.value;
@@ -61,18 +66,27 @@ const EnhancedTimeInput: React.FC<EnhancedTimeInputProps> = ({
           // Validate and set if it's a valid time
           const [h, m] = [parseInt(hours), parseInt(minutes)];
           if (h >= 0 && h <= 23 && m >= 0 && m <= 59) {
-            onChange(formattedTime);
+            onChange({
+              target: { value: formattedTime },
+              currentTarget: { value: formattedTime }
+            } as React.ChangeEvent<HTMLInputElement>);
           }
         }
       }}
       onWheel={(e) => {
+        if (type !== 'time') return;
         // Always use 15-minute increments for wheel - simple and consistent
         e.preventDefault();
         const newTime = handle15MinuteIncrement(e.currentTarget.value, e.deltaY > 0);
-        onChange(newTime);
+        const event = {
+          target: { value: newTime },
+          currentTarget: { value: newTime }
+        } as React.ChangeEvent<HTMLInputElement>;
+        onChange(event);
       }}
       className={className}
       placeholder={placeholder}
+      aria-label={ariaLabel}
     />
   );
 };

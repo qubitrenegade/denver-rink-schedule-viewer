@@ -1,6 +1,7 @@
 // workers/scrapers/foothills-edge.ts - Foothills Edge scraper with Durable Objects scheduling
 import { ScraperHelpers, RawIceEventData } from '../helpers/scraper-helpers';
-import { CONTENT_EXTRACTION, TIME_PATTERNS, RegexHelpers } from '../shared/regex-patterns';
+// import { CONTENT_EXTRACTION, TIME_PATTERNS, RegexHelpers } from '../shared/regex-patterns';
+import { CONTENT_EXTRACTION, RegexHelpers } from '../shared/regex-patterns';
 import { ColoradoTimezone } from '../shared/timezone-utils';
 
 interface Env {
@@ -51,26 +52,27 @@ class FoothillsEdgeScraper {
       }
       const eventsDataStr = html.substring(startIndex, endIndex + 1);
       const eventsData = JSON.parse(eventsDataStr);
-      Object.entries(eventsData as Record<string, any[]>).forEach(([dateStr, dayEvents]) => {
+      Object.entries(eventsData as Record<string, unknown[]>).forEach(([dateStr, dayEvents]) => {
         const [year, month, day] = dateStr.split('-').map(Number);
         const eventDate = new Date(year, month - 1, day);
-        dayEvents.forEach((event: any, index: number) => {
+        dayEvents.forEach((event: unknown, index: number) => {
           try {
-            const title = event.name || 'Ice Activity';
-            const timeIn = event.TimeIn || '12:00 PM';
-            const timeOut = event.TimeOut || '1:30 PM';
-            const startTime = this.parseFoothillsTime(timeIn, eventDate);
-            const endTime = this.parseFoothillsTime(timeOut, eventDate);
+            const e = event as Record<string, unknown>;
+            const title = e.name || 'Ice Activity';
+            const timeIn = e.TimeIn || '12:00 PM';
+            const timeOut = e.TimeOut || '1:30 PM';
+            const startTime = this.parseFoothillsTime(timeIn as string, eventDate);
+            const endTime = this.parseFoothillsTime(timeOut as string, eventDate);
             if (endTime <= startTime) return;
             const eventId = `${this.rinkId}-${dateStr}-${index}`;
             events.push({
               id: eventId,
               rinkId: this.rinkId,
-              title: this.cleanTitle(title),
+              title: this.cleanTitle(title as string),
               startTime: startTime.toISOString(),
               endTime: endTime.toISOString(),
-              category: this.categorizeEvent(title),
-              description: event.Description || 'Ice activity at Foothills Edge Ice Arena',
+              category: this.categorizeEvent(title as string),
+              description: e.Description || 'Ice activity at Foothills Edge Ice Arena',
               isFeatured: false
             });
           } catch {

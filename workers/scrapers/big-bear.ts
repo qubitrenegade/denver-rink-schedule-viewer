@@ -1,5 +1,6 @@
 // workers/scrapers/big-bear.ts - Big Bear scraper with Durable Objects scheduling
 import { ScraperHelpers, RawIceEventData } from '../helpers/scraper-helpers';
+import { DurableObjectState, KVNamespace, DurableObjectNamespace } from '@cloudflare/workers-types'
 
 interface Env {
   RINK_DATA: KVNamespace;
@@ -56,22 +57,23 @@ class BigBearScraper {
       throw new Error('Big Bear API did not return an array');
     }
 
-    const events: RawIceEventData[] = eventsJson.map((ev: any) => {
+    const events: RawIceEventData[] = eventsJson.map((ev: unknown) => {
+      const e = ev as Record<string, unknown>;
       // The API returns times in Mountain Time (MT), but Date parses as UTC. To store as UTC, add 6 hours.
-      const startTime = new Date(ev.start);
+      const startTime = new Date(e.start as string);
       startTime.setHours(startTime.getHours() + 6);
-      const endTime = new Date(ev.end);
+      const endTime = new Date(e.end as string);
       endTime.setHours(endTime.getHours() + 6);
 
       // Extract rink name from resourceName or venues (for future use if needed)
       // const rawRinkName = ev.resourceName || (ev.venues && ev.venues[0]?.Name) || 'Main Rink';
 
       // Clean title
-      const title = ScraperHelpers.cleanTitle(ev.title || '');
+      const title = ScraperHelpers.cleanTitle((e.title as string) || '');
       const category = ScraperHelpers.categorizeEvent(title);
 
       // Extract rink name from resourceName field
-      const rawRinkName = ev.resourceName || 'Main Rink';
+      const rawRinkName = (e.resourceName as string) || 'Main Rink';
       let rinkId = this.rinkId;
 
       // Map resourceName to specific rink IDs
@@ -84,8 +86,8 @@ class BigBearScraper {
       // Parse and clean description
       let cleanedDescription = '';
 
-      if (ev.description) {
-        const desc = ev.description.trim();
+      if (e.description) {
+        const desc = (e.description as string).trim();
 
         cleanedDescription = desc;
 
@@ -115,7 +117,7 @@ class BigBearScraper {
       }
 
       return {
-        id: `${rinkId}-${ev.id}`,
+        id: `${rinkId}-${e.id}`,
         rinkId,
         title,
         startTime: startTime.toISOString(),
@@ -219,7 +221,7 @@ export class BigBearScheduler {
         );
 
         // Write custom aggregated metadata for Big Bear
-        const bigBearMetadata: any = {
+        const bigBearMetadata: Record<string, unknown> = {
           facilityId: 'big-bear',
           facilityName: 'Big Bear Ice Arena',
           displayName: 'Big Bear Ice Arena (Lowry)',
