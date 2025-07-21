@@ -41,7 +41,7 @@
     "@capacitor/core": "^7.4.2",
     "react": "19",
     "react-dom": "19",
-    "vite": "^7.0.4",
+    "vite": "^7.0.5",
     "wrangler": "^4.25.0"
   },
   "devDependencies": {
