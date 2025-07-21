@@ -60,7 +60,7 @@ jobs:
         echo "✅ Critical tests passed"
 
     - name: Run coverage report
-      run: bun run test --coverage --environment happy-dom
+      run: bun run test --coverage
       continue-on-error: true
 
     - name: Build check
