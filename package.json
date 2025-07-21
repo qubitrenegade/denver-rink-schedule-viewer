@@ -60,8 +60,12 @@
     "happy-dom": "^18.0.1",
     "jsdom": "^26.1.0",
     "node-fetch": "^3.0.0",
-    "typescript": "~5.8.3",
+    "typescript": "^5.5.4",
     "typescript-eslint": "^8.36.0",
-    "vitest": "^3.1.4"
+    "vitest": "^3.1.4",
+    "react-router-dom": "^6.26.1",
+    "react-test-renderer": "^18.3.1",
+    "semver": "^7.6.3",
+    "tailwindcss": "^3.4.10"
   }
 }
