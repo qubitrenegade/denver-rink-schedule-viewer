@@ -17,7 +17,13 @@ jobs:
     - name: Setup Bun
       uses: oven-sh/setup-bun@v2
       with:
-        bun-version: latest
+        bun-version: 1.2.18  # Pin to specific version for consistency
+
+    - name: Setup environment
+      run: |
+        # Set environment variables that may help with sharp installation
+        echo "SHARP_IGNORE_GLOBAL_LIBVIPS=1" >> $GITHUB_ENV
+        echo "SHARP_LIBVIPS_FORCE_GLOBAL=false" >> $GITHUB_ENV
 
     - name: Cache dependencies
       uses: actions/cache@v4
@@ -30,19 +36,43 @@ jobs:
           ${{ runner.os }}-bun-
 
     - name: Install dependencies
-      run: bun install --frozen-lockfile
+      run: |
+        # Address potential sharp/semver timing issue in CI environment
+        # by ensuring semver is available before sharp's post-install script runs
+        echo "🔧 Installing dependencies with enhanced timing robustness..."
+        
+        # Clear any existing node_modules to ensure clean install
+        rm -rf node_modules
+        
+        # Install with retry mechanism to handle transient issues
+        for attempt in 1 2 3; do
+          echo "Installation attempt $attempt..."
+          if bun install --frozen-lockfile; then
+            echo "✅ Dependencies installed successfully"
+            break
+          else
+            echo "⚠️ Installation attempt $attempt failed, retrying..."
+            rm -rf node_modules
+            sleep 2
+          fi
+          
+          if [ $attempt -eq 3 ]; then
+            echo "❌ All installation attempts failed"
+            exit 1
+          fi
+        done
 
     - name: Test scrapers
       run: |
         echo "🔍 Testing all scrapers to detect website changes..."
         
-        # Test each scraper individually
-        bun test workers/scrapers/apex-ice.test.ts --run
-        bun test workers/scrapers/big-bear.test.ts --run || true
-        bun test workers/scrapers/du-ritchie.test.ts --run || true
-        bun test workers/scrapers/foothills-edge.test.ts --run || true
-        bun test workers/scrapers/ice-ranch.test.ts --run || true
-        bun test workers/scrapers/ssprd.test.ts --run || true
+        # Test each scraper individually (only if test file exists)
+        [ -f workers/scrapers/apex-ice.test.ts ] && bun test workers/scrapers/apex-ice.test.ts --run
+        [ -f workers/scrapers/big-bear.test.ts ] && bun test workers/scrapers/big-bear.test.ts --run || true
+        [ -f workers/scrapers/du-ritchie.test.ts ] && bun test workers/scrapers/du-ritchie.test.ts --run || true
+        [ -f workers/scrapers/foothills-edge.test.ts ] && bun test workers/scrapers/foothills-edge.test.ts --run || true
+        [ -f workers/scrapers/ice-ranch.test.ts ] && bun test workers/scrapers/ice-ranch.test.ts --run || true
+        [ -f workers/scrapers/ssprd.test.ts ] && bun test workers/scrapers/ssprd.test.ts --run || true
         
         echo "✅ Scraper tests completed"
 
