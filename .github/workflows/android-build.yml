@@ -112,19 +112,19 @@ jobs:
     
     steps:
     - name: Download Release APK
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v6
       with:
         name: release-apk
         path: ./artifacts/
         
     - name: Download Debug APK
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v6
       with:
         name: debug-apk
         path: ./artifacts/
         
     - name: Download App Bundle
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v6
       with:
         name: app-bundle
         path: ./artifacts/
